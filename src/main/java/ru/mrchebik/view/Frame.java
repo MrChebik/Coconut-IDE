@@ -1,9 +1,9 @@
-package ru.mrchebik.frame;
+package ru.mrchebik.view;
 
-import ru.mrchebik.run.Compile;
-import ru.mrchebik.run.New;
-import ru.mrchebik.run.Run;
-import ru.mrchebik.run.Save;
+import ru.mrchebik.controller.Compile;
+import ru.mrchebik.controller.New;
+import ru.mrchebik.controller.Run;
+import ru.mrchebik.controller.Save;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,7 +15,6 @@ public class Frame extends JFrame {
 
     public static JTextArea code = new JTextArea();
     public static JTextArea out = new JTextArea();
-    public static JButton save = new JButton("Save");
 
     public Frame() {
         setLayout(new BorderLayout());
@@ -29,23 +28,24 @@ public class Frame extends JFrame {
         add(southPanel, BorderLayout.SOUTH);
 
         JButton newFile = new JButton("New");
-        newFile.addActionListener(new New());
+        newFile.addActionListener(e -> New.start());
         southPanel.add(newFile);
 
         JButton compile = new JButton("Compile");
-        compile.addActionListener(new Compile());
+        compile.addActionListener(e -> Compile.start());
         southPanel.add(compile);
 
         JButton run = new JButton("Run");
-        run.addActionListener(new Run());
+        run.addActionListener(e -> Run.start());
         southPanel.add(run);
 
-        save.addActionListener(new Save());
+        JButton save = new JButton("Save");
+        save.addActionListener(e -> Save.start());
         southPanel.add(save);
 
         setSize(1200, 800);
         splitPane.setDividerLocation((getHeight() - 35) / 2);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setVisible(true);
     }
