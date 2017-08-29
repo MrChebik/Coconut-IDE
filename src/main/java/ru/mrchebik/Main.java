@@ -1,12 +1,15 @@
 package ru.mrchebik;
 
-import ru.mrchebik.frame.Frame;
+import javafx.application.Application;
+import ru.mrchebik.view.StartOfWorking;
+
+import java.io.File;
 
 /**
  * Created by mrchebik on 07.05.16.
  */
 public class Main {
     public static void main(String[] args) {
-        new Frame();
+        Application.launch(StartOfWorking.class);
     }
 }

@@ -1,6 +1,7 @@
 package ru.mrchebik.controller.process;
 
-import ru.mrchebik.view.Frame;
+import ru.mrchebik.controller.javafx.WorkStationController;
+import ru.mrchebik.view.WorkStation;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -30,14 +31,18 @@ public class EnhancedProcess {
         if (process != null) {
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
 
+            StringBuilder lines = new StringBuilder();
             String line;
             try {
                 while ((line = bufferedReader.readLine()) != null) {
-                    Frame.out.append(line + "\n");
+                    lines.append(line + "\n");
                 }
             } catch (IOException e) {
                 e.printStackTrace();
             }
+
+            WorkStationController controller = WorkStation.getFxmlLoader().getController();
+            controller.setOutText(lines.toString());
 
             try {
                 process.waitFor();
