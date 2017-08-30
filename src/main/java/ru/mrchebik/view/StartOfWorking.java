@@ -17,7 +17,6 @@ public class StartOfWorking extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         Scene scene = new Scene(FXMLLoader.load(StartOfWorking.class.getResource("/fxml/startOfWorking.fxml")));
-        /*scene.getStylesheets().add(StartOfWorking.class.getResource("/css/start.css").toExternalForm());*/
 
         stage = primaryStage;
         stage.setTitle("Coconut-IDE");

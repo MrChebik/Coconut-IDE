@@ -12,7 +12,7 @@ public class NewProjectAction {
     public static void start() {
         new File(Project.getPath()).mkdir();
         try {
-            new File(Project.getPath() + "/Main.java").createNewFile();
+            new File(Project.getPath() + File.separator + "Main.java").createNewFile();
         } catch (IOException e) {
             e.printStackTrace();
         }

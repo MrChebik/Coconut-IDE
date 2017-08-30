@@ -40,7 +40,8 @@ public class NewProjectController implements Initializable {
 
     @FXML private void handleEditPath() {
         DirectoryChooser directoryChooser = new DirectoryChooser();
-        directoryChooser.setInitialDirectory(new File("/home/" + System.getProperty("user.name")));
+
+        directoryChooser.setInitialDirectory(new File(projectPath.getText().startsWith("/") ? new File(projectPath.getText()).exists() ? projectPath.getText() : System.getProperty("user.home") : System.getProperty("user.home")));
         directoryChooser.setTitle("Choose Folder");
 
         File file = directoryChooser.showDialog(NewProject.getStage());
@@ -69,7 +70,8 @@ public class NewProjectController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        Projects.setPath("/home/" + System.getProperty("user.name") + "/CoconutProjects/");
+        Projects.setPath(System.getProperty("user.home") + File.separator + "CoconutProjects" + File.separator);
+
         new File(Projects.getPath()).mkdirs();
 
         projectPath.setText(Projects.getPath());

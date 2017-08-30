@@ -24,7 +24,6 @@ public class NewProject {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        /*scene.getStylesheets().add(StartOfWorking.class.getResource("/css/start.css").toExternalForm());*/
 
         primaryStage = new Stage();
         primaryStage.initModality(Modality.APPLICATION_MODAL);
