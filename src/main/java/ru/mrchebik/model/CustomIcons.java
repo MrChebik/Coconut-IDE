@@ -1,4 +1,4 @@
-package ru.mrchebik.view.treeview;
+package ru.mrchebik.model;
 
 import javafx.scene.image.Image;
 import ru.mrchebik.controller.javafx.WorkStationController;

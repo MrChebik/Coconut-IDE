@@ -13,9 +13,9 @@ import ru.mrchebik.controller.Compile;
 import ru.mrchebik.controller.Run;
 import ru.mrchebik.controller.Save;
 import ru.mrchebik.controller.process.SaveProcess;
+import ru.mrchebik.model.CustomIcons;
 import ru.mrchebik.model.Project;
 import ru.mrchebik.view.WorkStation;
-import ru.mrchebik.view.treeview.CustomIcons;
 import ru.mrchebik.view.treeview.FilePathTreeItem;
 
 import java.io.File;

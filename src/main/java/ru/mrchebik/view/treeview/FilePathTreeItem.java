@@ -4,6 +4,7 @@ import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.control.TreeItem;
 import javafx.scene.image.ImageView;
+import ru.mrchebik.model.CustomIcons;
 
 import java.io.File;
 import java.io.IOException;
