@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
@@ -28,6 +29,8 @@ public class StartOfWorking extends Application {
         Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
         stage.setX((primScreenBounds.getWidth() - stage.getMinWidth()) / 2);
         stage.setY((primScreenBounds.getHeight() - stage.getMinHeight()) / 2);
+
+        stage.getIcons().add(new Image(String.valueOf(NewProject.class.getResource("/img/coconut.png"))));
 
         stage.setScene(scene);
         stage.show();

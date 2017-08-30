@@ -8,8 +8,6 @@ import ru.mrchebik.model.Project;
  */
 public class Compile {
     public static void start() {
-        Save.start();
-
         new EnhancedProcess("javac", Project.getPath() + "/Main.java").start();
     }
 }

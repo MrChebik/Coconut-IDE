@@ -6,7 +6,7 @@
 
     <groupId>coconut.ide</groupId>
     <artifactId>coconut-ide</artifactId>
-    <version>0.0.2</version>
+    <version>0.0.4</version>
 
     <build>
         <plugins>

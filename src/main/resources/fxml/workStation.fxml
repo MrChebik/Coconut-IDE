@@ -1,28 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.SplitPane?>
-<?import javafx.scene.control.TextArea?>
-<?import javafx.scene.control.ToolBar?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
-
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.mrchebik.controller.javafx.WorkStationController">
    <bottom>
       <ToolBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
         <items>
-            <Button fx:id="compile" onMouseClicked="#handleCompileProject" mnemonicParsing="false" prefWidth="225.0" text="Compile" />
+            <Button fx:id="compile" mnemonicParsing="false" onMouseClicked="#handleCompileProject" prefWidth="225.0"
+                    text="Compile"/>
             <HBox prefHeight="28.0" prefWidth="713.0" />
-          <Button fx:id="run" onMouseClicked="#handleRunProject" mnemonicParsing="false" prefWidth="240.0" text="Run" />
+            <Button fx:id="run" mnemonicParsing="false" onMouseClicked="#handleRunProject" prefWidth="240.0"
+                    text="Run"/>
         </items>
       </ToolBar>
    </bottom>
    <center>
-      <SplitPane dividerPositions="0.7214765100671141" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0" BorderPane.alignment="CENTER">
-        <items>
-            <TextArea fx:id="code" prefHeight="200.0" prefWidth="200.0" />
-            <TextArea fx:id="out" prefHeight="200.0" prefWidth="200.0" />
-        </items>
-      </SplitPane>
+       <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+           <center>
+               <TabPane fx:id="tabPane" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+               </TabPane>
+           </center>
+           <left>
+               <TreeView fx:id="treeView" editable="true" onMouseClicked="#handleDoubleClick" prefHeight="200.0"
+                         prefWidth="200.0" BorderPane.alignment="CENTER"/>
+           </left>
+           <bottom>
+               <TextArea fx:id="out" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER"/>
+           </bottom>
+       </BorderPane>
    </center>
 </BorderPane>

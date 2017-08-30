@@ -3,6 +3,7 @@ package ru.mrchebik.view;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Modality;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
@@ -37,6 +38,8 @@ public class NewProject {
         Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
         primaryStage.setX((primScreenBounds.getWidth() - primaryStage.getMinWidth()) / 2);
         primaryStage.setY((primScreenBounds.getHeight() - primaryStage.getMinHeight()) / 2);
+
+        primaryStage.getIcons().add(new Image(String.valueOf(NewProject.class.getResource("/img/coconut.png"))));
 
         primaryStage.setScene(scene);
         primaryStage.show();
