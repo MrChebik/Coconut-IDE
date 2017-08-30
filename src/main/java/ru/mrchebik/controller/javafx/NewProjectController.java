@@ -35,7 +35,7 @@ public class NewProjectController implements Initializable {
         NewProject.close();
         StartOfWorking.close();
 
-        WorkStation.start(StartOfWorking.getStage());
+        WorkStation.start();
     }
 
     @FXML private void handleEditPath() {

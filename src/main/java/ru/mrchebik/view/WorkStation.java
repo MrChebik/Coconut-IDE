@@ -13,7 +13,9 @@ import javafx.stage.Stage;
 public class WorkStation {
     private static FXMLLoader fxmlLoader;
 
-    public static void start(Stage primaryStage) throws Exception {
+    public static void start() throws Exception {
+        Stage primaryStage = new Stage();
+
         fxmlLoader = new FXMLLoader();
 
         fxmlLoader.setLocation(StartOfWorking.class.getResource("/fxml/workStation.fxml"));
@@ -21,14 +23,14 @@ public class WorkStation {
         Scene scene = new Scene(fxmlLoader.load());
 
         primaryStage.setTitle("Coconut-IDE");
-        primaryStage.setMinWidth(1208);
-        primaryStage.setMinHeight(840);
-        primaryStage.setMaxHeight(840);
-        primaryStage.setMaxWidth(1208);
 
         Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
-        primaryStage.setX((primScreenBounds.getWidth() - primaryStage.getMinWidth()) / 2);
-        primaryStage.setY((primScreenBounds.getHeight() - primaryStage.getMinHeight()) / 2);
+
+        primaryStage.setWidth(primScreenBounds.getWidth() / 100 * 75);
+        primaryStage.setHeight(primScreenBounds.getHeight() / 100 * 75);
+
+        primaryStage.setX((primScreenBounds.getWidth() - primaryStage.getWidth()) / 2);
+        primaryStage.setY((primScreenBounds.getHeight() - primaryStage.getHeight()) / 2);
 
         primaryStage.getIcons().add(new Image(String.valueOf(NewProject.class.getResource("/img/coconut.png"))));
 
