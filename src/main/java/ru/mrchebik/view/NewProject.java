@@ -45,4 +45,8 @@ public class NewProject {
     public static void close() {
         primaryStage.close();
     }
+
+    public static Stage getStage() {
+        return primaryStage;
+    }
 }

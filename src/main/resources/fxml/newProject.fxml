@@ -27,16 +27,16 @@
           </rowConstraints>
          <children>
             <Label text="Name:" />
-            <TextField fx:id="projectName" prefHeight="26.0" prefWidth="195.0" GridPane.columnIndex="1" GridPane.columnSpan="2">
+            <TextField fx:id="projectName" onKeyReleased="#handleCreateProjectWithKeyOnName" prefHeight="26.0" prefWidth="195.0" GridPane.columnIndex="1" GridPane.columnSpan="2">
                <opaqueInsets>
                   <Insets right="-1.0" />
                </opaqueInsets>
             </TextField>
              <Label text="Path:" GridPane.rowIndex="3" />
-            <TextField fx:id="projectPath" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <TextField fx:id="projectPath" onKeyReleased="#handleCreateProjectWithKeyOnPath" GridPane.columnIndex="1" GridPane.rowIndex="3" />
             <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="3">
                <children>
-                  <Button mnemonicParsing="false" text="Edit" />
+                  <Button onMouseClicked="#handleEditPath" mnemonicParsing="false" text="Edit" />
                </children>
             </HBox>
             <VBox prefHeight="15.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />

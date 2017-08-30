@@ -1,10 +1,11 @@
 package ru.mrchebik.controller.javafx;
 
-import javafx.application.Application;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.stage.DirectoryChooser;
 import ru.mrchebik.controller.NewProjectAction;
 import ru.mrchebik.model.Project;
 import ru.mrchebik.model.Projects;
@@ -25,7 +26,7 @@ public class NewProjectController implements Initializable {
 
     private boolean wasChanged;
 
-    @FXML private void handleCreateProject() throws Exception {
+    private void newProject() throws Exception {
         Project.setName(projectName.getText());
         Project.setPath(projectPath.getText());
 
@@ -35,6 +36,35 @@ public class NewProjectController implements Initializable {
         StartOfWorking.close();
 
         WorkStation.start(StartOfWorking.getStage());
+    }
+
+    @FXML private void handleEditPath() {
+        DirectoryChooser directoryChooser = new DirectoryChooser();
+        directoryChooser.setInitialDirectory(new File("/home/" + System.getProperty("user.name")));
+        directoryChooser.setTitle("Choose Folder");
+
+        File file = directoryChooser.showDialog(NewProject.getStage());
+
+        if (file != null) {
+            projectName.setText(file.getName());
+            projectPath.setText(file.getPath());
+        }
+    }
+
+    @FXML private void handleCreateProject() throws Exception {
+        newProject();
+    }
+
+    @FXML private void handleCreateProjectWithKeyOnName(KeyEvent event) throws Exception {
+        if (event.getCode() == KeyCode.ENTER) {
+            newProject();
+        }
+    }
+
+    @FXML private void handleCreateProjectWithKeyOnPath(KeyEvent event) throws Exception {
+        if (event.getCode() == KeyCode.ENTER) {
+            newProject();
+        }
     }
 
     @Override

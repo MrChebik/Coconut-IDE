@@ -35,7 +35,7 @@ public class EnhancedProcess {
             String line;
             try {
                 while ((line = bufferedReader.readLine()) != null) {
-                    lines.append(line + "\n");
+                    lines.append(line).append("\n");
                 }
             } catch (IOException e) {
                 e.printStackTrace();
