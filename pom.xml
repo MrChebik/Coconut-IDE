@@ -6,15 +6,7 @@
 
     <groupId>coconut.ide</groupId>
     <artifactId>coconut-ide</artifactId>
-    <version>0.0.7</version>
-
-    <dependencies>
-        <dependency>
-            <groupId>uk.com.robust-it</groupId>
-            <artifactId>cloning</artifactId>
-            <version>1.9.5</version>
-        </dependency>
-    </dependencies>
+    <version>0.0.8</version>
 
     <build>
         <plugins>

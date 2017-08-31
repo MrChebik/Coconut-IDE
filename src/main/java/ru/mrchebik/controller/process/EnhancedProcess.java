@@ -1,12 +1,9 @@
 package ru.mrchebik.controller.process;
 
-import javafx.application.Platform;
-import ru.mrchebik.controller.javafx.WorkStationController;
-import ru.mrchebik.view.WorkStation;
+import ru.mrchebik.controller.process.io.InputProcess;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.OutputStream;
 
 /**
  * Created by mrchebik on 8/29/17.
@@ -14,8 +11,11 @@ import java.io.InputStreamReader;
 public class EnhancedProcess {
     private String[] commands;
 
+    private static OutputStream outputStream;
+
     public EnhancedProcess(String... commands) {
         this.commands = commands;
+        EnhancedProcess.outputStream = null;
     }
 
     public void start() {
@@ -30,20 +30,9 @@ public class EnhancedProcess {
         }
 
         if (process != null) {
-            WorkStationController controller = WorkStation.getFxmlLoader().getController();
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            new InputProcess(process.getInputStream()).start();
 
-            StringBuilder lines = new StringBuilder();
-            String line;
-            try {
-                while ((line = bufferedReader.readLine()) != null) {
-                    lines.append(line).append("\n");
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            Platform.runLater(() -> controller.setOutText(lines.toString()));
+            EnhancedProcess.outputStream = process.getOutputStream();
 
             try {
                 process.waitFor();
@@ -51,7 +40,15 @@ public class EnhancedProcess {
                 e.printStackTrace();
             }
 
-            Platform.runLater(controller::loadTree);
+            outputStream = null;
         }
+    }
+
+    public static void setOutputStream(OutputStream outputStream) {
+        EnhancedProcess.outputStream = outputStream;
+    }
+
+    public static OutputStream getOutputStream() {
+        return outputStream;
     }
 }

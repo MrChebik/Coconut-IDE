@@ -23,7 +23,7 @@
     <bottom>
         <BorderPane prefHeight="41.0" prefWidth="1200.0" BorderPane.alignment="CENTER">
             <left>
-                <Button fx:id="compile" mnemonicParsing="false" onMouseClicked="#handleCompileProject" prefWidth="225.0"
+                <Button mnemonicParsing="false" onMouseClicked="#handleCompileProject" prefWidth="225.0"
                         text="Compile" BorderPane.alignment="CENTER">
                     <BorderPane.margin>
                         <Insets left="7.0"/>
@@ -31,7 +31,7 @@
                 </Button>
             </left>
             <right>
-                <Button fx:id="run" mnemonicParsing="false" onMouseClicked="#handleRunProject" prefWidth="240.0"
+                <Button mnemonicParsing="false" onMouseClicked="#handleRunProject" prefWidth="240.0"
                         text="Run" BorderPane.alignment="CENTER">
                     <BorderPane.margin>
                         <Insets right="7.0"/>

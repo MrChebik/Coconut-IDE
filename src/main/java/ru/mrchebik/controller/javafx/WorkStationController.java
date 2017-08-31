@@ -7,12 +7,13 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.BorderPane;
 import ru.mrchebik.controller.Compile;
 import ru.mrchebik.controller.Run;
 import ru.mrchebik.controller.Save;
 import ru.mrchebik.controller.exception.ExceptionUtils;
+import ru.mrchebik.controller.process.EnhancedProcess;
 import ru.mrchebik.controller.process.SaveProcess;
 import ru.mrchebik.model.CustomIcons;
 import ru.mrchebik.model.Project;
@@ -35,17 +36,14 @@ import java.util.stream.Collectors;
  * Created by mrchebik on 8/29/17.
  */
 public class WorkStationController implements Initializable {
-    @FXML private TextArea code;
     @FXML private TextArea out;
-    @FXML private Button compile;
-    @FXML private Button run;
+    private String input;
+
     @FXML
     private TreeView<Path> treeView;
 
     private TreeView<Path> backupTree;
 
-    @FXML
-    private BorderPane borderPane;
     @FXML
     private TabPane tabPane;
 
@@ -60,6 +58,7 @@ public class WorkStationController implements Initializable {
     @FXML private void handleRunProject() {
         Platform.runLater(() -> {
             out.setText("");
+            input = "";
 
             saveAllOpenTabs();
 
@@ -70,6 +69,7 @@ public class WorkStationController implements Initializable {
     @FXML private void handleCompileProject() {
         Platform.runLater(() -> {
             out.setText("");
+            input = "";
 
             saveAllOpenTabs();
 
@@ -112,10 +112,6 @@ public class WorkStationController implements Initializable {
         }
     }
 
-    public String getCodeText() {
-        return code.getText();
-    }
-
     public void setOutText(String text) {
         out.setText(text);
     }
@@ -131,6 +127,29 @@ public class WorkStationController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         controller = WorkStation.getFxmlLoader().getController();
+
+        input = "";
+
+        out.setOnKeyPressed(event -> {
+            if (EnhancedProcess.getOutputStream() != null) {
+                if (event.getCode() == KeyCode.ENTER) {
+                    try {
+                        EnhancedProcess.getOutputStream().write((input.replaceAll("\r", "") + "\n").replaceAll("\b", "").getBytes());
+                        EnhancedProcess.getOutputStream().flush();
+                    } catch (IOException ignored) {
+                        EnhancedProcess.setOutputStream(null);
+                    } finally {
+                        input = "";
+                    }
+                } else if (event.getCode() == KeyCode.BACK_SPACE) {
+                    if (input.length() > 0) {
+                        input = input.substring(0, input.length() - 1);
+                    }
+                } else {
+                    input = input.concat(event.getText());
+                }
+            }
+        });
 
         backupTree = new TreeView<>();
 
@@ -161,6 +180,10 @@ public class WorkStationController implements Initializable {
         tabdata.setContent(code);
 
         tabPane.getTabs().add(tabdata);
+
+
+        TextArea focusable = (TextArea) tabPane.getTabs().get(0).getContent();
+        Platform.runLater(focusable::requestFocus);
 
         treeView.getTreeItem(3);
 

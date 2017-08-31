@@ -1,6 +1,5 @@
 package ru.mrchebik.controller;
 
-import javafx.application.Platform;
 import ru.mrchebik.controller.javafx.WorkStationController;
 import ru.mrchebik.controller.process.EnhancedProcess;
 import ru.mrchebik.model.Project;
@@ -30,12 +29,10 @@ public class Run extends Thread {
 
         WorkStationController controller = WorkStation.getFxmlLoader().getController();
 
-        Platform.runLater(() -> {
-            if ("".equals(controller.getOutText())) {
-                new EnhancedProcess("java",
-                        "-cp", Project.getPathOut(),
-                        main.toString().substring(Project.getPathOut().length() + 1, main.toString().indexOf('.')).replaceAll("/", ".")).start();
-            }
-        });
+        if ("".equals(controller.getOutText())) {
+            new EnhancedProcess("java",
+                    "-cp", Project.getPathOut(),
+                    main.toString().substring(Project.getPathOut().length() + 1, main.toString().indexOf('.')).replaceAll("/", ".")).start();
+        }
     }
 }
