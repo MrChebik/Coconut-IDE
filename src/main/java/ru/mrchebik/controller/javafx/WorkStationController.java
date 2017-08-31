@@ -1,5 +1,6 @@
 package ru.mrchebik.controller.javafx;
 
+import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -10,6 +11,7 @@ import javafx.scene.layout.BorderPane;
 import ru.mrchebik.controller.Compile;
 import ru.mrchebik.controller.Run;
 import ru.mrchebik.controller.Save;
+import ru.mrchebik.controller.exception.ExceptionUtils;
 import ru.mrchebik.controller.process.SaveProcess;
 import ru.mrchebik.model.CustomIcons;
 import ru.mrchebik.model.Project;
@@ -24,7 +26,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.List;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 /**
  * Created by mrchebik on 8/29/17.
@@ -53,17 +57,34 @@ public class WorkStationController implements Initializable {
     private WorkStationController controller;
 
     @FXML private void handleRunProject() {
-        out.setText("");
+        Platform.runLater(() -> {
+            out.setText("");
 
-        controller.getTabs().forEach(tab -> Save.start((Path) tab.getUserData(), tab.getText()));
+            saveAllOpenTabs();
 
-        Run.start((Path) tabPane.getSelectionModel().getSelectedItem().getUserData());
+            new Run((Path) tabPane.getSelectionModel().getSelectedItem().getUserData()).start();
+        });
     }
 
     @FXML private void handleCompileProject() {
-        out.setText("");
+        Platform.runLater(() -> {
+            out.setText("");
 
-        Compile.start();
+            saveAllOpenTabs();
+
+            new Compile().start();
+        });
+    }
+
+    private void saveAllOpenTabs() {
+        List<Save> saves = controller.getTabs().stream().map(tab -> {
+            TextArea area = (TextArea) tab.getContent();
+
+            return new Save((Path) tab.getUserData(), area.getText());
+        }).collect(Collectors.toList());
+
+        saves.forEach(Thread::start);
+        saves.forEach(ExceptionUtils.handlingConsumerWrapper(Thread::join, InterruptedException.class));
     }
 
     @FXML

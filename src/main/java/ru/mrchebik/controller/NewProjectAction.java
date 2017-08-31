@@ -8,8 +8,9 @@ import java.io.IOException;
 /**
  * Created by mrchebik on 14.05.16.
  */
-public class NewProjectAction {
-    public static void start() {
+public class NewProjectAction extends Thread {
+    @Override
+    public void run() {
         new File(Project.getPath()).mkdir();
 
         Project.setPathSource(Project.getPath() + File.separator + "src");

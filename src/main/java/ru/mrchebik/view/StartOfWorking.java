@@ -2,11 +2,10 @@ package ru.mrchebik.view;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
+import ru.mrchebik.model.CustomIcons;
+import ru.mrchebik.model.ScreenInfo;
 
 /**
  * Created by mrchebik on 8/29/17.
@@ -20,16 +19,13 @@ public class StartOfWorking extends Application {
 
         stage = primaryStage;
         stage.setTitle("Coconut-IDE");
-        stage.setMinWidth(600);
-        stage.setMinHeight(400);
-        stage.setMaxHeight(400);
-        stage.setMaxWidth(600);
+        stage.setWidth(600);
+        stage.setHeight(400);
 
-        Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
-        stage.setX((primScreenBounds.getWidth() - stage.getMinWidth()) / 2);
-        stage.setY((primScreenBounds.getHeight() - stage.getMinHeight()) / 2);
+        stage.setX((ScreenInfo.bounds.getWidth() - 600) / 2);
+        stage.setY((ScreenInfo.bounds.getHeight() - 400) / 2);
 
-        stage.getIcons().add(new Image(String.valueOf(NewProject.class.getResource("/img/coconut.png"))));
+        stage.getIcons().add(CustomIcons.logo);
 
         stage.setScene(scene);
         stage.show();
@@ -37,9 +33,5 @@ public class StartOfWorking extends Application {
 
     public static void close() {
         stage.close();
-    }
-
-    public static Stage getStage() {
-        return stage;
     }
 }

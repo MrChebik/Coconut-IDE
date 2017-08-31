@@ -1,5 +1,6 @@
 package ru.mrchebik.controller.process;
 
+import javafx.application.Platform;
 import ru.mrchebik.controller.javafx.WorkStationController;
 import ru.mrchebik.view.WorkStation;
 
@@ -20,6 +21,7 @@ public class EnhancedProcess {
 
     public void start() {
         System.out.println(Arrays.toString(commands));
+
         ProcessBuilder processBuilder = new ProcessBuilder(commands);
         processBuilder.redirectErrorStream(true);
         Process process = null;
@@ -31,6 +33,7 @@ public class EnhancedProcess {
         }
 
         if (process != null) {
+            WorkStationController controller = WorkStation.getFxmlLoader().getController();
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
 
             StringBuilder lines = new StringBuilder();
@@ -43,8 +46,7 @@ public class EnhancedProcess {
                 e.printStackTrace();
             }
 
-            WorkStationController controller = WorkStation.getFxmlLoader().getController();
-            controller.setOutText(lines.toString());
+            Platform.runLater(() -> controller.setOutText(lines.toString()));
 
             try {
                 process.waitFor();
@@ -52,7 +54,7 @@ public class EnhancedProcess {
                 e.printStackTrace();
             }
 
-            controller.loadTree();
+            Platform.runLater(controller::loadTree);
         }
     }
 }

@@ -2,7 +2,7 @@ package ru.mrchebik.controller.javafx;
 
 import javafx.animation.ScaleTransition;
 import javafx.animation.Timeline;
-import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.image.ImageView;
@@ -18,8 +18,9 @@ import java.util.ResourceBundle;
 public class StartOfWorkingController implements Initializable {
     @FXML private ImageView coconutPng;
 
-    @FXML private void handleNewProject() {
-        NewProject.start();
+    @FXML
+    private void handleNewProject() {
+        Platform.runLater(NewProject::start);
     }
 
     @Override

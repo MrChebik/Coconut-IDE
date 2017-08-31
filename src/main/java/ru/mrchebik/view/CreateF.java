@@ -1,13 +1,12 @@
 package ru.mrchebik.view;
 
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
 import javafx.stage.Modality;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import ru.mrchebik.model.CustomIcons;
+import ru.mrchebik.model.ScreenInfo;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -35,16 +34,14 @@ public class CreateF {
         primaryStage.initModality(Modality.APPLICATION_MODAL);
         primaryStage.initStyle(StageStyle.DECORATED);
         primaryStage.setTitle(type);
-        primaryStage.setMinWidth(400);
-        primaryStage.setMinHeight(150);
-        primaryStage.setMaxHeight(150);
-        primaryStage.setMaxWidth(400);
+        primaryStage.setWidth(400);
+        primaryStage.setHeight(150);
+        primaryStage.setResizable(false);
 
-        Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
-        primaryStage.setX((primScreenBounds.getWidth() - primaryStage.getMinWidth()) / 2);
-        primaryStage.setY((primScreenBounds.getHeight() - primaryStage.getMinHeight()) / 2);
+        primaryStage.setX((ScreenInfo.bounds.getWidth() - 400) / 2);
+        primaryStage.setY((ScreenInfo.bounds.getHeight() - 150) / 2);
 
-        primaryStage.getIcons().add(new Image(String.valueOf(NewProject.class.getResource("/img/coconut.png"))));
+        primaryStage.getIcons().add(CustomIcons.logo);
 
         primaryStage.setScene(scene);
         primaryStage.show();
@@ -52,10 +49,6 @@ public class CreateF {
 
     public static void close() {
         primaryStage.close();
-    }
-
-    public static Stage getStage() {
-        return primaryStage;
     }
 
     public static String getType() {

@@ -3,15 +3,14 @@ package ru.mrchebik.view;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import ru.mrchebik.controller.javafx.WorkStationController;
+import ru.mrchebik.model.CustomIcons;
 import ru.mrchebik.model.Project;
 import ru.mrchebik.model.Projects;
+import ru.mrchebik.model.ScreenInfo;
 
 /**
  * Created by mrchebik on 8/29/17.
@@ -30,15 +29,13 @@ public class WorkStation {
 
         primaryStage.setTitle(Project.getName() + " - [" + (Project.getPath().startsWith(Projects.getPath()) ? "~" + Project.getPath().substring(Projects.getPath().length() - 17) : Project.getPath()) + "] - Coconut-IDE 0.0.7");
 
-        Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
+        primaryStage.setWidth(ScreenInfo.bounds.getWidth() / 100 * 75);
+        primaryStage.setHeight(ScreenInfo.bounds.getHeight() / 100 * 75);
 
-        primaryStage.setWidth(primScreenBounds.getWidth() / 100 * 75);
-        primaryStage.setHeight(primScreenBounds.getHeight() / 100 * 75);
+        primaryStage.setX((ScreenInfo.bounds.getWidth() - primaryStage.getWidth()) / 2);
+        primaryStage.setY((ScreenInfo.bounds.getHeight() - primaryStage.getHeight()) / 2);
 
-        primaryStage.setX((primScreenBounds.getWidth() - primaryStage.getWidth()) / 2);
-        primaryStage.setY((primScreenBounds.getHeight() - primaryStage.getHeight()) / 2);
-
-        primaryStage.getIcons().add(new Image(String.valueOf(NewProject.class.getResource("/img/coconut.png"))));
+        primaryStage.getIcons().add(CustomIcons.logo);
 
         primaryStage.setOnCloseRequest(event -> System.exit(0));
 

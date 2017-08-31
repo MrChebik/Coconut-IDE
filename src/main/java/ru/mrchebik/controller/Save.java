@@ -7,8 +7,17 @@ import java.nio.file.Path;
 /**
  * Created by mrchebik on 14.05.16.
  */
-public class Save {
-    public static void start(Path path, String text) {
+public class Save extends Thread {
+    private Path path;
+    private String text;
+
+    public Save(Path path,
+                String text) {
+        this.path = path;
+        this.text = text;
+    }
+
+    public void run() {
         PrintWriter writer = null;
         try {
             writer = new PrintWriter(path.toFile());

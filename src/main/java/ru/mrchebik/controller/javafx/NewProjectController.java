@@ -30,7 +30,7 @@ public class NewProjectController implements Initializable {
         Project.setName(projectName.getText());
         Project.setPath(projectPath.getText());
 
-        NewProjectAction.start();
+        new NewProjectAction().start();
 
         NewProject.close();
         StartOfWorking.close();

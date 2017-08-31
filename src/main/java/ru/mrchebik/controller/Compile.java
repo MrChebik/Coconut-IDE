@@ -11,13 +11,13 @@ import java.util.Arrays;
 /**
  * Created by mrchebik on 08.05.16.
  */
-public class Compile {
-    public static void start() {
+public class Compile extends Thread {
+    @Override
+    public void run() {
         findAllJava(new File(Project.getPathSource()));
 
         new EnhancedProcess("javac",
-                /*"-d", Project.getPathOut(),*/
-                "@" + Project.getPathOut() + File.separator + "option.txt",
+                "-d", Project.getPathOut(),
                 "@" + Project.getPathOut() + File.separator + "source.txt").start();
     }
 
@@ -31,18 +31,14 @@ public class Compile {
 
         File[] files = source.listFiles(new CustomFileFilter());
         if (files != null) {
-            String[] paths = Arrays.stream(files).map(File::getPath).toArray(String[]::new);
-
-            Save.start(sourceNew.toPath(), "-d " + Project.getPathOut() + "\n" + String.join("\n", String.join("\n", paths)));
+            Save save = new Save(sourceNew.toPath(),
+                    String.join("\n", Arrays.stream(files).map(File::getPath).toArray(String[]::new)));
+            save.start();
+            try {
+                save.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
-
-        File option = new File(Project.getPathOut() + File.separator + "option.txt");
-        try {
-            option.createNewFile();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        Save.start(option.toPath(), "-d " + Project.getPathOut() + "\n-sourcepath " + Project.getPathSource());
     }
 }

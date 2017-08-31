@@ -33,7 +33,7 @@ public class SaveProcess extends Thread {
         schedule(() -> controller.getTabs().forEach(tab -> {
             TextArea area = (TextArea) tab.getContent();
 
-            Save.start((Path) tab.getUserData(), area.getText());
+            new Save((Path) tab.getUserData(), area.getText()).start();
         }));
     }
 }
