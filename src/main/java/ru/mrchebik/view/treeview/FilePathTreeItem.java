@@ -1,86 +1,61 @@
 package ru.mrchebik.view.treeview;
 
-import javafx.event.Event;
-import javafx.event.EventHandler;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.control.TreeItem;
-import javafx.scene.image.ImageView;
-import ru.mrchebik.model.CustomIcons;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.attribute.BasicFileAttributes;
+import java.util.stream.Collectors;
 
 /**
  * Created by mrchebik on 8/30/17.
  */
-public class FilePathTreeItem extends TreeItem<String> {
-    private String fullPath;
-
-    private boolean isDirectory;
-
-    public FilePathTreeItem(Path file) {
-        super(file.toString());
-
-        this.fullPath = file.toString();
-
-        if (Files.isDirectory(file)) {
-            this.isDirectory = true;
-            this.setGraphic(new ImageView(CustomIcons.folderCollapseImage));
-        } else {
-            this.isDirectory = false;
-            this.setGraphic(new ImageView(CustomIcons.fileImage));
-        }
-
-        if (!fullPath.endsWith(File.separator)) {
-            String value = file.toString();
-
-            int indexOf = value.lastIndexOf(File.separator);
-
-            if (indexOf > 0) {
-                this.setValue(value.substring(indexOf + 1));
-            } else {
-                this.setValue(value);
-            }
-        }
-
-        this.addEventHandler(TreeItem.branchExpandedEvent(), new EventHandler() {
-            @Override
-            public void handle(Event e) {
-                FilePathTreeItem source = (FilePathTreeItem) e.getSource();
-                if (source.isDirectory() && source.isExpanded()) {
-                    ImageView iv = (ImageView) source.getGraphic();
-                    iv.setImage(CustomIcons.folderExpandImage);
-                }
-                try {
-                    if (source.getChildren().isEmpty()) {
-                        Path path = Paths.get(source.getFullPath());
-                        BasicFileAttributes attribs = Files.readAttributes(path, BasicFileAttributes.class);
-                        if (attribs.isDirectory()) {
-                            DirectoryStream<Path> dir = Files.newDirectoryStream(path);
-                            for (Path file : dir) {
-                                FilePathTreeItem treeNode = new FilePathTreeItem(file);
-                                source.getChildren().add(treeNode);
-                            }
-                        }
-                    } else {
-
-                    }
-                } catch (IOException x) {
-                    x.printStackTrace();
-                }
-            }
-        });
-    }
-
-    public String getFullPath() {
-        return fullPath;
-    }
+public class FilePathTreeItem extends TreeItem<Path> {
+    private boolean isFirstTimeChildren = true;
+    private boolean isFirstTimeLeaf = true;
+    private boolean isLeaf;
 
     public boolean isDirectory() {
-        return isDirectory;
+        return Files.isDirectory(getValue());
+    }
+
+    public FilePathTreeItem(Path f) {
+        super(f);
+    }
+
+    @Override
+    public ObservableList<TreeItem<Path>> getChildren() {
+        if (isFirstTimeChildren) {
+            isFirstTimeChildren = false;
+
+            super.getChildren().setAll(buildChildren());
+        }
+        return super.getChildren();
+    }
+
+    @Override
+    public boolean isLeaf() {
+        if (isFirstTimeLeaf) {
+            isFirstTimeLeaf = false;
+            isLeaf = Files.exists(getValue()) && !Files.isDirectory(getValue());
+        }
+        return isLeaf;
+    }
+
+    private ObservableList<TreeItem<Path>> buildChildren() {
+        if (Files.isDirectory(getValue())) {
+            try {
+                return Files.list(getValue())
+                        .map(FilePathTreeItem::new)
+                        .collect(Collectors.toCollection(FXCollections::observableArrayList));
+            } catch (IOException e) {
+                e.printStackTrace();
+                return FXCollections.emptyObservableList();
+            }
+        }
+
+        return FXCollections.emptyObservableList();
     }
 }

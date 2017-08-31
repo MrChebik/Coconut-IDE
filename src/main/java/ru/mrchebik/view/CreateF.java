@@ -10,17 +10,23 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 import java.io.IOException;
+import java.nio.file.Path;
 
 /**
- * Created by mrchebik on 8/29/17.
+ * Created by mrchebik on 8/30/17.
  */
-public class NewProject {
+public class CreateF {
     private static Stage primaryStage;
+    private static String type;
+    private static Path path;
 
-    public static void start() {
+    public static void start(String type, Path path) {
+        CreateF.type = type;
+        CreateF.path = path;
+
         Scene scene = null;
         try {
-            scene = new Scene(FXMLLoader.load(NewProject.class.getResource("/fxml/newProject.fxml")));
+            scene = new Scene(FXMLLoader.load(CreateF.class.getResource("/fxml/createF.fxml")));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -28,11 +34,11 @@ public class NewProject {
         primaryStage = new Stage();
         primaryStage.initModality(Modality.APPLICATION_MODAL);
         primaryStage.initStyle(StageStyle.DECORATED);
-        primaryStage.setTitle("New Project");
-        primaryStage.setMinWidth(500);
-        primaryStage.setMinHeight(200);
-        primaryStage.setMaxHeight(200);
-        primaryStage.setMaxWidth(500);
+        primaryStage.setTitle(type);
+        primaryStage.setMinWidth(400);
+        primaryStage.setMinHeight(150);
+        primaryStage.setMaxHeight(150);
+        primaryStage.setMaxWidth(400);
 
         Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
         primaryStage.setX((primScreenBounds.getWidth() - primaryStage.getMinWidth()) / 2);
@@ -50,5 +56,13 @@ public class NewProject {
 
     public static Stage getStage() {
         return primaryStage;
+    }
+
+    public static String getType() {
+        return type;
+    }
+
+    public static Path getPath() {
+        return path;
     }
 }

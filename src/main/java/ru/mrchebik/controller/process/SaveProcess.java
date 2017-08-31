@@ -1,12 +1,11 @@
 package ru.mrchebik.controller.process;
 
-import javafx.collections.ObservableList;
-import javafx.scene.control.Tab;
 import javafx.scene.control.TextArea;
 import ru.mrchebik.controller.Save;
 import ru.mrchebik.controller.javafx.WorkStationController;
 import ru.mrchebik.view.WorkStation;
 
+import java.nio.file.Path;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -16,26 +15,25 @@ import java.util.TimerTask;
 public class SaveProcess extends Thread {
     private final Timer t = new Timer();
 
-    public void schedule(Runnable r, long delay, long period) {
+    private WorkStationController controller;
+
+    public void schedule(Runnable r) {
         final TimerTask task = new TimerTask() {
             public void run() {
                 r.run();
             }
         };
-        t.schedule(task, delay, period);
+        t.schedule(task, (long) 5000, (long) 5000);
     }
 
     @Override
     public void run() {
-        schedule(() -> {
-            WorkStationController controller = WorkStation.getFxmlLoader().getController();
-            ObservableList<Tab> tabs = controller.getTabs();
+        controller = WorkStation.getFxmlLoader().getController();
 
-            if (tabs.size() > 0) {
-                TextArea textArea = (TextArea) tabs.filtered(e -> e.getText().equals("Main.java")).get(0).getContent();
+        schedule(() -> controller.getTabs().forEach(tab -> {
+            TextArea area = (TextArea) tab.getContent();
 
-                Save.start(textArea.getText());
-            }
-        }, 5000, 5000);
+            Save.start((Path) tab.getUserData(), area.getText());
+        }));
     }
 }

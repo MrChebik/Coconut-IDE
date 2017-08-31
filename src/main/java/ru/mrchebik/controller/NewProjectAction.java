@@ -11,8 +11,15 @@ import java.io.IOException;
 public class NewProjectAction {
     public static void start() {
         new File(Project.getPath()).mkdir();
+
+        Project.setPathSource(Project.getPath() + File.separator + "src");
+        Project.setPathOut(Project.getPath() + File.separator + "out");
+
+        new File(Project.getPathSource()).mkdir();
+        new File(Project.getPathOut()).mkdir();
+
         try {
-            new File(Project.getPath() + File.separator + "Main.java").createNewFile();
+            new File(Project.getPathSource() + File.separator + "Main.java").createNewFile();
         } catch (IOException e) {
             e.printStackTrace();
         }
