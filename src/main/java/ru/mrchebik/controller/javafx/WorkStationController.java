@@ -303,8 +303,6 @@ public class WorkStationController implements Initializable {
     }
 
     private TreeItem<Path> getItem(TreeItem<Path> root, Path path) {
-        System.out.println(" --- ");
-        System.out.println(root.getValue() + " // " + path);
         if (root.getValue().equals(path)) {
             return root;
         }
@@ -317,7 +315,6 @@ public class WorkStationController implements Initializable {
         }
 
         for (TreeItem<Path> child : root.getChildren()) {
-            System.out.println(child.getValue() + " // " + path);
             if (!path.equals(child.getValue())) {
                 if (path.equals(targetToRename) && child.getValue().equals(renamedFile)) {
                     targetToRename = null;
