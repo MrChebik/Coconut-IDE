@@ -233,21 +233,23 @@ public class WorkStationController implements Initializable {
                     });
 
                     paste.setOnAction(event -> {
-                        Path moveTo = Paths.get(path.toString() + File.separator + pathForCommand.getFileName().toString());
-                        if ("Cut".equals(command)) {
-                            try {
-                                Files.move(pathForCommand, moveTo, StandardCopyOption.REPLACE_EXISTING);
-                            } catch (IOException e) {
-                                e.printStackTrace();
+                        if (command != null) {
+                            Path moveTo = Paths.get(path.toString() + File.separator + pathForCommand.getFileName().toString());
+                            if ("Cut".equals(command)) {
+                                try {
+                                    Files.move(pathForCommand, moveTo, StandardCopyOption.REPLACE_EXISTING);
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            } else if ("Copy".equals(command)) {
+                                try {
+                                    Files.copy(pathForCommand, moveTo, StandardCopyOption.REPLACE_EXISTING);
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
                             }
-                        } else if ("Copy".equals(command)) {
-                            try {
-                                Files.copy(pathForCommand, moveTo, StandardCopyOption.REPLACE_EXISTING);
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
+                            loadTree();
                         }
-                        loadTree();
                     });
 
                     rename.setOnAction(event -> CreateF.start("Rename " + (isDirectory ? "Folder" : "File"), path));
