@@ -1,8 +1,11 @@
 package ru.mrchebik.view.treeview;
 
+import javafx.beans.property.BooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TreeItem;
+import javafx.scene.image.ImageView;
+import ru.mrchebik.model.CustomIcons;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -48,7 +51,21 @@ public class FilePathTreeItem extends TreeItem<Path> {
         if (Files.isDirectory(getValue())) {
             try {
                 return Files.list(getValue())
-                        .map(FilePathTreeItem::new)
+                        .map(e -> {
+                            FilePathTreeItem item = new FilePathTreeItem(e);
+                            item.setGraphic(new ImageView(item.isDirectory() ? CustomIcons.folderCollapseImage : CustomIcons.fileImage));
+                            if (isDirectory()) {
+                                item.expandedProperty().addListener((observable, oldValue, newValue) -> {
+                                    BooleanProperty bb = (BooleanProperty) observable;
+
+                                    TreeItem t = (TreeItem) bb.getBean();
+
+                                    t.setGraphic(new ImageView(newValue ? CustomIcons.folderExpandImage : CustomIcons.folderCollapseImage));
+                                });
+                            }
+
+                            return item;
+                        })
                         .collect(Collectors.toCollection(FXCollections::observableArrayList));
             } catch (IOException e) {
                 e.printStackTrace();

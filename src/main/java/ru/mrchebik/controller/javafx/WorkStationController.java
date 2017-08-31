@@ -1,6 +1,7 @@
 package ru.mrchebik.controller.javafx;
 
 import javafx.application.Platform;
+import javafx.beans.property.BooleanProperty;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -136,6 +137,7 @@ public class WorkStationController implements Initializable {
         loadTree();
 
         treeView.getSelectionModel().select(2);
+        treeView.getTreeItem(2).setGraphic(new ImageView(CustomIcons.folderExpandImage));
 
         TreeItem<Path> item = treeView.getTreeItem(2).getChildren().get(0);
 
@@ -173,11 +175,9 @@ public class WorkStationController implements Initializable {
                 } else {
                     boolean isDirectory = path.toFile().isDirectory();
 
-                    String text = path.getFileName().toString();
-                    ImageView icon = new ImageView(isDirectory ? CustomIcons.folderCollapseImage : CustomIcons.fileImage);
+                    setText(path.getFileName().toString());
 
-                    setText(text);
-                    setGraphic(icon);
+                    setGraphic(getTreeItem().getGraphic());
 
                     ContextMenu contextMenu = new ContextMenu();
 
@@ -260,6 +260,14 @@ public class WorkStationController implements Initializable {
 
         TreeItem<Path> rootNode = new FilePathTreeItem(Paths.get(Project.getPath()));
         rootNode.setExpanded(true);
+        rootNode.setGraphic(new ImageView(CustomIcons.folderExpandImage));
+        rootNode.expandedProperty().addListener((observable, oldValue, newValue) -> {
+            BooleanProperty bb = (BooleanProperty) observable;
+
+            TreeItem t = (TreeItem) bb.getBean();
+
+            t.setGraphic(new ImageView(newValue ? CustomIcons.folderExpandImage : CustomIcons.folderCollapseImage));
+        });
 
         treeView.setRoot(rootNode);
 
@@ -279,27 +287,24 @@ public class WorkStationController implements Initializable {
         return copy;
     }
 
-    public TreeView getTreeView() {
-        return treeView;
-    }
-
     private void passAllTree(TreeItem<Path> root) {
         TreeItem item = getItem(treeView.getRoot(), root.getValue());
 
         if (item != null) {
             item.setExpanded(root.isExpanded());
+            item.setGraphic(new ImageView(item.isExpanded() ? CustomIcons.folderExpandImage : CustomIcons.folderCollapseImage));
         }
 
-        if (root.getChildren() != null) {
-            for (TreeItem<Path> child : root.getChildren()) {
-                if (!child.getChildren().isEmpty()) {
-                    passAllTree(child);
-                }
+        for (TreeItem<Path> child : root.getChildren()) {
+            if (Files.isDirectory(child.getValue())) {
+                passAllTree(child);
             }
         }
     }
 
     private TreeItem<Path> getItem(TreeItem<Path> root, Path path) {
+        System.out.println(" --- ");
+        System.out.println(root.getValue() + " // " + path);
         if (root.getValue().equals(path)) {
             return root;
         }
@@ -312,6 +317,7 @@ public class WorkStationController implements Initializable {
         }
 
         for (TreeItem<Path> child : root.getChildren()) {
+            System.out.println(child.getValue() + " // " + path);
             if (!path.equals(child.getValue())) {
                 if (path.equals(targetToRename) && child.getValue().equals(renamedFile)) {
                     targetToRename = null;
@@ -320,7 +326,10 @@ public class WorkStationController implements Initializable {
                     return child;
                 }
                 if (!child.getChildren().isEmpty()) {
-                    getItem(child, path);
+                    TreeItem<Path> item = getItem(child, path);
+                    if (item != null) {
+                        return item;
+                    }
                 }
             } else {
                 return child;

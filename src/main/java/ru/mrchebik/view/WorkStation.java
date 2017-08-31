@@ -25,8 +25,6 @@ public class WorkStation {
 
         fxmlLoader.setLocation(StartOfWorking.class.getResource("/fxml/workStation.fxml"));
 
-        Scene scene = new Scene(fxmlLoader.load());
-
         primaryStage.setTitle(Project.getName() + " - [" + (Project.getPath().startsWith(Projects.getPath()) ? "~" + Project.getPath().substring(Projects.getPath().length() - 17) : Project.getPath()) + "] - Coconut-IDE 0.0.7");
 
         primaryStage.setWidth(ScreenInfo.bounds.getWidth() / 100 * 75);
@@ -38,6 +36,8 @@ public class WorkStation {
         primaryStage.getIcons().add(CustomIcons.logo);
 
         primaryStage.setOnCloseRequest(event -> System.exit(0));
+
+        Scene scene = new Scene(fxmlLoader.load());
 
         primaryStage.setScene(scene);
         primaryStage.show();

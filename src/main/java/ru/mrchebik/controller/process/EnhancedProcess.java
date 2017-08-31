@@ -7,7 +7,6 @@ import ru.mrchebik.view.WorkStation;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Arrays;
 
 /**
  * Created by mrchebik on 8/29/17.
@@ -20,8 +19,6 @@ public class EnhancedProcess {
     }
 
     public void start() {
-        System.out.println(Arrays.toString(commands));
-
         ProcessBuilder processBuilder = new ProcessBuilder(commands);
         processBuilder.redirectErrorStream(true);
         Process process = null;
