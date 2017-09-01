@@ -6,6 +6,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import ru.mrchebik.model.Project;
 import ru.mrchebik.view.CreateF;
 import ru.mrchebik.view.WorkStation;
 
@@ -37,11 +38,17 @@ public class CreateFController implements Initializable {
             File newFile = new File(file.getPath().substring(0, file.getPath().length() - file.getName().length()) + name.getText());
             boolean isRenamed = file.renameTo(newFile);
 
-            controller.setTabs(newFile.getPath(), name.getText());
+            if (isRenamed) {
+                if (CreateF.getPath().toString().equals(Project.getPath())) {
+                    Project.setPath(newFile.getPath());
+                }
 
-            if (newFile.isDirectory() && isRenamed) {
-                controller.setTargetToRename(CreateF.getPath());
-                controller.setRenamedFile(newFile.toPath());
+                controller.setTabs(newFile.getPath(), name.getText());
+
+                if (newFile.isDirectory()) {
+                    controller.setTargetToRename(CreateF.getPath());
+                    controller.setRenamedFile(newFile.toPath());
+                }
             }
         }
 
