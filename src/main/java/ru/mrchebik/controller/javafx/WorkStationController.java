@@ -124,6 +124,41 @@ public class WorkStationController implements Initializable {
         return tabPane.getTabs();
     }
 
+    public void setTabs(String newFile, String name) {
+        for (int i = 0; i < tabPane.getTabs().size(); i++) {
+            Path path = (Path) tabPane.getTabs().get(i).getUserData();
+
+            if (path.toString().startsWith(CreateF.getPath().toString())) {
+                int indexOfDifference = 0;
+                StringBuilder nameOfDifference = new StringBuilder();
+
+                char[] inital = path.toString().toCharArray();
+                char[] rename = newFile.toCharArray();
+
+                for (int j = 0; j < rename.length; j++) {
+                    if (inital[j] != rename[j]) {
+                        if (inital[j] != File.separator.charAt(0)) {
+                            indexOfDifference = path.toString().substring(0, j).lastIndexOf(File.separator.charAt(0)) + 1;
+                        } else {
+                            indexOfDifference = j;
+                        }
+                        break;
+                    }
+                }
+
+                for (int j = indexOfDifference; j < path.toString().length(); j++) {
+                    if (inital[j] == File.separator.charAt(0)) {
+                        break;
+                    } else {
+                        nameOfDifference.append(inital[j]);
+                    }
+                }
+
+                tabPane.getTabs().get(i).setUserData(Paths.get(newFile.substring(0, indexOfDifference) + name + path.toString().substring(indexOfDifference + nameOfDifference.length(), path.toString().length())));
+            }
+        }
+    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         controller = WorkStation.getFxmlLoader().getController();

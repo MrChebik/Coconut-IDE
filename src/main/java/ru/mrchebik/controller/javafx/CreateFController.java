@@ -37,6 +37,8 @@ public class CreateFController implements Initializable {
             File newFile = new File(file.getPath().substring(0, file.getPath().length() - file.getName().length()) + name.getText());
             boolean isRenamed = file.renameTo(newFile);
 
+            controller.setTabs(newFile.getPath(), name.getText());
+
             if (newFile.isDirectory() && isRenamed) {
                 controller.setTargetToRename(CreateF.getPath());
                 controller.setRenamedFile(newFile.toPath());
