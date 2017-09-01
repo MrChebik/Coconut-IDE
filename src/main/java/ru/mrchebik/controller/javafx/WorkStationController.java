@@ -356,7 +356,7 @@ public class WorkStationController implements Initializable {
         }
 
         for (TreeItem<Path> child : root.getChildren()) {
-            if (Files.isDirectory(child.getValue())) {
+            if (child.getValue().toString().indexOf('.') == -1) {
                 passAllTree(child);
             }
         }
