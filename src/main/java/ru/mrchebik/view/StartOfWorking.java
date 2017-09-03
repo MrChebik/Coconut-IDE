@@ -22,8 +22,8 @@ public class StartOfWorking extends Application {
         stage.setWidth(600);
         stage.setHeight(400);
 
-        stage.setX((ScreenInfo.bounds.getWidth() - 600) / 2);
-        stage.setY((ScreenInfo.bounds.getHeight() - 400) / 2);
+        stage.setX((ScreenInfo.BOUNDS.getWidth() - 600) / 2);
+        stage.setY((ScreenInfo.BOUNDS.getHeight() - 400) / 2);
 
         stage.getIcons().add(CustomIcons.logo);
 

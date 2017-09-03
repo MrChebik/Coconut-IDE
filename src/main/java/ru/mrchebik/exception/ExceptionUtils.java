@@ -1,6 +1,6 @@
-package ru.mrchebik.controller.exception;
+package ru.mrchebik.exception;
 
-import ru.mrchebik.controller.exception.throwing.ThrowingConsumer;
+import ru.mrchebik.exception.throwing.ThrowingConsumer;
 
 import java.util.function.Consumer;
 

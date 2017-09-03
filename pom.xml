@@ -6,6 +6,7 @@
 
     <groupId>coconut.ide</groupId>
     <artifactId>coconut-ide</artifactId>
+    <packaging>pom</packaging>
     <version>0.0.8</version>
 
     <build>
@@ -57,5 +58,13 @@
             </plugin>
         </plugins>
     </build>
+
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+        </dependency>
+    </dependencies>
 
 </project>

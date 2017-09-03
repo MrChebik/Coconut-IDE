@@ -7,5 +7,5 @@ import javafx.stage.Screen;
  * Created by mrchebik on 8/31/17.
  */
 public class ScreenInfo {
-    public static final Rectangle2D bounds = Screen.getPrimary().getVisualBounds();
+    public static final Rectangle2D BOUNDS = Screen.getPrimary().getVisualBounds();
 }

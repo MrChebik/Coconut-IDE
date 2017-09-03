@@ -32,8 +32,8 @@ public class NewProject {
         primaryStage.setHeight(200);
         primaryStage.setResizable(false);
 
-        primaryStage.setX((ScreenInfo.bounds.getWidth() - 500) / 2);
-        primaryStage.setY((ScreenInfo.bounds.getHeight() - 200) / 2);
+        primaryStage.setX((ScreenInfo.BOUNDS.getWidth() - 500) / 2);
+        primaryStage.setY((ScreenInfo.BOUNDS.getHeight() - 200) / 2);
 
         primaryStage.getIcons().add(CustomIcons.logo);
 

@@ -7,8 +7,10 @@ public class Project {
     private static String name;
     private static String path;
 
-    private static String pathSource;
     private static String pathOut;
+    private static String pathOutListStructure;
+
+    private static String pathSource;
 
     public static String getName() {
         return Project.name;
@@ -40,5 +42,13 @@ public class Project {
 
     public static void setPathOut(String pathOut) {
         Project.pathOut = pathOut;
+    }
+
+    public static String getPathOutListStructure() {
+        return pathOutListStructure;
+    }
+
+    public static void setPathOutListStructure(String pathOutListStructure) {
+        Project.pathOutListStructure = pathOutListStructure;
     }
 }

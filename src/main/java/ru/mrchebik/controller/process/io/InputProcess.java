@@ -13,20 +13,23 @@ import java.io.InputStreamReader;
  */
 public class InputProcess extends Thread {
     private InputStream inputStream;
+    private WorkStationController controller;
 
     public InputProcess(InputStream inputStream) {
         this.inputStream = inputStream;
+        this.controller = WorkStation.getFxmlLoader().getController();
     }
 
     @Override
     public void run() {
-        WorkStationController controller = WorkStation.getFxmlLoader().getController();
-        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+        InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+        BufferedReader reader = new BufferedReader(inputStreamReader);
 
         String line;
         try {
             while ((line = reader.readLine()) != null) {
-                controller.setOutText(controller.getOutText() + line + "\n");
+                String previousLines = controller.getOutText();
+                controller.setOutText(previousLines + line + "\n");
             }
         } catch (IOException e) {
             e.printStackTrace();

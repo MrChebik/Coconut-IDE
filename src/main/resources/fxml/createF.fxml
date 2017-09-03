@@ -5,7 +5,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.*?>
 <AnchorPane xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="ru.mrchebik.controller.javafx.CreateFController">
+            fx:controller="ru.mrchebik.controller.javafx.CreatorFilesController">
     <children>
         <GridPane layoutX="90.0" layoutY="67.0" prefHeight="100.0" prefWidth="400.0" AnchorPane.bottomAnchor="30.0"
                   AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="30.0">

@@ -1,12 +1,8 @@
 package ru.mrchebik.view;
 
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import javafx.util.Duration;
-import ru.mrchebik.controller.javafx.WorkStationController;
 import ru.mrchebik.model.CustomIcons;
 import ru.mrchebik.model.Project;
 import ru.mrchebik.model.Projects;
@@ -27,11 +23,11 @@ public class WorkStation {
 
         primaryStage.setTitle(Project.getName() + " - [" + (Project.getPath().startsWith(Projects.getPath()) ? "~" + Project.getPath().substring(Projects.getPath().length() - 17) : Project.getPath()) + "] - Coconut-IDE 0.0.8");
 
-        primaryStage.setWidth(ScreenInfo.bounds.getWidth() / 100 * 75);
-        primaryStage.setHeight(ScreenInfo.bounds.getHeight() / 100 * 75);
+        primaryStage.setWidth(ScreenInfo.BOUNDS.getWidth() / 100 * 75);
+        primaryStage.setHeight(ScreenInfo.BOUNDS.getHeight() / 100 * 75);
 
-        primaryStage.setX((ScreenInfo.bounds.getWidth() - primaryStage.getWidth()) / 2);
-        primaryStage.setY((ScreenInfo.bounds.getHeight() - primaryStage.getHeight()) / 2);
+        primaryStage.setX((ScreenInfo.BOUNDS.getWidth() - primaryStage.getWidth()) / 2);
+        primaryStage.setY((ScreenInfo.BOUNDS.getHeight() - primaryStage.getHeight()) / 2);
 
         primaryStage.getIcons().add(CustomIcons.logo);
 
@@ -41,15 +37,6 @@ public class WorkStation {
 
         primaryStage.setScene(scene);
         primaryStage.show();
-
-        WorkStationController controller = fxmlLoader.getController();
-
-        Timeline timeline = new Timeline(new KeyFrame(
-                Duration.seconds(3),
-                event -> controller.loadTree())
-        );
-        timeline.setCycleCount(Timeline.INDEFINITE);
-        timeline.play();
     }
 
     public static FXMLLoader getFxmlLoader() {

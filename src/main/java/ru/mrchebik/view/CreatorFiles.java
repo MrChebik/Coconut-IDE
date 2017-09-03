@@ -14,18 +14,18 @@ import java.nio.file.Path;
 /**
  * Created by mrchebik on 8/30/17.
  */
-public class CreateF {
+public class CreatorFiles {
     private static Stage primaryStage;
     private static String type;
     private static Path path;
 
     public static void start(String type, Path path) {
-        CreateF.type = type;
-        CreateF.path = path;
+        CreatorFiles.type = type;
+        CreatorFiles.path = path;
 
         Scene scene = null;
         try {
-            scene = new Scene(FXMLLoader.load(CreateF.class.getResource("/fxml/createF.fxml")));
+            scene = new Scene(FXMLLoader.load(CreatorFiles.class.getResource("/fxml/createF.fxml")));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -38,8 +38,8 @@ public class CreateF {
         primaryStage.setHeight(150);
         primaryStage.setResizable(false);
 
-        primaryStage.setX((ScreenInfo.bounds.getWidth() - 400) / 2);
-        primaryStage.setY((ScreenInfo.bounds.getHeight() - 150) / 2);
+        primaryStage.setX((ScreenInfo.BOUNDS.getWidth() - 400) / 2);
+        primaryStage.setY((ScreenInfo.BOUNDS.getHeight() - 150) / 2);
 
         primaryStage.getIcons().add(CustomIcons.logo);
 

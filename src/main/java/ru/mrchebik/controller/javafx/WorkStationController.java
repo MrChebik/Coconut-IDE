@@ -1,7 +1,6 @@
 package ru.mrchebik.controller.javafx;
 
 import javafx.application.Platform;
-import javafx.beans.property.BooleanProperty;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -9,17 +8,18 @@ import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
-import ru.mrchebik.controller.Compile;
-import ru.mrchebik.controller.Run;
-import ru.mrchebik.controller.Save;
-import ru.mrchebik.controller.exception.ExceptionUtils;
+import ru.mrchebik.controller.actions.Run;
+import ru.mrchebik.controller.actions.autosave.Autosave;
+import ru.mrchebik.controller.actions.autosave.saver.SaveTabs;
+import ru.mrchebik.controller.actions.autosave.saver.SaveTabsProcess;
+import ru.mrchebik.controller.actions.compile.Compile;
+import ru.mrchebik.controller.javafx.updater.tab.TabUpdater;
+import ru.mrchebik.controller.javafx.updater.tree.CustomTreeItem;
+import ru.mrchebik.controller.javafx.updater.tree.TreeUpdater;
 import ru.mrchebik.controller.process.EnhancedProcess;
-import ru.mrchebik.controller.process.SaveProcess;
 import ru.mrchebik.model.CustomIcons;
 import ru.mrchebik.model.Project;
-import ru.mrchebik.view.CreateF;
-import ru.mrchebik.view.WorkStation;
-import ru.mrchebik.view.treeview.FilePathTreeItem;
+import ru.mrchebik.view.CreatorFiles;
 
 import java.io.File;
 import java.io.IOException;
@@ -28,9 +28,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.List;
 import java.util.ResourceBundle;
-import java.util.stream.Collectors;
 
 /**
  * Created by mrchebik on 8/29/17.
@@ -42,18 +40,11 @@ public class WorkStationController implements Initializable {
     @FXML
     private TreeView<Path> treeView;
 
-    private TreeView<Path> backupTree;
-
     @FXML
     private TabPane tabPane;
 
     private String command;
     private Path pathForCommand;
-
-    private Path targetToRename;
-    private Path renamedFile;
-
-    private WorkStationController controller;
 
     @FXML private void handleRunProject() {
         Platform.runLater(() -> {
@@ -62,7 +53,7 @@ public class WorkStationController implements Initializable {
 
             saveAllOpenTabs();
 
-            new Run((Path) tabPane.getSelectionModel().getSelectedItem().getUserData()).start();
+            new Run((Path) tabPane.getSelectionModel().getSelectedItem().getUserData(), this).start();
         });
     }
 
@@ -78,36 +69,18 @@ public class WorkStationController implements Initializable {
     }
 
     private void saveAllOpenTabs() {
-        List<Save> saves = controller.getTabs().stream().map(tab -> {
-            TextArea area = (TextArea) tab.getContent();
-
-            return new Save((Path) tab.getUserData(), area.getText());
-        }).collect(Collectors.toList());
-
-        saves.forEach(Thread::start);
-        saves.forEach(ExceptionUtils.handlingConsumerWrapper(Thread::join, InterruptedException.class));
+        Autosave saver = new SaveTabs(this.getTabs());
+        saver.start();
+        saver.save();
     }
 
     @FXML
-    private void handleDoubleClick(MouseEvent e) throws IOException {
+    private void handleDoubleClick(MouseEvent e) {
         if (e.getClickCount() == 2) {
-            FilePathTreeItem item = (FilePathTreeItem) treeView.getSelectionModel().getSelectedItem();
+            CustomTreeItem item = (CustomTreeItem) treeView.getSelectionModel().getSelectedItem();
 
             if (item != null && !item.isDirectory() && tabPane.getTabs().filtered(tab -> item.getValue().equals(tab.getUserData())).size() < 1) {
-                Tab tabdata = new Tab();
-                TextArea code = new TextArea();
-
-                final String[] lines = {""};
-                Files.readAllLines(Paths.get(item.getValue().toUri()))
-                        .forEach(line -> lines[0] += line + "\n");
-                code.setText(lines[0]);
-
-                tabdata.setText(item.getValue().getFileName().toString());
-                tabdata.setGraphic(new ImageView(CustomIcons.fileImage));
-                tabdata.setUserData(item.getValue());
-                tabdata.setContent(code);
-
-                tabPane.getTabs().add(tabdata);
+                TabUpdater.addObjectToTab(item);
             }
         }
     }
@@ -124,44 +97,12 @@ public class WorkStationController implements Initializable {
         return tabPane.getTabs();
     }
 
-    public void setTabs(String newFile, String name) {
-        for (int i = 0; i < tabPane.getTabs().size(); i++) {
-            Path path = (Path) tabPane.getTabs().get(i).getUserData();
-
-            if (path.toString().startsWith(CreateF.getPath().toString())) {
-                int indexOfDifference = 0;
-                StringBuilder nameOfDifference = new StringBuilder();
-
-                char[] inital = path.toString().toCharArray();
-                char[] rename = newFile.toCharArray();
-
-                for (int j = 0; j < rename.length; j++) {
-                    if (inital[j] != rename[j]) {
-                        if (inital[j] != File.separator.charAt(0)) {
-                            indexOfDifference = path.toString().substring(0, j).lastIndexOf(File.separator.charAt(0)) + 1;
-                        } else {
-                            indexOfDifference = j;
-                        }
-                        break;
-                    }
-                }
-
-                for (int j = indexOfDifference; j < path.toString().length(); j++) {
-                    if (inital[j] == File.separator.charAt(0)) {
-                        break;
-                    } else {
-                        nameOfDifference.append(inital[j]);
-                    }
-                }
-
-                tabPane.getTabs().get(i).setUserData(Paths.get(newFile.substring(0, indexOfDifference) + name + path.toString().substring(indexOfDifference + nameOfDifference.length(), path.toString().length())));
-            }
-        }
-    }
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        controller = WorkStation.getFxmlLoader().getController();
+        TreeUpdater.setTreeView(treeView);
+        TreeUpdater.setRootToTreeView();
+
+        TabUpdater.setTabPane(tabPane);
 
         input = "";
 
@@ -172,7 +113,7 @@ public class WorkStationController implements Initializable {
                         EnhancedProcess.getOutputStream().write((input.replaceAll("\r", "") + "\n").replaceAll("\b", "").getBytes());
                         EnhancedProcess.getOutputStream().flush();
                     } catch (IOException ignored) {
-                        EnhancedProcess.setOutputStream(null);
+                        EnhancedProcess.setOutputStream();
                     } finally {
                         input = "";
                     }
@@ -186,10 +127,6 @@ public class WorkStationController implements Initializable {
             }
         });
 
-        backupTree = new TreeView<>();
-
-        loadTree();
-
         treeView.getSelectionModel().select(2);
         treeView.getTreeItem(2).setGraphic(new ImageView(CustomIcons.folderExpandImage));
 
@@ -197,25 +134,12 @@ public class WorkStationController implements Initializable {
 
         treeView.getSelectionModel().select(item);
 
-        Tab tabdata = new Tab();
-        TextArea code = new TextArea();
+        String pathTarget = Project.getPathSource() + File.separator + "Main.java";
+        Path path = Paths.get(pathTarget);
+        TreeItem<Path> root = treeView.getRoot();
+        CustomTreeItem mainFile = (CustomTreeItem) TreeUpdater.getItem(root, path);
 
-        final String[] lines = {""};
-        try {
-            Files.readAllLines(Paths.get(item.getValue().toUri()))
-                    .forEach(line -> lines[0] += line + "\n");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        code.setText(lines[0]);
-
-        tabdata.setText(item.getValue().getFileName().toString());
-        tabdata.setGraphic(new ImageView(CustomIcons.fileImage));
-        tabdata.setUserData(item.getValue());
-        tabdata.setContent(code);
-
-        tabPane.getTabs().add(tabdata);
-
+        TabUpdater.addObjectToTab(mainFile);
 
         TextArea focusable = (TextArea) tabPane.getTabs().get(0).getContent();
         Platform.runLater(focusable::requestFocus);
@@ -231,6 +155,7 @@ public class WorkStationController implements Initializable {
                     setGraphic(null);
                     setContextMenu(null);
                 } else {
+                    String pathString = path.toString();
                     boolean isDirectory = path.toFile().isDirectory();
 
                     setText(path.getFileName().toString());
@@ -247,15 +172,21 @@ public class WorkStationController implements Initializable {
                     MenuItem rename = new MenuItem("Rename");
                     MenuItem delete = new MenuItem("Delete");
 
-                    if (isDirectory) {
-                        createFile.setOnAction(event -> CreateF.start("Create File", path));
-
-                        createFolder.setOnAction(event -> CreateF.start("Create Folder", path));
-                    } else {
+                    if (!isDirectory) {
                         createFile.setDisable(true);
                         createFolder.setDisable(true);
                         paste.setDisable(true);
                     }
+                    if (pathString.equals(Project.getPath())) {
+                        cut.setDisable(true);
+                        copy.setDisable(true);
+                        paste.setDisable(true);
+                        delete.setDisable(true);
+                    }
+
+                    createFile.setOnAction(event -> CreatorFiles.start("Create File", path));
+
+                    createFolder.setOnAction(event -> CreatorFiles.start("Create Folder", path));
 
                     cut.setOnAction(event -> {
                         command = "Cut";
@@ -269,7 +200,7 @@ public class WorkStationController implements Initializable {
 
                     paste.setOnAction(event -> {
                         if (command != null) {
-                            Path moveTo = Paths.get(path.toString() + File.separator + pathForCommand.getFileName().toString());
+                            Path moveTo = Paths.get(pathString + File.separator + pathForCommand.getFileName().toString());
                             if ("Cut".equals(command)) {
                                 try {
                                     Files.move(pathForCommand, moveTo, StandardCopyOption.REPLACE_EXISTING);
@@ -283,16 +214,12 @@ public class WorkStationController implements Initializable {
                                     e.printStackTrace();
                                 }
                             }
-                            loadTree();
                         }
                     });
 
-                    rename.setOnAction(event -> CreateF.start("Rename " + (isDirectory ? "Folder" : "File"), path));
+                    rename.setOnAction(event -> CreatorFiles.start("Rename " + (isDirectory ? "Folder" : "File"), path));
 
-                    delete.setOnAction(event -> {
-                        deleteDirectory(path.toFile());
-                        loadTree();
-                    });
+                    delete.setOnAction(event -> deleteDirectory(path.toFile()));
 
                     contextMenu.getItems().addAll(createFile, createFolder, new SeparatorMenuItem(), cut, copy, paste, new SeparatorMenuItem(), rename, new SeparatorMenuItem(), delete);
                     setContextMenu(contextMenu);
@@ -300,100 +227,8 @@ public class WorkStationController implements Initializable {
             }
         });
 
-        new SaveProcess().start();
-    }
-
-    public void setTargetToRename(Path targetToRename) {
-        this.targetToRename = targetToRename;
-    }
-
-    public void setRenamedFile(Path renamedFile) {
-        this.renamedFile = renamedFile;
-    }
-
-    public void loadTree() {
-        if (treeView.getRoot() != null) {
-            backupTree.setRoot(deepcopy(treeView.getRoot()));
-        }
-
-        int index = treeView.getRow(treeView.getSelectionModel().getSelectedItem());
-
-        TreeItem<Path> rootNode = new FilePathTreeItem(Paths.get(Project.getPath()));
-        rootNode.setExpanded(true);
-        rootNode.setGraphic(new ImageView(CustomIcons.folderExpandImage));
-        rootNode.expandedProperty().addListener((observable, oldValue, newValue) -> {
-            BooleanProperty bb = (BooleanProperty) observable;
-
-            TreeItem t = (TreeItem) bb.getBean();
-
-            t.setGraphic(new ImageView(newValue ? CustomIcons.folderExpandImage : CustomIcons.folderCollapseImage));
-        });
-
-        treeView.setRoot(rootNode);
-
-        if (backupTree.getRoot() != null) {
-            passAllTree(backupTree.getRoot());
-        }
-
-        treeView.getSelectionModel().select(index);
-    }
-
-    private TreeItem<Path> deepcopy(TreeItem<Path> item) {
-        TreeItem<Path> copy = new TreeItem<>(item.getValue());
-        copy.setExpanded(item.isExpanded());
-        for (TreeItem<Path> child : item.getChildren()) {
-            copy.getChildren().add(deepcopy(child));
-        }
-        return copy;
-    }
-
-    private void passAllTree(TreeItem<Path> root) {
-        TreeItem item = getItem(treeView.getRoot(), root.getValue());
-
-        if (item != null) {
-            item.setExpanded(root.isExpanded());
-            item.setGraphic(new ImageView(item.isExpanded() ? CustomIcons.folderExpandImage : CustomIcons.folderCollapseImage));
-        }
-
-        for (TreeItem<Path> child : root.getChildren()) {
-            if (child.getValue().toString().indexOf('.') == -1) {
-                passAllTree(child);
-            }
-        }
-    }
-
-    private TreeItem<Path> getItem(TreeItem<Path> root, Path path) {
-        if (root.getValue().equals(path)) {
-            return root;
-        }
-
-        if (path.equals(targetToRename) && root.getValue().equals(renamedFile)) {
-            targetToRename = null;
-            renamedFile = null;
-
-            return root;
-        }
-
-        for (TreeItem<Path> child : root.getChildren()) {
-            if (!path.equals(child.getValue())) {
-                if (path.equals(targetToRename) && child.getValue().equals(renamedFile)) {
-                    targetToRename = null;
-                    renamedFile = null;
-
-                    return child;
-                }
-                if (!child.getChildren().isEmpty()) {
-                    TreeItem<Path> item = getItem(child, path);
-                    if (item != null) {
-                        return item;
-                    }
-                }
-            } else {
-                return child;
-            }
-        }
-
-        return null;
+        Autosave saver = new SaveTabsProcess(this);
+        saver.start();
     }
 
     private void deleteDirectory(File path) {

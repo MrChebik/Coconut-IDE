@@ -1,10 +1,10 @@
-package ru.mrchebik.view.treeview;
+package ru.mrchebik.controller.javafx.updater.tree;
 
-import javafx.beans.property.BooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TreeItem;
 import javafx.scene.image.ImageView;
+import ru.mrchebik.controller.javafx.updater.WatcherStructure;
 import ru.mrchebik.model.CustomIcons;
 
 import java.io.IOException;
@@ -15,17 +15,23 @@ import java.util.stream.Collectors;
 /**
  * Created by mrchebik on 8/30/17.
  */
-public class FilePathTreeItem extends TreeItem<Path> {
+public class CustomTreeItem extends TreeItem<Path> {
     private boolean isFirstTimeChildren = true;
     private boolean isFirstTimeLeaf = true;
     private boolean isLeaf;
+
+    private WatcherStructure watcherStructure;
 
     public boolean isDirectory() {
         return Files.isDirectory(getValue());
     }
 
-    public FilePathTreeItem(Path f) {
+    public CustomTreeItem(Path f, WatcherStructure watcherStructure) {
         super(f);
+        if (watcherStructure != null) {
+            this.watcherStructure = watcherStructure;
+            watcherStructure.start();
+        }
     }
 
     @Override
@@ -52,16 +58,17 @@ public class FilePathTreeItem extends TreeItem<Path> {
             try {
                 return Files.list(getValue())
                         .map(e -> {
-                            FilePathTreeItem item = new FilePathTreeItem(e);
+                            WatcherStructure watcherStructure = null;
+
+                            if (Files.isDirectory(e)) {
+                                watcherStructure = new WatcherStructure(e);
+                            }
+
+                            CustomTreeItem item = new CustomTreeItem(e, watcherStructure);
+
                             item.setGraphic(new ImageView(item.isDirectory() ? CustomIcons.folderCollapseImage : CustomIcons.fileImage));
                             if (isDirectory()) {
-                                item.expandedProperty().addListener((observable, oldValue, newValue) -> {
-                                    BooleanProperty bb = (BooleanProperty) observable;
-
-                                    TreeItem t = (TreeItem) bb.getBean();
-
-                                    t.setGraphic(new ImageView(newValue ? CustomIcons.folderExpandImage : CustomIcons.folderCollapseImage));
-                                });
+                                item.expandedProperty().addListener(TreeUpdater.expanderListener());
                             }
 
                             return item;

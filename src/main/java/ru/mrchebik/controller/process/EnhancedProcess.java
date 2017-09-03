@@ -3,7 +3,9 @@ package ru.mrchebik.controller.process;
 import ru.mrchebik.controller.process.io.InputProcess;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Arrays;
 
 /**
  * Created by mrchebik on 8/29/17.
@@ -15,10 +17,12 @@ public class EnhancedProcess {
 
     public EnhancedProcess(String... commands) {
         this.commands = commands;
-        EnhancedProcess.outputStream = null;
+        outputStream = null;
     }
 
     public void start() {
+        System.out.println(Arrays.toString(commands));
+
         ProcessBuilder processBuilder = new ProcessBuilder(commands);
         processBuilder.redirectErrorStream(true);
         Process process = null;
@@ -30,9 +34,11 @@ public class EnhancedProcess {
         }
 
         if (process != null) {
-            new InputProcess(process.getInputStream()).start();
+            InputStream inputStream = process.getInputStream();
+            InputProcess inputProcess = new InputProcess(inputStream);
+            inputProcess.start();
 
-            EnhancedProcess.outputStream = process.getOutputStream();
+            outputStream = process.getOutputStream();
 
             try {
                 process.waitFor();
@@ -44,8 +50,8 @@ public class EnhancedProcess {
         }
     }
 
-    public static void setOutputStream(OutputStream outputStream) {
-        EnhancedProcess.outputStream = outputStream;
+    public static void setOutputStream() {
+        outputStream = null;
     }
 
     public static OutputStream getOutputStream() {

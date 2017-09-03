@@ -1,4 +1,4 @@
-package ru.mrchebik.controller.exception.throwing;
+package ru.mrchebik.exception.throwing;
 
 @FunctionalInterface
 public interface ThrowingConsumer<T, E extends Exception> {
