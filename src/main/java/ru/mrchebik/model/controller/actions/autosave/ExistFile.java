@@ -5,11 +5,11 @@ import java.nio.file.Path;
 /**
  * Created by mrchebik on 9/2/17.
  */
-public class FutureFile {
+public class ExistFile {
     private Path path;
     private String text;
 
-    public FutureFile(Path path, String text) {
+    public ExistFile(Path path, String text) {
         this.path = path;
         this.text = text;
     }

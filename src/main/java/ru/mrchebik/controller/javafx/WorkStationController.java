@@ -22,6 +22,7 @@ import ru.mrchebik.model.Project;
 import ru.mrchebik.view.CreatorFiles;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
@@ -71,7 +72,12 @@ public class WorkStationController implements Initializable {
     private void saveAllOpenTabs() {
         Autosave saver = new SaveTabs(this.getTabs());
         saver.start();
-        saver.save();
+
+        try {
+            saver.save();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML

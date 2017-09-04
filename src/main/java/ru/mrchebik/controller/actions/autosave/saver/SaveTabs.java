@@ -4,7 +4,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TextArea;
 import ru.mrchebik.controller.actions.autosave.Autosave;
-import ru.mrchebik.model.controller.actions.autosave.FutureFile;
+import ru.mrchebik.model.controller.actions.autosave.ExistFile;
 
 import java.nio.file.Path;
 
@@ -27,7 +27,7 @@ public class SaveTabs extends Autosave {
                     TextArea textArea = (TextArea) tab.getContent();
                     String text = textArea.getText();
 
-                    return new FutureFile(path, text);
+                    return new ExistFile(path, text);
                 })
                 .map(SaveFile::new)
                 .forEach(Thread::start);

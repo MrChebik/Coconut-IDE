@@ -1,8 +1,9 @@
 package ru.mrchebik.controller.actions.autosave.saver;
 
 import ru.mrchebik.controller.actions.autosave.Autosave;
-import ru.mrchebik.model.controller.actions.autosave.FutureFile;
+import ru.mrchebik.model.controller.actions.autosave.ExistFile;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 
@@ -10,23 +11,26 @@ import java.io.PrintWriter;
  * Created by mrchebik on 9/2/17.
  */
 public class SaveFile extends Autosave {
-    private FutureFile futureFile;
+    private ExistFile existFile;
 
-    public SaveFile(FutureFile futureFile) {
-        this.futureFile = futureFile;
+    public SaveFile(ExistFile existFile) {
+        this.existFile = existFile;
     }
 
     public void save() {
+        File file = existFile.getPath().toFile();
+
         PrintWriter writer = null;
         try {
-            writer = new PrintWriter(futureFile.getPath().toFile());
+            writer = new PrintWriter(file);
         } catch (FileNotFoundException e1) {
-            e1.printStackTrace();
+            // TODO show error window
         }
 
-        assert writer != null;
-        writer.write(futureFile.getText());
-        writer.flush();
-        writer.close();
+        if (writer != null) {
+            writer.write(existFile.getText());
+            writer.flush();
+            writer.close();
+        }
     }
 }
