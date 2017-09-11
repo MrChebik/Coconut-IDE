@@ -17,20 +17,13 @@ import java.util.stream.Stream;
  * Created by mrchebik on 8/29/17.
  */
 public class ProjectEntity implements Project {
-    private @Getter
-    @Setter
-    String name;
-    private @Getter
-    @Setter
-    Path path;
+    private @Getter @Setter String name;
 
-    private @Getter
-    @Setter
-    Path pathOut;
+    private @Getter @Setter Path path;
 
-    private @Getter
-    @Setter
-    Path pathSource;
+    private @Getter @Setter Path pathOut;
+
+    private @Getter @Setter Path pathSource;
 
     @Inject
     public ProjectEntity(@Assisted String name,
