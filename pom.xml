@@ -6,7 +6,7 @@
 
     <groupId>coconut.ide</groupId>
     <artifactId>coconut-ide</artifactId>
-    <version>0.0.8</version>
+    <version>0.0.9</version>
 
     <build>
         <plugins>
@@ -116,6 +116,21 @@
             <groupId>org.loadui</groupId>
             <artifactId>testFx</artifactId>
             <version>3.1.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.16.18</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.inject</groupId>
+            <artifactId>guice</artifactId>
+            <version>4.1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.inject.extensions</groupId>
+            <artifactId>guice-assistedinject</artifactId>
+            <version>4.1.0</version>
         </dependency>
     </dependencies>
 

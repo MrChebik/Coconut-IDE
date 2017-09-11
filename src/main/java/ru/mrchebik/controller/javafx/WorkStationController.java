@@ -1,5 +1,6 @@
 package ru.mrchebik.controller.javafx;
 
+import com.google.inject.Inject;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -8,21 +9,20 @@ import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
+import ru.mrchebik.controller.actions.Compile;
 import ru.mrchebik.controller.actions.Run;
 import ru.mrchebik.controller.actions.autosave.Autosave;
 import ru.mrchebik.controller.actions.autosave.saver.SaveTabs;
 import ru.mrchebik.controller.actions.autosave.saver.SaveTabsProcess;
-import ru.mrchebik.controller.actions.compile.Compile;
 import ru.mrchebik.controller.javafx.updater.tab.TabUpdater;
 import ru.mrchebik.controller.javafx.updater.tree.CustomTreeItem;
 import ru.mrchebik.controller.javafx.updater.tree.TreeUpdater;
 import ru.mrchebik.controller.process.EnhancedProcess;
 import ru.mrchebik.model.CustomIcons;
-import ru.mrchebik.model.Project;
+import ru.mrchebik.model.project.Project;
 import ru.mrchebik.view.CreatorFiles;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
@@ -35,6 +35,9 @@ import java.util.ResourceBundle;
  * Created by mrchebik on 8/29/17.
  */
 public class WorkStationController implements Initializable {
+    @Inject
+    private Project project;
+
     @FXML private TextArea out;
     private String input;
 
@@ -72,12 +75,7 @@ public class WorkStationController implements Initializable {
     private void saveAllOpenTabs() {
         Autosave saver = new SaveTabs(this.getTabs());
         saver.start();
-
-        try {
-            saver.save();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+        saver.save();
     }
 
     @FXML
@@ -134,13 +132,13 @@ public class WorkStationController implements Initializable {
         });
 
         treeView.getSelectionModel().select(2);
-        treeView.getTreeItem(2).setGraphic(new ImageView(CustomIcons.folderExpandImage));
+        treeView.getTreeItem(2).setGraphic(new ImageView(CustomIcons.getFolderExpandImage()));
 
         TreeItem<Path> item = treeView.getTreeItem(2).getChildren().get(0);
 
         treeView.getSelectionModel().select(item);
 
-        String pathTarget = Project.getPathSource() + File.separator + "Main.java";
+        String pathTarget = project.getPathSource() + File.separator + "Main.java";
         Path path = Paths.get(pathTarget);
         TreeItem<Path> root = treeView.getRoot();
         CustomTreeItem mainFile = (CustomTreeItem) TreeUpdater.getItem(root, path);
@@ -183,7 +181,7 @@ public class WorkStationController implements Initializable {
                         createFolder.setDisable(true);
                         paste.setDisable(true);
                     }
-                    if (pathString.equals(Project.getPath())) {
+                    if (path.equals(project.getPath())) {
                         cut.setDisable(true);
                         copy.setDisable(true);
                         paste.setDisable(true);

@@ -1,17 +1,21 @@
 package ru.mrchebik.controller.javafx;
 
+import com.google.inject.Inject;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.DirectoryChooser;
-import ru.mrchebik.controller.actions.newProject.NewProject;
+import lombok.SneakyThrows;
 import ru.mrchebik.model.Projects;
+import ru.mrchebik.model.project.Project;
+import ru.mrchebik.model.project.ProjectFactory;
 import ru.mrchebik.view.StartOfWorking;
 import ru.mrchebik.view.WorkStation;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -27,18 +31,26 @@ public class NewProjectController implements Initializable {
 
     private boolean wasChanged;
 
-    private void newProject() {
-        NewProject newProject = new NewProject(projectName.getText(), projectPath.getText());
-        newProject.start();
+    @Inject
+    private ProjectFactory projectFactory;
+    @Inject
+    private Project project;
 
+    @SneakyThrows(IOException.class)
+    private void newProject() {
         ru.mrchebik.view.NewProject.close();
         StartOfWorking.close();
 
-        try {
-            WorkStation.start();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        String name = projectName.getText();
+        Path path = Paths.get(projectPath.getText());
+
+        Path pathOfSource = Paths.get(path.toString(), "src");
+        Path pathOfOut = Paths.get(path.toString(), "out");
+
+        WorkStation.start();
+
+        project = projectFactory.create(name, path, pathOfOut, pathOfSource);
+        project.build();
     }
 
     @FXML private void handleEditPath() {

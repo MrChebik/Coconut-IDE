@@ -1,16 +1,13 @@
 package ru.mrchebik.model;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * Created by mrchebik on 8/29/17.
  */
 public class Projects {
-    private static String path;
-
-    public static String getPath() {
-        return Projects.path;
-    }
-
-    public static void setPath(String path) {
-        Projects.path = path;
-    }
+    private @Getter
+    @Setter
+    static String path;
 }

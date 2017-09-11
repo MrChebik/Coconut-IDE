@@ -66,7 +66,7 @@ public class CustomTreeItem extends TreeItem<Path> {
 
                             CustomTreeItem item = new CustomTreeItem(e, watcherStructure);
 
-                            item.setGraphic(new ImageView(item.isDirectory() ? CustomIcons.folderCollapseImage : CustomIcons.fileImage));
+                            item.setGraphic(new ImageView(item.isDirectory() ? CustomIcons.getFolderCollapseImage() : CustomIcons.getFileImage()));
                             if (isDirectory()) {
                                 item.expandedProperty().addListener(TreeUpdater.expanderListener());
                             }

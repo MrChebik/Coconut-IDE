@@ -32,10 +32,10 @@ public class NewProject {
         primaryStage.setHeight(200);
         primaryStage.setResizable(false);
 
-        primaryStage.setX((ScreenInfo.BOUNDS.getWidth() - 500) / 2);
-        primaryStage.setY((ScreenInfo.BOUNDS.getHeight() - 200) / 2);
+        primaryStage.setX((ScreenInfo.getBOUNDS().getWidth() - 500) / 2);
+        primaryStage.setY((ScreenInfo.getBOUNDS().getHeight() - 200) / 2);
 
-        primaryStage.getIcons().add(CustomIcons.logo);
+        primaryStage.getIcons().add(CustomIcons.getLogo());
 
         primaryStage.setScene(scene);
         primaryStage.show();

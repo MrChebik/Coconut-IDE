@@ -1,8 +1,9 @@
 package ru.mrchebik.controller.javafx.updater;
 
+import com.google.inject.Inject;
 import ru.mrchebik.controller.javafx.updater.tab.TabUpdater;
 import ru.mrchebik.controller.javafx.updater.tree.TreeUpdater;
-import ru.mrchebik.model.Project;
+import ru.mrchebik.model.project.Project;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,7 +18,10 @@ import static java.nio.file.StandardWatchEventKinds.*;
  */
 public class WatcherStructure extends Thread {
     private Path path;
-    private String toRename;
+    private Path toRename;
+
+    @Inject
+    private Project project;
 
     public WatcherStructure(Path path) {
         this.path = path;
@@ -47,21 +51,20 @@ public class WatcherStructure extends Thread {
                         Path dir = (Path) key.watchable();
                         Path newPath = dir.resolve(((WatchEvent<Path>) watchEvent)
                                 .context());
-                        String newPathString = newPath.toString();
 
                         if (ENTRY_CREATE == kind) {
-                            boolean isRoot = Objects.equals(Project.getPath(), toRename);
+                            boolean isRoot = Objects.equals(project.getPath(), toRename);
 
                             if (toRename != null) {
-                                updateCorePathIfRenameTo(newPathString);
+                                updateCorePathIfRenameTo(newPath);
 
-                                TabUpdater.updateTabs(newPathString);
+                                TabUpdater.updateTabs(newPath);
                             }
 
                             if (events.size() == 1) {
                                 TreeUpdater.createObject(newPath, isRoot);
                             } else {
-                                TreeUpdater.updateObject(Paths.get(toRename), newPath);
+                                TreeUpdater.updateObject(toRename, newPath);
                             }
 
                             if (toRename != null) {
@@ -70,10 +73,10 @@ public class WatcherStructure extends Thread {
                         } else if (ENTRY_DELETE == kind) {
                             if (events.size() == 1) {
                                 TreeUpdater.removeObject(newPath);
-                                TabUpdater.updateTabs(newPathString);
+                                TabUpdater.updateTabs(newPath);
                             }
 
-                            setRenameToIfCorePath(newPathString);
+                            setRenameToIfCorePath(newPath);
                         }
                     }
                 }
@@ -87,30 +90,26 @@ public class WatcherStructure extends Thread {
         }
     }
 
-    private void updateCorePathIfRenameTo(String path) {
-        if (Objects.equals(toRename, Project.getPath())) {
-            int indexLastSlash = toRename.lastIndexOf(File.separator);
-            String name = toRename.substring(indexLastSlash);
+    private void updateCorePathIfRenameTo(Path path) {
+        if (Objects.equals(toRename, project.getPath())) {
+            int indexLastSlash = toRename.toString().lastIndexOf(File.separator);
+            String name = toRename.toString().substring(indexLastSlash);
 
-            Project.setName(name);
-            Project.setPath(path);
+            project.setName(name);
+            project.setPath(path);
         }
-        if (Objects.equals(toRename, Project.getPathSource())) {
-            Project.setPathSource(path);
+        if (Objects.equals(toRename, project.getPathSource())) {
+            project.setPathSource(path);
         }
-        if (Objects.equals(toRename, Project.getPathOut())) {
-            Project.setPathOut(path);
-        }
-        if (Objects.equals(toRename, Project.getPathOutListStructure())) {
-            Project.setPathOutListStructure(path);
+        if (Objects.equals(toRename, project.getPathOut())) {
+            project.setPathOut(path);
         }
     }
 
-    private void setRenameToIfCorePath(String path) {
-        if (Objects.equals(path, Project.getPath()) ||
-                Objects.equals(path, Project.getPathSource()) ||
-                Objects.equals(path, Project.getPathOut()) ||
-                Objects.equals(path, Project.getPathOutListStructure())) {
+    private void setRenameToIfCorePath(Path path) {
+        if (Objects.equals(path, project.getPath()) ||
+                Objects.equals(path, project.getPathSource()) ||
+                Objects.equals(path, project.getPathOut())) {
             toRename = path;
         }
     }

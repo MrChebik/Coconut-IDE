@@ -1,17 +1,20 @@
 package ru.mrchebik.controller.javafx;
 
+import com.google.inject.Inject;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import ru.mrchebik.controller.actions.newProject.paths.CreateProjectPaths;
+import ru.mrchebik.model.project.Project;
 import ru.mrchebik.view.CreatorFiles;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ResourceBundle;
 
 /**
@@ -23,16 +26,19 @@ public class CreatorFilesController implements Initializable {
     @FXML
     private Button create;
 
+    @Inject
+    private Project project;
+
     private void create() throws IOException {
         CreatorFiles.close();
 
         String pathOfCreator = CreatorFiles.getPath().toString();
-        String path = pathOfCreator + File.separator + name.getText();
+        Path path = Paths.get(pathOfCreator, name.getText());
         File file;
         if ("Create File".equals(CreatorFiles.getType())) {
-            CreateProjectPaths.createFileToProject(path);
+            project.createFile(path);
         } else if ("Create Folder".equals(CreatorFiles.getType())) {
-            CreateProjectPaths.createFolderToProject(path);
+            project.createFolder(path);
         } else {
             file = new File(pathOfCreator);
             String nameFromPath = file.getName();

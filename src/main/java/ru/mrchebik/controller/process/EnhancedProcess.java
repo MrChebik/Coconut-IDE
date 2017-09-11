@@ -15,8 +15,8 @@ public class EnhancedProcess {
 
     private static OutputStream outputStream;
 
-    public EnhancedProcess(String... commands) {
-        this.commands = commands;
+    public EnhancedProcess(String command) {
+        this.commands = command.split(" ");
         outputStream = null;
     }
 

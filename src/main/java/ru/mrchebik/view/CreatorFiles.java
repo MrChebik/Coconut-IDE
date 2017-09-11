@@ -38,10 +38,10 @@ public class CreatorFiles {
         primaryStage.setHeight(150);
         primaryStage.setResizable(false);
 
-        primaryStage.setX((ScreenInfo.BOUNDS.getWidth() - 400) / 2);
-        primaryStage.setY((ScreenInfo.BOUNDS.getHeight() - 150) / 2);
+        primaryStage.setX((ScreenInfo.getBOUNDS().getWidth() - 400) / 2);
+        primaryStage.setY((ScreenInfo.getBOUNDS().getHeight() - 150) / 2);
 
-        primaryStage.getIcons().add(CustomIcons.logo);
+        primaryStage.getIcons().add(CustomIcons.getLogo());
 
         primaryStage.setScene(scene);
         primaryStage.show();

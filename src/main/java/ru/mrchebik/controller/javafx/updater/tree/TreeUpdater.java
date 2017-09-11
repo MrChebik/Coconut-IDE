@@ -1,5 +1,6 @@
 package ru.mrchebik.controller.javafx.updater.tree;
 
+import com.google.inject.Inject;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.value.ChangeListener;
@@ -8,17 +9,19 @@ import javafx.scene.control.TreeView;
 import javafx.scene.image.ImageView;
 import ru.mrchebik.controller.javafx.updater.WatcherStructure;
 import ru.mrchebik.model.CustomIcons;
-import ru.mrchebik.model.Project;
+import ru.mrchebik.model.project.Project;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 
 /**
  * Created by mrchebik on 9/3/17.
  */
 public class TreeUpdater {
     private static TreeView<Path> treeView;
+
+    @Inject
+    private static Project project;
 
     public static void createObject(Path path, boolean isRoot) {
         if (isRoot) {
@@ -35,10 +38,10 @@ public class TreeUpdater {
 
             TreeItem<Path> newItem = new CustomTreeItem(path, watcherStructure);
             if (Files.isDirectory(path)) {
-                newItem.setGraphic(new ImageView(CustomIcons.folderCollapseImage));
+                newItem.setGraphic(new ImageView(CustomIcons.getFolderCollapseImage()));
                 newItem.expandedProperty().addListener(expanderListener());
             } else {
-                newItem.setGraphic(new ImageView(CustomIcons.fileImage));
+                newItem.setGraphic(new ImageView(CustomIcons.getFileImage()));
             }
 
             parent.getChildren().add(newItem);
@@ -52,7 +55,7 @@ public class TreeUpdater {
     }
 
     public static void removeObject(Path path) {
-        if (Project.getPath().equals(path.toString())) {
+        if (project.getPath().equals(path.toString())) {
             Platform.runLater(() -> {
                 treeView.setRoot(null);
             });
@@ -68,7 +71,7 @@ public class TreeUpdater {
     }
 
     public static void setRootToTreeView() {
-        Path projectPath = Paths.get(Project.getPath());
+        Path projectPath = project.getPath();
 
         WatcherStructure rootOutWatcher = new WatcherStructure(projectPath.getParent());
         rootOutWatcher.start();
@@ -105,7 +108,7 @@ public class TreeUpdater {
 
             TreeItem t = (TreeItem) bb.getBean();
 
-            t.setGraphic(new ImageView(newValue ? CustomIcons.folderExpandImage : CustomIcons.folderCollapseImage));
+            t.setGraphic(new ImageView(newValue ? CustomIcons.getFolderExpandImage() : CustomIcons.getFolderCollapseImage()));
         };
     }
 
@@ -114,7 +117,7 @@ public class TreeUpdater {
 
         TreeItem<Path> rootNode = new CustomTreeItem(path, rootInWatcher);
         rootNode.setExpanded(true);
-        rootNode.setGraphic(new ImageView(CustomIcons.folderExpandImage));
+        rootNode.setGraphic(new ImageView(CustomIcons.getFolderExpandImage()));
         rootNode.expandedProperty().addListener(expanderListener());
 
         return rootNode;

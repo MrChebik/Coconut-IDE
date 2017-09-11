@@ -21,7 +21,7 @@ import java.util.Objects;
 public class TabUpdater {
     private static TabPane tabPane;
 
-    public static void updateTabs(String newFile) {
+    public static void updateTabs(Path newFile) {
         System.out.println("Old " + newFile);
 
         ObservableList<Tab> tabs = tabPane.getTabs();
@@ -33,14 +33,14 @@ public class TabUpdater {
             System.out.println(newFile + File.separator + name + " // " + path.toString());
             if (!Objects.equals(newFile + File.separator + name, path.toString())) {
                 String pathString = path.toString();
-                String nameOfNewFile = Paths.get(newFile).getFileName().toString();
+                String nameOfNewFile = Paths.get(newFile.toString()).getFileName().toString();
 
                 if (pathString.startsWith(CreatorFiles.getPath().toString())) {
                     int indexOfDifference = 0;
                     StringBuilder nameOfDifference = new StringBuilder();
 
                     char[] inital = path.toString().toCharArray();
-                    char[] rename = newFile.toCharArray();
+                    char[] rename = newFile.toString().toCharArray();
 
                     for (int j = 0; j < rename.length; j++) {
                         if (inital[j] != rename[j]) {
@@ -61,7 +61,7 @@ public class TabUpdater {
                         }
                     }
 
-                    String firstHalf = newFile.substring(0, indexOfDifference);
+                    String firstHalf = newFile.toString().substring(0, indexOfDifference);
                     String secondHalf = path.toString().substring(indexOfDifference + nameOfDifference.length());
                     Path newPath = Paths.get(firstHalf + nameOfNewFile + secondHalf);
 
@@ -83,7 +83,7 @@ public class TabUpdater {
         code.setText(text);
 
         tab.setText(item.getValue().getFileName().toString());
-        tab.setGraphic(new ImageView(CustomIcons.fileImage));
+        tab.setGraphic(new ImageView(CustomIcons.getFileImage()));
         tab.setUserData(item.getValue());
         tab.setContent(code);
 

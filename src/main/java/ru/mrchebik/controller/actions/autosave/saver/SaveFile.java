@@ -1,36 +1,32 @@
 package ru.mrchebik.controller.actions.autosave.saver;
 
 import ru.mrchebik.controller.actions.autosave.Autosave;
-import ru.mrchebik.model.controller.actions.autosave.ExistFile;
+import ru.mrchebik.model.controller.actions.autosave.ExistFileToSave;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 /**
  * Created by mrchebik on 9/2/17.
  */
 public class SaveFile extends Autosave {
-    private ExistFile existFile;
+    private ExistFileToSave existFileToSave;
 
-    public SaveFile(ExistFile existFile) {
-        this.existFile = existFile;
+    public SaveFile(ExistFileToSave existFileToSave) {
+        this.existFileToSave = existFileToSave;
     }
 
     public void save() {
-        File file = existFile.getPath().toFile();
+        Path path = existFileToSave.getPath();
+        String lines = existFileToSave.getLines();
+        byte[] linesByte = lines.getBytes();
 
-        PrintWriter writer = null;
         try {
-            writer = new PrintWriter(file);
-        } catch (FileNotFoundException e1) {
+            Files.write(path, linesByte);
+        } catch (IOException e) {
+            e.printStackTrace();
             // TODO show error window
-        }
-
-        if (writer != null) {
-            writer.write(existFile.getText());
-            writer.flush();
-            writer.close();
         }
     }
 }
