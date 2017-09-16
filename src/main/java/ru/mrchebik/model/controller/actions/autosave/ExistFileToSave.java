@@ -1,8 +1,10 @@
 package ru.mrchebik.model.controller.actions.autosave;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.SneakyThrows;
 
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 
 /**
@@ -10,8 +12,13 @@ import java.nio.file.Path;
  */
 @AllArgsConstructor
 public class ExistFileToSave {
-    private @Getter
-    Path path;
-    private @Getter
-    String lines;
+    private Path path;
+    private String lines;
+
+    @SneakyThrows(IOException.class)
+    public void save() {
+        byte[] linesByte = lines.getBytes();
+
+        Files.write(path, linesByte);
+    }
 }

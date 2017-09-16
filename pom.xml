@@ -57,7 +57,7 @@
                 </configuration>
             </plugin>
 
-            <plugin>
+            <!--<plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>0.7.9</version>
@@ -102,8 +102,28 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
+            </plugin>-->
         </plugins>
+        <resources>
+            <resource>
+                <directory>src/main/java</directory>
+                <includes>
+                    <include>**/*.fxml</include>
+                    <include>**/*.css</include>
+                    <include>**/*.properties</include>
+                </includes>
+            </resource>
+            <!--<resource>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>**/*.xml</include>
+                    <include>**/*.css</include>
+                    <include>**/*.fxml</include>
+                    <include>**/*.png</include>
+                    <include>**/*.properties</include>
+                </includes>
+            </resource>-->
+        </resources>
     </build>
 
     <dependencies>
@@ -123,15 +143,15 @@
             <version>1.16.18</version>
         </dependency>
         <dependency>
+            <groupId>com.airhacks</groupId>
+            <artifactId>afterburner.fx</artifactId>
+            <version>1.7.0</version>
+        </dependency>
+        <!--<dependency>
             <groupId>com.google.inject</groupId>
             <artifactId>guice</artifactId>
             <version>4.1.0</version>
-        </dependency>
-        <dependency>
-            <groupId>com.google.inject.extensions</groupId>
-            <artifactId>guice-assistedinject</artifactId>
-            <version>4.1.0</version>
-        </dependency>
+        </dependency>-->
     </dependencies>
 
 </project>
