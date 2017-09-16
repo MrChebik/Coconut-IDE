@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
 import ru.mrchebik.process.ExecutorCommand;
+import ru.mrchebik.process.io.ErrorProcess;
 
 import java.io.File;
 import java.io.IOException;
@@ -27,6 +28,7 @@ public class Project {
     private @Getter @Setter Path pathSource;
 
     private ExecutorCommand executorCommand;
+    private ErrorProcess errorProcess;
 
     public void build() {
         createFolder(path);
@@ -62,7 +64,7 @@ public class Project {
             } catch (InterruptedException ignored) {
             }
 
-            if ("".equals(outputArea.getText())) {
+            if (!errorProcess.isWasError()) {
                 String command = "java -cp " + pathOut.toString() + " " + getPackageOfRunnable(path);
                 executorCommand.execute(command);
             }

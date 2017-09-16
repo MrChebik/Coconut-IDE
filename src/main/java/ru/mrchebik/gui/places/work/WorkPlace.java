@@ -10,6 +10,7 @@ import ru.mrchebik.model.screen.Screen;
 import ru.mrchebik.model.screen.measurement.Point;
 import ru.mrchebik.model.screen.measurement.Scale;
 import ru.mrchebik.process.ExecutorCommand;
+import ru.mrchebik.process.io.ErrorProcess;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -22,8 +23,12 @@ import java.util.Map;
  */
 public class WorkPlace {
     private ExecutorCommand executorCommand;
+    private ErrorProcess errorProcess;
+
     public void start(String name, Path path) throws IOException {
         executorCommand = new ExecutorCommand();
+        errorProcess = new ErrorProcess();
+
         Project project = initalizeProject(name, path);
         initalizeInject(project);
 
@@ -57,13 +62,14 @@ public class WorkPlace {
         customProperties.put("project", project);
         customProperties.put("objectPlace", objectPlace);
         customProperties.put("executorCommand", executorCommand);
+        customProperties.put("errorProcess", errorProcess);
         Injector.setConfigurationSource(customProperties::get);
     }
 
     private Project initalizeProject(String name, Path path) {
         Path pathOut = Paths.get(path.toString(), "out");
         Path pathSource = Paths.get(path.toString(), "src");
-        Project project = new Project(name, path, pathOut, pathSource, executorCommand);
+        Project project = new Project(name, path, pathOut, pathSource, executorCommand, errorProcess);
         project.build();
 
         return project;

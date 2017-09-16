@@ -21,6 +21,7 @@ import ru.mrchebik.model.Project;
 import ru.mrchebik.process.ExecutorCommand;
 import ru.mrchebik.process.SaveTabs;
 import ru.mrchebik.process.SaveTabsProcess;
+import ru.mrchebik.process.io.ErrorProcess;
 
 import javax.inject.Inject;
 import java.io.File;
@@ -40,6 +41,7 @@ public class WorkPresenter implements Initializable {
     @Inject private Project project;
     @Inject private ObjectPlace objectPlace;
     @Inject private ExecutorCommand executorCommand;
+    @Inject private ErrorProcess errorProcess;
 
     private TabUpdater tabUpdater;
     private TreeUpdater treeUpdater;
@@ -94,14 +96,16 @@ public class WorkPresenter implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        errorProcess.setTextArea(outputArea);
         outputArea.setEditable(false);
 
         tabUpdater = new TabUpdater(tabPane);
         treeUpdater = new TreeUpdater(project, treeView, tabUpdater);
         treeUpdater.setRootToTreeView();
         executorCommand.setOutputArea(outputArea);
+        executorCommand.setErrorProcess(errorProcess);
 
-        inputTextToOutputArea = new InputTextToOutputArea(executorCommand);
+        inputTextToOutputArea = new InputTextToOutputArea(executorCommand, outputArea);
 
         outputArea.setOnKeyPressed(inputTextToOutputArea);
 

@@ -1,8 +1,8 @@
 package ru.mrchebik.process.io;
 
 import javafx.scene.control.TextArea;
-import lombok.AllArgsConstructor;
 import lombok.Cleanup;
+import lombok.Getter;
 import lombok.SneakyThrows;
 
 import java.io.BufferedReader;
@@ -13,29 +13,27 @@ import java.io.InputStreamReader;
 /**
  * Created by mrchebik on 8/31/17.
  */
-@AllArgsConstructor
 public class InputProcess extends Thread {
     private InputStream inputStream;
     private TextArea textArea;
+    private @Getter boolean firstLine;
 
-    @Override
+    public InputProcess(InputStream inputStream, TextArea textArea) {
+        this.inputStream = inputStream;
+        this.textArea = textArea;
+    }
+
     @SneakyThrows(IOException.class)
     public void run() {
-        textArea.setEditable(true);
-
+        firstLine = true;
         @Cleanup BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
         String line;
         while ((line = reader.readLine()) != null) {
-            appendToOutputArea(line);
+            if (firstLine) {
+                textArea.appendText("\n");
+                firstLine = false;
+            }
+            textArea.appendText(line);
         }
-
-        textArea.setEditable(false);
-    }
-
-    private void appendToOutputArea(String line) {
-        String previousLines = textArea.getText();
-        String newLines = line + "\n";
-
-        textArea.setText(previousLines + newLines);
     }
 }
