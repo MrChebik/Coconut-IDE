@@ -9,6 +9,8 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import org.fxmisc.flowless.VirtualizedScrollPane;
+import org.fxmisc.richtext.CodeArea;
 import ru.mrchebik.gui.places.creator.object.ObjectPlace;
 import ru.mrchebik.gui.places.work.event.InputTextToOutputArea;
 import ru.mrchebik.gui.places.work.event.structure.StructureUpdateGraphic;
@@ -124,7 +126,8 @@ public class WorkPresenter implements Initializable {
 
         tabUpdater.addObjectToTab(mainFile);
 
-        TextArea focusable = (TextArea) tabPane.getTabs().get(0).getContent();
+        VirtualizedScrollPane scrollPane = (VirtualizedScrollPane) tabPane.getTabs().get(0).getContent();
+        CodeArea focusable = (CodeArea) scrollPane.getContent();
         Platform.runLater(focusable::requestFocus);
 
         treeView.getTreeItem(3);

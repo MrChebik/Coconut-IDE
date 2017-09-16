@@ -1,3 +1,17 @@
 .text-area {
     -fx-font-family: monospace;
 }
+
+.keyword {
+    -fx-fill: brown;
+    -fx-font-weight: bold;
+}
+
+.string {
+    -fx-fill: green;
+    -fx-font-weight: bold;
+}
+
+.comment {
+    -fx-fill: gray;
+}

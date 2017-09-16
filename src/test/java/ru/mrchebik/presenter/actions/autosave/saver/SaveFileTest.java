@@ -24,8 +24,10 @@ public class SaveFileTest {
         Path testDir = Paths.get(System.getProperty("user.home"), "Coconut-Test");
         Path testFile = testDir.resolve("test");
 
-        Files.createDirectory(testDir);
-        Files.createFile(testFile);
+        if (!Files.exists(testDir))
+            Files.createDirectory(testDir);
+        if (!Files.exists(testDir))
+            Files.createFile(testFile);
 
         path = testFile;
     }

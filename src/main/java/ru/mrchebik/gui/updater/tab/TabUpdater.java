@@ -4,11 +4,11 @@ import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
-import javafx.scene.control.TextArea;
 import javafx.scene.image.ImageView;
 import lombok.AllArgsConstructor;
 import lombok.Setter;
 import lombok.SneakyThrows;
+import org.fxmisc.flowless.VirtualizedScrollPane;
 import ru.mrchebik.gui.updater.tree.CustomTreeItem;
 import ru.mrchebik.model.CustomIcons;
 
@@ -66,14 +66,16 @@ public class TabUpdater {
 
     public void addObjectToTab(CustomTreeItem item) {
         String text = getText(item.getValue());
-        TextArea code = new TextArea(text);
+        CodePlace codePlace = new CodePlace(text);
 
         Tab tab = new Tab();
         tab.setText(item.getValue().getFileName().toString());
         CustomIcons customIcons = new CustomIcons();
         tab.setGraphic(new ImageView(customIcons.getFileImage()));
         tab.setUserData(item.getValue());
-        tab.setContent(code);
+
+        VirtualizedScrollPane scrollPane = new VirtualizedScrollPane<>(codePlace);
+        tab.setContent(scrollPane);
 
         tabPane.getTabs().add(tab);
     }

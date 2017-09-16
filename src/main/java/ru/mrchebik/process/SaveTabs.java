@@ -2,8 +2,9 @@ package ru.mrchebik.process;
 
 import javafx.collections.ObservableList;
 import javafx.scene.control.Tab;
-import javafx.scene.control.TextArea;
 import lombok.AllArgsConstructor;
+import org.fxmisc.flowless.VirtualizedScrollPane;
+import org.fxmisc.richtext.CodeArea;
 import ru.mrchebik.model.ExistFileToSave;
 
 import java.nio.file.Path;
@@ -21,8 +22,9 @@ public class SaveTabs extends Thread {
                 .map(tab -> {
                     Path path = (Path) tab.getUserData();
 
-                    TextArea textArea = (TextArea) tab.getContent();
-                    String lines = textArea.getText();
+                    VirtualizedScrollPane scrollPane = (VirtualizedScrollPane) tab.getContent();
+                    CodeArea codeArea = (CodeArea) scrollPane.getContent();
+                    String lines = codeArea.getText();
 
                     return new ExistFileToSave(path, lines);
                 })
