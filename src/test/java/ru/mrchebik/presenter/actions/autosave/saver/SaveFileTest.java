@@ -1,14 +1,15 @@
 package ru.mrchebik.presenter.actions.autosave.saver;
 
+import lombok.SneakyThrows;
 import org.junit.Before;
 import org.junit.Test;
-import ru.mrchebik.actions.ReadFile;
-import ru.mrchebik.model.controller.actions.autosave.ExistFileToSave;
+import ru.mrchebik.model.ExistFileToSave;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
 
@@ -23,11 +24,8 @@ public class SaveFileTest {
         Path testDir = Paths.get(System.getProperty("user.home"), "Coconut-Test");
         Path testFile = testDir.resolve("test");
 
-        if (!Files.exists(testDir))
-            Files.createDirectory(testDir);
-
-        if (!Files.exists(testFile))
-            Files.createFile(testFile);
+        Files.createDirectory(testDir);
+        Files.createFile(testFile);
 
         path = testFile;
     }
@@ -37,6 +35,12 @@ public class SaveFileTest {
         ExistFileToSave existFileToSave = new ExistFileToSave(path, "Hello World!\nHello World");
         existFileToSave.save();
 
-        assertEquals("Hello World!\nHello World", ReadFile.readFile(path));
+        assertEquals("Hello World!\nHello World", getText(path));
+    }
+
+    @SneakyThrows(IOException.class)
+    private String getText(Path path) {
+        return Files.readAllLines(path).stream()
+                .collect(Collectors.joining("\n"));
     }
 }

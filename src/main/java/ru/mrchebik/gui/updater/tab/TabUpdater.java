@@ -8,12 +8,14 @@ import javafx.scene.control.TextArea;
 import javafx.scene.image.ImageView;
 import lombok.AllArgsConstructor;
 import lombok.Setter;
-import ru.mrchebik.actions.ReadFile;
+import lombok.SneakyThrows;
 import ru.mrchebik.gui.updater.tree.CustomTreeItem;
 import ru.mrchebik.model.CustomIcons;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.stream.Collectors;
 
 /**
  * Created by mrchebik on 9/3/17.
@@ -35,8 +37,22 @@ public class TabUpdater {
                 Tab tab = tabs.get(i);
                 Platform.runLater(() -> tab.setText(newPath.getFileName().toString()));
                 tab.setUserData(newPath);
-            } else if (!Files.isDirectory(newPath) && newPath.equals(path))
-                tabs.remove(i);
+            }
+        }
+    }
+
+    public void deleteTab(Path pathToDelete) {
+        ObservableList<Tab> tabs = tabPane.getTabs();
+
+        for (int i = 0; i < tabs.size(); i++) {
+            Path path = (Path) tabs.get(i).getUserData();
+
+            if (!Files.isDirectory(path) && pathToDelete.equals(path)) {
+                int finalI = i;
+                Platform.runLater(() -> tabs.remove(finalI));
+
+                break;
+            }
         }
     }
 
@@ -49,7 +65,7 @@ public class TabUpdater {
     }
 
     public void addObjectToTab(CustomTreeItem item) {
-        String text = ReadFile.readFile(item.getValue());
+        String text = getText(item.getValue());
         TextArea code = new TextArea(text);
 
         Tab tab = new Tab();
@@ -60,5 +76,11 @@ public class TabUpdater {
         tab.setContent(code);
 
         tabPane.getTabs().add(tab);
+    }
+
+    @SneakyThrows(IOException.class)
+    private String getText(Path path) {
+        return Files.readAllLines(path).stream()
+                .collect(Collectors.joining("\n"));
     }
 }

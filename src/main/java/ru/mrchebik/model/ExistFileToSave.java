@@ -1,4 +1,4 @@
-package ru.mrchebik.model.controller.actions.autosave;
+package ru.mrchebik.model;
 
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;

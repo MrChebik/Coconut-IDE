@@ -2,12 +2,11 @@ package ru.mrchebik.gui.updater.tree;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.control.TabPane;
 import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeView;
 import javafx.scene.image.ImageView;
 import lombok.SneakyThrows;
 import ru.mrchebik.gui.updater.WatcherStructure;
+import ru.mrchebik.gui.updater.tab.TabUpdater;
 import ru.mrchebik.model.CustomIcons;
 import ru.mrchebik.model.Project;
 
@@ -21,8 +20,8 @@ import java.util.stream.Collectors;
  */
 public class CustomTreeItem extends TreeItem<Path> {
     private Project project;
-    private TreeView<Path> treeView;
-    private TabPane tabPane;
+    private TabUpdater tabUpdater;
+    private TreeUpdater treeUpdater;
 
     private boolean isFirstTimeChildren = true;
     private boolean isFirstTimeLeaf = true;
@@ -32,14 +31,14 @@ public class CustomTreeItem extends TreeItem<Path> {
         return Files.isDirectory(getValue());
     }
 
-    CustomTreeItem(Path f, WatcherStructure watcherStructure, Project project, TreeView<Path> treeView, TabPane tabPane) {
+    CustomTreeItem(Path f, WatcherStructure watcherStructure, Project project, TabUpdater tabUpdater, TreeUpdater treeUpdater) {
         super(f);
         if (watcherStructure != null) {
             watcherStructure.start();
         }
         this.project = project;
-        this.treeView = treeView;
-        this.tabPane = tabPane;
+        this.tabUpdater = tabUpdater;
+        this.treeUpdater = treeUpdater;
     }
 
     @Override
@@ -67,18 +66,15 @@ public class CustomTreeItem extends TreeItem<Path> {
             return Files.list(getValue())
                     .map(e -> {
                         WatcherStructure watcherStructure = null;
-
                         if (Files.isDirectory(e))
-                            watcherStructure = new WatcherStructure(e, project, tabPane, treeView);
+                            watcherStructure = new WatcherStructure(e, project, tabUpdater, treeUpdater);
 
-                        CustomTreeItem item = new CustomTreeItem(e, watcherStructure, project, treeView, tabPane);
+                        CustomTreeItem item = new CustomTreeItem(e, watcherStructure, project, tabUpdater, treeUpdater);
 
                         CustomIcons customIcons = new CustomIcons();
                         item.setGraphic(new ImageView(item.isDirectory() ? customIcons.getFolderCollapseImage() : customIcons.getFileImage()));
-                        if (isDirectory()) {
-                            TreeUpdater treeUpdater = new TreeUpdater(project, tabPane, treeView);
+                        if (isDirectory())
                             item.expandedProperty().addListener(treeUpdater.expanderListener());
-                        }
 
                         return item;
                     })

@@ -1,7 +1,5 @@
 package ru.mrchebik.gui.updater;
 
-import javafx.scene.control.TabPane;
-import javafx.scene.control.TreeView;
 import lombok.Cleanup;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -23,8 +21,8 @@ import static java.nio.file.StandardWatchEventKinds.*;
 public class WatcherStructure extends Thread {
     @NonNull private Path path;
     @NonNull private Project project;
-    @NonNull private TabPane tabPane;
-    @NonNull private TreeView<Path> treeView;
+    @NonNull private TabUpdater tabUpdater;
+    @NonNull private TreeUpdater treeUpdater;
 
     private Path toRename;
 
@@ -42,46 +40,55 @@ public class WatcherStructure extends Thread {
         while (true) {
             key = service.take();
 
-            WatchEvent.Kind<?> kind;
-            List<WatchEvent<?>> events = key.pollEvents();
-            for (WatchEvent<?> watchEvent : events) {
-                kind = watchEvent.kind();
+            takedEvent(key);
 
-                if (OVERFLOW != kind) {
-                    Path dir = (Path) key.watchable();
-                    Path newPath = dir.resolve(((WatchEvent<Path>) watchEvent)
-                            .context());
-
-                    TabUpdater tabUpdater = new TabUpdater(tabPane);
-                    TreeUpdater treeUpdater = new TreeUpdater(project, tabPane, treeView);
-                    if (ENTRY_CREATE == kind) {
-                        if (toRename != null) {
-                            updateCorePathIfRenameTo(newPath);
-                            tabUpdater.updateTabs(newPath, toRename);
-                        }
-
-                        if (events.size() == 1)
-                            treeUpdater.createObject(newPath, isPath(toRename));
-                        else
-                            treeUpdater.updateObject(toRename, newPath);
-
-                        toRename = null;
-                    }
-                    if (ENTRY_DELETE == kind) {
-                        if (events.size() == 1) {
-                            treeUpdater.removeObject(newPath);
-                            tabUpdater.updateTabs(newPath, toRename);
-                        } else {
-                            toRename = newPath;
-                        }
-                    }
-                }
-            }
-
-            if (!key.reset()) {
+            if (!key.reset())
                 break;
-            }
         }
+    }
+
+    private void takedEvent(WatchKey key) {
+        List<WatchEvent<?>> events = key.pollEvents();
+        for (WatchEvent<?> watchEvent : events) {
+            defineEvent(key, watchEvent, events.size());
+        }
+    }
+
+    private void defineEvent(WatchKey key, WatchEvent<?> watchEvent, int size) {
+        WatchEvent.Kind<?> kind = watchEvent.kind();
+
+        if (OVERFLOW != kind) {
+            Path newPath = ((Path) key.watchable())
+                    .resolve(((WatchEvent<Path>) watchEvent)
+                    .context());
+
+            if (ENTRY_CREATE == kind)
+                createAction(size, newPath);
+            if (ENTRY_DELETE == kind)
+                deleteAction(size, newPath);
+        }
+    }
+
+    private void createAction(int size, Path path) {
+        if (toRename != null) {
+            updateCorePathIfRenameTo(path);
+            tabUpdater.updateTabs(path, toRename);
+        }
+
+        if (size == 1)
+            treeUpdater.createObject(path, isPath(toRename));
+        else
+            treeUpdater.updateObject(toRename, path);
+
+        toRename = null;
+    }
+
+    private void deleteAction(int size, Path path) {
+        if (size == 1) {
+            treeUpdater.removeObject(path);
+            tabUpdater.deleteTab(path);
+        } else
+            toRename = path;
     }
 
     private void updateCorePathIfRenameTo(Path path) {

@@ -6,15 +6,17 @@ import javafx.scene.Parent;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.AnchorPane;
+import lombok.SneakyThrows;
 import org.junit.Before;
 import org.junit.Test;
 import org.loadui.testfx.GuiTest;
-import ru.mrchebik.actions.ReadFile;
-import ru.mrchebik.actions.autosave.saver.SaveTabs;
+import ru.mrchebik.process.SaveTabs;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
 
@@ -34,13 +36,11 @@ public class SaveTabsTest extends GuiTest {
 
         Path testDir = Paths.get(System.getProperty("user.home"), "Coconut-Test");
 
-        if (!Files.exists(testDir))
-            Files.createDirectory(testDir);
+        Files.createDirectory(testDir);
 
         for (int i = 0; i < 2; i++) {
             Path file = testDir.resolve("tab-test-" + i + ".txt");
-            if (!Files.exists(file))
-                Files.createFile(file);
+            Files.createFile(file);
 
             paths[i] = file;
 
@@ -60,11 +60,10 @@ public class SaveTabsTest extends GuiTest {
         SaveTabs saver = new SaveTabs(tabs);
         saver.run();
 
-        assertEquals("Hello World 0", ReadFile.readFile(paths[0]));
-        assertEquals("Hello World 1", ReadFile.readFile(paths[1]));
+        assertEquals("Hello World 0", getText(paths[0]));
+        assertEquals("Hello World 1", getText(paths[1]));
     }
 
-    @Override
     protected Parent getRootNode() {
         AnchorPane pane = new AnchorPane();
         TextArea area0 = new TextArea();
@@ -74,5 +73,11 @@ public class SaveTabsTest extends GuiTest {
         pane.getChildren().addAll(area0, area1);
 
         return pane;
+    }
+
+    @SneakyThrows(IOException.class)
+    private String getText(Path path) {
+        return Files.readAllLines(path).stream()
+                .collect(Collectors.joining("\n"));
     }
 }

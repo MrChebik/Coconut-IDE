@@ -9,17 +9,18 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import ru.mrchebik.actions.autosave.saver.SaveTabs;
-import ru.mrchebik.actions.autosave.saver.process.SaveTabsProcess;
 import ru.mrchebik.gui.places.creator.object.ObjectPlace;
 import ru.mrchebik.gui.places.work.event.InputTextToOutputArea;
 import ru.mrchebik.gui.places.work.event.structure.StructureUpdateGraphic;
 import ru.mrchebik.gui.updater.tab.TabUpdater;
 import ru.mrchebik.gui.updater.tree.CustomTreeItem;
 import ru.mrchebik.gui.updater.tree.TreeUpdater;
+import ru.mrchebik.model.CommandPath;
 import ru.mrchebik.model.CustomIcons;
 import ru.mrchebik.model.Project;
 import ru.mrchebik.process.ExecutorCommand;
+import ru.mrchebik.process.SaveTabs;
+import ru.mrchebik.process.SaveTabsProcess;
 
 import javax.inject.Inject;
 import java.io.File;
@@ -43,6 +44,7 @@ public class WorkPresenter implements Initializable {
     private TabUpdater tabUpdater;
     private TreeUpdater treeUpdater;
     private InputTextToOutputArea inputTextToOutputArea;
+    private CommandPath commandPath;
 
     @FXML private void handleRunProject() {
         Platform.runLater(() -> {
@@ -93,7 +95,7 @@ public class WorkPresenter implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         tabUpdater = new TabUpdater(tabPane);
-        treeUpdater = new TreeUpdater(project, tabPane, treeView);
+        treeUpdater = new TreeUpdater(project, treeView, tabUpdater);
         treeUpdater.setRootToTreeView();
         executorCommand.setOutputArea(outputArea);
 
@@ -121,7 +123,8 @@ public class WorkPresenter implements Initializable {
 
         treeView.getTreeItem(3);
 
-        treeView.setCellFactory(new StructureUpdateGraphic(project, objectPlace));
+        commandPath = new CommandPath();
+        treeView.setCellFactory(new StructureUpdateGraphic(project, objectPlace, commandPath));
 
         SaveTabsProcess saver = new SaveTabsProcess(tabPane);
         saver.start();

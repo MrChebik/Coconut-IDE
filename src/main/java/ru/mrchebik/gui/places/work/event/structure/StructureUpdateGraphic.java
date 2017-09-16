@@ -6,6 +6,7 @@ import javafx.util.Callback;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import ru.mrchebik.gui.places.creator.object.ObjectPlace;
+import ru.mrchebik.model.CommandPath;
 import ru.mrchebik.model.Project;
 
 import java.nio.file.Path;
@@ -17,9 +18,10 @@ import java.nio.file.Path;
 public class StructureUpdateGraphic implements Callback<TreeView<Path>, TreeCell<Path>> {
     @NonNull private Project project;
     @NonNull private ObjectPlace objectPlace;
+    @NonNull private CommandPath commandPath;
 
     @Override
     public TreeCell<Path> call(TreeView<Path> param) {
-        return new CustomTreeCell(project, objectPlace);
+        return new CustomTreeCell(project, objectPlace, commandPath);
     }
 }

@@ -1,10 +1,10 @@
-package ru.mrchebik.actions.autosave.saver;
+package ru.mrchebik.process;
 
 import javafx.collections.ObservableList;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TextArea;
 import lombok.AllArgsConstructor;
-import ru.mrchebik.model.controller.actions.autosave.ExistFileToSave;
+import ru.mrchebik.model.ExistFileToSave;
 
 import java.nio.file.Path;
 

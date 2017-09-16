@@ -7,23 +7,20 @@ import javafx.scene.control.TreeCell;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import ru.mrchebik.gui.places.creator.object.ObjectPlace;
+import ru.mrchebik.gui.places.work.event.structure.event.PasteEvent;
+import ru.mrchebik.model.CommandPath;
 import ru.mrchebik.model.Project;
 
-import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
 
 /**
  * Created by mrchebik on 9/15/17.
  */
 @RequiredArgsConstructor
 public class CustomTreeCell extends TreeCell<Path> {
-    private String command;
-    private Path pathForCommand;
-
     @NonNull private Project project;
     @NonNull private ObjectPlace objectPlace;
+    @NonNull private CommandPath commandPath;
 
     @Override
     public void updateItem(Path path, boolean empty) {
@@ -72,32 +69,17 @@ public class CustomTreeCell extends TreeCell<Path> {
             });
 
             cut.setOnAction(event -> {
-                command = "Cut";
-                pathForCommand = path;
+                commandPath.setCommand("Cut");
+                commandPath.setPath(path);
             });
 
             copy.setOnAction(event -> {
-                command = "Copy";
-                pathForCommand = path;
+                commandPath.setCommand("Copy");
+                commandPath.setPath(path);
             });
 
-            paste.setOnAction(event -> {
-                if (command != null) {
-                    Path moveTo = path.resolve(pathForCommand.getFileName());
-                    if ("Cut".equals(command))
-                        try {
-                            Files.move(pathForCommand, moveTo, StandardCopyOption.REPLACE_EXISTING);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    else if ("Copy".equals(command))
-                        try {
-                            Files.copy(pathForCommand, moveTo, StandardCopyOption.REPLACE_EXISTING);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                }
-            });
+            PasteEvent pasteEvent = new PasteEvent(commandPath, path);
+            paste.setOnAction(pasteEvent);
 
             rename.setOnAction(event -> {
                 objectPlace.setType("Rename " + (isDirectory ? "Folder" : "File"));

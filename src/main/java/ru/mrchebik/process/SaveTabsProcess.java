@@ -1,8 +1,7 @@
-package ru.mrchebik.actions.autosave.saver.process;
+package ru.mrchebik.process;
 
 import javafx.scene.control.TabPane;
 import lombok.AllArgsConstructor;
-import ru.mrchebik.actions.autosave.saver.SaveTabs;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -15,14 +14,12 @@ public class SaveTabsProcess extends Thread {
     private TabPane tabPane;
 
     private void schedule(Runnable r) {
-        Timer timer = new Timer();
-
         TimerTask task = new TimerTask() {
             public void run() {
                 r.run();
             }
         };
-
+        Timer timer = new Timer();
         timer.schedule(task, (long) 5000, (long) 5000);
     }
 
