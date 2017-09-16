@@ -94,6 +94,8 @@ public class WorkPresenter implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        outputArea.setEditable(false);
+
         tabUpdater = new TabUpdater(tabPane);
         treeUpdater = new TreeUpdater(project, treeView, tabUpdater);
         treeUpdater.setRootToTreeView();

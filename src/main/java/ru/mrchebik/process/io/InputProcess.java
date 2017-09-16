@@ -21,11 +21,15 @@ public class InputProcess extends Thread {
     @Override
     @SneakyThrows(IOException.class)
     public void run() {
+        textArea.setEditable(true);
+
         @Cleanup BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
         String line;
         while ((line = reader.readLine()) != null) {
             appendToOutputArea(line);
         }
+
+        textArea.setEditable(false);
     }
 
     private void appendToOutputArea(String line) {
