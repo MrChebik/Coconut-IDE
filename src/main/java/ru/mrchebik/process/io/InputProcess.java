@@ -10,6 +10,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Created by mrchebik on 8/31/17.
@@ -18,6 +20,8 @@ public class InputProcess extends Thread {
     private InputStream inputStream;
     private TextArea textArea;
     private @Getter boolean firstLine;
+    private boolean open;
+    private @Getter StringBuilder line;
 
     public InputProcess(InputStream inputStream, TextArea textArea) {
         this.inputStream = inputStream;
@@ -26,17 +30,35 @@ public class InputProcess extends Thread {
 
     @SneakyThrows(IOException.class)
     public void run() {
+        @Cleanup BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+        initializeTimer();
+        open = false;
         firstLine = true;
-        @Cleanup BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
-        String line;
-        while ((line = reader.readLine()) != null) {
-            String currLine = line;
-            Platform.runLater(() -> {
-                textArea.appendText((firstLine ? "\n" : "") + currLine + "\n");
+        int n;
+        line = new StringBuilder();
+        while ((n = reader.read()) != -1) {
+            line.append((char) n);open = false;
+            if (open) {
+                open = false;
                 if (firstLine) {
+                    textArea.appendText("\n");
                     firstLine = false;
                 }
-            });
+                String currLine = line.toString();
+                Platform.runLater(() -> textArea.appendText(currLine));
+                line = new StringBuilder();
+            }
         }
+    }
+
+    private void initializeTimer() {
+        Timer timer = new Timer();
+        TimerTask task = new TimerTask() {
+            @Override
+            public void run() {
+                open = true;
+            }
+        };
+        timer.schedule(task, 100, 100);
     }
 }
