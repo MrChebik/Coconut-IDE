@@ -37,7 +37,7 @@ public class InputProcess extends Thread {
         int n;
         line = new StringBuilder();
         while ((n = reader.read()) != -1) {
-            line.append((char) n);open = false;
+            line.append((char) n);
             if (open) {
                 open = false;
                 if (firstLine) {
