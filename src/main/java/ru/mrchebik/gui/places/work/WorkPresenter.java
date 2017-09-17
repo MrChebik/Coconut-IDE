@@ -50,7 +50,6 @@ public class WorkPresenter implements Initializable {
     private TreeUpdater treeUpdater;
     private InputTextToOutputArea inputTextToOutputArea;
     private CommandPath commandPath;
-    private Highlight highlight;
 
     @FXML private void handleRunProject() {
         Platform.runLater(() -> {
@@ -109,7 +108,7 @@ public class WorkPresenter implements Initializable {
     }
 
     private void initalizeVariables() {
-        highlight = new Highlight();
+        Highlight highlight = new Highlight();
 
         errorProcess.setTextArea(outputArea);
 
