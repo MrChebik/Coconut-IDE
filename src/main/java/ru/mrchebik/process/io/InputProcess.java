@@ -44,9 +44,10 @@ public class InputProcess extends Thread {
                     textArea.appendText("\n");
                     firstLine = false;
                 }
-                String currLine = line.toString();
-                Platform.runLater(() -> textArea.appendText(currLine));
-                line = new StringBuilder();
+                Platform.runLater(() -> {
+                    textArea.appendText(line.toString());
+                    line = new StringBuilder();
+                });
             }
         }
     }
