@@ -32,6 +32,7 @@ public class ExecutorCommand {
         setOutputStream(process.getOutputStream());
         process.waitFor();
         Platform.runLater(() -> outputArea.appendText(inputProcess.getLine().toString()));
+        inputProcess.setOpen(false);
         Platform.runLater(() -> outputArea.appendText((!inputProcess.isFirstLine() || errorProcess.isWasError() ? "\n\n" : "") + "[PROCESS]: " + (errorProcess.isWasError() ? "Failure" : "Success") + "\n"));
         setOutputStream(null);
 

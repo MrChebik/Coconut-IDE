@@ -4,6 +4,7 @@ import javafx.application.Platform;
 import javafx.scene.control.TextArea;
 import lombok.Cleanup;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.SneakyThrows;
 
 import java.io.BufferedReader;
@@ -20,7 +21,7 @@ public class InputProcess extends Thread {
     private InputStream inputStream;
     private TextArea textArea;
     private @Getter boolean firstLine;
-    private boolean open;
+    private @Setter boolean open;
     private @Getter StringBuilder line;
 
     public InputProcess(InputStream inputStream, TextArea textArea) {
@@ -32,24 +33,26 @@ public class InputProcess extends Thread {
     public void run() {
         @Cleanup BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
         initializeTimer();
-        open = false;
+        open = true;
         firstLine = true;
         int n;
         line = new StringBuilder();
         while ((n = reader.read()) != -1) {
             line.append((char) n);
-            if (open) {
-                open = false;
-                if (firstLine) {
-                    textArea.appendText("\n");
-                    firstLine = false;
-                }
-                Platform.runLater(() -> {
-                    textArea.appendText(line.toString());
-                    line = new StringBuilder();
-                });
+            if (firstLine) {
+                textArea.appendText("\n");
+                firstLine = false;
             }
         }
+    }
+
+    private void print() {
+        open = false;
+        Platform.runLater(() -> {
+            textArea.appendText(line.toString());
+            line = new StringBuilder();
+            open = true;
+        });
     }
 
     private void initializeTimer() {
@@ -57,7 +60,9 @@ public class InputProcess extends Thread {
         TimerTask task = new TimerTask() {
             @Override
             public void run() {
-                open = true;
+                if (open) {
+                    print();
+                }
             }
         };
         timer.schedule(task, 100, 100);
