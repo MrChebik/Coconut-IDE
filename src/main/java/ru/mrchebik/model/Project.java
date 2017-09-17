@@ -56,7 +56,7 @@ public class Project {
         Projects projects = new Projects();
         Path corePath = projects.getPath();
 
-        return name + " - [" + (path.startsWith(corePath) ? "~" + path.relativize(corePath) : path) + "] - Coconut-IDE 0.0.9";
+        return name + " - [" + (path.startsWith(corePath) ? "~/" + corePath.getFileName().toString() + "/" + corePath.relativize(path) : path) + "] - Coconut-IDE 0.0.9";
     }
 
     public Thread compile() {
