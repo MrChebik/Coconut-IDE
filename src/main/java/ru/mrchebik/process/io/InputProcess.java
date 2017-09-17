@@ -27,14 +27,16 @@ public class InputProcess extends Thread {
     @SneakyThrows(IOException.class)
     public void run() {
         firstLine = true;
-        @Cleanup BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+        @Cleanup BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
         String line;
         while ((line = reader.readLine()) != null) {
-            if (firstLine) {
-                firstLine = false;
-            }
             String currLine = line;
-            Platform.runLater(() -> textArea.appendText("\n" + currLine));
+            Platform.runLater(() -> {
+                textArea.appendText((firstLine ? "\n" : "") + currLine + "\n");
+                if (firstLine) {
+                    firstLine = false;
+                }
+            });
         }
     }
 }
