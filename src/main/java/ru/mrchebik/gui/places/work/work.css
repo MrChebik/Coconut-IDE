@@ -2,16 +2,57 @@
     -fx-font-family: monospace;
 }
 
+* {
+    -fx-font-smoothing-type: gray;
+}
+
+.annotation {
+    -fx-fill: #646464;
+}
+
+.number {
+    -fx-fill: purple;
+}
+
 .keyword {
-    -fx-fill: brown;
+    -fx-fill: #7F0055;
     -fx-font-weight: bold;
 }
 
 .string {
-    -fx-fill: green;
+    -fx-fill: #2A00FF;
+}
+
+.comment-one {
+    -fx-fill: #3F7F5F;
+}
+
+.comment-multi {
+    -fx-fill: #3F7F5F;
+}
+
+.comment-keyword {
+    -fx-fill: #7F9FBF;
     -fx-font-weight: bold;
 }
 
-.comment {
-    -fx-fill: gray;
+.javadoc {
+    -fx-fill: #3F5FBF;
+}
+
+.javadoc-link {
+    -fx-fill: #3F3FBF;
+}
+
+.javadoc-html {
+    -fx-fill: #7F7F9F;
+}
+
+.javadoc-keyword {
+    -fx-fill: #7F9FBF;
+    -fx-font-weight: bold;
+}
+
+.caret {
+    -fx-stroke-width: 2;
 }

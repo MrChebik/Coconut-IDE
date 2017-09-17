@@ -1,5 +1,6 @@
 package ru.mrchebik.process;
 
+import javafx.application.Platform;
 import javafx.scene.control.TextArea;
 import lombok.Getter;
 import lombok.Setter;
@@ -30,7 +31,7 @@ public class ExecutorCommand {
         initializeInputStream();
         setOutputStream(process.getOutputStream());
         process.waitFor();
-        outputArea.appendText((!inputProcess.isFirstLine() || errorProcess.isWasError() ? "\n\n" : "") + "[PROCESS]: " + (errorProcess.isWasError() ? "Failure" : "Success") + "\n");
+        Platform.runLater(() -> outputArea.appendText((!inputProcess.isFirstLine() || errorProcess.isWasError() ? "\n\n" : "") + "[PROCESS]: " + (errorProcess.isWasError() ? "Failure" : "Success") + "\n"));
         setOutputStream(null);
 
         outputArea.setEditable(false);
@@ -42,7 +43,7 @@ public class ExecutorCommand {
         ProcessBuilder processBuilder = new ProcessBuilder(divideCommand);
         process = processBuilder.start();
 
-        outputArea.appendText("[COMMAND]: " + command + "\n");
+        Platform.runLater(() -> outputArea.appendText("[COMMAND]: " + command + "\n"));
     }
 
     private void initializeInputStream() {

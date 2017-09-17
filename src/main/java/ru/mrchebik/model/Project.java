@@ -37,6 +37,19 @@ public class Project {
 
         Path pathOfMain = Paths.get(pathSource.toString(), "Main.java");
         createFile(pathOfMain);
+        writeClassMain(pathOfMain);
+    }
+
+    @SneakyThrows(IOException.class)
+    private void writeClassMain(Path path) {
+        String classMain = String.join("\n", new String[] {
+                "public class Main {",
+                "    public static void main(String[] args) {",
+                "        ",
+                "    }",
+                "}"
+        });
+        Files.write(path, classMain.getBytes());
     }
 
     public String getTitle() {

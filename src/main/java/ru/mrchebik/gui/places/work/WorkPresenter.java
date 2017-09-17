@@ -20,6 +20,7 @@ import ru.mrchebik.gui.updater.tree.TreeUpdater;
 import ru.mrchebik.model.CommandPath;
 import ru.mrchebik.model.CustomIcons;
 import ru.mrchebik.model.Project;
+import ru.mrchebik.model.syntax.Highlight;
 import ru.mrchebik.process.ExecutorCommand;
 import ru.mrchebik.process.SaveTabs;
 import ru.mrchebik.process.SaveTabsProcess;
@@ -49,6 +50,7 @@ public class WorkPresenter implements Initializable {
     private TreeUpdater treeUpdater;
     private InputTextToOutputArea inputTextToOutputArea;
     private CommandPath commandPath;
+    private Highlight highlight;
 
     @FXML private void handleRunProject() {
         Platform.runLater(() -> {
@@ -98,19 +100,35 @@ public class WorkPresenter implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        errorProcess.setTextArea(outputArea);
-        outputArea.setEditable(false);
+        initalizeVariables();
+        setUpOutputArea();
+        setUpTreeView();
+        addTabOfMain();
+        focusToMain();
+        activateSaveProcess();
+    }
 
-        tabUpdater = new TabUpdater(tabPane);
+    private void initalizeVariables() {
+        highlight = new Highlight();
+
+        errorProcess.setTextArea(outputArea);
+
+        commandPath = new CommandPath();
+        tabUpdater = new TabUpdater(tabPane, highlight);
         treeUpdater = new TreeUpdater(project, treeView, tabUpdater);
         treeUpdater.setRootToTreeView();
         executorCommand.setOutputArea(outputArea);
         executorCommand.setErrorProcess(errorProcess);
 
         inputTextToOutputArea = new InputTextToOutputArea(executorCommand, outputArea);
+    }
 
+    private void setUpOutputArea() {
+        outputArea.setEditable(false);
         outputArea.setOnKeyPressed(inputTextToOutputArea);
+    }
 
+    private void setUpTreeView() {
         treeView.getSelectionModel().select(2);
         CustomIcons customIcons = new CustomIcons();
         treeView.getRoot().getChildren().get(1).setGraphic(new ImageView(customIcons.getFolderExpandImage()));
@@ -118,23 +136,26 @@ public class WorkPresenter implements Initializable {
         TreeItem<Path> item = treeView.getRoot().getChildren().get(1).getChildren().get(0);
 
         treeView.getSelectionModel().select(item);
+        treeView.setCellFactory(new StructureUpdateGraphic(project, objectPlace, commandPath));
+    }
 
+    private void addTabOfMain() {
         String pathTarget = project.getPathSource() + File.separator + "Main.java";
         Path path = Paths.get(pathTarget);
         TreeItem<Path> root = treeView.getRoot();
         CustomTreeItem mainFile = (CustomTreeItem) treeUpdater.getItem(root, path);
 
         tabUpdater.addObjectToTab(mainFile);
+    }
 
+    private void focusToMain() {
         VirtualizedScrollPane scrollPane = (VirtualizedScrollPane) tabPane.getTabs().get(0).getContent();
         CodeArea focusable = (CodeArea) scrollPane.getContent();
         Platform.runLater(focusable::requestFocus);
+        focusable.moveTo(73);
+    }
 
-        treeView.getTreeItem(3);
-
-        commandPath = new CommandPath();
-        treeView.setCellFactory(new StructureUpdateGraphic(project, objectPlace, commandPath));
-
+    private void activateSaveProcess() {
         SaveTabsProcess saver = new SaveTabsProcess(tabPane);
         saver.start();
     }

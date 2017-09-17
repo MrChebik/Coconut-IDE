@@ -1,5 +1,6 @@
 package ru.mrchebik.process.io;
 
+import javafx.application.Platform;
 import javafx.scene.control.TextArea;
 import lombok.Cleanup;
 import lombok.Getter;
@@ -30,10 +31,10 @@ public class InputProcess extends Thread {
         String line;
         while ((line = reader.readLine()) != null) {
             if (firstLine) {
-                textArea.appendText("\n");
                 firstLine = false;
             }
-            textArea.appendText(line);
+            String currLine = line;
+            Platform.runLater(() -> textArea.appendText("\n" + currLine));
         }
     }
 }

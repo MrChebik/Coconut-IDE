@@ -6,11 +6,11 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.image.ImageView;
 import lombok.AllArgsConstructor;
-import lombok.Setter;
 import lombok.SneakyThrows;
 import org.fxmisc.flowless.VirtualizedScrollPane;
 import ru.mrchebik.gui.updater.tree.CustomTreeItem;
 import ru.mrchebik.model.CustomIcons;
+import ru.mrchebik.model.syntax.Highlight;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -22,7 +22,8 @@ import java.util.stream.Collectors;
  */
 @AllArgsConstructor
 public class TabUpdater {
-    private @Setter TabPane tabPane;
+    private TabPane tabPane;
+    private Highlight highlight;
 
     public void updateTabs(Path newPath, Path toRename) {
         ObservableList<Tab> tabs = tabPane.getTabs();
@@ -66,7 +67,7 @@ public class TabUpdater {
 
     public void addObjectToTab(CustomTreeItem item) {
         String text = getText(item.getValue());
-        CodePlace codePlace = new CodePlace(text);
+        CodePlace codePlace = new CodePlace(text, highlight);
 
         Tab tab = new Tab();
         tab.setText(item.getValue().getFileName().toString());

@@ -1,5 +1,6 @@
 package ru.mrchebik.process.io;
 
+import javafx.application.Platform;
 import lombok.AllArgsConstructor;
 import lombok.Cleanup;
 import lombok.SneakyThrows;
@@ -23,7 +24,8 @@ public class ErrorThread extends Thread {
         String line;
         while ((line = reader.readLine()) != null) {
             errorProcess.setWasError(true);
-            errorProcess.getTextArea().appendText("\n" + line);
+            String currLine = line;
+            Platform.runLater(() -> errorProcess.getTextArea().appendText("\n" + currLine));
         }
     }
 }
