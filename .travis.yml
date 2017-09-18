@@ -8,4 +8,4 @@ before_install:
 
 script:
 - mvn package
-- java -jar ./target/coconut-ide*.jar
+- java -jar ./target/coconut-ide*.jar -exitOnSec 3
