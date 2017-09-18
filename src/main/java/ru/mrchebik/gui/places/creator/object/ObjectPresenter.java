@@ -55,14 +55,6 @@ public class ObjectPresenter implements Initializable {
             project.createFolder(pathAdd);
         else
             Files.move(path, pathRename);
-            /*file = new File(pathOfCreator);
-            String nameFromPath = file.getName();
-            int indexWithoutName = pathOfCreator.length() - nameFromPath.length();
-
-            String newPath = pathOfCreator.substring(0, indexWithoutName) + name.getText();
-            File newFile = new File(newPath);
-
-            file.renameTo(newFile);*/
     }
 
     @Override

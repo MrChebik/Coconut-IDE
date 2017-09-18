@@ -114,7 +114,7 @@ public class Project {
     }
 
     @SneakyThrows(IOException.class)
-    public String getStructure(String... advanceSuffixes) {
+    private String getStructure(String... advanceSuffixes) {
         String[] suffixes = mergeSuffixes(advanceSuffixes);
 
         return Files.walk(pathSource)
@@ -129,7 +129,7 @@ public class Project {
                 .collect(Collectors.joining(" "));
     }
 
-    public String getPackageOfRunnable(Path path) {
+    private String getPackageOfRunnable(Path path) {
         Path relative = pathSource.relativize(path);
         String relativePathWithoutExtension = getPathWithoutExtension(relative);
 

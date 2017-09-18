@@ -48,11 +48,12 @@ public class InputProcess extends Thread {
 
     private void print() {
         open = false;
-        Platform.runLater(() -> {
-            textArea.appendText(line.toString());
-            line = new StringBuilder();
-            open = true;
-        });
+        if (!line.toString().isEmpty())
+            Platform.runLater(() -> {
+                textArea.appendText(line.toString());
+                line = new StringBuilder();
+                open = true;
+            });
     }
 
     private void initializeTimer() {
