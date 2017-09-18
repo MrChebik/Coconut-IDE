@@ -1,0 +1,6 @@
+language: java
+sudo: false
+
+script:
+- mvn package
+- java -jar ./target/coconut-ide*.jar
