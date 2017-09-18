@@ -14,6 +14,7 @@ import ru.mrchebik.model.Project;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Comparator;
 
 /**
  * Created by mrchebik on 9/3/17.
@@ -46,12 +47,16 @@ public class TreeUpdater {
             }
 
             parent.getChildren().add(newItem);
+
+            sortItemsInTree(parent);
         }
     }
 
     public void updateObject(Path oldPath, Path newPath) {
         TreeItem<Path> item = getItem(treeView.getRoot(), oldPath);
         item.setValue(newPath);
+
+        sortItemsInTree(item.getParent());
     }
 
     public void removeObject(Path path) {
@@ -64,6 +69,11 @@ public class TreeUpdater {
             TreeItem<Path> item = getItem(parent, path);
             parent.getChildren().remove(item);
         }
+    }
+
+    private void sortItemsInTree(TreeItem<Path> start) {
+        if (!treeView.getRoot().equals(start))
+            start.getChildren().sort(Comparator.comparing(e -> e.getValue().toString()));
     }
 
     public void setRootToTreeView() {
