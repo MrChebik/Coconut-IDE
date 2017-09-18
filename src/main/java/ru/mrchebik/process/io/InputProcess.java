@@ -65,6 +65,6 @@ public class InputProcess extends Thread {
                 }
             }
         };
-        timer.schedule(task, 100, 100);
+        timer.schedule(task, 5, 5);
     }
 }
