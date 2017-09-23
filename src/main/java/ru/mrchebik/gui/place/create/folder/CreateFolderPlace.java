@@ -17,9 +17,6 @@ public class CreateFolderPlace {
 
     private Stage stage;
 
-    public CreateFolderPlace() {
-    }
-
     public static CreateFolderPlace create() {
         return new CreateFolderPlace();
     }

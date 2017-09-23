@@ -28,11 +28,11 @@ public class ErrorProcessSyntax extends Thread {
 
     private static DiagnosticCollector<JavaFileObject> diagnostics;
 
-    public ErrorProcessSyntax(CustomCodeArea customCodeArea,
-                              Project project,
-                              SaveTabsProcess saveTabsProcess,
-                              TabPane tabPane,
-                              TreeView<Path> treeView) {
+    ErrorProcessSyntax(CustomCodeArea customCodeArea,
+                       Project project,
+                       SaveTabsProcess saveTabsProcess,
+                       TabPane tabPane,
+                       TreeView<Path> treeView) {
         this.customCodeArea = customCodeArea;
         this.project = project;
         this.saveTabsProcess = saveTabsProcess;
@@ -69,35 +69,33 @@ public class ErrorProcessSyntax extends Thread {
 
     private void computeProblems() {
         for (Diagnostic diagnostic : diagnostics.getDiagnostics()) {
+            //System.out.printPlatform.runLater(area::requestFocus);ln(diagnostic.getKind());
+            //System.out.println(diagnostic.getStartPosition());
+            //System.out.println(diagnostic.getEndPosition());
+            //System.out.println(diagnostic.getSource());
+            //System.out.println(diagnostic.getMessage(null));
+
             BaseFileObject baseFileObject = (BaseFileObject) diagnostic.getSource();
-            if (baseFileObject.getShortName().equals(customCodeArea.getName())) {
-                //System.out.printPlatform.runLater(area::requestFocus);ln(diagnostic.getKind());
-                //System.out.println(diagnostic.getStartPosition());
-                //System.out.println(diagnostic.getEndPosition());
-                //System.out.println(diagnostic.getSource());
-                //System.out.println(diagnostic.getMessage(null));
+            if (baseFileObject.getShortName().equals(customCodeArea.getName()) && diagnostic.getStartPosition() > -1) {
+                int start = (int) diagnostic.getStartPosition();
+                int end = (int) diagnostic.getEndPosition();
 
-                if (!"WARNING".equals(diagnostic.getKind().toString()) && diagnostic.getStartPosition() > -1) {
-                    int start = (int) diagnostic.getStartPosition();
-                    int end = (int) diagnostic.getEndPosition();
-
-                    if (start == end) {
-                        if (start > 0) {
-                            start -= 1;
-                        }
-                        if (end < customCodeArea.getText().length() - 1) {
-                            end += 1;
-                        }
-                    } else if (end < start) {
-                        end = start + 1;
-                        start--;
-                        if (end == customCodeArea.getText().length() - 1) {
-                            end--;
-                        }
+                if (start == end) {
+                    if (start > 0) {
+                        start -= 1;
                     }
-
-                    customCodeArea.getCodeAreaCSS().setStyleClass(start, end, "error");
+                    if (end < customCodeArea.getText().length() - 1) {
+                        end += 1;
+                    }
+                } else if (end < start) {
+                    end = start + 1;
+                    start--;
+                    if (end == customCodeArea.getText().length() - 1) {
+                        end--;
+                    }
                 }
+
+                customCodeArea.getCodeAreaCSS().setStyleClass(start, end, "error");
             }
         }
     }
@@ -131,11 +129,9 @@ public class ErrorProcessSyntax extends Thread {
                     if (baseFileObject.getName().equals(path.toString())) {
                         for (Node node :  cells) {
                             TreeCell treeCell = (TreeCell) node;
-                            if (treeCell.getTreeItem() != null) {
-                                if (treeCell.getTreeItem().equals(item)) {
-                                    treeCell.setStyle(ERROR);
-                                    break;
-                                }
+                            if (treeCell.getTreeItem() != null && treeCell.getTreeItem().equals(item)) {
+                                treeCell.setStyle(ERROR);
+                                break;
                             }
                         }
                         return;

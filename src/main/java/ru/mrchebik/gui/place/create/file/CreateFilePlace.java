@@ -17,9 +17,6 @@ public class CreateFilePlace {
 
     private Stage stage;
 
-    public CreateFilePlace() {
-    }
-
     public static CreateFilePlace create() {
         return new CreateFilePlace();
     }

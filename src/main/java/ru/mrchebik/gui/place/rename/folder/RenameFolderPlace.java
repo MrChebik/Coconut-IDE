@@ -17,9 +17,6 @@ public class RenameFolderPlace {
 
     private Stage stage;
 
-    public RenameFolderPlace() {
-    }
-
     public static RenameFolderPlace create() {
         return new RenameFolderPlace();
     }

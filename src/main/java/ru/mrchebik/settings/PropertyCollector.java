@@ -15,8 +15,6 @@ import java.util.Properties;
 public class PropertyCollector {
     private final Path SETTINGS_PATH = Paths.get(System.getProperty("user.home"), ".coconut-ide");
 
-    private Properties lastProjects;
-    private Path pathLastProjects;
     private Path pathProperties;
     private Properties properties;
 
@@ -26,15 +24,10 @@ public class PropertyCollector {
             Files.createDirectory(SETTINGS_PATH);
         }
         initializeApplicationProperties();
-        initializeLastProjectsProperties();
     }
 
     public static PropertyCollector create() {
         return new PropertyCollector();
-    }
-
-    public String getProject(String key) {
-        return lastProjects.getProperty(key);
     }
 
     public String getProperty(String key) {
@@ -49,29 +42,6 @@ public class PropertyCollector {
         }
         properties = new Properties();
         properties.load(new FileInputStream(new File(String.valueOf(pathProperties.toFile()))));
-    }
-
-    public void initializeLastProject() {
-
-    }
-
-    @SneakyThrows
-    private void initializeLastProjectsProperties() {
-        pathLastProjects = SETTINGS_PATH.resolve("lastProjects.properties");
-        if (!Files.exists(pathLastProjects)) {
-            Files.createFile(pathLastProjects);
-        }
-        lastProjects = new Properties();
-        lastProjects.load(new FileInputStream(new File(String.valueOf(pathLastProjects.toFile()))));
-    }
-
-    @SneakyThrows
-    public void writeProject(String key, String value) {
-        lastProjects.setProperty(key, value);
-
-        File file = pathLastProjects.toFile();
-        @Cleanup FileOutputStream fos = new FileOutputStream(file);
-        lastProjects.store(fos, "Update");
     }
 
     @SneakyThrows
