@@ -34,7 +34,7 @@ public class SaveFileTest {
 
     @Test
     public void save() throws Exception {
-        ExistFileToSave existFileToSave = new ExistFileToSave(path, "Hello World!\nHello World");
+        ExistFileToSave existFileToSave = new ExistFileToSave("Hello World!\nHello World", path);
         existFileToSave.save();
 
         assertEquals("Hello World!\nHello World", getText(path));

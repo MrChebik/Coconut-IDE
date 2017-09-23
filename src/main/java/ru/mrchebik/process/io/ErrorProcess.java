@@ -6,14 +6,20 @@ import lombok.Setter;
 
 import java.io.InputStream;
 
-/**
- * Created by mrchebik on 9/16/17.
- */
 public class ErrorProcess {
-    private @Setter @Getter InputStream inputStream;
-    private @Setter @Getter TextArea textArea;
+    @Getter @Setter
+    private InputStream inputStream;
+    @Getter @Setter
+    private TextArea textArea;
+    @Getter @Setter
+    private boolean wasError;
 
-    private @Getter @Setter boolean wasError;
+    private ErrorProcess() {
+    }
+
+    public static ErrorProcess create() {
+        return new ErrorProcess();
+    }
 
     public void start() {
         ErrorThread errorThread = new ErrorThread(this);

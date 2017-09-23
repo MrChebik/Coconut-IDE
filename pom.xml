@@ -6,7 +6,7 @@
 
     <groupId>coconut.ide</groupId>
     <artifactId>coconut-ide</artifactId>
-    <version>0.0.9</version>
+    <version>0.1.0</version>
 
     <build>
         <plugins>
@@ -56,8 +56,8 @@
                     </archive>
                 </configuration>
             </plugin>
-
         </plugins>
+
         <resources>
             <resource>
                 <directory>src/main/java</directory>
@@ -84,11 +84,6 @@
             <version>4.12</version>
         </dependency>
         <dependency>
-            <groupId>org.loadui</groupId>
-            <artifactId>testFx</artifactId>
-            <version>3.1.2</version>
-        </dependency>
-        <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>1.16.18</version>
@@ -106,7 +101,14 @@
         <dependency>
             <groupId>com.github.javaparser</groupId>
             <artifactId>java-symbol-solver-core</artifactId>
-            <version>0.5.5</version>
+            <version>0.6.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.sun</groupId>
+            <artifactId>tools</artifactId>
+            <scope>system</scope>
+            <version>1</version>
+            <systemPath>${java.home}/../lib/tools.jar</systemPath>
         </dependency>
     </dependencies>
 

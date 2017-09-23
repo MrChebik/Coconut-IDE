@@ -5,10 +5,16 @@ import lombok.Setter;
 
 import java.nio.file.Path;
 
-/**
- * Created by mrchebik on 9/16/17.
- */
 public class CommandPath {
-    private @Getter @Setter String command;
-    private @Getter @Setter Path path;
+    @Getter @Setter
+    private String command;
+    @Getter @Setter
+    private Path path;
+
+    private CommandPath() {
+    }
+
+    public static CommandPath create() {
+        return new CommandPath();
+    }
 }

@@ -2,10 +2,7 @@ package ru.mrchebik.process.io;
 
 import javafx.application.Platform;
 import javafx.scene.control.TextArea;
-import lombok.Cleanup;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.SneakyThrows;
+import lombok.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -14,20 +11,19 @@ import java.io.InputStreamReader;
 import java.util.Timer;
 import java.util.TimerTask;
 
-/**
- * Created by mrchebik on 8/31/17.
- */
+@RequiredArgsConstructor
 public class InputProcess extends Thread {
-    private InputStream inputStream;
-    private TextArea textArea;
-    private @Getter boolean firstLine;
-    private @Setter boolean open;
-    private @Getter StringBuilder line;
+    @Getter
+    private boolean firstLine;
+    @Getter
+    private StringBuilder line;
+    @Setter
+    private boolean open;
 
-    public InputProcess(InputStream inputStream, TextArea textArea) {
-        this.inputStream = inputStream;
-        this.textArea = textArea;
-    }
+    @NonNull
+    private InputStream inputStream;
+    @NonNull
+    private TextArea textArea;
 
     @SneakyThrows(IOException.class)
     public void run() {
@@ -46,16 +42,6 @@ public class InputProcess extends Thread {
         }
     }
 
-    private void print() {
-        open = false;
-        if (!line.toString().isEmpty())
-            Platform.runLater(() -> {
-                textArea.appendText(line.toString());
-                line = new StringBuilder();
-                open = true;
-            });
-    }
-
     private void initializeTimer() {
         Timer timer = new Timer();
         TimerTask task = new TimerTask() {
@@ -67,5 +53,15 @@ public class InputProcess extends Thread {
             }
         };
         timer.schedule(task, 5, 5);
+    }
+
+    private void print() {
+        open = false;
+        if (!line.toString().isEmpty())
+            Platform.runLater(() -> {
+                textArea.appendText(line.toString());
+                line = new StringBuilder();
+                open = true;
+            });
     }
 }

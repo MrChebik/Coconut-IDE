@@ -12,15 +12,23 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-/**
- * Created by mrchebik on 8/29/17.
- */
 public class ExecutorCommand {
-    private Process process;
-    private @Setter TextArea outputArea;
-    private @Getter @Setter OutputStream outputStream;
-    private @Setter ErrorProcess errorProcess;
+    @Setter
+    private ErrorProcess errorProcess;
+    @Setter
+    private TextArea outputArea;
+    @Getter @Setter
+    private OutputStream outputStream;
+
     private InputProcess inputProcess;
+    private Process process;
+
+    private ExecutorCommand() {
+    }
+
+    public static ExecutorCommand create() {
+        return new ExecutorCommand();
+    }
 
     @SneakyThrows(InterruptedException.class)
     public void execute(String command) {
@@ -39,13 +47,10 @@ public class ExecutorCommand {
         outputArea.setEditable(false);
     }
 
-    @SneakyThrows(IOException.class)
-    private void initializeProcess(String command) {
-        String[] divideCommand = command.split(" ");
-        ProcessBuilder processBuilder = new ProcessBuilder(divideCommand);
-        process = processBuilder.start();
-
-        Platform.runLater(() -> outputArea.appendText("[COMMAND]: " + command + "\n"));
+    private void initializeErrorStream() {
+        InputStream inputStream = process.getErrorStream();
+        errorProcess.setInputStream(inputStream);
+        errorProcess.start();
     }
 
     private void initializeInputStream() {
@@ -54,9 +59,12 @@ public class ExecutorCommand {
         inputProcess.start();
     }
 
-    private void initializeErrorStream() {
-        InputStream inputStream = process.getErrorStream();
-        errorProcess.setInputStream(inputStream);
-        errorProcess.start();
+    @SneakyThrows(IOException.class)
+    private void initializeProcess(String command) {
+        String[] divideCommand = command.split(" ");
+        ProcessBuilder processBuilder = new ProcessBuilder(divideCommand);
+        process = processBuilder.start();
+
+        Platform.runLater(() -> outputArea.appendText("[COMMAND]: " + command + "\n"));
     }
 }

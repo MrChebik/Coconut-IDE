@@ -4,11 +4,12 @@
 [![codebeat badge](https://codebeat.co/badges/b5e31acb-b0be-41c1-91cf-7d8d3c88fc84)](https://codebeat.co/projects/github-com-mrchebik-coconut-ide-master)
 > IDE for Java developers.
 
-## Facilities:
-* TreeStructure of project;
+## Features:
+* Highlight (without names) / Syntax;
 * IO (Input/Output streams);
 * Launch multi _java_ files from source folder (NOT libraries);
-* Highlight (NOT syntax) (without names);
+* Setting JDK path;
+* TreeStructure of project;
 
 ## Screenshot
 ![Coconut-IDE - Screenshot](https://github.com/MrChebik/Coconut-IDE/blob/master/coconut-ide-screenshot.png?raw=true)

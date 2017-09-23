@@ -1,12 +1,12 @@
 package ru.mrchebik.model;
 
-import javafx.scene.control.TextArea;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
 import ru.mrchebik.process.ExecutorCommand;
 import ru.mrchebik.process.io.ErrorProcess;
+import ru.mrchebik.settings.PropertyCollector;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,18 +17,19 @@ import java.util.LinkedList;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-/**
- * Created by mrchebik on 8/29/17.
- */
 @AllArgsConstructor
 public class Project {
-    private @Getter @Setter String name;
-    private @Getter @Setter Path path;
-    private @Getter @Setter Path pathOut;
-    private @Getter @Setter Path pathSource;
+    @Getter @Setter
+    private String name;
+    @Getter @Setter
+    private Path path;
+    @Getter @Setter
+    private Path pathOut;
+    @Getter @Setter
+    private Path pathSource;
 
-    private ExecutorCommand executorCommand;
     private ErrorProcess errorProcess;
+    private ExecutorCommand executorCommand;
 
     public void build() {
         createFolder(path);
@@ -40,28 +41,15 @@ public class Project {
         writeClassMain(pathOfMain);
     }
 
-    @SneakyThrows(IOException.class)
-    private void writeClassMain(Path path) {
-        String classMain = String.join("\n", new String[] {
-                "public class Main {",
-                "    public static void main(String[] args) {",
-                "        ",
-                "    }",
-                "}"
-        });
-        Files.write(path, classMain.getBytes());
-    }
-
-    public String getTitle() {
-        Projects projects = new Projects();
-        Path corePath = projects.getPath();
-
-        return name + " - [" + (path.startsWith(corePath) ? "~/" + corePath.getFileName().toString() + "/" + corePath.relativize(path) : path) + "] - Coconut-IDE 0.0.9";
-    }
-
     public Thread compile() {
         Thread thread = new Thread(() -> {
-            String command = "javac -d " + pathOut.toString() + " " + getStructure();
+            String pathJDK = PropertyCollector.create().getProperty("jdk");
+            if (pathJDK == null) {
+                pathJDK = "javac";
+            } else {
+                pathJDK += "/bin/javac";
+            }
+            String command = pathJDK + " -d " + pathOut.toString() + " " + getStructure();
             executorCommand.execute(command);
         });
         thread.start();
@@ -69,32 +57,18 @@ public class Project {
         return thread;
     }
 
-    public void run(Path path, TextArea outputArea) {
-        Thread thread = new Thread(() -> {
-            Thread compile = compile();
-            try {
-                compile.join();
-            } catch (InterruptedException ignored) {
-            }
-
-            if (!errorProcess.isWasError()) {
-                String command = "java -cp " + pathOut.toString() + " " + getPackageOfRunnable(path);
-                executorCommand.execute(command);
-            }
-        });
-        thread.start();
+    @SneakyThrows(IOException.class)
+    public void createFile(Path path) {
+        if (!Files.exists(path)) {
+            Files.createFile(path);
+        }
     }
 
     @SneakyThrows(IOException.class)
     public void createFolder(Path path) {
-        if (!Files.exists(path))
+        if (!Files.exists(path)) {
             Files.createDirectory(path);
-    }
-
-    @SneakyThrows(IOException.class)
-    public void createFile(Path path) {
-        if (!Files.exists(path))
-            Files.createFile(path);
+        }
     }
 
     @SneakyThrows(IOException.class)
@@ -113,20 +87,11 @@ public class Project {
         }
     }
 
-    @SneakyThrows(IOException.class)
-    private String getStructure(String... advanceSuffixes) {
-        String[] suffixes = mergeSuffixes(advanceSuffixes);
+    private String getPathWithoutExtension(Path path) {
+        String pathString = path.toString();
+        int indexOfLastDot = pathString.lastIndexOf('.');
 
-        return Files.walk(pathSource)
-                .filter(p -> {
-                    for (String suffix : suffixes)
-                        if (p.toString().endsWith(suffix))
-                            return true;
-
-                    return false;
-                })
-                .map(Path::toString)
-                .collect(Collectors.joining(" "));
+        return pathString.substring(0, indexOfLastDot);
     }
 
     private String getPackageOfRunnable(Path path) {
@@ -136,11 +101,31 @@ public class Project {
         return relativePathWithoutExtension.replaceAll(File.separator, ".");
     }
 
-    private String getPathWithoutExtension(Path path) {
-        String pathString = path.toString();
-        int indexOfLastDot = pathString.lastIndexOf('.');
+    @SneakyThrows(IOException.class)
+    private String getStructure(String... advanceSuffixes) {
+        String[] suffixes = mergeSuffixes(advanceSuffixes);
 
-        return pathString.substring(0, indexOfLastDot);
+        return Files.walk(pathSource)
+                .filter(p -> {
+                    for (String suffix : suffixes) {
+                        if (p.toString().endsWith(suffix)) {
+                            return true;
+                        }
+                    }
+
+                    return false;
+                })
+                .map(Path::toString)
+                .collect(Collectors.joining(" "));
+    }
+
+    public String getTitle() {
+        Path corePath = Projects.create().getCorePath();
+
+        return name + " - [" +
+                (path.startsWith(corePath) ?
+                        "~/" + corePath.getFileName().toString() + "/" + corePath.relativize(path) : path)
+                + "] - Coconut-IDE 0.1.0";
     }
 
     private String[] mergeSuffixes(String... advanceSuffixes) {
@@ -150,5 +135,39 @@ public class Project {
                 .forEach(i -> computeSuffixes[i + 1] = advanceSuffixes[i]);
 
         return computeSuffixes;
+    }
+
+    public void run(Path path) {
+        Thread thread = new Thread(() -> {
+            Thread compile = compile();
+            try {
+                compile.join();
+            } catch (InterruptedException ignored) {
+            }
+
+            if (!errorProcess.isWasError()) {
+                String pathJDK = PropertyCollector.create().getProperty("jdk");
+                if (pathJDK == null) {
+                    pathJDK = "java";
+                } else {
+                    pathJDK += "/bin/java";
+                }
+                String command = pathJDK + " -cp " + pathOut.toString() + " " + getPackageOfRunnable(path);
+                executorCommand.execute(command);
+            }
+        });
+        thread.start();
+    }
+
+    @SneakyThrows(IOException.class)
+    private void writeClassMain(Path path) {
+        String classMain = String.join("\n", new String[]{
+                "public class Main {",
+                "    public static void main(String[] args) {",
+                "        ",
+                "    }",
+                "}"
+        });
+        Files.write(path, classMain.getBytes());
     }
 }

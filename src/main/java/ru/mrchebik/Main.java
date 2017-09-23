@@ -1,7 +1,8 @@
 package ru.mrchebik;
 
 import javafx.application.Application;
-import ru.mrchebik.gui.places.start.StartPlace;
+import ru.mrchebik.gui.place.start.StartPlace;
+import ru.mrchebik.settings.PropertyCollector;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -21,6 +22,9 @@ public class Main {
             };
             timer.schedule(timerTask, Integer.parseInt(args[1]) * 1000);
         }
+
+        PropertyCollector collector = PropertyCollector.create();
+        //collector.writeProject("TES1T", "/home/mrchebik/123");
 
         Application.launch(StartPlace.class);
     }

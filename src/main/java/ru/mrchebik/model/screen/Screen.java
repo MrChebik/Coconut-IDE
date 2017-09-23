@@ -4,11 +4,12 @@ import javafx.geometry.Rectangle2D;
 import ru.mrchebik.model.screen.measurement.Point;
 import ru.mrchebik.model.screen.measurement.Scale;
 
-/**
- * Created by mrchebik on 8/31/17.
- */
 public class Screen {
-    private Rectangle2D bounds = javafx.stage.Screen.getPrimary().getVisualBounds();
+    private Rectangle2D bounds;
+
+    public Screen() {
+        bounds = javafx.stage.Screen.getPrimary().getVisualBounds();
+    }
 
     public Point calculateCenter(double width, double height) {
         double x = (bounds.getWidth() - width) / 2;

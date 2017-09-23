@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<BorderPane prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8.0.111"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.mrchebik.gui.place.work.WorkPresenter">
+    <bottom>
+        <BorderPane prefHeight="41.0" prefWidth="1200.0" BorderPane.alignment="CENTER">
+            <left>
+                <Button mnemonicParsing="false" onMouseClicked="#handleCompileProject" prefWidth="225.0" text="Compile"
+                        BorderPane.alignment="CENTER">
+                    <BorderPane.margin>
+                        <Insets left="7.0"/>
+                    </BorderPane.margin>
+                </Button>
+            </left>
+            <right>
+                <Button mnemonicParsing="false" onMouseClicked="#handleRunProject" prefWidth="240.0" text="Run"
+                        BorderPane.alignment="CENTER">
+                    <BorderPane.margin>
+                        <Insets right="7.0"/>
+                    </BorderPane.margin>
+                </Button>
+            </right>
+        </BorderPane>
+    </bottom>
+    <center>
+        <SplitPane dividerPositions="0.7225891677675033" orientation="VERTICAL" prefHeight="200.0"
+                   prefWidth="160.0" BorderPane.alignment="CENTER">
+            <BorderPane prefHeight="200.0" prefWidth="200.0">
+                <left>
+                    <TreeView fx:id="treeView" editable="true" onMouseClicked="#handleDoubleClick"
+                              prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER"/>
+                </left>
+                <center>
+                    <TabPane fx:id="tabPane" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                    </TabPane>
+                </center>
+            </BorderPane>
+            <TextArea fx:id="outputArea"/>
+        </SplitPane>
+    </center>
+</BorderPane>

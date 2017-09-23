@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<BorderPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.mrchebik.gui.place.start.StartPresenter">
+    <center>
+        <ImageView fx:id="coconutPng" fitHeight="275.0" fitWidth="275.0" pickOnBounds="true" preserveRatio="true"
+                   BorderPane.alignment="CENTER">
+            <BorderPane.margin>
+                <Insets top="-35.0"/>
+            </BorderPane.margin>
+            <Image url="/img/coconut.png"/>
+        </ImageView>
+    </center>
+    <bottom>
+        <HBox alignment="CENTER" prefHeight="40.0" prefWidth="200.0">
+            <Button mnemonicParsing="false" onMouseClicked="#handleNewProject" text="New Project"/>
+        </HBox>
+    </bottom>
+    <top>
+        <HBox alignment="CENTER_RIGHT" prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+            <Button mnemonicParsing="false" onMouseClicked="#handleSetupJDK" text="JDK">
+                <HBox.margin>
+                    <Insets right="6.0"/>
+                </HBox.margin>
+            </Button>
+        </HBox>
+    </top>
+</BorderPane>

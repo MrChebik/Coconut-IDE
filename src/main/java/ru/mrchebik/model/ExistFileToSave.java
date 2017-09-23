@@ -7,13 +7,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-/**
- * Created by mrchebik on 9/2/17.
- */
 @AllArgsConstructor
 public class ExistFileToSave {
-    private Path path;
     private String lines;
+    private Path path;
 
     @SneakyThrows(IOException.class)
     public void save() {

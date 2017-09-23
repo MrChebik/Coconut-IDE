@@ -4,13 +4,20 @@ import javafx.scene.image.Image;
 import lombok.Getter;
 import ru.mrchebik.Main;
 
-/**
- * Created by mrchebik on 8/30/17.
- */
 public class CustomIcons {
-    private @Getter Image logo = new Image(String.valueOf(Main.class.getResource("/img/coconut.png")));
+    @Getter
+    private Image fileImage;
+    @Getter
+    private Image folderCollapseImage;
+    @Getter
+    private Image folderExpandImage;
+    @Getter
+    private Image logo;
 
-    private @Getter Image folderCollapseImage = new Image(String.valueOf(Main.class.getResource("/icons/folder.png")));
-    private @Getter Image folderExpandImage = new Image(String.valueOf(Main.class.getResource("/icons/folder-open.png")));
-    private @Getter Image fileImage = new Image(String.valueOf(Main.class.getResource("/icons/text-x-generic.png")));
+    public CustomIcons() {
+        fileImage = new Image(String.valueOf(Main.class.getResource("/icons/text-x-generic.png")));
+        folderCollapseImage = new Image(String.valueOf(Main.class.getResource("/icons/folder.png")));
+        folderExpandImage = new Image(String.valueOf(Main.class.getResource("/icons/folder-open.png")));
+        logo = new Image(String.valueOf(Main.class.getResource("/img/coconut.png")));
+    }
 }

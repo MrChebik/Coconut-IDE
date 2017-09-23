@@ -9,9 +9,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-/**
- * Created by mrchebik on 9/16/17.
- */
 @AllArgsConstructor
 public class ErrorThread extends Thread {
     private ErrorProcess errorProcess;
