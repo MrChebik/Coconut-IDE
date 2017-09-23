@@ -6,9 +6,6 @@ import ru.mrchebik.gui.place.start.StartPlace;
 import java.util.Timer;
 import java.util.TimerTask;
 
-/**
- * Created by mrchebik on 07.05.16.
- */
 public class Main {
     public static void main(String[] args) {
         if (args.length > 1 && "-exitOnSec".equals(args[0])) {

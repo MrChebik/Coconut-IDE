@@ -11,7 +11,9 @@ import ru.mrchebik.gui.node.CustomCodeArea;
 import ru.mrchebik.model.Project;
 import ru.mrchebik.process.SaveTabsProcess;
 
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -23,7 +25,12 @@ public class Syntax {
     private TreeView<Path> treeView;
 
     public void compute(CustomCodeArea customCodeArea) {
-        if (/*Files.exists(Paths.get(System.getProperty("java.home"), "bin", "javac"))*/ true) {
+        Path pathHome = Paths.get(System.getProperty("java.home"));
+
+        boolean isJDKHome = Files.exists(pathHome.resolve("bin").resolve("javac"));
+        boolean parentIsJDK = Files.exists(pathHome.getParent().resolve("bin").resolve("javac"));
+
+        if (isJDKHome || parentIsJDK) {
             ErrorProcessSyntax processSyntax = new ErrorProcessSyntax(customCodeArea, project, saveTabsProcess, tabPane, treeView);
             processSyntax.start();
         } else {

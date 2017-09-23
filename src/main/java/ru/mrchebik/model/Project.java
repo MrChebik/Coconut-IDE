@@ -47,7 +47,7 @@ public class Project {
             if (pathJDK == null) {
                 pathJDK = "javac";
             } else {
-                pathJDK += "/bin/javac";
+                pathJDK += File.separator + "bin" + File.separator + "javac";
             }
             String command = pathJDK + " -d " + pathOut.toString() + " " + getStructure();
             executorCommand.execute(command);
@@ -98,7 +98,11 @@ public class Project {
         Path relative = pathSource.relativize(path);
         String relativePathWithoutExtension = getPathWithoutExtension(relative);
 
-        return relativePathWithoutExtension.replaceAll(File.separator, ".");
+        if (relativePathWithoutExtension.contains(File.separator)) {
+            return relativePathWithoutExtension.replaceAll(File.separator, ".");
+        } else {
+            return relativePathWithoutExtension;
+        }
     }
 
     @SneakyThrows(IOException.class)
@@ -150,7 +154,7 @@ public class Project {
                 if (pathJDK == null) {
                     pathJDK = "java";
                 } else {
-                    pathJDK += "/bin/java";
+                    pathJDK += File.separator + "bin" + File.separator + "java";
                 }
                 String command = pathJDK + " -cp " + pathOut.toString() + " " + getPackageOfRunnable(path);
                 executorCommand.execute(command);

@@ -18,7 +18,7 @@
     </center>
     <bottom>
         <HBox alignment="CENTER" prefHeight="40.0" prefWidth="200.0">
-            <Button mnemonicParsing="false" onMouseClicked="#handleNewProject" text="New Project"/>
+            <Button fx:id="createProject" mnemonicParsing="false" onMouseClicked="#handleNewProject" text="New Project"/>
         </HBox>
     </bottom>
     <top>

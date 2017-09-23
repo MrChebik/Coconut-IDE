@@ -5,6 +5,7 @@ import javafx.animation.ScaleTransition;
 import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
 import javafx.stage.DirectoryChooser;
 import javafx.util.Duration;
@@ -25,6 +26,8 @@ import java.util.ResourceBundle;
 public class StartPresenter implements Initializable {
     @FXML
     private ImageView coconutPng;
+    @FXML
+    private Button createProject;
     @Inject
     private StartPlace startPlace;
 
@@ -51,6 +54,14 @@ public class StartPresenter implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        Path javaHome = Paths.get(System.getProperty("java.home"));
+
+        if (!Files.exists(javaHome.resolve("bin").resolve("javac")) &&
+                !Files.exists(javaHome.getParent().resolve("bin").resolve("javac")) &&
+                PropertyCollector.create().getProperty("jdk") == null) {
+            createProject.setDisable(true);
+        }
+
         ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(2000), coconutPng);
         scaleTransition.setToX(1.1f);
         scaleTransition.setToY(1.1f);
@@ -77,6 +88,7 @@ public class StartPresenter implements Initializable {
         Path pathJavac = Paths.get(pathString, "bin", "javac");
         if (Files.exists(pathJavac)) {
             PropertyCollector.create().writeProperty("jdk", pathString);
+            createProject.setDisable(false);
         }
     }
 }
