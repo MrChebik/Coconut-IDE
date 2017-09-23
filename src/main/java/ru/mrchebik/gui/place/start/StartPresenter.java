@@ -40,7 +40,8 @@ public class StartPresenter implements Initializable {
 
     @FXML
     private void handleSetupJDK() {
-        File target = Paths.get(System.getProperty("java.home")).toFile();
+        String jdkProperty = PropertyCollector.create().getProperty("jdk");
+        File target = Paths.get(jdkProperty == null ? System.getProperty("java.home") : jdkProperty).toFile();
 
         DirectoryChooser directoryChooser = new DirectoryChooser();
         directoryChooser.setInitialDirectory(target);
