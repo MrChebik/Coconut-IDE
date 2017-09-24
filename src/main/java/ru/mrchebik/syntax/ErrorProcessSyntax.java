@@ -1,6 +1,5 @@
 package ru.mrchebik.syntax;
 
-import com.sun.tools.javac.file.BaseFileObject;
 import javafx.application.Platform;
 import javafx.scene.Node;
 import javafx.scene.control.TabPane;
@@ -75,8 +74,11 @@ public class ErrorProcessSyntax extends Thread {
             //System.out.println(diagnostic.getSource());
             //System.out.println(diagnostic.getMessage(null));
 
-            BaseFileObject baseFileObject = (BaseFileObject) diagnostic.getSource();
-            if (baseFileObject.getShortName().equals(customCodeArea.getName()) && diagnostic.getStartPosition() > -1) {
+            JavaFileObject javaFileObject = (JavaFileObject) diagnostic.getSource();
+            String name = javaFileObject.getName();
+            if (!"WARNING".equals(diagnostic.getKind().toString()) &&
+                    name.substring(name.lastIndexOf(File.separator) + 1).equals(customCodeArea.getName()) &&
+                    diagnostic.getStartPosition() > -1) {
                 int start = (int) diagnostic.getStartPosition();
                 int end = (int) diagnostic.getEndPosition();
 
@@ -125,16 +127,18 @@ public class ErrorProcessSyntax extends Thread {
             treeItems.forEach(item -> {
                 Path path = item.getValue();
                 for (Diagnostic diagnostic : diagnostics.getDiagnostics()) {
-                    BaseFileObject baseFileObject = (BaseFileObject) diagnostic.getSource();
-                    if (baseFileObject.getName().equals(path.toString())) {
-                        for (Node node :  cells) {
-                            TreeCell treeCell = (TreeCell) node;
-                            if (treeCell.getTreeItem() != null && treeCell.getTreeItem().equals(item)) {
-                                treeCell.setStyle(ERROR);
-                                break;
+                    if (!"WARNING".equals(diagnostic.getKind().toString())) {
+                        JavaFileObject javaFileObject = (JavaFileObject) diagnostic.getSource();
+                        if (javaFileObject.getName().equals(path.toString())) {
+                            for (Node node : cells) {
+                                TreeCell treeCell = (TreeCell) node;
+                                if (treeCell.getTreeItem() != null && treeCell.getTreeItem().equals(item)) {
+                                    treeCell.setStyle(ERROR);
+                                    break;
+                                }
                             }
+                            return;
                         }
-                        return;
                     }
                 }
 
@@ -156,10 +160,12 @@ public class ErrorProcessSyntax extends Thread {
             tabPane.getTabs().forEach(t -> {
                 Path path = (Path) t.getUserData();
                 for (Diagnostic diagnostic : diagnostics.getDiagnostics()) {
-                    BaseFileObject baseFileObject = (BaseFileObject) diagnostic.getSource();
-                    if (baseFileObject.getName().equals(path.toString())) {
-                        t.setStyle(ERROR);
-                        return;
+                    if (!"WARNING".equals(diagnostic.getKind().toString())) {
+                        JavaFileObject javaFileObject = (JavaFileObject) diagnostic.getSource();
+                        if (javaFileObject.getName().equals(path.toString())) {
+                            t.setStyle(ERROR);
+                            return;
+                        }
                     }
                 }
 
