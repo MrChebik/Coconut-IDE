@@ -32,6 +32,7 @@ public class StartPresenter implements Initializable {
     private StartPlace startPlace;
 
     private CreateProjectPlace createProjectPlace;
+    private PropertyCollector propertyCollector;
 
     @FXML
     private void handleNewProject() {
@@ -40,7 +41,7 @@ public class StartPresenter implements Initializable {
 
     @FXML
     private void handleSetupJDK() {
-        String jdkProperty = PropertyCollector.create().getProperty("jdk");
+        String jdkProperty = propertyCollector.getProperty("jdk");
         File target = Paths.get(jdkProperty == null ? System.getProperty("java.home") : jdkProperty).toFile();
 
         DirectoryChooser directoryChooser = new DirectoryChooser();
@@ -55,11 +56,9 @@ public class StartPresenter implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        Path javaHome = Paths.get(System.getProperty("java.home"));
+        propertyCollector = PropertyCollector.create();
 
-        if (!Files.exists(javaHome.resolve("bin").resolve("javac")) &&
-                !Files.exists(javaHome.getParent().resolve("bin").resolve("javac")) &&
-                PropertyCollector.create().getProperty("jdk") == null) {
+        if (!propertyCollector.isJDKCorrect() && propertyCollector.getProperty("jdk") == null) {
             createProject.setDisable(true);
         }
 
@@ -86,9 +85,9 @@ public class StartPresenter implements Initializable {
     }
 
     private void setJDK(String pathString) {
-        Path pathJavac = Paths.get(pathString, "bin", "javac");
-        if (Files.exists(pathJavac) || Files.exists(Paths.get(pathJavac.toString() + ".exe"))) {
-            PropertyCollector.create().writeProperty("jdk", pathString);
+        Path pathJavac = Paths.get(pathString, "bin", propertyCollector.getJavac());
+        if (Files.exists(pathJavac)) {
+            propertyCollector.writeProperty("jdk", pathString);
             createProject.setDisable(false);
         }
     }

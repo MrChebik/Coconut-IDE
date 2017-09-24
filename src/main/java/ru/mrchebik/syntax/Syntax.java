@@ -6,31 +6,38 @@ import com.github.javaparser.Problem;
 import javafx.application.Platform;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TreeView;
-import lombok.AllArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import ru.mrchebik.gui.node.CustomCodeArea;
 import ru.mrchebik.model.Project;
 import ru.mrchebik.process.SaveTabsProcess;
+import ru.mrchebik.settings.PropertyCollector;
 
-import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class Syntax {
+    @NonNull
     private Project project;
+    @NonNull
     private SaveTabsProcess saveTabsProcess;
+    @NonNull
     private TabPane tabPane;
+    @NonNull
     private TreeView<Path> treeView;
 
+    private PropertyCollector propertyCollector;
+    private boolean isJDKCorrect;
+
     public void compute(CustomCodeArea customCodeArea) {
-        Path pathHome = Paths.get(System.getProperty("java.home"));
+        if (propertyCollector == null) {
+            propertyCollector = PropertyCollector.create();
+            isJDKCorrect = propertyCollector.isJDKCorrect();
+        }
 
-        boolean isJDKHome = Files.exists(pathHome.resolve("bin").resolve("javac"));
-        boolean parentIsJDK = Files.exists(pathHome.getParent().resolve("bin").resolve("javac"));
-
-        if (isJDKHome || parentIsJDK) {
+        if (isJDKCorrect) {
             ErrorProcessSyntax processSyntax = new ErrorProcessSyntax(customCodeArea, project, saveTabsProcess, tabPane, treeView);
             processSyntax.start();
         } else {
@@ -78,9 +85,9 @@ public class Syntax {
                         customCodeArea.getCodeAreaCSS().setStyleClass(beforeChars + column + startFound, (beforeChars + column + startFound) + found.length(), "error");
                     }
                 }
-
-                Platform.runLater(() -> customCodeArea.setStyleSpans(0, customCodeArea.getCodeAreaCSS().getStyleSpans(0, customCodeArea.getText().length())));
             }
+
+            Platform.runLater(() -> customCodeArea.setStyleSpans(0, customCodeArea.getCodeAreaCSS().getStyleSpans(0, customCodeArea.getText().length())));
 
             /*List<VariableDeclarationExpr> variableDeclarationExprs = Navigator.findAllNodesOfGivenClass(cu, VariableDeclarationExpr.class);
 

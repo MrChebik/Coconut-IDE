@@ -49,7 +49,7 @@ public class ErrorProcessSyntax extends Thread {
         saveTabsProcess.runSynch();
 
         JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
-        diagnostics = new DiagnosticCollector<JavaFileObject>();
+        diagnostics = new DiagnosticCollector<>();
         StandardJavaFileManager fileManager = compiler.getStandardFileManager(diagnostics, Locale.getDefault(), null);
 
         String[] compileOptions = new String[]{"-d", project.getPathOut().toString()};

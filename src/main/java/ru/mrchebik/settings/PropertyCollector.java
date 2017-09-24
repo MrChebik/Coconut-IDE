@@ -17,6 +17,7 @@ public class PropertyCollector {
 
     private Path pathProperties;
     private Properties properties;
+    private String javac;
 
     @SneakyThrows(IOException.class)
     private PropertyCollector() {
@@ -28,6 +29,19 @@ public class PropertyCollector {
 
     public static PropertyCollector create() {
         return new PropertyCollector();
+    }
+
+    public String getJavac() {
+        if (javac == null) {
+            javac = "javac";
+
+            String os = System.getProperty("os.name");
+            if (os.contains("Windows")) {
+                javac += ".exe";
+            }
+        }
+
+        return javac;
     }
 
     public String getProperty(String key) {
@@ -42,6 +56,12 @@ public class PropertyCollector {
         }
         properties = new Properties();
         properties.load(new FileInputStream(new File(String.valueOf(pathProperties.toFile()))));
+    }
+
+    public boolean isJDKCorrect() {
+        Path javaHome = Paths.get(System.getProperty("java.home"));
+        return Files.exists(javaHome.resolve("bin").resolve(getJavac())) ||
+                Files.exists(javaHome.getParent().resolve("bin").resolve(getJavac()));
     }
 
     @SneakyThrows
