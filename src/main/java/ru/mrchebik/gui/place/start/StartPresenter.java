@@ -87,7 +87,7 @@ public class StartPresenter implements Initializable {
 
     private void setJDK(String pathString) {
         Path pathJavac = Paths.get(pathString, "bin", "javac");
-        if (Files.exists(pathJavac)) {
+        if (Files.exists(pathJavac) || Files.exists(Paths.get(pathJavac.toString() + ".exe"))) {
             PropertyCollector.create().writeProperty("jdk", pathString);
             createProject.setDisable(false);
         }
