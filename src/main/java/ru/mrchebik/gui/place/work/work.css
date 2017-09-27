@@ -40,8 +40,8 @@
 }
 
 .error {
-    -fx-fill: white;
-    -fx-background-fill: #cc1b00;
+    -fx-fill: #cc1b00;
+    -fx-font-weight: bold;
 }
 
 .javadoc {

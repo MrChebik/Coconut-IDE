@@ -1,13 +1,29 @@
 package ru.mrchebik.highlight.syntax.switcher.javaSymbolSolver;
 
-public class JavaSymbolSolverSyntax extends Thread {
-    public void compute() {
-        /*//TypeSolver typeSolver = new CombinedTypeSolver();
-        String code = customCodeArea.getText();
+import com.github.javaparser.JavaParser;
+import com.github.javaparser.ParseProblemException;
+import com.github.javaparser.Problem;
+import javafx.application.Platform;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import ru.mrchebik.gui.node.CustomCodeArea;
 
-        //CompilationUnit cu;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+@RequiredArgsConstructor
+public class JavaSymbolSolverSyntax extends Thread {
+    @NonNull
+    private CustomCodeArea customCodeArea;
+
+    @Override
+    public void run() {
+        compute();
+    }
+
+    public void compute() {
+        String code = customCodeArea.getText();
         try {
-                *//*cu = *//*
             JavaParser.parse(customCodeArea.getText());
         } catch (ParseProblemException ppe) {
             for (Problem problem : ppe.getProblems()) {
@@ -51,7 +67,7 @@ public class JavaSymbolSolverSyntax extends Thread {
 
         Platform.runLater(() -> customCodeArea.setStyleSpans(0, customCodeArea.getCodeAreaCSS().getStyleSpans(0, customCodeArea.getText().length())));
 
-            *//*List<VariableDeclarationExpr> variableDeclarationExprs = Navigator.findAllNodesOfGivenClass(cu, VariableDeclarationExpr.class);
+            /*List<VariableDeclarationExpr> variableDeclarationExprs = Navigator.findAllNodesOfGivenClass(cu, VariableDeclarationExpr.class);
 
             variableDeclarationExprs.forEach(a -> {
                 int beforeChars = 0;

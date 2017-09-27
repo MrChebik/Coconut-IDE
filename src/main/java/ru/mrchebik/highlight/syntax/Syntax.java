@@ -37,7 +37,7 @@ public class Syntax {
             JavaCompilerSyntax processSyntax = new JavaCompilerSyntax(customCodeArea, project, saveTabsProcess, tabPane, treeView);
             processSyntax.start();
         } else {
-            JavaSymbolSolverSyntax processSyntax = new JavaSymbolSolverSyntax();
+            JavaSymbolSolverSyntax processSyntax = new JavaSymbolSolverSyntax(customCodeArea);
             processSyntax.start();
         }
     }
