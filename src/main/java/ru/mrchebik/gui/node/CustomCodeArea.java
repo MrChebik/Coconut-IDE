@@ -1,19 +1,31 @@
 package ru.mrchebik.gui.node;
 
 import javafx.concurrent.Task;
+import javafx.event.Event;
+import javafx.scene.input.KeyCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.LineNumberFactory;
+import org.fxmisc.richtext.RichTextChange;
 import org.fxmisc.richtext.StyleSpans;
+import org.fxmisc.wellbehaved.event.InputMap;
+import org.fxmisc.wellbehaved.event.Nodes;
+import org.reactfx.util.Try;
 import ru.mrchebik.highlight.Highlight;
-import ru.mrchebik.syntax.Syntax;
+import ru.mrchebik.highlight.syntax.Syntax;
 
 import java.time.Duration;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+
+import static javafx.scene.input.KeyCode.TAB;
+import static javafx.scene.input.KeyCombination.SHIFT_ANY;
+import static javafx.scene.input.KeyCombination.SHORTCUT_ANY;
+import static org.fxmisc.wellbehaved.event.EventPattern.anyOf;
+import static org.fxmisc.wellbehaved.event.EventPattern.keyPressed;
 
 public class CustomCodeArea extends CodeArea {
     @Getter
@@ -33,21 +45,25 @@ public class CustomCodeArea extends CodeArea {
         this.lastText = "";
         this.name = name;
 
+        InputMap<Event> prevent = InputMap.consume(
+                anyOf(
+                        keyPressed(TAB, SHORTCUT_ANY, SHIFT_ANY)
+                )
+        );
+        Nodes.addInputMap(this, prevent);
+
+        this.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.TAB) {
+                this.insertText(this.getCaretPosition(), "    ");
+            }
+        });
         this.setParagraphGraphicFactory(LineNumberFactory.get(this));
         this.richChanges()
-                .filter(ch -> !lastText.equals(this.getText()))
-                .filter(ch -> !ch.getInserted().equals(ch.getRemoved()))
+                .filter(this::isChangeable)
                 .successionEnds(Duration.ofMillis(20))
                 .supplyTask(this::computeHighlightingAsync)
                 .awaitLatest(this.richChanges())
-                .filterMap(t -> {
-                    if (t.isSuccess()) {
-                        return Optional.of(t.get());
-                    } else {
-                        t.getFailure().printStackTrace();
-                        return Optional.empty();
-                    }
-                })
+                .filterMap(this::getOptional)
                 .subscribe(this::applyHighlighting);
         this.replaceText(0, 0, text);
     }
@@ -71,5 +87,20 @@ public class CustomCodeArea extends CodeArea {
         };
         executor.execute(task);
         return task;
+    }
+
+    private Optional<StyleSpans<Collection<String>>> getOptional(Try<StyleSpans<Collection<String>>> t) {
+        if (t.isSuccess()) {
+            return Optional.of(t.get());
+        } else {
+            t.getFailure().printStackTrace();
+            return Optional.empty();
+        }
+    }
+
+    private boolean isChangeable(RichTextChange<Collection<String>, Collection<String>> ch) {
+        String text = this.getText();
+
+        return !lastText.equals(text) && !ch.getInserted().equals(ch.getRemoved());
     }
 }

@@ -8,9 +8,9 @@ import javafx.scene.control.TreeView;
 import javafx.scene.image.ImageView;
 import lombok.AllArgsConstructor;
 import ru.mrchebik.gui.node.CustomTreeItem;
+import ru.mrchebik.highlight.syntax.switcher.javaCompiler.cell.HighlightCell;
 import ru.mrchebik.model.CustomIcons;
 import ru.mrchebik.model.Project;
-import ru.mrchebik.syntax.ErrorProcessSyntax;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -124,7 +124,7 @@ public class TreeUpdater {
         TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {
-                ErrorProcessSyntax.highlightCells();
+                HighlightCell.highlight();
             }
         };
         timer.schedule(timerTask, 50);

@@ -12,9 +12,9 @@ import org.fxmisc.flowless.VirtualizedScrollPane;
 import ru.mrchebik.gui.node.CustomCodeArea;
 import ru.mrchebik.gui.node.CustomTreeItem;
 import ru.mrchebik.highlight.Highlight;
+import ru.mrchebik.highlight.syntax.Syntax;
+import ru.mrchebik.highlight.syntax.switcher.javaCompiler.tab.HighlightTab;
 import ru.mrchebik.model.CustomIcons;
-import ru.mrchebik.syntax.ErrorProcessSyntax;
-import ru.mrchebik.syntax.Syntax;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -88,7 +88,7 @@ public class TabUpdater {
         TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {
-                ErrorProcessSyntax.highlightTabs();
+                HighlightTab.highlight();
             }
         };
         timer.schedule(timerTask, 50);

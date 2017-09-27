@@ -31,9 +31,9 @@ public class CreateFolderPresenter extends PresenterHelper {
     }
 
     private void createFolder() {
-        Path path = places.getPathOfCreateFolderPlace().resolve(name.getText());
+        Path pathFromPlace = places.closeAndGetCreateFolderPlace();
+        String nameOfFolder = name.getText();
+        Path path = pathFromPlace.resolve(nameOfFolder);
         project.createFolder(path);
-
-        places.closeCreateFolderPlace();
     }
 }

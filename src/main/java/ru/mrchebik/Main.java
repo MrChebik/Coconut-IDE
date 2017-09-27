@@ -8,6 +8,12 @@ import java.util.TimerTask;
 
 public class Main {
     public static void main(String[] args) {
+        ifTravisCi(args);
+
+        Application.launch(StartPlace.class);
+    }
+
+    private static void ifTravisCi(String[] args) {
         if (args.length > 1 && "-exitOnSec".equals(args[0])) {
             Timer timer = new Timer();
             TimerTask timerTask = new TimerTask() {
@@ -18,7 +24,5 @@ public class Main {
             };
             timer.schedule(timerTask, Integer.parseInt(args[1]) * 1000);
         }
-
-        Application.launch(StartPlace.class);
     }
 }

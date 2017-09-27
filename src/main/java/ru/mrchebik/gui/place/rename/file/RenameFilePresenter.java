@@ -32,10 +32,9 @@ public class RenameFilePresenter extends PresenterHelper {
 
     @SneakyThrows(IOException.class)
     private void renameFile() {
-        Path path = places.getPathOfRenameFilePlace();
-        Path pathRename = path.getParent().resolve(name.getText());
+        Path path = places.closeAndGetRenameFilePlace();
+        String nameOfFile = name.getText();
+        Path pathRename = path.getParent().resolve(nameOfFile);
         Files.move(path, pathRename);
-
-        places.closeRenameFilePlace();
     }
 }

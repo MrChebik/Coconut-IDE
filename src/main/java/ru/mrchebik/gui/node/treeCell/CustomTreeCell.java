@@ -1,4 +1,4 @@
-package ru.mrchebik.gui.node;
+package ru.mrchebik.gui.node.treeCell;
 
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
@@ -6,7 +6,7 @@ import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.control.TreeCell;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import ru.mrchebik.gui.place.work.event.structure.event.PasteEvent;
+import ru.mrchebik.gui.node.treeCell.event.PasteEvent;
 import ru.mrchebik.model.ActionPlaces;
 import ru.mrchebik.model.CommandPath;
 import ru.mrchebik.model.Project;
@@ -55,15 +55,9 @@ public class CustomTreeCell extends TreeCell<Path> {
             delete.setDisable(true);
         }
 
-        createFile.setOnAction(event -> {
-            places.setPathOfCreateFilePlace(path);
-            places.startCreateFilePlace();
-        });
+        createFile.setOnAction(event -> places.runCreateFilePlace(path));
 
-        createFolder.setOnAction(event -> {
-            places.setPathOfCreateFolderPlace(path);
-            places.startCreateFolderPlace();
-        });
+        createFolder.setOnAction(event -> places.runCreateFolderPlace(path));
 
         copy.setOnAction(event -> {
             commandPath.setCommand("Copy");
@@ -80,11 +74,9 @@ public class CustomTreeCell extends TreeCell<Path> {
 
         rename.setOnAction(event -> {
             if (Files.isDirectory(path)) {
-                places.setPathOfRenameFilePlace(path);
-                places.startRenameFilePlace();
+                places.runRenameFilePlace(path);
             } else {
-                places.setPathOfRenameFolderPlace(path);
-                places.startRenameFolderPlace();
+                places.runRenameFolderPlace(path);
             }
         });
 

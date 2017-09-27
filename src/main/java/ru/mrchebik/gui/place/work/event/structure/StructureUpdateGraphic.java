@@ -4,7 +4,7 @@ import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeView;
 import javafx.util.Callback;
 import lombok.AllArgsConstructor;
-import ru.mrchebik.gui.node.CustomTreeCell;
+import ru.mrchebik.gui.node.treeCell.CustomTreeCell;
 import ru.mrchebik.model.ActionPlaces;
 import ru.mrchebik.model.CommandPath;
 import ru.mrchebik.model.Project;

@@ -3,10 +3,7 @@ package ru.mrchebik.gui.place.work;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.TabPane;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeView;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import org.fxmisc.flowless.VirtualizedScrollPane;
@@ -17,6 +14,7 @@ import ru.mrchebik.gui.place.work.event.structure.StructureUpdateGraphic;
 import ru.mrchebik.gui.updater.TabUpdater;
 import ru.mrchebik.gui.updater.TreeUpdater;
 import ru.mrchebik.highlight.Highlight;
+import ru.mrchebik.highlight.syntax.Syntax;
 import ru.mrchebik.model.ActionPlaces;
 import ru.mrchebik.model.CommandPath;
 import ru.mrchebik.model.CustomIcons;
@@ -25,7 +23,6 @@ import ru.mrchebik.process.ExecutorCommand;
 import ru.mrchebik.process.SaveTabs;
 import ru.mrchebik.process.SaveTabsProcess;
 import ru.mrchebik.process.io.ErrorProcess;
-import ru.mrchebik.syntax.Syntax;
 
 import javax.inject.Inject;
 import java.net.URL;
@@ -67,10 +64,12 @@ public class WorkPresenter implements Initializable {
     @FXML
     private void handleDoubleClick(MouseEvent e) {
         if (e.getClickCount() == 2) {
-            CustomTreeItem item = (CustomTreeItem) treeView.getSelectionModel().getSelectedItem();
+            SelectionModel selectionModel = treeView.getSelectionModel();
+            CustomTreeItem item = (CustomTreeItem) selectionModel.getSelectedItem();
 
-            if (!item.isDirectory() && lengthOfOpenTabPathLessThanOne(item))
+            if (!item.isDirectory() && lengthOfOpenTabPathLessThanOne(item)) {
                 tabUpdater.addObjectToTab(item);
+            }
         }
     }
 

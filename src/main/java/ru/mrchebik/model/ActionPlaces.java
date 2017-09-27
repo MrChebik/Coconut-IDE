@@ -15,67 +15,51 @@ public class ActionPlaces {
     private RenameFilePlace renameFilePlace;
     private RenameFolderPlace renameFolderPlace;
 
-    public void closeCreateFilePlace() {
+    public Path closeAndGetCreateFilePlace() {
+        Path path = createFilePlace.getPath();
         createFilePlace.close();
+
+        return path;
     }
 
-    public void closeCreateFolderPlace() {
+    public Path closeAndGetCreateFolderPlace() {
+        Path path = createFolderPlace.getPath();
         createFolderPlace.close();
+
+        return path;
     }
 
-    public void closeRenameFilePlace() {
+    public Path closeAndGetRenameFilePlace() {
+        Path path = renameFilePlace.getPath();
         renameFilePlace.close();
+
+        return path;
     }
 
-    public void closeRenameFolderPlace() {
+    public Path closeAndGetRenameFolderPlace() {
+        Path path = renameFolderPlace.getPath();
         renameFolderPlace.close();
+
+        return path;
     }
 
-    public Path getPathOfCreateFilePlace() {
-        return createFilePlace.getPath();
-    }
-
-    public void setPathOfCreateFilePlace(Path path) {
+    public void runCreateFilePlace(Path path) {
         createFilePlace.setPath(path);
-    }
-
-    public void startCreateFilePlace() {
         createFilePlace.start();
     }
 
-    public Path getPathOfCreateFolderPlace() {
-        return createFolderPlace.getPath();
-    }
-
-    public void setPathOfCreateFolderPlace(Path path) {
+    public void runCreateFolderPlace(Path path) {
         createFolderPlace.setPath(path);
-    }
-
-    public void startCreateFolderPlace() {
         createFolderPlace.start();
     }
 
-    public Path getPathOfRenameFilePlace() {
-        return renameFilePlace.getPath();
-    }
-
-    public void setPathOfRenameFilePlace(Path path) {
+    public void runRenameFilePlace(Path path) {
         renameFilePlace.setPath(path);
-    }
-
-    public void startRenameFilePlace() {
         renameFilePlace.start();
     }
 
-    public Path getPathOfRenameFolderPlace() {
-        return renameFolderPlace.getPath();
-    }
-
-    public void setPathOfRenameFolderPlace(Path path) {
+    public void runRenameFolderPlace(Path path) {
         renameFolderPlace.setPath(path);
-    }
-
-    public void startRenameFolderPlace() {
         renameFolderPlace.start();
     }
 }

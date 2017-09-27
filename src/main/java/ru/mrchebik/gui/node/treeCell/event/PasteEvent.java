@@ -1,4 +1,4 @@
-package ru.mrchebik.gui.place.work.event.structure.event;
+package ru.mrchebik.gui.node.treeCell.event;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;

@@ -15,7 +15,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.LinkedList;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 @AllArgsConstructor
 public class Project {
@@ -133,12 +133,8 @@ public class Project {
     }
 
     private String[] mergeSuffixes(String... advanceSuffixes) {
-        String[] computeSuffixes = new String[1 + advanceSuffixes.length];
-        computeSuffixes[0] = ".java";
-        IntStream.range(0, advanceSuffixes.length)
-                .forEach(i -> computeSuffixes[i + 1] = advanceSuffixes[i]);
-
-        return computeSuffixes;
+        return Stream.concat(Stream.of(".java"), Stream.of(advanceSuffixes))
+                .toArray(String[]::new);
     }
 
     public void run(Path path) {

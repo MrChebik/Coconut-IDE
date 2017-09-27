@@ -31,9 +31,9 @@ public class CreateFilePresenter extends PresenterHelper {
     }
 
     private void createFile() {
-        Path path = places.getPathOfCreateFilePlace().resolve(name.getText());
+        Path pathFromPlace = places.closeAndGetCreateFilePlace();
+        String nameOfFile = name.getText();
+        Path path = pathFromPlace.resolve(nameOfFile);
         project.createFile(path);
-
-        places.closeCreateFilePlace();
     }
 }
