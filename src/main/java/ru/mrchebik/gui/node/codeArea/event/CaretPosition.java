@@ -16,6 +16,7 @@ public class CaretPosition {
     private int lastPosCaret = -1;
     private List<ParentSymbol> parents;
     private String prevClass;
+    private String prevClassSaved;
 
     private boolean calcHighlight(ParentSymbol parent, int caretPos) {
         if (currText.charAt(caretPos) == parent.getLeft()) {
@@ -95,10 +96,10 @@ public class CaretPosition {
             for (ParentSymbol parent : parents) {
                 char symbol = currText.charAt(lastPosCaret);
                 if (symbol == parent.getLeft()) {
-                    calcNext(parent, lastPosCaret, prevClass);
+                    calcNext(parent, lastPosCaret, prevClassSaved);
                 }
                 if (symbol == parent.getRight()) {
-                    calcPrev(parent, lastPosCaret, prevClass);
+                    calcPrev(parent, lastPosCaret, prevClassSaved);
                 }
             }
         }
@@ -122,11 +123,13 @@ public class CaretPosition {
 
                 if (stack.size() == 0) {
                     if (codeArea.getStyleOfChar(pos).size() != 0) {
-                        if (pos != lastPosCaret) {
-                            prevClass = codeArea.getStyleOfChar(pos).iterator().next();
+                        String currClass = codeArea.getStyleOfChar(pos).iterator().next();
+                        if (pos != lastPosCaret && !prevClass.equals(currClass)) {
+                            prevClassSaved = currClass;
                         }
+                        prevClass = currClass;
                     } else {
-                        prevClass = "empty";
+                        prevClassSaved = "empty";
                     }
 
                     Platform.runLater(() -> codeArea.setStyleClass(pos, pos + 1, classCss));
