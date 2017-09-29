@@ -124,7 +124,7 @@ public class CaretPosition {
                 if (stack.size() == 0) {
                     if (codeArea.getStyleOfChar(pos).size() != 0) {
                         String currClass = codeArea.getStyleOfChar(pos).iterator().next();
-                        if (pos != lastPosCaret && !prevClass.equals(currClass)) {
+                        if (pos != lastPosCaret && !currClass.equals(prevClass)) {
                             prevClassSaved = currClass;
                         }
                         prevClass = currClass;
