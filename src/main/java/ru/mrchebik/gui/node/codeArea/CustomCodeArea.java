@@ -1,4 +1,4 @@
-package ru.mrchebik.gui.node;
+package ru.mrchebik.gui.node.codeArea;
 
 import javafx.concurrent.Task;
 import javafx.event.Event;
@@ -12,6 +12,7 @@ import org.fxmisc.richtext.StyleSpans;
 import org.fxmisc.wellbehaved.event.InputMap;
 import org.fxmisc.wellbehaved.event.Nodes;
 import org.reactfx.util.Try;
+import ru.mrchebik.gui.node.codeArea.event.CaretPosition;
 import ru.mrchebik.highlight.Highlight;
 import ru.mrchebik.highlight.syntax.Syntax;
 
@@ -33,6 +34,7 @@ public class CustomCodeArea extends CodeArea {
     @Getter @Setter
     private String name;
 
+    private CaretPosition caretPosition;
     private Executor executor;
     private Highlight highlight;
     private String lastText;
@@ -57,6 +59,8 @@ public class CustomCodeArea extends CodeArea {
                 this.insertText(this.getCaretPosition(), "    ");
             }
         });
+        caretPosition = CaretPosition.create();
+        this.caretPositionProperty().addListener(listener -> caretPosition.compute(this));
         this.setParagraphGraphicFactory(LineNumberFactory.get(this));
         this.richChanges()
                 .filter(this::isChangeable)
@@ -72,6 +76,7 @@ public class CustomCodeArea extends CodeArea {
         codeAreaCSS = new CodeArea(this.getText());
 
         codeAreaCSS.setStyleSpans(0, highlighting);
+        caretPosition.compute(codeAreaCSS);
         syntax.compute(this);
 
         lastText = this.getText();
