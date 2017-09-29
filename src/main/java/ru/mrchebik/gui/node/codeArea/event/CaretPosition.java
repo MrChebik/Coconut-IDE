@@ -128,7 +128,6 @@ public class CaretPosition {
                     } else {
                         prevClass = "empty";
                     }
-                    System.out.println(prevClass);
 
                     Platform.runLater(() -> codeArea.setStyleClass(pos, pos + 1, classCss));
                     Platform.runLater(() -> codeArea.setStyleClass(i, i + 1, classCss));
