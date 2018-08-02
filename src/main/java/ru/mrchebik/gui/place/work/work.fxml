@@ -7,14 +7,14 @@
     <bottom>
         <BorderPane prefHeight="41.0" prefWidth="1200.0" BorderPane.alignment="CENTER">
             <left>
-                <Button mnemonicParsing="false" onMouseClicked="#handleCompileProject" prefWidth="225.0" text="Compile" BorderPane.alignment="CENTER">
+                <Button mnemonicParsing="false" onMouseClicked="#handleCompileProject" prefWidth="120.0" text="Compile" BorderPane.alignment="CENTER">
                     <BorderPane.margin>
                         <Insets left="7.0" />
                     </BorderPane.margin>
                 </Button>
             </left>
             <right>
-                <Button mnemonicParsing="false" onMouseClicked="#handleRunProject" prefWidth="240.0" text="Run" BorderPane.alignment="CENTER">
+                <Button mnemonicParsing="false" onMouseClicked="#handleRunProject" prefWidth="120.0" text="Run" BorderPane.alignment="CENTER">
                     <BorderPane.margin>
                         <Insets right="7.0" />
                     </BorderPane.margin>

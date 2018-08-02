@@ -7,8 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.LineNumberFactory;
-import org.fxmisc.richtext.RichTextChange;
-import org.fxmisc.richtext.StyleSpans;
+import org.fxmisc.richtext.model.StyleSpans;
 import org.fxmisc.wellbehaved.event.InputMap;
 import org.fxmisc.wellbehaved.event.Nodes;
 import org.reactfx.util.Try;
@@ -37,14 +36,12 @@ public class CustomCodeArea extends CodeArea {
     private CaretPosition caretPosition;
     private Executor executor;
     private Highlight highlight;
-    private String lastText;
     private Syntax syntax;
 
     public CustomCodeArea(String text, Highlight highlight, Syntax syntax, String name) {
         executor = Executors.newSingleThreadExecutor();
         this.highlight = highlight;
         this.syntax = syntax;
-        this.lastText = "";
         this.name = name;
 
         InputMap<Event> prevent = InputMap.consume(
@@ -62,11 +59,10 @@ public class CustomCodeArea extends CodeArea {
         caretPosition = CaretPosition.create();
         this.caretPositionProperty().addListener(listener -> caretPosition.compute(this));
         this.setParagraphGraphicFactory(LineNumberFactory.get(this));
-        this.richChanges()
-                .filter(this::isChangeable)
-                .successionEnds(Duration.ofMillis(20))
+        this.multiPlainChanges()
+                .successionEnds(Duration.ofMillis(350))
                 .supplyTask(this::computeHighlightingAsync)
-                .awaitLatest(this.richChanges())
+                .awaitLatest(this.multiPlainChanges())
                 .filterMap(this::getOptional)
                 .subscribe(this::applyHighlighting);
         this.replaceText(0, 0, text);
@@ -78,8 +74,6 @@ public class CustomCodeArea extends CodeArea {
         codeAreaCSS.setStyleSpans(0, highlighting);
         caretPosition.compute(codeAreaCSS);
         syntax.compute(this);
-
-        lastText = this.getText();
     }
 
     private Task<StyleSpans<Collection<String>>> computeHighlightingAsync() {
@@ -101,11 +95,5 @@ public class CustomCodeArea extends CodeArea {
             t.getFailure().printStackTrace();
             return Optional.empty();
         }
-    }
-
-    private boolean isChangeable(RichTextChange<Collection<String>, Collection<String>> ch) {
-        String text = this.getText();
-
-        return !lastText.equals(text) && !ch.getInserted().equals(ch.getRemoved());
     }
 }

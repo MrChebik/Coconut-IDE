@@ -86,7 +86,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.16.18</version>
+            <version>1.18.2</version>
         </dependency>
         <dependency>
             <groupId>com.airhacks</groupId>
@@ -96,12 +96,12 @@
         <dependency>
             <groupId>org.fxmisc.richtext</groupId>
             <artifactId>richtextfx</artifactId>
-            <version>0.7-M1</version>
+            <version>0.9.1</version>
         </dependency>
         <dependency>
             <groupId>com.github.javaparser</groupId>
             <artifactId>java-symbol-solver-core</artifactId>
-            <version>0.6.0</version>
+            <version>0.6.3</version>
         </dependency>
         <dependency>
             <groupId>com.sun</groupId>
