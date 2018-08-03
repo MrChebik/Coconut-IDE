@@ -75,5 +75,5 @@
 }
 
 .figure {
-    -fx-background-fill: chartreuse;
+    -rtfx-background-color: chartreuse;
 }
