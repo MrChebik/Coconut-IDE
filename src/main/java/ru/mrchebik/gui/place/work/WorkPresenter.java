@@ -119,7 +119,7 @@ public class WorkPresenter implements Initializable {
         commandPath = CommandPath.create();
 
         Syntax syntax = new Syntax(project, saveTabsProcess, tabPane, treeView);
-        tabUpdater = new TabUpdater(tabPane, Highlight.create(), syntax);
+        tabUpdater = new TabUpdater(tabPane, Highlight.create(), syntax, places.getWorkPlace().getStage());
 
         treeUpdater = new TreeUpdater(project, treeView, tabUpdater);
         treeUpdater.setRootToTreeView();

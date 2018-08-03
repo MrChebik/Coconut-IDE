@@ -1,10 +1,12 @@
 package ru.mrchebik.model;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import ru.mrchebik.gui.place.create.file.CreateFilePlace;
 import ru.mrchebik.gui.place.create.folder.CreateFolderPlace;
 import ru.mrchebik.gui.place.rename.file.RenameFilePlace;
 import ru.mrchebik.gui.place.rename.folder.RenameFolderPlace;
+import ru.mrchebik.gui.place.work.WorkPlace;
 
 import java.nio.file.Path;
 
@@ -14,6 +16,8 @@ public class ActionPlaces {
     private CreateFolderPlace createFolderPlace;
     private RenameFilePlace renameFilePlace;
     private RenameFolderPlace renameFolderPlace;
+    @Getter
+    private WorkPlace workPlace;
 
     public Path closeAndGetCreateFilePlace() {
         Path path = createFilePlace.getPath();

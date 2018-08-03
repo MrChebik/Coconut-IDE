@@ -1,0 +1,14 @@
+.list-view {
+    -fx-padding: 0;
+    -fx-background-color: orange;
+}
+
+.list-cell {
+    -fx-padding: 1 2 3 2;
+    -fx-background-color: orange;
+}
+
+.list-cell:filled:selected:focused, .list-cell:filled:selected {
+    -fx-background-color: #cc8500;
+    -fx-text-fill: white;
+}

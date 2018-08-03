@@ -3,6 +3,7 @@ package ru.mrchebik.gui.place.work;
 import com.airhacks.afterburner.injection.Injector;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import lombok.Getter;
 import ru.mrchebik.gui.place.create.file.CreateFilePlace;
 import ru.mrchebik.gui.place.create.folder.CreateFolderPlace;
 import ru.mrchebik.gui.place.rename.file.RenameFilePlace;
@@ -23,6 +24,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class WorkPlace {
+    @Getter
+    private Stage stage;
+
     private ErrorProcess errorProcess;
     private ExecutorCommand executorCommand;
     private Project project;
@@ -32,7 +36,7 @@ public class WorkPlace {
         initializeProject(name, path);
         initializeInject();
 
-        Stage stage = new Stage();
+        stage = new Stage();
         stage.setTitle(project.getTitle());
 
         Screen screen = new Screen();
@@ -65,7 +69,8 @@ public class WorkPlace {
                 CreateFilePlace.create(),
                 CreateFolderPlace.create(),
                 RenameFilePlace.create(),
-                RenameFolderPlace.create());
+                RenameFolderPlace.create(),
+                this);
 
         Map<Object, Object> customProperties = new HashMap<>();
         customProperties.put("project", project);

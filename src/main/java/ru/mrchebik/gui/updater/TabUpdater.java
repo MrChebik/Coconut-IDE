@@ -6,6 +6,7 @@ import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.image.ImageView;
+import javafx.stage.Stage;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import org.fxmisc.flowless.VirtualizedScrollPane;
@@ -28,10 +29,11 @@ public class TabUpdater {
     private TabPane tabPane;
     private Highlight highlight;
     private Syntax syntax;
+    private Stage stage;
 
     public void addObjectToTab(CustomTreeItem item) {
         String text = getText(item.getValue());
-        CustomCodeArea customCodeArea = new CustomCodeArea(text, highlight, syntax, item.getValue().getFileName().toString());
+        CustomCodeArea customCodeArea = new CustomCodeArea(text, highlight, syntax, stage, item.getValue().getFileName().toString());
 
         Tab tab = new Tab();
         tab.setText(item.getValue().getFileName().toString());
