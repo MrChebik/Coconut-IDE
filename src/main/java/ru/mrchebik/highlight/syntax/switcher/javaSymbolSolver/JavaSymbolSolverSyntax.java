@@ -6,7 +6,7 @@ import com.github.javaparser.Problem;
 import javafx.application.Platform;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import ru.mrchebik.gui.node.codeArea.CustomCodeArea;
+import ru.mrchebik.gui.node.codearea.CustomCodeArea;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

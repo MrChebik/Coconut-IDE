@@ -4,7 +4,7 @@
 [![codebeat badge](https://codebeat.co/badges/b5e31acb-b0be-41c1-91cf-7d8d3c88fc84)](https://codebeat.co/projects/github-com-mrchebik-coconut-ide-master)
 > IDE for Java developers.
 
-## Features:
+## Features
 * Autocomplete (basic keywords)
 * Highlight (without names) / Syntax / Paired symbols
 * IO (Input/Output streams)

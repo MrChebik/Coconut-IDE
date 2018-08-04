@@ -11,7 +11,7 @@ import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import org.fxmisc.flowless.VirtualizedScrollPane;
 import ru.mrchebik.gui.node.CustomTreeItem;
-import ru.mrchebik.gui.node.codeArea.CustomCodeArea;
+import ru.mrchebik.gui.node.codearea.CustomCodeArea;
 import ru.mrchebik.highlight.Highlight;
 import ru.mrchebik.highlight.syntax.Syntax;
 import ru.mrchebik.highlight.syntax.switcher.javaCompiler.tab.HighlightTab;

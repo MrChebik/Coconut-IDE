@@ -38,4 +38,9 @@ public class EditWord {
         word = word.substring(0, caretPos - begin) + word.substring(caretPos - begin + fragment.length());
         end = begin + word.length();
     }
+
+    public boolean isOutRange(int position) {
+        return !word.equals("") &&
+                position < begin || position > end;
+    }
 }

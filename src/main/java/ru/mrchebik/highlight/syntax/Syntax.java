@@ -4,7 +4,7 @@ import javafx.scene.control.TabPane;
 import javafx.scene.control.TreeView;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import ru.mrchebik.gui.node.codeArea.CustomCodeArea;
+import ru.mrchebik.gui.node.codearea.CustomCodeArea;
 import ru.mrchebik.highlight.syntax.switcher.javaCompiler.JavaCompilerSyntax;
 import ru.mrchebik.highlight.syntax.switcher.javaSymbolSolver.JavaSymbolSolverSyntax;
 import ru.mrchebik.model.Project;

@@ -2,7 +2,7 @@ package ru.mrchebik.highlight.syntax.switcher.javaCompiler.tab;
 
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TreeView;
-import ru.mrchebik.gui.node.codeArea.CustomCodeArea;
+import ru.mrchebik.gui.node.codearea.CustomCodeArea;
 import ru.mrchebik.highlight.syntax.switcher.javaCompiler.JavaCompilerSyntax;
 import ru.mrchebik.model.Project;
 import ru.mrchebik.process.SaveTabsProcess;

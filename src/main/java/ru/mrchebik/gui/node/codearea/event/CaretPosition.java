@@ -1,4 +1,4 @@
-package ru.mrchebik.gui.node.codeArea.event;
+package ru.mrchebik.gui.node.codearea.event;
 
 import javafx.application.Platform;
 import org.fxmisc.richtext.CodeArea;
