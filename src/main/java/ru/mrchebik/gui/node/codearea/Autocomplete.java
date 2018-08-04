@@ -16,6 +16,7 @@ import ru.mrchebik.highlight.Highlight;
 import ru.mrchebik.model.EditWord;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -25,6 +26,7 @@ public class Autocomplete extends Popup {
     private CodeArea codeArea;
     private Stage stage;
     private boolean begin;
+    private AtomicInteger index;
 
     @Getter @Setter
     private boolean hideTemporarily = true;
@@ -37,6 +39,7 @@ public class Autocomplete extends Popup {
 
         this.editWord = new EditWord();
         this.begin = true;
+        this.index = new AtomicInteger();
         this.codeArea = codeArea;
         this.stage = stage;
 
@@ -75,10 +78,15 @@ public class Autocomplete extends Popup {
             CodeArea codeArea = new CodeArea(option);
             codeArea.setPrefHeight(16);
             codeArea.setEditable(false);
-            codeArea.setStyle("-fx-background-color: transparent");
+            codeArea.getStyleClass().add("list-item");
+            codeArea.setAccessibleHelp(String.valueOf(index.getAndIncrement()));
+            codeArea.setOnMouseEntered(event -> listOptions.getSelectionModel().select(Integer.parseInt(codeArea.getAccessibleHelp())));
+            codeArea.setOnMousePressed(event -> doOption());
             listOptions.getItems().add(codeArea);
         });
         listOptions.getSelectionModel().selectFirst();
+        listOptions.setOnMousePressed(event -> doOption());
+        index.set(0);
     }
 
     private void doOption() {

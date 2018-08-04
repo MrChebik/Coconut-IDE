@@ -1,14 +1,22 @@
 .list-view {
     -fx-padding: 0;
     -fx-background-color: orange;
+    -fx-cursor: hand;
 }
 
 .list-cell {
     -fx-padding: 1 2 3 2;
     -fx-background-color: orange;
+    -fx-cursor: hand;
 }
 
-.list-cell:filled:selected:focused, .list-cell:filled:selected {
+.list-cell:filled:selected:focused,
+.list-cell:filled:selected {
     -fx-background-color: #cc8500;
     -fx-text-fill: white;
+}
+
+.list-item {
+    -fx-cursor: hand !important;
+    -fx-background-color: transparent;
 }
