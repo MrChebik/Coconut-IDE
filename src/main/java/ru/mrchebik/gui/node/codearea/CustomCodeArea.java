@@ -3,6 +3,9 @@ package ru.mrchebik.gui.node.codearea;
 import javafx.concurrent.Task;
 import javafx.event.Event;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import lombok.Getter;
 import lombok.Setter;
@@ -22,9 +25,7 @@ import java.util.Optional;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
-import static javafx.scene.input.KeyCode.TAB;
-import static javafx.scene.input.KeyCombination.SHIFT_ANY;
-import static javafx.scene.input.KeyCombination.SHORTCUT_ANY;
+import static javafx.scene.input.KeyCode.*;
 import static org.fxmisc.wellbehaved.event.EventPattern.anyOf;
 import static org.fxmisc.wellbehaved.event.EventPattern.keyPressed;
 
@@ -51,7 +52,7 @@ public class CustomCodeArea extends CodeArea {
 
         InputMap<Event> prevent = InputMap.consume(
                 anyOf(
-                        keyPressed(TAB, SHORTCUT_ANY, SHIFT_ANY)
+                        keyPressed(TAB)
                 )
         );
         Nodes.addInputMap(this, prevent);
@@ -63,6 +64,38 @@ public class CustomCodeArea extends CodeArea {
                 this.insertText(this.getCaretPosition(), "    ");
             }
         });
+
+        KeyCombination openBracket = new KeyCodeCombination(KeyCode.OPEN_BRACKET);                                 // [
+        KeyCombination quote = new KeyCodeCombination(KeyCode.QUOTE);                                              // '
+        KeyCombination commaShift = new KeyCodeCombination(KeyCode.COMMA, KeyCombination.SHIFT_DOWN);              // <
+        KeyCombination quoteShift = new KeyCodeCombination(KeyCode.QUOTE, KeyCombination.SHIFT_DOWN);              // "
+        KeyCombination digit9Shift = new KeyCodeCombination(KeyCode.DIGIT9, KeyCombination.SHIFT_DOWN);            // (
+        KeyCombination openBracketShift = new KeyCodeCombination(KeyCode.OPEN_BRACKET, KeyCombination.SHIFT_DOWN); // {
+        this.addEventHandler(KeyEvent.KEY_RELEASED, event -> {
+            if (openBracket.match(event) ||
+                    quote.match(event) ||
+                    commaShift.match(event) ||
+                    quoteShift.match(event) ||
+                    digit9Shift.match(event) ||
+                    openBracketShift.match(event)) {
+                int position = this.getCaretPosition();
+                if (openBracket.match(event)) {
+                    this.insertText(position, "]");
+                } else if (quote.match(event)) {
+                    this.insertText(position, "'");
+                } else if (commaShift.match(event)) {
+                    this.insertText(position, ">");
+                } else if (quoteShift.match(event)){
+                    this.insertText(position, "\"");
+                } else if (digit9Shift.match(event)) {
+                    this.insertText(position, ")");
+                } else {
+                    this.insertText(position, "}");
+                }
+                this.moveTo(position);
+            }
+        });
+
         caretPosition = CaretPosition.create();
         this.caretPositionProperty().addListener(listener -> caretPosition.compute(this));
         this.setParagraphGraphicFactory(LineNumberFactory.get(this));

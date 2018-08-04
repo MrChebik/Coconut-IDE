@@ -149,6 +149,7 @@ public class CaretPosition {
         parents = new ArrayList<>();
         parents.add(new ParentSymbol('{', '}'));
         parents.add(new ParentSymbol('(', ')'));
+        parents.add(new ParentSymbol('[', ']'));
     }
 
     public static CaretPosition create() {

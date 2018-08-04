@@ -5,10 +5,10 @@
 > IDE for Java developers.
 
 ## Features
-* Autocomplete (basic keywords)
+* Autocomplete (basic keywords) / Paired symbols
 * Highlight (without names) / Syntax / Paired symbols
-* IO (Input/Output streams)
-* Launch multi _java_ files from source folder (NOT libraries)
+* IO streams
+* Launch multi _java_ files from source folder
 * Setting JDK path
 * TreeStructure of project
 
