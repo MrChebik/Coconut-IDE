@@ -40,11 +40,7 @@ public class EditWord {
     }
 
     public boolean isOutRange(int position) {
-        return !"".equals(word) &&
+        return !word.isEmpty() &&
                 position < begin || position > end;
-    }
-
-    public boolean wordIsEmpty() {
-        return "".equals(word);
     }
 }

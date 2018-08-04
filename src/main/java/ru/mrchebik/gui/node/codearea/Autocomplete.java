@@ -15,7 +15,6 @@ import org.fxmisc.richtext.model.PlainTextChange;
 import ru.mrchebik.highlight.Highlight;
 import ru.mrchebik.model.EditWord;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -113,7 +112,7 @@ public class Autocomplete extends Popup {
                 }
             }
 
-            if (!editWord.wordIsEmpty()) {
+            if (!editWord.getWord().isEmpty()) {
                 List<String> options = Stream.of(Highlight.getKEYWORDS()).filter(word -> word.startsWith(editWord.getWord())).collect(Collectors.toList());
 
                 if (!options.isEmpty()) {
