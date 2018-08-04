@@ -5,23 +5,21 @@
 > IDE for Java developers.
 
 ## Features:
-* Highlight (without names) / Syntax;
-* IO (Input/Output streams);
-* Launch multi _java_ files from source folder (NOT libraries);
-* Setting JDK path;
-* TreeStructure of project;
+* Autocomplete
+* Highlight (without names) / Syntax / Paired symbols
+* IO (Input/Output streams)
+* Launch multi _java_ files from source folder (NOT libraries)
+* Setting JDK path
+* TreeStructure of project
 
-## Screenshot
-![Coconut-IDE - Screenshot](https://github.com/MrChebik/Coconut-IDE/blob/master/coconut-ide-screenshot.png?raw=true)
+## Demonstration
+![Coconut-IDE - Screenshot](https://github.com/MrChebik/Coconut-IDE/blob/master/coconut-ide-demonstration.webp?raw=true)
+Hello World - Error - Autocomplete
 
-## Launch
-1. Clone repository:
+## Build
 ```
 $ git clone https://github.com/MrChebik/Coconut-IDE.git
 $ cd Coconut-IDE
-```
-2. Launch:
-```
 $ mvn package
 $ java -jar ./target/coconut-ide*.jar
 ```
