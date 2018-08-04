@@ -14,6 +14,7 @@
 
 ## Demonstration
 ![Coconut-IDE - Screenshot](https://github.com/MrChebik/Coconut-IDE/blob/master/coconut-ide-demonstration.webp?raw=true)
+
 Hello World - Error - Autocomplete
 
 ## Build
