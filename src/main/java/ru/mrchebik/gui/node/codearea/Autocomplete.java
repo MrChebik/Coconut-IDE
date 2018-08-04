@@ -64,8 +64,13 @@ public class Autocomplete extends Popup {
 
     private void setOptions(List<String> options) {
         listOptions.getItems().clear();
-        scrollPane.setPrefHeight(options.size()*16 + options.size()*4 + 2);
-        listOptions.setPrefHeight(options.size()*16 + options.size()*4);
+        if (options.size() <= 5) {
+            scrollPane.setPrefHeight(options.size() * 16 + options.size() * 4 + 2);
+            listOptions.setPrefHeight(options.size() * 16 + options.size() * 4);
+        } else {
+            scrollPane.setPrefHeight(92);
+            listOptions.setPrefHeight(90);
+        }
         options.forEach(option -> {
             CodeArea codeArea = new CodeArea(option);
             codeArea.setPrefHeight(16);
@@ -73,7 +78,6 @@ public class Autocomplete extends Popup {
             codeArea.setStyle("-fx-background-color: transparent");
             listOptions.getItems().add(codeArea);
         });
-        listOptions.getItems().get(0).getStyleClass().add("first-elem");
         listOptions.getSelectionModel().selectFirst();
     }
 
@@ -93,10 +97,10 @@ public class Autocomplete extends Popup {
             return;
         }
 
-        if (" ".equals(inserted) || "    ".equals(inserted) || inserted.length() != 0 && inserted.charAt(0) == 10) {
+        if (" ".equals(inserted) || "    ".equals(inserted) || !inserted.isEmpty() && inserted.charAt(0) == 10) {
             hideSnippet();
         } else {
-            if (!" ".equals(inserted)) {
+            if (!inserted.isEmpty() && !" ".equals(inserted)) {
                 if (editWord.getWord().length() == 0) {
                     int caretPos = codeArea.getCaretPosition();
                     if (caretPos == 0) {
@@ -107,7 +111,7 @@ public class Autocomplete extends Popup {
                 }
                 editWord.concat(changeList.get(0).getInserted());
             } else {
-                if (editWord.getWord().length() != 0) {
+                if (!editWord.getWord().isEmpty()) {
                     editWord.remove(changeList.get(0).getRemoved(), codeArea.getCaretPosition());
                 }
             }
@@ -132,9 +136,9 @@ public class Autocomplete extends Popup {
                         show(stage);
                         setHideTemporarily(false);
                     }
-                } else {
-                    hideTemporarily();
                 }
+            } else {
+                hideTemporarily();
             }
         }
     }
