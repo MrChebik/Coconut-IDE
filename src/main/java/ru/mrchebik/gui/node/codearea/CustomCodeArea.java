@@ -2,36 +2,25 @@ package ru.mrchebik.gui.node.codearea;
 
 import javafx.concurrent.Task;
 import javafx.event.Event;
-import javafx.geometry.Bounds;
-import javafx.scene.control.ListView;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.input.KeyCode;
-import javafx.stage.Popup;
 import javafx.stage.Stage;
 import lombok.Getter;
 import lombok.Setter;
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.LineNumberFactory;
-import org.fxmisc.richtext.model.PlainTextChange;
 import org.fxmisc.richtext.model.StyleSpans;
 import org.fxmisc.wellbehaved.event.InputMap;
 import org.fxmisc.wellbehaved.event.Nodes;
 import org.reactfx.util.Try;
-import org.reactfx.value.Var;
 import ru.mrchebik.gui.node.codearea.event.CaretPosition;
 import ru.mrchebik.highlight.Highlight;
 import ru.mrchebik.highlight.syntax.Syntax;
-import ru.mrchebik.model.EditWord;
 
 import java.time.Duration;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static javafx.scene.input.KeyCode.TAB;
 import static javafx.scene.input.KeyCombination.SHIFT_ANY;
