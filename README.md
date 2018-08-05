@@ -1,3 +1,5 @@
+#### moved to [gitlab](https://gitlab.com/MrChebik/Coconut-IDE)
+---
 # Coconut-IDE
 [![Build Status](https://travis-ci.org/MrChebik/Coconut-IDE.svg?branch=master)](https://travis-ci.org/MrChebik/Coconut-IDE)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/c4acd2aa137745849973890abad2f67a)](https://www.codacy.com/app/mrchebik/Coconut-IDE?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=MrChebik/Coconut-IDE&amp;utm_campaign=Badge_Grade)
@@ -26,4 +28,4 @@ $ java -jar ./target/coconut-ide*.jar
 ```
 
 ## License
-This project is licensed under the GPL-3.0 License - see the [LICENSE](https://github.com/MrChebik/Coconut-IDE/blob/master/LICENSE) file for details.
+This project is licensed under the GPL-3.0 License - see the [LICENSE](https://github.com/MrChebik/Coconut-IDE/blob/master/LICENSE) file for details
