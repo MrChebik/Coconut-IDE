@@ -152,12 +152,13 @@ public class Autocomplete extends Popup {
     public void callSnippet(List<PlainTextChange> changeList) {
         String inserted = changeList.get(0).getInserted();
 
-        if (begin) {
+        if (begin || wasSameSymbol) {
             begin = false;
+            wasSameSymbol = false;
             return;
         }
 
-        if (!wasSameSymbol && inserted.length() == 1) {
+        if (inserted.length() == 1) {
             char firstChar = inserted.charAt(0);
 
             if (Character.isMirrored(firstChar)) {
@@ -167,11 +168,6 @@ public class Autocomplete extends Popup {
                 pasteSimilarSymbol(inserted, sameSymbols, false);
                 return;
             }
-        }
-
-        if (wasSameSymbol) {
-            wasSameSymbol = false;
-            return;
         }
 
         if (" ".equals(inserted) || "    ".equals(inserted) || !inserted.isEmpty() && inserted.charAt(0) == 10) {
