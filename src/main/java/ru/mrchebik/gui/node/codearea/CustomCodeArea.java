@@ -79,37 +79,6 @@ public class CustomCodeArea extends CodeArea {
             }
         });
 
-        KeyCombination openBracket = new KeyCodeCombination(KeyCode.OPEN_BRACKET);                                 // [
-        KeyCombination quote = new KeyCodeCombination(KeyCode.QUOTE);                                              // '
-        KeyCombination commaShift = new KeyCodeCombination(KeyCode.COMMA, KeyCombination.SHIFT_DOWN);              // <
-        KeyCombination quoteShift = new KeyCodeCombination(KeyCode.QUOTE, KeyCombination.SHIFT_DOWN);              // "
-        KeyCombination digit9Shift = new KeyCodeCombination(KeyCode.DIGIT9, KeyCombination.SHIFT_DOWN);            // (
-        KeyCombination openBracketShift = new KeyCodeCombination(KeyCode.OPEN_BRACKET, KeyCombination.SHIFT_DOWN); // {
-        this.addEventHandler(KeyEvent.KEY_RELEASED, event -> {
-            if (openBracket.match(event) ||
-                    quote.match(event) ||
-                    commaShift.match(event) ||
-                    quoteShift.match(event) ||
-                    digit9Shift.match(event) ||
-                    openBracketShift.match(event)) {
-                int position = this.getCaretPosition();
-                if (openBracket.match(event)) {
-                    this.insertText(position, "]");
-                } else if (quote.match(event)) {
-                    this.insertText(position, "'");
-                } else if (commaShift.match(event)) {
-                    this.insertText(position, ">");
-                } else if (quoteShift.match(event)){
-                    this.insertText(position, "\"");
-                } else if (digit9Shift.match(event)) {
-                    this.insertText(position, ")");
-                } else {
-                    this.insertText(position, "}");
-                }
-                this.moveTo(position);
-            }
-        });
-
         caretPosition = CaretPosition.create();
         this.caretPositionProperty().addListener(listener -> caretPosition.compute(this));
         this.setParagraphGraphicFactory(LineNumberFactory.get(this));

@@ -1,6 +1,7 @@
 === v0.2.3 - master
 Autocomplete:
     * Added hide snippet if focus is lost.
+    * Improved accuracy and speed auto adding paired characters.
     * Fixed scroll bar.
 
 === v0.2.2

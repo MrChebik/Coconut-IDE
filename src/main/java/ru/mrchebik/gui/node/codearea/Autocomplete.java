@@ -19,16 +19,22 @@ import ru.mrchebik.model.autocomplete.AutocompleteItem;
 import ru.mrchebik.model.autocomplete.TextPackage;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 public class Autocomplete extends Popup {
+    private final String[] mirrorSymbols = { "{}", "[]", "<>", "()" };
+    private final String[] sameSymbols = { "\"", "\'" };
+
     private EditWord editWord;
 
     private CodeArea codeArea;
     private Stage stage;
     private boolean begin;
+    private boolean wasSameSymbol;
     private AtomicInteger index;
     private AtomicInteger maxLength;
 
@@ -44,6 +50,7 @@ public class Autocomplete extends Popup {
 
         this.editWord = new EditWord();
         this.begin = true;
+        this.wasSameSymbol = false;
         this.index = new AtomicInteger();
         this.maxLength = new AtomicInteger();
         this.codeArea = codeArea;
@@ -150,20 +157,24 @@ public class Autocomplete extends Popup {
             return;
         }
 
-        char lastChar = '\0';
+        if (!wasSameSymbol && inserted.length() == 1) {
+            char firstChar = inserted.charAt(0);
 
-        if (editWord.getWord().length() > 0) {
-            lastChar = editWord.getWord().charAt(editWord.getWord().length() - 1);
+            if (Character.isMirrored(firstChar)) {
+                pasteSimilarSymbol(inserted, mirrorSymbols, true);
+                return;
+            } else if (Arrays.stream(sameSymbols).anyMatch(inserted::contains)) {
+                pasteSimilarSymbol(inserted, sameSymbols, false);
+                return;
+            }
         }
 
-        if (lastChar != '\0' && (
-                (lastChar == '(' && ")".equals(inserted)) ||
-                        (lastChar == '{' && "}".equals(inserted)) ||
-                        (lastChar == '<' && ">".equals(inserted)) ||
-                        (lastChar == '[' && "]".equals(inserted))
-        )) {
-            editWord.clear();
-        } else if (" ".equals(inserted) || "    ".equals(inserted) || !inserted.isEmpty() && inserted.charAt(0) == 10) {
+        if (wasSameSymbol) {
+            wasSameSymbol = false;
+            return;
+        }
+
+        if (" ".equals(inserted) || "    ".equals(inserted) || !inserted.isEmpty() && inserted.charAt(0) == 10) {
             hideSnippet();
         } else {
             if (!inserted.isEmpty() && !" ".equals(inserted)) {
@@ -251,6 +262,18 @@ public class Autocomplete extends Popup {
             } else {
                 hideTemporarily();
             }
+        }
+    }
+
+    private void pasteSimilarSymbol(String symbol, String[] options, boolean mirror) {
+        Optional<String> findSame = Arrays.stream(options).filter(option -> option.startsWith(symbol)).findFirst();
+
+        if (findSame.isPresent()) {
+            wasSameSymbol = !mirror;
+            int position = codeArea.getCaretPosition();
+            int posChar = mirror ? 1 : 0;
+            codeArea.insertText(position, Character.toString(findSame.get().charAt(posChar)));
+            editWord.clear();
         }
     }
 
