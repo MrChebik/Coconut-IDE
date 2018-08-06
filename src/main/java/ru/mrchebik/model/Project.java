@@ -4,8 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
-import ru.mrchebik.process.ExecutorCommand;
 import ru.mrchebik.process.io.ErrorProcess;
+import ru.mrchebik.process.io.ExecutorCommand;
 import ru.mrchebik.settings.PropertyCollector;
 
 import java.io.File;
@@ -129,7 +129,7 @@ public class Project {
         return name + " - [" +
                 (path.startsWith(corePath) ?
                         "~/" + corePath.getFileName().toString() + "/" + corePath.relativize(path) : path)
-                + "] - Coconut-IDE 0.2.1";
+                + "] - Coconut-IDE 0.2.3";
     }
 
     private String[] mergeSuffixes(String... advanceSuffixes) {

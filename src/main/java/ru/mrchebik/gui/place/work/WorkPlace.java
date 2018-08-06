@@ -14,8 +14,8 @@ import ru.mrchebik.model.Project;
 import ru.mrchebik.model.screen.Screen;
 import ru.mrchebik.model.screen.measurement.Point;
 import ru.mrchebik.model.screen.measurement.Scale;
-import ru.mrchebik.process.ExecutorCommand;
 import ru.mrchebik.process.io.ErrorProcess;
+import ru.mrchebik.process.io.ExecutorCommand;
 
 import java.io.IOException;
 import java.nio.file.Path;

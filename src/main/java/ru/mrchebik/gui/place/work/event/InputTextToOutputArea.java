@@ -6,7 +6,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import ru.mrchebik.gui.place.PresenterHelper;
-import ru.mrchebik.process.ExecutorCommand;
+import ru.mrchebik.process.io.ExecutorCommand;
 
 import java.io.IOException;
 import java.io.OutputStream;

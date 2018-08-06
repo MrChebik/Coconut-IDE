@@ -6,9 +6,12 @@ import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.ScrollEvent;
+import javafx.scene.transform.Scale;
 import javafx.stage.Stage;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
+import org.fxmisc.flowless.ScaledVirtualized;
 import org.fxmisc.flowless.VirtualizedScrollPane;
 import ru.mrchebik.gui.node.CustomTreeItem;
 import ru.mrchebik.gui.node.codearea.CustomCodeArea;
@@ -16,6 +19,7 @@ import ru.mrchebik.highlight.Highlight;
 import ru.mrchebik.highlight.syntax.Syntax;
 import ru.mrchebik.highlight.syntax.switcher.javaCompiler.tab.HighlightTab;
 import ru.mrchebik.model.CustomIcons;
+import ru.mrchebik.process.autocomplete.AnalyzerAutocomplete;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -30,10 +34,23 @@ public class TabUpdater {
     private Highlight highlight;
     private Syntax syntax;
     private Stage stage;
+    private AnalyzerAutocomplete analyzer;
 
     public void addObjectToTab(CustomTreeItem item) {
         String text = getText(item.getValue());
-        CustomCodeArea customCodeArea = new CustomCodeArea(text, highlight, syntax, stage, item.getValue().getFileName().toString());
+        CustomCodeArea customCodeArea = new CustomCodeArea(text, highlight, syntax, stage, analyzer, item.getValue().getFileName().toString());
+        ScaledVirtualized<CustomCodeArea> scaleVirtualized = new ScaledVirtualized<>(customCodeArea);
+
+        customCodeArea.addEventFilter(ScrollEvent.ANY, e -> {
+            if (e.isControlDown()) {
+                double scaleAmount = 0.9;
+                Scale zoom = scaleVirtualized.getZoom();
+
+                double scale = e.getDeltaY() < 0 ? zoom.getY() * scaleAmount : zoom.getY() / scaleAmount;
+                zoom.setX(scale);
+                zoom.setY(scale);
+            }
+        });
 
         Tab tab = new Tab();
         tab.setText(item.getValue().getFileName().toString());
@@ -41,7 +58,7 @@ public class TabUpdater {
         tab.setGraphic(new ImageView(customIcons.getFileImage()));
         tab.setUserData(item.getValue());
 
-        VirtualizedScrollPane scrollPane = new VirtualizedScrollPane<>(customCodeArea);
+        VirtualizedScrollPane scrollPane = new VirtualizedScrollPane<>(scaleVirtualized);
         tab.setContent(scrollPane);
 
         tabPane.getTabs().add(tab);

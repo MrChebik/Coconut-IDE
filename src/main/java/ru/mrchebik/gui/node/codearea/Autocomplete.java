@@ -3,22 +3,25 @@ package ru.mrchebik.gui.node.codearea;
 import javafx.event.EventHandler;
 import javafx.geometry.Bounds;
 import javafx.scene.control.ListView;
-import javafx.scene.control.ScrollPane;
+import javafx.scene.control.ScrollBar;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.ScrollEvent;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
 import lombok.Getter;
 import lombok.Setter;
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.model.PlainTextChange;
-import ru.mrchebik.highlight.Highlight;
 import ru.mrchebik.model.EditWord;
+import ru.mrchebik.model.autocomplete.AutocompleteDatabase;
+import ru.mrchebik.model.autocomplete.AutocompleteItem;
+import ru.mrchebik.model.autocomplete.TextPackage;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class Autocomplete extends Popup {
     private EditWord editWord;
@@ -27,31 +30,36 @@ public class Autocomplete extends Popup {
     private Stage stage;
     private boolean begin;
     private AtomicInteger index;
+    private AtomicInteger maxLength;
+
+    private AutocompleteDatabase database;
 
     @Getter @Setter
     private boolean hideTemporarily = true;
 
-    private final ScrollPane scrollPane;
     private final ListView<CodeArea> listOptions;
 
-    Autocomplete(CodeArea codeArea, Stage stage) {
+    Autocomplete(CodeArea codeArea, Stage stage, AutocompleteDatabase database) {
         super();
 
         this.editWord = new EditWord();
         this.begin = true;
         this.index = new AtomicInteger();
+        this.maxLength = new AtomicInteger();
         this.codeArea = codeArea;
         this.stage = stage;
 
-        scrollPane = new ScrollPane();
-        scrollPane.setPrefWidth(200);
-        scrollPane.setMaxHeight(92);
-        scrollPane.setFitToHeight(true);
+        this.database = database;
+
+        codeArea.focusedProperty().addListener((arg0, oldPropertyValue, newPropertyValue) -> {
+            if (!newPropertyValue) {
+                hideSnippet();
+            }
+        });
+
         listOptions = new ListView<>();
-        listOptions.setPrefWidth(198);
-        listOptions.setMaxHeight(90);
         listOptions.getStylesheets().add("css/snippet.css");
-        scrollPane.setContent(listOptions);
+        listOptions.setOnMousePressed(event -> doOption());
 
         EventHandler<KeyEvent> eventEnterOrTab = keyEvent -> {
             if (keyEvent.getCode() == KeyCode.ENTER ||
@@ -60,39 +68,76 @@ public class Autocomplete extends Popup {
             }
         };
 
-        scrollPane.setOnKeyPressed(eventEnterOrTab);
         listOptions.setOnKeyPressed(eventEnterOrTab);
-        getContent().add(scrollPane);
+        getContent().add(listOptions);
     }
 
-    private void setOptions(List<String> options) {
+    private void setOptions(List<AutocompleteItem> options) {
         listOptions.getItems().clear();
-        if (options.size() <= 5) {
-            scrollPane.setPrefHeight(options.size() * 16 + options.size() * 4 + 2);
+        if (options.size() < 5) {
             listOptions.setPrefHeight(options.size() * 16 + options.size() * 4);
         } else {
-            scrollPane.setPrefHeight(92);
-            listOptions.setPrefHeight(90);
+            listOptions.setPrefHeight(100);
         }
+        options.forEach(this::getMaxLength);
         options.forEach(option -> {
-            CodeArea codeArea = new CodeArea(option);
+            StringBuilder blank = new StringBuilder();
+            for (int i = 0; i < maxLength.get() - option.getText().length(); i++) {
+                blank.append(" ");
+            }
+            CodeArea codeArea = new CodeArea(option.getType() + " " + option.getText() + blank + (option.getPackageName().isEmpty() ? " " : " | " + option.getPackageName()));
             codeArea.setPrefHeight(16);
             codeArea.setEditable(false);
             codeArea.getStyleClass().add("list-item");
             codeArea.setAccessibleHelp(String.valueOf(index.getAndIncrement()));
+            codeArea.setAccessibleText(option.getPasteText());
             codeArea.setOnMouseEntered(event -> listOptions.getSelectionModel().select(Integer.parseInt(codeArea.getAccessibleHelp())));
             codeArea.setOnMousePressed(event -> doOption());
+            codeArea.addEventFilter(ScrollEvent.ANY, e -> {
+                ScrollBar verticalBar = (ScrollBar) listOptions.lookup(".scroll-bar:vertical");
+                if (e.getDeltaY() < 0) {
+                    verticalBar.increment();
+                    verticalBar.increment();
+                    verticalBar.increment();
+                    verticalBar.increment();
+                } else {
+                    verticalBar.decrement();
+                    verticalBar.decrement();
+                    verticalBar.decrement();
+                    verticalBar.decrement();
+                }
+            });
             listOptions.getItems().add(codeArea);
         });
         listOptions.getSelectionModel().selectFirst();
-        listOptions.setOnMousePressed(event -> doOption());
         index.set(0);
+        maxLength.set(0);
+        listOptions.getItems().forEach(this::getMaxLength);
+        listOptions.setPrefWidth(maxLength.get() * 8 + 16 + 8 + 16 + 8);
+        maxLength.set(0);
+    }
+
+    private void getMaxLength(CodeArea area) {
+        calcMaxLength(area.getText());
+    }
+
+    private void getMaxLength(AutocompleteItem item) {
+        calcMaxLength(item.getText());
+    }
+
+    private void calcMaxLength(String text) {
+        int length = text.length();
+        if (maxLength.get() == 0) {
+            maxLength.set(length);
+        } else if (length > maxLength.get()) {
+            maxLength.set(length);
+        }
     }
 
     private void doOption() {
         if (!isHideTemporarily()) {
             codeArea.deleteText(editWord.getBegin(), editWord.getEnd());
-            codeArea.insertText(editWord.getBegin(), listOptions.getSelectionModel().getSelectedItem().getText() + " ");
+            codeArea.insertText(editWord.getBegin(), listOptions.getSelectionModel().getSelectedItem().getAccessibleText() + " ");
             hideSnippet();
         }
     }
@@ -105,7 +150,20 @@ public class Autocomplete extends Popup {
             return;
         }
 
-        if (" ".equals(inserted) || "    ".equals(inserted) || !inserted.isEmpty() && inserted.charAt(0) == 10) {
+        char lastChar = '\0';
+
+        if (editWord.getWord().length() > 0) {
+            lastChar = editWord.getWord().charAt(editWord.getWord().length() - 1);
+        }
+
+        if (lastChar != '\0' && (
+                (lastChar == '(' && ")".equals(inserted)) ||
+                        (lastChar == '{' && "}".equals(inserted)) ||
+                        (lastChar == '<' && ">".equals(inserted)) ||
+                        (lastChar == '[' && "]".equals(inserted))
+        )) {
+            editWord.clear();
+        } else if (" ".equals(inserted) || "    ".equals(inserted) || !inserted.isEmpty() && inserted.charAt(0) == 10) {
             hideSnippet();
         } else {
             if (!inserted.isEmpty() && !" ".equals(inserted)) {
@@ -125,18 +183,61 @@ public class Autocomplete extends Popup {
             }
 
             if (!editWord.getWord().isEmpty()) {
-                List<String> options = Stream.of(Highlight.getKEYWORDS()).filter(word -> word.startsWith(editWord.getWord())).collect(Collectors.toList());
+                List<AutocompleteItem> options = new ArrayList<>();
+
+                List<String> optionsKeywords = database.getKeywords().stream().filter(word -> word.startsWith(editWord.getWord())).collect(Collectors.toList());
+                List<TextPackage> optionsClass = new ArrayList<>();
+                List<TextPackage> optionsMethods = new ArrayList<>();
+                List<TextPackage> optionsVariables = new ArrayList<>();
+
+                database.getClassList().forEach(classItem -> {
+                    if (classItem.getNameClass().startsWith(editWord.getWord())) {
+                        optionsClass.add(new TextPackage(classItem.getNameClass(), classItem.getPackageClass()));
+                    }
+                    classItem.getVariables().forEach(variable -> {
+                        if (variable.startsWith(editWord.getWord())) {
+                            optionsVariables.add(new TextPackage(variable, classItem.getPackageClass()));
+                        }
+                    });
+                    classItem.getMethods().forEach(method -> {
+                        if (method.startsWith(editWord.getWord())) {
+                            optionsMethods.add(new TextPackage(method, classItem.getPackageClass()));
+                        }
+                    });
+                });
+
+                optionsKeywords.forEach(item -> {
+                    AutocompleteItem autocompleteItem = new AutocompleteItem("K", item, item, "");
+                    options.add(autocompleteItem);
+                });
+
+                optionsClass.forEach(item -> {
+                    AutocompleteItem autocompleteItem = new AutocompleteItem("?", item.getText(), item.getText(), item.getPackageText());
+                    options.add(autocompleteItem);
+                });
+
+                optionsVariables.forEach(item -> {
+                    AutocompleteItem autocompleteItem = new AutocompleteItem("V", item.getText(), item.getText(), item.getPackageText());
+                    options.add(autocompleteItem);
+                });
+
+                optionsMethods.forEach(item -> {
+                    AutocompleteItem autocompleteItem = new AutocompleteItem("M", item.getText(), item.getText(), item.getPackageText());
+                    options.add(autocompleteItem);
+                });
 
                 if (!options.isEmpty()) {
+                    Bounds bounds = codeArea.caretBoundsProperty().getValue().get();
+                    double y = bounds.getMaxY();
+
                     if (editWord.getBeginGlobal() == -1) {
-                        Bounds bounds = codeArea.caretBoundsProperty().getValue().get();
-                        double x = bounds.getMaxX() - 13.7;
-                        double y = bounds.getMaxY();
+                        double x = bounds.getMaxX() - 30;
                         editWord.setBeginGlobal(x);
 
                         setX(editWord.getBeginGlobal());
-                        setY(y);
                     }
+
+                    setY(y);
 
                     setOptions(options);
 
@@ -144,6 +245,8 @@ public class Autocomplete extends Popup {
                         show(stage);
                         setHideTemporarily(false);
                     }
+                } else {
+                    hideTemporarily();
                 }
             } else {
                 hideTemporarily();

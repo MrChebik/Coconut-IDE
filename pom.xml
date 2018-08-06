@@ -6,7 +6,7 @@
 
     <groupId>coconut.ide</groupId>
     <artifactId>coconut-ide</artifactId>
-    <version>0.2.1</version>
+    <version>0.2.3</version>
 
     <build>
         <plugins>
@@ -112,5 +112,4 @@
             <systemPath>${java.home}/../lib/tools.jar</systemPath>
         </dependency>
     </dependencies>
-
 </project>

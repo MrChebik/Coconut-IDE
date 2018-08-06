@@ -7,7 +7,7 @@ import ru.mrchebik.gui.node.codearea.CustomCodeArea;
 import ru.mrchebik.highlight.syntax.switcher.javaCompiler.cell.HighlightCell;
 import ru.mrchebik.highlight.syntax.switcher.javaCompiler.tab.HighlightTab;
 import ru.mrchebik.model.Project;
-import ru.mrchebik.process.SaveTabsProcess;
+import ru.mrchebik.process.save.SaveTabsProcess;
 
 import javax.tools.*;
 import java.io.File;
@@ -61,7 +61,11 @@ public class JavaCompilerSyntax extends Thread {
         HighlightTab.highlight();
         highlightArea();
 
-        Platform.runLater(() -> customCodeArea.setStyleSpans(0, customCodeArea.getCodeAreaCSS().getStyleSpans(0, customCodeArea.getText().length())));
+        Platform.runLater(() -> {
+            try {
+                customCodeArea.setStyleSpans(0, customCodeArea.getCodeAreaCSS().getStyleSpans(0, customCodeArea.getText().length()));
+            } catch (IndexOutOfBoundsException ignored) {}
+        });
     }
 
     private List<JavaFileObject> scanRecursivelyForJavaObjects(File dir, StandardJavaFileManager fileManager) {

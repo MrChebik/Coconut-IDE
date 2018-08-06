@@ -1,0 +1,91 @@
+=== v0.2.3 - master
+Autocomplete:
+    * Added hide snippet if focus is lost.
+    * Fixed scroll bar.
+
+=== v0.2.2
+Autocomplete:
+    * Added classes / methods / variables to snippet.
+    * Added flags to item.
+    * Added package source to item.
+    * Changed color of selected item.
+    * Fixed height of snippet.
+    * Fixed hide snippet if `options` is empty.
+    * Fixed clean `editWord` after brackets.
+    * Fixed scrolling on `codeArea`.
+    * Fixed Y position.
+    * Removed `ScrollPane`.
+CodeArea:
+    * Added ability to zoom.
+Highlight:
+    * Ignored `IndexOutOfBoundsException`.
+
+=== v0.2.1
+Autocomplete:
+    * Added automatic completion of characters `' " < ( { [`
+    * Click on an element - select it.
+    * Hover on items.
+    * Reduced calculations for the height of the snippet.
+    * Set cursor to hand.
+Highlight:
+    * Added highlight `[ ]`
+
+=== v0.2.0
+* Update to latest version of libraries.
+Autocomplete:
+    * Added basic keywords in Java.
+Highlight:
+    * Added paired shapes and brackets.
+    * Fixed highlight without JDK.
+    * Improved TreeStructure.
+JDK:
+    * Added description of JDK button (Tooltip).
+    * Fixed open JDK path.
+Windows:
+    * Fixed JDK setting.
+
+=== v0.1.0
+* Added Syntax.
+* Added ability to setting JDK path.
+* Changed window of New Project.
+
+=== v0.0.9
+* Added highlight.
+* Fixed `TreeView`.
+
+=== v0.0.8
+* Added ability to Input data from Output area.
+* Added focus to `TextArea`.
+
+=== v0.0.7
+TreeView:
+    * Added `ContextMenu`.
+    * Fixed view of files.
+* Added ability to run other classes from `src` directory.
+* Added `out` directory with `source.txt` whose save path to all java file in `src`.
+* Events such as `Save` or `Compile` makes with other `Thread`.
+
+=== v0.0.6
+* Enhanced `DirectoryChooser`.
+
+=== v0.0.5
+* Changed size of window to 75% of screen.
+* Changed Pane.
+
+=== v0.0.4
+* Added `TreeView`
+* Added ability to create a New Project.
+* Added ability to build jar file from Maven.
+
+=== v0.0.3
+* New GUI - JavaFX.
+
+=== v0.0.2
+* Improved `Processes`.
+* Changes API.
+
+=== v0.0.1
+- Rebase from repository - MyLittleIDE
+GUI: Swing
+Have ability to Compile/Run.
+Have one text area.

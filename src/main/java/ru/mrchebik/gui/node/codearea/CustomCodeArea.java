@@ -18,6 +18,7 @@ import org.reactfx.util.Try;
 import ru.mrchebik.gui.node.codearea.event.CaretPosition;
 import ru.mrchebik.highlight.Highlight;
 import ru.mrchebik.highlight.syntax.Syntax;
+import ru.mrchebik.process.autocomplete.AnalyzerAutocomplete;
 
 import java.time.Duration;
 import java.util.Collection;
@@ -25,7 +26,7 @@ import java.util.Optional;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
-import static javafx.scene.input.KeyCode.*;
+import static javafx.scene.input.KeyCode.TAB;
 import static org.fxmisc.wellbehaved.event.EventPattern.anyOf;
 import static org.fxmisc.wellbehaved.event.EventPattern.keyPressed;
 
@@ -42,13 +43,13 @@ public class CustomCodeArea extends CodeArea {
 
     private Autocomplete autocomplete;
 
-    public CustomCodeArea(String text, Highlight highlight, Syntax syntax, Stage stage, String name) {
+    public CustomCodeArea(String text, Highlight highlight, Syntax syntax, Stage stage, AnalyzerAutocomplete analyzer, String name) {
         executor = Executors.newSingleThreadExecutor();
         this.highlight = highlight;
         this.syntax = syntax;
         this.name = name;
 
-        autocomplete = new Autocomplete(this, stage);
+        autocomplete = new Autocomplete(this, stage, analyzer.getDatabase());
 
         InputMap<Event> prevent = InputMap.consume(
                 anyOf(
@@ -62,6 +63,19 @@ public class CustomCodeArea extends CodeArea {
         this.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.TAB) {
                 this.insertText(this.getCaretPosition(), "    ");
+            }
+            if (event.getCode() == KeyCode.SEMICOLON) {
+                new Thread(() -> {
+                    try {
+                        Thread.sleep(50);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    analyzer.callAnalysis(this.getText());
+                }).start();
+            }
+            if (event.getCode() == KeyCode.ENTER) {
+                analyzer.callAnalysis(this.getText());
             }
         });
 

@@ -6,9 +6,11 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import org.fxmisc.flowless.ScaledVirtualized;
 import org.fxmisc.flowless.VirtualizedScrollPane;
 import org.fxmisc.richtext.CodeArea;
 import ru.mrchebik.gui.node.CustomTreeItem;
+import ru.mrchebik.gui.node.codearea.CustomCodeArea;
 import ru.mrchebik.gui.place.work.event.InputTextToOutputArea;
 import ru.mrchebik.gui.place.work.event.structure.StructureUpdateGraphic;
 import ru.mrchebik.gui.updater.TabUpdater;
@@ -19,15 +21,17 @@ import ru.mrchebik.model.ActionPlaces;
 import ru.mrchebik.model.CommandPath;
 import ru.mrchebik.model.CustomIcons;
 import ru.mrchebik.model.Project;
-import ru.mrchebik.process.ExecutorCommand;
-import ru.mrchebik.process.SaveTabs;
-import ru.mrchebik.process.SaveTabsProcess;
+import ru.mrchebik.process.autocomplete.AnalyzerAutocomplete;
 import ru.mrchebik.process.io.ErrorProcess;
+import ru.mrchebik.process.io.ExecutorCommand;
+import ru.mrchebik.process.save.SaveTabs;
+import ru.mrchebik.process.save.SaveTabsProcess;
 
 import javax.inject.Inject;
 import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.ResourceBundle;
 
 public class WorkPresenter implements Initializable {
@@ -51,6 +55,7 @@ public class WorkPresenter implements Initializable {
     private SaveTabsProcess saveTabsProcess;
     private TabUpdater tabUpdater;
     private TreeUpdater treeUpdater;
+    private AnalyzerAutocomplete analyzer;
 
     @FXML
     private void handleCompileProject() {
@@ -103,7 +108,8 @@ public class WorkPresenter implements Initializable {
 
     private void moveCaretInMain() {
         VirtualizedScrollPane scrollPane = (VirtualizedScrollPane) tabPane.getTabs().get(0).getContent();
-        CodeArea area = (CodeArea) scrollPane.getContent();
+        ScaledVirtualized<CodeArea> scaledVirtualized = (ScaledVirtualized) scrollPane.getContent();
+        CustomCodeArea area = (CustomCodeArea) scaledVirtualized.getChildrenUnmodifiable().get(0);
         Platform.runLater(area::requestFocus);
         area.moveTo(73);
     }
@@ -114,12 +120,16 @@ public class WorkPresenter implements Initializable {
     }
 
     private void initializeVariables() {
+        analyzer = new AnalyzerAutocomplete();
+        analyzer.initialize(project.getPathSource());
+        analyzer.getDatabase().setKeywords(Arrays.asList(Highlight.getKEYWORDS()));
+
         errorProcess.setTextArea(outputArea);
 
         commandPath = CommandPath.create();
 
         Syntax syntax = new Syntax(project, saveTabsProcess, tabPane, treeView);
-        tabUpdater = new TabUpdater(tabPane, Highlight.create(), syntax, places.getWorkPlace().getStage());
+        tabUpdater = new TabUpdater(tabPane, Highlight.create(), syntax, places.getWorkPlace().getStage(), analyzer);
 
         treeUpdater = new TreeUpdater(project, treeView, tabUpdater);
         treeUpdater.setRootToTreeView();

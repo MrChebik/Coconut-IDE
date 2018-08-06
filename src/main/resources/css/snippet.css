@@ -12,7 +12,7 @@
 
 .list-cell:filled:selected:focused,
 .list-cell:filled:selected {
-    -fx-background-color: #cc8500;
+    -fx-background-color: #e69500;
     -fx-text-fill: white;
 }
 

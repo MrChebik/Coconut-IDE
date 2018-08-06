@@ -8,7 +8,7 @@ import javafx.scene.control.TreeView;
 import ru.mrchebik.gui.node.codearea.CustomCodeArea;
 import ru.mrchebik.highlight.syntax.switcher.javaCompiler.JavaCompilerSyntax;
 import ru.mrchebik.model.Project;
-import ru.mrchebik.process.SaveTabsProcess;
+import ru.mrchebik.process.save.SaveTabsProcess;
 
 import javax.tools.Diagnostic;
 import javax.tools.JavaFileObject;
