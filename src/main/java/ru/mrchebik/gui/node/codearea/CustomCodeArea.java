@@ -82,32 +82,19 @@ public class CustomCodeArea extends CodeArea {
                     analyzer.callAnalysis(this.getText());
                 }).start();
             } else if (event.getCode() == ENTER) {
-                char open = '{';
-                char close = '}';
-                Stack<Character> brackets = new Stack<>();
-                String textToAnalyze = this.getText(0, position);
-                for (int i = 0; i < position; i++) {
-                    char charToAnalyze = textToAnalyze.charAt(i);
-                    if (charToAnalyze == open) {
-                        brackets.push(open);
-                    } else if (charToAnalyze == close) {
-                        brackets.pop();
-                    }
-                }
-                String tabLength = IntStream.range(0, brackets.size()).mapToObj(i -> CUSTOM_TAB).collect(Collectors.joining());
-
-                this.insertText(position, "\n" + tabLength);
+                this.insertText(position, "\n" + getTabLength(position));
                 analyzer.callAnalysis(this.getText());
             } else if (event.getCode() == KeyCode.BACK_SPACE) {
                 String paragraph = this.getParagraph(this.getCurrentParagraph()).getText();
 
-                if (paragraph.trim().length() == 0) {
+                if (paragraph.trim().length() == 0 &&
+                        getTabLength(position).equals(paragraph)) {
                     this.deleteText(position - paragraph.length() - 1, position);
                 } else if (position >= 4 &&
                             CUSTOM_TAB.equals(this.getText(position - 4, position))) {
                     int spaces = 0;
 
-                    for (int i = this.getCaretColumn() - 1; i > 0; i--) {
+                    for (int i = this.getCaretColumn() - 1; i >= 0; i--) {
                         if (paragraph.charAt(i) == ' ') {
                             spaces++;
                         } else {
@@ -143,6 +130,22 @@ public class CustomCodeArea extends CodeArea {
         this.multiPlainChanges()
                 .subscribe(autocomplete::callSnippet);
         this.replaceText(0, 0, text);
+    }
+
+    private String getTabLength(int position) {
+        char open = '{';
+        char close = '}';
+        Stack<Character> brackets = new Stack<>();
+        String textToAnalyze = this.getText(0, position);
+        for (int i = 0; i < position; i++) {
+            char charToAnalyze = textToAnalyze.charAt(i);
+            if (charToAnalyze == open) {
+                brackets.push(open);
+            } else if (charToAnalyze == close) {
+                brackets.pop();
+            }
+        }
+        return IntStream.range(0, brackets.size()).mapToObj(i -> CUSTOM_TAB).collect(Collectors.joining());
     }
 
     private void applyHighlighting(StyleSpans<Collection<String>> highlighting) {
