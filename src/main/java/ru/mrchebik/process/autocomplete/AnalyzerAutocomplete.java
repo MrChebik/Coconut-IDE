@@ -51,36 +51,39 @@ public class AnalyzerAutocomplete {
     }
 
     public void callAnalysis(String text) {
-        AutocompleteClass autocompleteClass = new AutocompleteClass();
-
         try {
+            AutocompleteClass autocompleteClass = new AutocompleteClass();
+
             CompilationUnit unit = JavaParser.parse(text);
-            TypeDeclaration declaration = unit.getType(0);
+            if (unit.getTypes().size() > 0) {
+                TypeDeclaration declaration = unit.getType(0);
 
-            if (unit.getPackageDeclaration().isPresent()) {
-                autocompleteClass.setPackageClass(unit.getPackageDeclaration().get().getNameAsString());
-            } else {
-                autocompleteClass.setPackageClass("");
-            }
+                if (unit.getPackageDeclaration().isPresent()) {
+                    autocompleteClass.setPackageClass(unit.getPackageDeclaration().get().getNameAsString());
+                } else {
+                    autocompleteClass.setPackageClass("");
+                }
 
-            autocompleteClass.setNameClass(declaration.getNameAsString());
+                autocompleteClass.setNameClass(declaration.getNameAsString());
 
-            if (declaration.getFields().size() > 0) {
-                declaration.getFields().forEach(field -> {
-                    FieldDeclaration fieldDeclaration = (FieldDeclaration) field;
-                    fieldDeclaration.getVariables().forEach(variable -> {
-                        autocompleteClass.addVariable(variable.getNameAsString());
+                if (declaration.getFields().size() > 0) {
+                    declaration.getFields().forEach(field -> {
+                        FieldDeclaration fieldDeclaration = (FieldDeclaration) field;
+                        fieldDeclaration.getVariables().forEach(variable -> {
+                            autocompleteClass.addVariable(variable.getNameAsString());
+                        });
                     });
-                });
-            }
-            if (declaration.getMethods().size() > 0) {
-                declaration.getMethods().forEach(method -> {
-                    MethodDeclaration methodDeclaration = (MethodDeclaration) method;
-                    autocompleteClass.addMethod(methodDeclaration.getNameAsString());
-                });
-            }
+                }
+                if (declaration.getMethods().size() > 0) {
+                    declaration.getMethods().forEach(method -> {
+                        MethodDeclaration methodDeclaration = (MethodDeclaration) method;
+                        autocompleteClass.addMethod(methodDeclaration.getNameAsString());
+                    });
+                }
 
-            database.addClass(autocompleteClass);
-        } catch (ParseProblemException ignored) {}
+                database.addClass(autocompleteClass);
+            }
+        } catch (ParseProblemException ignored) {
+        }
     }
 }
