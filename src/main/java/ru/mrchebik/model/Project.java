@@ -129,7 +129,7 @@ public class Project {
         return name + " - [" +
                 (path.startsWith(corePath) ?
                         "~/" + corePath.getFileName().toString() + "/" + corePath.relativize(path) : path)
-                + "] - Coconut-IDE 0.2.3";
+                + "] - Coconut-IDE 0.2.4";
     }
 
     private String[] mergeSuffixes(String... advanceSuffixes) {

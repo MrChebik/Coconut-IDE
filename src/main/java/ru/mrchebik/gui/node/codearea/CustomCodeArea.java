@@ -71,8 +71,12 @@ public class CustomCodeArea extends CodeArea {
             int position = this.getCaretPosition();
 
             if (event.getCode() == TAB) {
+                position = deleteSelection(position);
+
                 this.insertText(position, CUSTOM_TAB);
             } else if (event.getCode() == KeyCode.SEMICOLON) {
+                deleteSelection(-1);
+
                 new Thread(() -> {
                     try {
                         Thread.sleep(50);
@@ -82,6 +86,8 @@ public class CustomCodeArea extends CodeArea {
                     analyzer.callAnalysis(this.getText());
                 }).start();
             } else if (event.getCode() == ENTER) {
+                position = deleteSelection(position);
+
                 this.insertText(position, "\n" + getTabLength(position));
                 analyzer.callAnalysis(this.getText());
             } else if (event.getCode() == KeyCode.BACK_SPACE) {
@@ -107,13 +113,8 @@ public class CustomCodeArea extends CodeArea {
                     } else {
                         this.deletePreviousChar();
                     }
-                } else {
-                    IndexRange range = this.getSelection();
-                    if (range.getLength() != 0) {
-                        this.deleteText(range.getStart(), range.getEnd());
-                    } else {
-                        this.deletePreviousChar();
-                    }
+                } else if (deleteSelection(-1) == -1) {
+                    this.deletePreviousChar();
                 }
             }
         });
@@ -130,6 +131,15 @@ public class CustomCodeArea extends CodeArea {
         this.multiPlainChanges()
                 .subscribe(autocomplete::callSnippet);
         this.replaceText(0, 0, text);
+    }
+
+    private int deleteSelection(int position) {
+        IndexRange range = this.getSelection();
+        if (range.getLength() != 0) {
+            this.deleteText(range.getStart(), range.getEnd());
+        }
+
+        return position == -1 ? position : (position == range.getEnd() ? range.getStart() : position);
     }
 
     private String getTabLength(int position) {

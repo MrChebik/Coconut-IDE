@@ -1,4 +1,8 @@
-=== v0.2.3 - master
+=== v0.2.4 - master
+CodeArea:
+    * Fixed removing selected area after Enter/Backspace/Semicolon.
+
+=== v0.2.3
 Autocomplete:
     + Class name to package info.
     + Clear `editWord` if input dot.
