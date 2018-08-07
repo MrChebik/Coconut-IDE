@@ -49,7 +49,10 @@ public class HighlightArea extends JavaCompilerSyntax {
             }
         }
 
-        customCodeArea.getCodeAreaCSS().setStyleClass(start, end, "error");
+        try {
+            customCodeArea.getCodeAreaCSS().setStyleClass(start, end, "error");
+        } catch (IndexOutOfBoundsException ignored) {
+        }
     }
 
     private static boolean isCurrArea(Diagnostic<? extends JavaFileObject> diagnostic) {
