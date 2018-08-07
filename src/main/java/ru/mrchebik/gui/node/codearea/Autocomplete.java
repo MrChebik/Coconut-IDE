@@ -196,7 +196,7 @@ public class Autocomplete extends Popup {
             }
         }
 
-        if (".".equals(inserted) || " ".equals(inserted) || "    ".equals(inserted) || !inserted.isEmpty() && inserted.charAt(0) == 10) {
+        if (".".equals(inserted) || " ".equals(inserted) || CustomCodeArea.CUSTOM_TAB.equals(inserted) || !inserted.isEmpty() && inserted.charAt(0) == 10) {
             hideSnippet();
         } else {
             if (!inserted.isEmpty() && !" ".equals(inserted)) {

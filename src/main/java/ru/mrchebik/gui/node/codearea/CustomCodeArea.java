@@ -2,10 +2,8 @@ package ru.mrchebik.gui.node.codearea;
 
 import javafx.concurrent.Task;
 import javafx.event.Event;
+import javafx.scene.control.IndexRange;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyCodeCombination;
-import javafx.scene.input.KeyCombination;
-import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import lombok.Getter;
 import lombok.Setter;
@@ -29,12 +27,15 @@ import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import static javafx.scene.input.KeyCode.BACK_SPACE;
 import static javafx.scene.input.KeyCode.ENTER;
 import static javafx.scene.input.KeyCode.TAB;
 import static org.fxmisc.wellbehaved.event.EventPattern.anyOf;
 import static org.fxmisc.wellbehaved.event.EventPattern.keyPressed;
 
 public class CustomCodeArea extends CodeArea {
+    public static final String CUSTOM_TAB = "    ";
+
     @Getter
     private CodeArea codeAreaCSS;
     @Getter @Setter
@@ -58,7 +59,8 @@ public class CustomCodeArea extends CodeArea {
         InputMap<Event> prevent = InputMap.consume(
                 anyOf(
                         keyPressed(TAB),
-                        keyPressed(ENTER)
+                        keyPressed(ENTER),
+                        keyPressed(BACK_SPACE)
                 )
         );
         Nodes.addInputMap(this, prevent);
@@ -66,10 +68,11 @@ public class CustomCodeArea extends CodeArea {
         this.caretPositionProperty().addListener(obs -> autocomplete.checkCaretPosition());
 
         this.setOnKeyPressed(event -> {
-            if (event.getCode() == KeyCode.TAB) {
-                this.insertText(this.getCaretPosition(), "    ");
-            }
-            if (event.getCode() == KeyCode.SEMICOLON) {
+            int position = this.getCaretPosition();
+
+            if (event.getCode() == TAB) {
+                this.insertText(position, CUSTOM_TAB);
+            } else if (event.getCode() == KeyCode.SEMICOLON) {
                 new Thread(() -> {
                     try {
                         Thread.sleep(50);
@@ -78,10 +81,7 @@ public class CustomCodeArea extends CodeArea {
                     }
                     analyzer.callAnalysis(this.getText());
                 }).start();
-            }
-            if (event.getCode() == ENTER) {
-                int position = this.getCaretPosition();
-
+            } else if (event.getCode() == ENTER) {
                 char open = '{';
                 char close = '}';
                 Stack<Character> brackets = new Stack<>();
@@ -94,10 +94,40 @@ public class CustomCodeArea extends CodeArea {
                         brackets.pop();
                     }
                 }
-                String tabLength = IntStream.range(0, brackets.size()).mapToObj(i -> "    ").collect(Collectors.joining());
+                String tabLength = IntStream.range(0, brackets.size()).mapToObj(i -> CUSTOM_TAB).collect(Collectors.joining());
 
                 this.insertText(position, "\n" + tabLength);
                 analyzer.callAnalysis(this.getText());
+            } else if (event.getCode() == KeyCode.BACK_SPACE) {
+                String paragraph = this.getParagraph(this.getCurrentParagraph()).getText();
+
+                if (paragraph.trim().length() == 0) {
+                    this.deleteText(position - paragraph.length() - 1, position);
+                } else if (position >= 4 &&
+                            CUSTOM_TAB.equals(this.getText(position - 4, position))) {
+                    int spaces = 0;
+
+                    for (int i = this.getCaretColumn() - 1; i > 0; i--) {
+                        if (paragraph.charAt(i) == ' ') {
+                            spaces++;
+                        } else {
+                            break;
+                        }
+                    }
+
+                    if (spaces % 4 == 0) {
+                        this.deleteText(position - 4, position);
+                    } else {
+                        this.deletePreviousChar();
+                    }
+                } else {
+                    IndexRange range = this.getSelection();
+                    if (range.getLength() != 0) {
+                        this.deleteText(range.getStart(), range.getEnd());
+                    } else {
+                        this.deletePreviousChar();
+                    }
+                }
             }
         });
 
