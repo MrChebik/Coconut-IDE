@@ -211,7 +211,11 @@ public class Autocomplete extends Popup {
                 editWord.concat(changeList.get(0).getInserted());
             } else {
                 if (!editWord.getWord().isEmpty()) {
-                    editWord.remove(changeList.get(0).getRemoved(), codeArea.getCaretPosition());
+                    try {
+                        editWord.remove(changeList.get(0).getRemoved(), codeArea.getCaretPosition());
+                    } catch (StringIndexOutOfBoundsException ignored) {
+                        editWord.clear();
+                    }
                 } else {
                     editWord.clear();
                 }
