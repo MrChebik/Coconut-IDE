@@ -98,6 +98,7 @@ public class Autocomplete extends Popup {
             codeArea.getStyleClass().add("list-item");
             codeArea.setAccessibleHelp(String.valueOf(index.getAndIncrement()));
             codeArea.setAccessibleText(option.getPasteText());
+            codeArea.setAccessibleRoleDescription(option.getPackageName());
             codeArea.setOnMouseEntered(event -> listOptions.getSelectionModel().select(Integer.parseInt(codeArea.getAccessibleHelp())));
             codeArea.setOnMousePressed(event -> doOption());
             codeArea.addEventFilter(ScrollEvent.ANY, e -> {
@@ -143,8 +144,32 @@ public class Autocomplete extends Popup {
 
     private void doOption() {
         if (!isHideTemporarily()) {
-            codeArea.deleteText(editWord.getBegin(), editWord.getEnd());
-            codeArea.insertText(editWord.getBegin(), listOptions.getSelectionModel().getSelectedItem().getAccessibleText() + " ");
+            CodeArea item = listOptions.getSelectionModel().getSelectedItem();
+            String inserted = item.getAccessibleText();
+            String packageName = item.getAccessibleRoleDescription();
+            codeArea.insertText(editWord.getEnd(), inserted.substring(editWord.getEnd() - editWord.getBegin()));
+            if (!packageName.isEmpty() &&
+                    !codeArea.getText().contains(packageName)) {
+                String text = codeArea.getText();
+                int lastPosition = codeArea.getCaretPosition() - (inserted.contains("()") ? 1 : 0);
+                int indexImport = text.indexOf("import");
+                int indexPackage = text.indexOf("package");
+                int indexInsert = 0;
+                String insertImport;
+
+                if (indexImport != -1) {
+                    insertImport = "import " + item.getAccessibleRoleDescription() + ";\n";
+                    indexInsert = indexImport;
+                } else if (indexPackage != -1) {
+                    insertImport = "\n\nimport " + item.getAccessibleRoleDescription() + ";\n\n";
+                    indexInsert =  codeArea.getText().substring(indexPackage).indexOf(";");
+                } else {
+                    insertImport = "import " + item.getAccessibleRoleDescription() + ";\n\n";
+                }
+                codeArea.insertText(indexInsert, insertImport);
+
+                codeArea.moveTo(lastPosition + insertImport.length());
+            }
             hideSnippet();
         }
     }
@@ -170,7 +195,7 @@ public class Autocomplete extends Popup {
             }
         }
 
-        if (" ".equals(inserted) || "    ".equals(inserted) || !inserted.isEmpty() && inserted.charAt(0) == 10) {
+        if (".".equals(inserted) || " ".equals(inserted) || "    ".equals(inserted) || !inserted.isEmpty() && inserted.charAt(0) == 10) {
             hideSnippet();
         } else {
             if (!inserted.isEmpty() && !" ".equals(inserted)) {
@@ -186,6 +211,8 @@ public class Autocomplete extends Popup {
             } else {
                 if (!editWord.getWord().isEmpty()) {
                     editWord.remove(changeList.get(0).getRemoved(), codeArea.getCaretPosition());
+                } else {
+                    editWord.clear();
                 }
             }
 
@@ -198,23 +225,25 @@ public class Autocomplete extends Popup {
                 List<TextPackage> optionsVariables = new ArrayList<>();
 
                 database.getClassList().forEach(classItem -> {
+                    String packageName = classItem.getPackageClass() + "." + classItem.getNameClass();
+
                     if (classItem.getNameClass().startsWith(editWord.getWord())) {
-                        optionsClass.add(new TextPackage(classItem.getNameClass(), classItem.getPackageClass()));
+                        optionsClass.add(new TextPackage(classItem.getNameClass(), packageName));
                     }
                     classItem.getVariables().forEach(variable -> {
                         if (variable.startsWith(editWord.getWord())) {
-                            optionsVariables.add(new TextPackage(variable, classItem.getPackageClass()));
+                            optionsVariables.add(new TextPackage(variable, packageName));
                         }
                     });
                     classItem.getMethods().forEach(method -> {
                         if (method.startsWith(editWord.getWord())) {
-                            optionsMethods.add(new TextPackage(method, classItem.getPackageClass()));
+                            optionsMethods.add(new TextPackage(method, packageName));
                         }
                     });
                 });
 
                 optionsKeywords.forEach(item -> {
-                    AutocompleteItem autocompleteItem = new AutocompleteItem("K", item, item, "");
+                    AutocompleteItem autocompleteItem = new AutocompleteItem(" ", item, item + " ", "");
                     options.add(autocompleteItem);
                 });
 
@@ -224,14 +253,16 @@ public class Autocomplete extends Popup {
                 });
 
                 optionsVariables.forEach(item -> {
-                    AutocompleteItem autocompleteItem = new AutocompleteItem("V", item.getText(), item.getText(), item.getPackageText());
+                    AutocompleteItem autocompleteItem = new AutocompleteItem("V", item.getText(), item.getText() + " ", item.getPackageText());
                     options.add(autocompleteItem);
                 });
 
                 optionsMethods.forEach(item -> {
-                    AutocompleteItem autocompleteItem = new AutocompleteItem("M", item.getText(), item.getText(), item.getPackageText());
+                    AutocompleteItem autocompleteItem = new AutocompleteItem("M", item.getText(), item.getText() + "()", item.getPackageText());
                     options.add(autocompleteItem);
                 });
+
+                System.out.println(editWord.getWord());
 
                 if (!options.isEmpty()) {
                     Bounds bounds = codeArea.caretBoundsProperty().getValue().get();

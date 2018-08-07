@@ -1,8 +1,13 @@
 === v0.2.3 - master
 Autocomplete:
     * Added hide snippet if focus is lost.
+    * Added class name to package info.
+    * Added make auto import.
+    * Added clear `editWord` if input dot.
     * Improved accuracy and speed auto adding paired characters.
     * Fixed scroll bar.
+    * Fixed X position.
+    * Removed flag of keywords.
 
 === v0.2.2
 Autocomplete:
