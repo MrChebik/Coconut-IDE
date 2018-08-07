@@ -19,9 +19,7 @@ import ru.mrchebik.highlight.syntax.Syntax;
 import ru.mrchebik.process.autocomplete.AnalyzerAutocomplete;
 
 import java.time.Duration;
-import java.util.Collection;
-import java.util.Optional;
-import java.util.Stack;
+import java.util.*;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
@@ -114,6 +112,16 @@ public class CustomCodeArea extends CodeArea {
                         this.deletePreviousChar();
                     }
                 } else if (deleteSelection(-1) == -1) {
+                    if (this.getText().length() > 1) {
+                        String snippet = this.getText(position - 1, position + 1);
+                        List<String> mirrorSymbols = Arrays.asList(Autocomplete.mirrorSymbols);
+                        List<String> sameSymbols = Arrays.asList(Autocomplete.sameSymbols);
+
+                        if (mirrorSymbols.contains(snippet) ||
+                                sameSymbols.contains(snippet)) {
+                            this.deleteNextChar();
+                        }
+                    }
                     this.deletePreviousChar();
                 }
             }

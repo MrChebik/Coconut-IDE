@@ -26,8 +26,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 public class Autocomplete extends Popup {
-    private final String[] mirrorSymbols = { "{}", "[]", "<>", "()" };
-    private final String[] sameSymbols = { "\"", "\'" };
+    public static final String[] mirrorSymbols = { "{}", "[]", "<>", "()" };
+    public static final String[] sameSymbols = { "\"\"", "\'\'" };
 
     private EditWord editWord;
 
@@ -190,7 +190,7 @@ public class Autocomplete extends Popup {
             if (Character.isMirrored(firstChar)) {
                 pasteSimilarSymbol(inserted, mirrorSymbols, true);
                 return;
-            } else if (Arrays.stream(sameSymbols).anyMatch(inserted::contains)) {
+            } else if (Arrays.stream(sameSymbols).anyMatch(item -> item.contains(inserted))) {
                 pasteSimilarSymbol(inserted, sameSymbols, false);
                 return;
             }
@@ -301,8 +301,7 @@ public class Autocomplete extends Popup {
         if (findSame.isPresent()) {
             wasSameSymbol = !mirror;
             int position = codeArea.getCaretPosition();
-            int posChar = mirror ? 1 : 0;
-            codeArea.insertText(position, Character.toString(findSame.get().charAt(posChar)));
+            codeArea.insertText(position, Character.toString(findSame.get().charAt(1)));
             editWord.clear();
         }
     }

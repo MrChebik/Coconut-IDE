@@ -1,5 +1,6 @@
 === v0.2.4 - master
 CodeArea:
+    + Remove same / mirror symbols with their pair.
     * Fixed removing selected area after Enter/Backspace/Semicolon.
 
 === v0.2.3
