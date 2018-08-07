@@ -23,9 +23,13 @@ import ru.mrchebik.process.autocomplete.AnalyzerAutocomplete;
 import java.time.Duration;
 import java.util.Collection;
 import java.util.Optional;
+import java.util.Stack;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
+import static javafx.scene.input.KeyCode.ENTER;
 import static javafx.scene.input.KeyCode.TAB;
 import static org.fxmisc.wellbehaved.event.EventPattern.anyOf;
 import static org.fxmisc.wellbehaved.event.EventPattern.keyPressed;
@@ -53,7 +57,8 @@ public class CustomCodeArea extends CodeArea {
 
         InputMap<Event> prevent = InputMap.consume(
                 anyOf(
-                        keyPressed(TAB)
+                        keyPressed(TAB),
+                        keyPressed(ENTER)
                 )
         );
         Nodes.addInputMap(this, prevent);
@@ -74,7 +79,24 @@ public class CustomCodeArea extends CodeArea {
                     analyzer.callAnalysis(this.getText());
                 }).start();
             }
-            if (event.getCode() == KeyCode.ENTER) {
+            if (event.getCode() == ENTER) {
+                int position = this.getCaretPosition();
+
+                char open = '{';
+                char close = '}';
+                Stack<Character> brackets = new Stack<>();
+                String textToAnalyze = this.getText(0, position);
+                for (int i = 0; i < position; i++) {
+                    char charToAnalyze = textToAnalyze.charAt(i);
+                    if (charToAnalyze == open) {
+                        brackets.push(open);
+                    } else if (charToAnalyze == close) {
+                        brackets.pop();
+                    }
+                }
+                String tabLength = IntStream.range(0, brackets.size()).mapToObj(i -> "    ").collect(Collectors.joining());
+
+                this.insertText(position, "\n" + tabLength);
                 analyzer.callAnalysis(this.getText());
             }
         });

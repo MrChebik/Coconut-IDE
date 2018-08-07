@@ -1,74 +1,76 @@
 === v0.2.3 - master
 Autocomplete:
-    * Added hide snippet if focus is lost.
-    * Added class name to package info.
-    * Added make auto import.
-    * Added clear `editWord` if input dot.
+    + Hide snippet if focus is lost.
+    + Class name to package info.
+    + Clear `editWord` if input dot.
+    + Make auto import.
     * Improved accuracy and speed auto adding paired characters.
     * Fixed scroll bar.
     * Fixed X position.
-    * Removed flag of keywords.
+    - Flag of keywords.
+CodeArea:
+    + Auto adding space after pressed Enter.
 
 === v0.2.2
 Autocomplete:
-    * Added classes / methods / variables to snippet.
-    * Added flags to item.
-    * Added package source to item.
+    + Classes / methods / variables to snippet.
+    + Flags to item.
+    + Package source to item.
     * Changed color of selected item.
     * Fixed height of snippet.
     * Fixed hide snippet if `options` is empty.
     * Fixed clean `editWord` after brackets.
     * Fixed scrolling on `codeArea`.
     * Fixed Y position.
-    * Removed `ScrollPane`.
+    - `ScrollPane`.
 CodeArea:
-    * Added ability to zoom.
+    + Ability to zoom.
 Highlight:
     * Ignored `IndexOutOfBoundsException`.
 
 === v0.2.1
 Autocomplete:
-    * Added automatic completion of characters `' " < ( { [`
-    * Click on an element - select it.
-    * Hover on items.
+    + Automatic completion of characters `' " < ( { [`
+    + Click on an element - select it.
+    + Hover on items.
     * Reduced calculations for the height of the snippet.
     * Set cursor to hand.
 Highlight:
-    * Added highlight `[ ]`
+    + Highlight `[ ]`
 
 === v0.2.0
 * Update to latest version of libraries.
 Autocomplete:
-    * Added basic keywords in Java.
+    + Basic keywords in Java.
 Highlight:
-    * Added paired shapes and brackets.
+    + Paired shapes and brackets.
     * Fixed highlight without JDK.
     * Improved TreeStructure.
 JDK:
-    * Added description of JDK button (Tooltip).
+    + Description of JDK button (Tooltip).
     * Fixed open JDK path.
 Windows:
     * Fixed JDK setting.
 
 === v0.1.0
-* Added Syntax.
-* Added ability to setting JDK path.
++ Syntax.
++ Ability to setting JDK path.
 * Changed window of New Project.
 
 === v0.0.9
-* Added highlight.
++ Highlight.
 * Fixed `TreeView`.
 
 === v0.0.8
-* Added ability to Input data from Output area.
-* Added focus to `TextArea`.
++ Ability to Input data from Output area.
++ Focus to `TextArea`.
 
 === v0.0.7
 TreeView:
-    * Added `ContextMenu`.
+    + `ContextMenu`.
     * Fixed view of files.
-* Added ability to run other classes from `src` directory.
-* Added `out` directory with `source.txt` whose save path to all java file in `src`.
++ Ability to run other classes from `src` directory.
++ `out` directory with `source.txt` whose save path to all java file in `src`.
 * Events such as `Save` or `Compile` makes with other `Thread`.
 
 === v0.0.6
@@ -79,9 +81,9 @@ TreeView:
 * Changed Pane.
 
 === v0.0.4
-* Added `TreeView`
-* Added ability to create a New Project.
-* Added ability to build jar file from Maven.
++ `TreeView`
++ Ability to build jar file from Maven.
++ Ability to create a New Project.
 
 === v0.0.3
 * New GUI - JavaFX.
