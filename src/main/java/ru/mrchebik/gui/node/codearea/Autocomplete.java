@@ -121,7 +121,7 @@ public class Autocomplete extends Popup {
         index.set(0);
         maxLength.set(0);
         listOptions.getItems().forEach(this::getMaxLength);
-        listOptions.setPrefWidth(maxLength.get() * 8 + 16 + 8 + 16 + 8);
+        listOptions.setPrefWidth(maxLength.get() * 8 + 16 + 8 + 16 + 16);
         maxLength.set(0);
     }
 
