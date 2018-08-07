@@ -186,12 +186,53 @@ public class Autocomplete extends Popup {
 
         if (inserted.length() == 1) {
             char firstChar = inserted.charAt(0);
+            int position = codeArea.getCaretPosition();
+            String nextChar = codeArea.getText(position, position + 1);
 
             if (Character.isMirrored(firstChar)) {
-                pasteSimilarSymbol(inserted, mirrorSymbols, true);
+                if (Arrays.stream(mirrorSymbols).anyMatch(item -> item.endsWith(nextChar))) {
+                    String text = codeArea.getText(0, position);
+                    char target = Arrays.stream(mirrorSymbols).filter(option -> option.endsWith(nextChar)).findFirst().get().charAt(0);
+                    boolean isOpened = false;
+
+                    for (int i = 0; i < text.length(); i++) {
+                        if (text.charAt(i) == target) {
+                            isOpened = !isOpened;
+                        }
+                    }
+
+                    if (!isOpened) {
+                        codeArea.deleteText(position, position + 1);
+                        codeArea.moveTo(position + 1);
+                    } else {
+                        pasteSimilarSymbol(inserted, mirrorSymbols, true);
+                    }
+                } else {
+                    pasteSimilarSymbol(inserted, mirrorSymbols, true);
+                }
+
                 return;
             } else if (Arrays.stream(sameSymbols).anyMatch(item -> item.contains(inserted))) {
-                pasteSimilarSymbol(inserted, sameSymbols, false);
+                if (Arrays.stream(sameSymbols).anyMatch(item -> item.contains(nextChar))) {
+                    String text = codeArea.getText(0, position);
+                    char target = Arrays.stream(sameSymbols).filter(option -> option.startsWith(nextChar)).findFirst().get().charAt(0);
+                    boolean isOpened = false;
+
+                    for (int i = 0; i < text.length(); i++) {
+                        if (text.charAt(i) == target) {
+                            isOpened = !isOpened;
+                        }
+                    }
+
+                    if (!isOpened) {
+                        codeArea.deleteText(position, position + 1);
+                        codeArea.moveTo(position + 1);
+                    } else {
+                        pasteSimilarSymbol(inserted, sameSymbols, false);
+                    }
+                } else {
+                    pasteSimilarSymbol(inserted, sameSymbols, false);
+                }
                 return;
             }
         }
