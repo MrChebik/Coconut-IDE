@@ -1,5 +1,6 @@
 === v0.2.4 - master
 CodeArea:
+    + Auto adding `\` to `"""` combination, the same with `'`.
     + Remove same / mirror symbols with their pair.
     + The possibility of closing a paired symbol without moving the arrow.
     * Fixed removing selected area after Enter/Backspace/Semicolon.

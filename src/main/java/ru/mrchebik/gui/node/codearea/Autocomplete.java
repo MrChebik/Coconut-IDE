@@ -231,7 +231,49 @@ public class Autocomplete extends Popup {
                         pasteSimilarSymbol(inserted, sameSymbols, false);
                     }
                 } else {
-                    pasteSimilarSymbol(inserted, sameSymbols, false);
+                    String text = codeArea.getText(0, position);
+
+                    if (text.length() > 2 &&
+                            position - 3 > -1) {
+                        String previousPair = text.substring(position - 3, position - 1);
+                        if (previousPair.charAt(0) == previousPair.charAt(1) &&
+                                previousPair.charAt(0) == inserted.charAt(0)) {
+                            codeArea.insertText(position - 2, "\\");
+                        } else {
+                            char target = Arrays.stream(sameSymbols).filter(option -> option.startsWith(inserted)).findFirst().get().charAt(0);
+                            boolean isOpened = false;
+
+                            for (int i = 0; i < text.length(); i++) {
+                                if (text.charAt(i) == target) {
+                                    isOpened = !isOpened;
+                                }
+                            }
+
+                            if (!isOpened) {
+                                String additionalCondition = codeArea.getText(position, codeArea.getText().length());
+
+                                for (int i = 0; i < additionalCondition.length(); i++) {
+                                    if (additionalCondition.charAt(i) == target) {
+                                        codeArea.insertText(position - 1, "\\");
+                                        new Thread(() -> {
+                                            try {
+                                                Thread.sleep(1);
+                                            } catch (InterruptedException e) {
+                                                e.printStackTrace();
+                                            }
+                                            codeArea.moveTo(position + 1);
+                                        }).start();
+                                        return;
+                                    }
+                                }
+                                pasteSimilarSymbol(inserted, sameSymbols, false);
+                            } else {
+                                pasteSimilarSymbol(inserted, sameSymbols, false);
+                            }
+                        }
+                    } else {
+                        pasteSimilarSymbol(inserted, sameSymbols, false);
+                    }
                 }
                 return;
             }
