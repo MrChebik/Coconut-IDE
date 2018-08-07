@@ -146,16 +146,18 @@ public class Autocomplete extends Popup {
         if (!isHideTemporarily()) {
             CodeArea item = listOptions.getSelectionModel().getSelectedItem();
             String inserted = item.getAccessibleText();
+            String insertImport = "";
             String packageName = item.getAccessibleRoleDescription();
+
             codeArea.insertText(editWord.getEnd(), inserted.substring(editWord.getEnd() - editWord.getBegin()));
+
+            int lastPosition = codeArea.getCaretPosition() - (inserted.contains("()") ? 1 : 0);
             if (!packageName.isEmpty() &&
                     !codeArea.getText().contains(packageName)) {
                 String text = codeArea.getText();
-                int lastPosition = codeArea.getCaretPosition() - (inserted.contains("()") ? 1 : 0);
                 int indexImport = text.indexOf("import");
                 int indexPackage = text.indexOf("package");
                 int indexInsert = 0;
-                String insertImport;
 
                 if (indexImport != -1) {
                     insertImport = "import " + item.getAccessibleRoleDescription() + ";\n";
@@ -167,9 +169,8 @@ public class Autocomplete extends Popup {
                     insertImport = "import " + item.getAccessibleRoleDescription() + ";\n\n";
                 }
                 codeArea.insertText(indexInsert, insertImport);
-
-                codeArea.moveTo(lastPosition + insertImport.length());
             }
+            codeArea.moveTo(lastPosition + insertImport.length());
             hideSnippet();
         }
     }
@@ -261,8 +262,6 @@ public class Autocomplete extends Popup {
                     AutocompleteItem autocompleteItem = new AutocompleteItem("M", item.getText(), item.getText() + "()", item.getPackageText());
                     options.add(autocompleteItem);
                 });
-
-                System.out.println(editWord.getWord());
 
                 if (!options.isEmpty()) {
                     Bounds bounds = codeArea.caretBoundsProperty().getValue().get();
