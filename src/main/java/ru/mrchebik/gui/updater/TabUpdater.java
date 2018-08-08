@@ -19,7 +19,7 @@ import ru.mrchebik.highlight.Highlight;
 import ru.mrchebik.highlight.syntax.Syntax;
 import ru.mrchebik.highlight.syntax.switcher.javaCompiler.tab.HighlightTab;
 import ru.mrchebik.model.CustomIcons;
-import ru.mrchebik.process.autocomplete.AnalyzerAutocomplete;
+import ru.mrchebik.autocomplete.AnalyzerAutocomplete;
 
 import java.io.IOException;
 import java.nio.file.Files;

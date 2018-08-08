@@ -1,4 +1,4 @@
-package ru.mrchebik.process.autocomplete;
+package ru.mrchebik.autocomplete;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseProblemException;
@@ -83,7 +83,6 @@ public class AnalyzerAutocomplete {
 
                 database.addClass(autocompleteClass);
             }
-        } catch (ParseProblemException ignored) {
-        }
+        } catch (ParseProblemException ignored) {}
     }
 }

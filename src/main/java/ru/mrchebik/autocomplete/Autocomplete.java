@@ -1,4 +1,4 @@
-package ru.mrchebik.gui.node.codearea;
+package ru.mrchebik.autocomplete;
 
 import javafx.event.EventHandler;
 import javafx.geometry.Bounds;
@@ -25,10 +25,11 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
-public class Autocomplete extends Popup {
-    public static final String[] mirrorSymbols = { "{}", "[]", "<>", "()" };
-    public static final String[] sameSymbols = { "\"\"", "\'\'" };
+import static ru.mrchebik.model.Symbols.CUSTOM_TAB;
+import static ru.mrchebik.model.Symbols.mirrorSymbols;
+import static ru.mrchebik.model.Symbols.sameSymbols;
 
+public class Autocomplete extends Popup {
     private EditWord editWord;
 
     private CodeArea codeArea;
@@ -45,7 +46,7 @@ public class Autocomplete extends Popup {
 
     private final ListView<CodeArea> listOptions;
 
-    Autocomplete(CodeArea codeArea, Stage stage, AutocompleteDatabase database) {
+    public Autocomplete(CodeArea codeArea, Stage stage, AutocompleteDatabase database) {
         super();
 
         this.editWord = new EditWord();
@@ -279,7 +280,7 @@ public class Autocomplete extends Popup {
             }
         }
 
-        if (".".equals(inserted) || " ".equals(inserted) || CustomCodeArea.CUSTOM_TAB.equals(inserted) || !inserted.isEmpty() && inserted.charAt(0) == 10) {
+        if (".".equals(inserted) || " ".equals(inserted) || CUSTOM_TAB.equals(inserted) || !inserted.isEmpty() && inserted.charAt(0) == 10) {
             hideSnippet();
         } else {
             if (!inserted.isEmpty() && !" ".equals(inserted)) {

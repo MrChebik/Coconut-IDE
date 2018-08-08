@@ -13,10 +13,11 @@ import org.fxmisc.richtext.model.StyleSpans;
 import org.fxmisc.wellbehaved.event.InputMap;
 import org.fxmisc.wellbehaved.event.Nodes;
 import org.reactfx.util.Try;
+import ru.mrchebik.autocomplete.Autocomplete;
 import ru.mrchebik.gui.node.codearea.event.CaretPosition;
 import ru.mrchebik.highlight.Highlight;
 import ru.mrchebik.highlight.syntax.Syntax;
-import ru.mrchebik.process.autocomplete.AnalyzerAutocomplete;
+import ru.mrchebik.autocomplete.AnalyzerAutocomplete;
 
 import java.time.Duration;
 import java.util.*;
@@ -30,10 +31,11 @@ import static javafx.scene.input.KeyCode.ENTER;
 import static javafx.scene.input.KeyCode.TAB;
 import static org.fxmisc.wellbehaved.event.EventPattern.anyOf;
 import static org.fxmisc.wellbehaved.event.EventPattern.keyPressed;
+import static ru.mrchebik.model.Symbols.CUSTOM_TAB;
+import static ru.mrchebik.model.Symbols.mirrorSymbols;
+import static ru.mrchebik.model.Symbols.sameSymbols;
 
 public class CustomCodeArea extends CodeArea {
-    public static final String CUSTOM_TAB = "    ";
-
     @Getter
     private CodeArea codeAreaCSS;
     @Getter @Setter
@@ -114,11 +116,11 @@ public class CustomCodeArea extends CodeArea {
                 } else if (deleteSelection(-1) == -1) {
                     if (this.getText().length() > 1) {
                         String snippet = this.getText(position - 1, position + 1);
-                        List<String> mirrorSymbols = Arrays.asList(Autocomplete.mirrorSymbols);
-                        List<String> sameSymbols = Arrays.asList(Autocomplete.sameSymbols);
+                        List<String> mirror = Arrays.asList(mirrorSymbols);
+                        List<String> same = Arrays.asList(sameSymbols);
 
-                        if (mirrorSymbols.contains(snippet) ||
-                                sameSymbols.contains(snippet)) {
+                        if (mirror.contains(snippet) ||
+                                same.contains(snippet)) {
                             this.deleteNextChar();
                         }
                     }

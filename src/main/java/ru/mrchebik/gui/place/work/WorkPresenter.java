@@ -21,7 +21,7 @@ import ru.mrchebik.model.ActionPlaces;
 import ru.mrchebik.model.CommandPath;
 import ru.mrchebik.model.CustomIcons;
 import ru.mrchebik.model.Project;
-import ru.mrchebik.process.autocomplete.AnalyzerAutocomplete;
+import ru.mrchebik.autocomplete.AnalyzerAutocomplete;
 import ru.mrchebik.process.io.ErrorProcess;
 import ru.mrchebik.process.io.ExecutorCommand;
 import ru.mrchebik.process.save.SaveTabs;
@@ -33,6 +33,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.ResourceBundle;
+
+import static ru.mrchebik.model.Symbols.KEYWORDS;
 
 public class WorkPresenter implements Initializable {
     @FXML
@@ -122,7 +124,7 @@ public class WorkPresenter implements Initializable {
     private void initializeVariables() {
         analyzer = new AnalyzerAutocomplete();
         analyzer.initialize(project.getPathSource());
-        analyzer.getDatabase().setKeywords(Arrays.asList(Highlight.getKEYWORDS()));
+        analyzer.getDatabase().setKeywords(Arrays.asList(KEYWORDS));
 
         errorProcess.setTextArea(outputArea);
 
