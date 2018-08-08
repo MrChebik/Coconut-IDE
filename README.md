@@ -12,7 +12,7 @@ Hello World - Error - Autocomplete
 * Highlight (without names)
 * IO streams
 * Project structure
-## Requires:
+## Requirements
 * Java: 10
 * RAM: 256 Mb
 ---
