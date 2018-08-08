@@ -1,4 +1,5 @@
 === v0.3.0 - master
+* Required Java 10.
 * Updated API.
 CodeArea:
     + Auto adding `\` to `"""` combination, the same with `'`.

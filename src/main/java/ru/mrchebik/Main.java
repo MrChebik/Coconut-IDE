@@ -15,14 +15,14 @@ public class Main {
 
     private static void ifTravisCi(String[] args) {
         if (args.length > 1 && "-exitOnSec".equals(args[0])) {
-            Timer timer = new Timer();
-            TimerTask timerTask = new TimerTask() {
+            var timer = new Timer();
+            var task = new TimerTask() {
                 @Override
                 public void run() {
                     System.exit(0);
                 }
             };
-            timer.schedule(timerTask, Integer.parseInt(args[1]) * 1000);
+            timer.schedule(task, Integer.parseInt(args[1]) * 1000);
         }
     }
 }

@@ -22,8 +22,6 @@ public class StartPlace extends Application {
 
         stage = primaryStage;
         stage.setTitle("Coconut-IDE");
-        stage.setWidth(600);
-        stage.setHeight(400);
         stage.setResizable(false);
 
         Screen screen = new Screen();
