@@ -1,4 +1,4 @@
-package ru.mrchebik.highlight;
+package ru.mrchebik.language.java.highlight;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -13,13 +13,13 @@ import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import org.fxmisc.flowless.ScaledVirtualized;
 import org.fxmisc.flowless.VirtualizedScrollPane;
+import ru.mrchebik.autocomplete.AnalyzerAutocomplete;
 import ru.mrchebik.gui.node.CustomTreeItem;
 import ru.mrchebik.gui.node.codearea.CustomCodeArea;
-import ru.mrchebik.highlight.Highlight;
-import ru.mrchebik.highlight.syntax.Syntax;
-import ru.mrchebik.highlight.syntax.switcher.javaCompiler.tab.HighlightTab;
+import ru.mrchebik.language.java.highlight.Highlight;
+import ru.mrchebik.language.java.highlight.syntax.Syntax;
+import ru.mrchebik.language.java.highlight.syntax.switcher.javaCompiler.tab.HighlightTab;
 import ru.mrchebik.model.CustomIcons;
-import ru.mrchebik.autocomplete.AnalyzerAutocomplete;
 
 import java.io.IOException;
 import java.nio.file.Files;

@@ -9,7 +9,7 @@ import ru.mrchebik.gui.updater.TabUpdater;
 import ru.mrchebik.gui.updater.TreeUpdater;
 import ru.mrchebik.gui.updater.WatcherStructure;
 import ru.mrchebik.model.CustomIcons;
-import ru.mrchebik.model.Project;
+import ru.mrchebik.project.Project;
 
 import java.io.IOException;
 import java.nio.file.Files;

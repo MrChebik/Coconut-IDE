@@ -13,11 +13,11 @@ import org.fxmisc.richtext.model.StyleSpans;
 import org.fxmisc.wellbehaved.event.InputMap;
 import org.fxmisc.wellbehaved.event.Nodes;
 import org.reactfx.util.Try;
+import ru.mrchebik.autocomplete.AnalyzerAutocomplete;
 import ru.mrchebik.autocomplete.Autocomplete;
 import ru.mrchebik.gui.node.codearea.event.CaretPosition;
-import ru.mrchebik.highlight.Highlight;
-import ru.mrchebik.highlight.syntax.Syntax;
-import ru.mrchebik.autocomplete.AnalyzerAutocomplete;
+import ru.mrchebik.language.java.highlight.Highlight;
+import ru.mrchebik.language.java.highlight.syntax.Syntax;
 
 import java.time.Duration;
 import java.util.*;
@@ -26,14 +26,10 @@ import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static javafx.scene.input.KeyCode.BACK_SPACE;
-import static javafx.scene.input.KeyCode.ENTER;
-import static javafx.scene.input.KeyCode.TAB;
+import static javafx.scene.input.KeyCode.*;
 import static org.fxmisc.wellbehaved.event.EventPattern.anyOf;
 import static org.fxmisc.wellbehaved.event.EventPattern.keyPressed;
-import static ru.mrchebik.model.Symbols.CUSTOM_TAB;
-import static ru.mrchebik.model.Symbols.mirrorSymbols;
-import static ru.mrchebik.model.Symbols.sameSymbols;
+import static ru.mrchebik.model.Symbols.*;
 
 public class CustomCodeArea extends CodeArea {
     @Getter

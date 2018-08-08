@@ -8,9 +8,9 @@ import javafx.scene.control.TreeView;
 import javafx.scene.image.ImageView;
 import lombok.AllArgsConstructor;
 import ru.mrchebik.gui.node.CustomTreeItem;
-import ru.mrchebik.highlight.syntax.switcher.javaCompiler.cell.HighlightCell;
+import ru.mrchebik.language.java.highlight.syntax.switcher.javaCompiler.cell.HighlightCell;
 import ru.mrchebik.model.CustomIcons;
-import ru.mrchebik.model.Project;
+import ru.mrchebik.project.Project;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -85,7 +85,7 @@ public class TreeUpdater {
     }
 
     void removeObject(Path path) {
-        if (project.getPath().equals(path)) {
+        if (Project.path.equals(path)) {
             Platform.runLater(() -> {
                 treeView.setRoot(null);
             });
@@ -109,12 +109,10 @@ public class TreeUpdater {
     }
 
     public void setRootToTreeView() {
-        Path projectPath = project.getPath();
-
-        WatcherStructure rootOutWatcher = new WatcherStructure(projectPath.getParent(), project, tabUpdater, this);
+        WatcherStructure rootOutWatcher = new WatcherStructure(Project.path.getParent(), project, tabUpdater, this);
         rootOutWatcher.start();
 
-        TreeItem<Path> rootNode = setRootItem(projectPath);
+        TreeItem<Path> rootNode = setRootItem(Project.path);
 
         treeView.setRoot(rootNode);
     }

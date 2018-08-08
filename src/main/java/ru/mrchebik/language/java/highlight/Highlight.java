@@ -1,4 +1,4 @@
-package ru.mrchebik.highlight;
+package ru.mrchebik.language.java.highlight;
 
 import org.fxmisc.richtext.model.StyleSpans;
 import org.fxmisc.richtext.model.StyleSpansBuilder;
@@ -10,9 +10,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static ru.mrchebik.model.Symbols.COMMENT_KEYWORDS;
-import static ru.mrchebik.model.Symbols.JAVADOC_KEYWORDS;
-import static ru.mrchebik.model.Symbols.KEYWORDS;
+import static ru.mrchebik.model.Symbols.*;
 
 public class Highlight {
     private static final String KEYWORD_PATTERN = "\\b(" + String.join("|", KEYWORDS) + ")\\b";

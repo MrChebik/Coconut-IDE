@@ -10,7 +10,7 @@ import lombok.SneakyThrows;
 import ru.mrchebik.gui.place.PresenterHelper;
 import ru.mrchebik.gui.place.start.StartPlace;
 import ru.mrchebik.gui.place.work.WorkPlace;
-import ru.mrchebik.model.Projects;
+import ru.mrchebik.project.Projects;
 
 import javax.inject.Inject;
 import java.io.File;

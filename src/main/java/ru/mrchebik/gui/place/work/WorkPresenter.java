@@ -9,23 +9,23 @@ import javafx.scene.input.MouseEvent;
 import org.fxmisc.flowless.ScaledVirtualized;
 import org.fxmisc.flowless.VirtualizedScrollPane;
 import org.fxmisc.richtext.CodeArea;
+import ru.mrchebik.autocomplete.AnalyzerAutocomplete;
 import ru.mrchebik.gui.node.CustomTreeItem;
 import ru.mrchebik.gui.node.codearea.CustomCodeArea;
 import ru.mrchebik.gui.place.work.event.InputTextToOutputArea;
 import ru.mrchebik.gui.place.work.event.structure.StructureUpdateGraphic;
 import ru.mrchebik.gui.updater.TabUpdater;
 import ru.mrchebik.gui.updater.TreeUpdater;
-import ru.mrchebik.highlight.Highlight;
-import ru.mrchebik.highlight.syntax.Syntax;
+import ru.mrchebik.language.java.highlight.Highlight;
+import ru.mrchebik.language.java.highlight.syntax.Syntax;
 import ru.mrchebik.model.ActionPlaces;
 import ru.mrchebik.model.CommandPath;
 import ru.mrchebik.model.CustomIcons;
-import ru.mrchebik.model.Project;
-import ru.mrchebik.autocomplete.AnalyzerAutocomplete;
 import ru.mrchebik.process.io.ErrorProcess;
 import ru.mrchebik.process.io.ExecutorCommand;
 import ru.mrchebik.process.save.SaveTabs;
 import ru.mrchebik.process.save.SaveTabsProcess;
+import ru.mrchebik.project.Project;
 
 import javax.inject.Inject;
 import java.net.URL;
@@ -64,7 +64,7 @@ public class WorkPresenter implements Initializable {
         Platform.runLater(() -> {
             handlePrepareToAction();
 
-            project.compile();
+            //project.compile();
         });
     }
 
@@ -86,7 +86,7 @@ public class WorkPresenter implements Initializable {
             handlePrepareToAction();
 
             Path path = (Path) tabPane.getSelectionModel().getSelectedItem().getUserData();
-            project.run(path);
+            //project.run(path);
         });
     }
 
@@ -101,7 +101,7 @@ public class WorkPresenter implements Initializable {
     }
 
     private void addTabOfMain() {
-        Path path = Paths.get(project.getPathSource().toString(), "Main.java");
+        Path path = Paths.get(Project.pathSource.toString(), "Main.java");
         TreeItem<Path> root = treeView.getRoot();
         CustomTreeItem mainFile = (CustomTreeItem) treeUpdater.getItem(root, path);
 
@@ -123,7 +123,7 @@ public class WorkPresenter implements Initializable {
 
     private void initializeVariables() {
         analyzer = new AnalyzerAutocomplete();
-        analyzer.initialize(project.getPathSource());
+        analyzer.initialize(Project.pathSource);
         analyzer.getDatabase().setKeywords(Arrays.asList(KEYWORDS));
 
         errorProcess.setTextArea(outputArea);

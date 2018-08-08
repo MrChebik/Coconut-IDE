@@ -7,7 +7,7 @@ import lombok.AllArgsConstructor;
 import ru.mrchebik.gui.node.treeCell.CustomTreeCell;
 import ru.mrchebik.model.ActionPlaces;
 import ru.mrchebik.model.CommandPath;
-import ru.mrchebik.model.Project;
+import ru.mrchebik.project.Project;
 
 import java.nio.file.Path;
 

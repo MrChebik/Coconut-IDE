@@ -3,14 +3,15 @@ package ru.mrchebik.gui.place.create.file;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
-import ru.mrchebik.gui.place.PresenterHelper;
+import ru.mrchebik.helper.FileHelper;
 import ru.mrchebik.model.ActionPlaces;
-import ru.mrchebik.model.Project;
+import ru.mrchebik.project.Project;
 
 import javax.inject.Inject;
-import java.nio.file.Path;
 
-public class CreateFilePresenter extends PresenterHelper {
+import static ru.mrchebik.gui.place.PresenterHelper.isEnter;
+
+public class CreateFilePresenter {
     @FXML
     private TextField name;
     @Inject
@@ -20,20 +21,12 @@ public class CreateFilePresenter extends PresenterHelper {
 
     @FXML
     private void handleCreateFile() {
-        createFile();
+        FileHelper.createFilePresenter(places, name);
     }
 
     @FXML
     private void handleCreateFileWithKey(KeyEvent event) {
-        if (super.isEnter(event)) {
-            createFile();
-        }
-    }
-
-    private void createFile() {
-        Path pathFromPlace = places.closeAndGetCreateFilePlace();
-        String nameOfFile = name.getText();
-        Path path = pathFromPlace.resolve(nameOfFile);
-        project.createFile(path);
+        if (isEnter(event))
+            FileHelper.createFilePresenter(places, name);
     }
 }

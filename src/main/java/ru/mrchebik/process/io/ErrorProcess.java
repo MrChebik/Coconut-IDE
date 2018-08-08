@@ -12,7 +12,7 @@ public class ErrorProcess {
     @Getter @Setter
     private TextArea textArea;
     @Getter @Setter
-    private boolean wasError;
+    private static boolean wasError;
 
     private ErrorProcess() {
     }

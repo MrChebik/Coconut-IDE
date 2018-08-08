@@ -13,11 +13,11 @@ import java.nio.file.Paths;
 import java.util.Properties;
 
 public class PropertyCollector {
-    private final Path SETTINGS_PATH = Paths.get(System.getProperty("user.home"), ".coconut-ide");
+    private static final Path SETTINGS_PATH = Paths.get(System.getProperty("user.home"), ".coconut-ide");
 
     private Path pathProperties;
-    private Properties properties;
-    private String javac;
+    private static Properties properties;
+    private static String javac;
 
     @SneakyThrows(IOException.class)
     private PropertyCollector() {
@@ -27,11 +27,7 @@ public class PropertyCollector {
         initializeApplicationProperties();
     }
 
-    public static PropertyCollector create() {
-        return new PropertyCollector();
-    }
-
-    public String getJavac() {
+    public static String getJavac() {
         if (javac == null) {
             javac = "javac";
 
@@ -44,7 +40,7 @@ public class PropertyCollector {
         return javac;
     }
 
-    public String getProperty(String key) {
+    public static String getProperty(String key) {
         return properties.getProperty(key);
     }
 
@@ -58,7 +54,7 @@ public class PropertyCollector {
         properties.load(new FileInputStream(new File(String.valueOf(pathProperties.toFile()))));
     }
 
-    public boolean isJDKCorrect() {
+    public static boolean isJDKCorrect() {
         Path javaHome = Paths.get(System.getProperty("java.home"));
         return Files.exists(javaHome.resolve("bin").resolve(getJavac())) ||
                 Files.exists(javaHome.getParent().resolve("bin").resolve(getJavac()));

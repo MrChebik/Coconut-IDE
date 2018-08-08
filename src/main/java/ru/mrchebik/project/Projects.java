@@ -1,4 +1,4 @@
-package ru.mrchebik.model;
+package ru.mrchebik.project;
 
 import lombok.Getter;
 

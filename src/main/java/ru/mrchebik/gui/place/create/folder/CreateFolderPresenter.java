@@ -4,8 +4,9 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import ru.mrchebik.gui.place.PresenterHelper;
+import ru.mrchebik.helper.FileHelper;
 import ru.mrchebik.model.ActionPlaces;
-import ru.mrchebik.model.Project;
+import ru.mrchebik.project.Project;
 
 import javax.inject.Inject;
 import java.nio.file.Path;
@@ -34,6 +35,6 @@ public class CreateFolderPresenter extends PresenterHelper {
         Path pathFromPlace = places.closeAndGetCreateFolderPlace();
         String nameOfFolder = name.getText();
         Path path = pathFromPlace.resolve(nameOfFolder);
-        project.createFolder(path);
+        FileHelper.createFolder(path);
     }
 }

@@ -7,9 +7,10 @@ import javafx.scene.control.TreeCell;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import ru.mrchebik.gui.node.treeCell.event.PasteEvent;
+import ru.mrchebik.helper.FileHelper;
 import ru.mrchebik.model.ActionPlaces;
 import ru.mrchebik.model.CommandPath;
-import ru.mrchebik.model.Project;
+import ru.mrchebik.project.Project;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -49,7 +50,7 @@ public class CustomTreeCell extends TreeCell<Path> {
             createFile.setDisable(true);
             createFolder.setDisable(true);
             paste.setDisable(true);
-        } else if (path.equals(project.getPath())) {
+        } else if (path.equals(Project.path)) {
             cut.setDisable(true);
             copy.setDisable(true);
             delete.setDisable(true);
@@ -80,7 +81,7 @@ public class CustomTreeCell extends TreeCell<Path> {
             }
         });
 
-        delete.setOnAction(event -> project.deleteFile(path));
+        delete.setOnAction(event -> FileHelper.deleteFile(path));
 
         ContextMenu contextMenu = new ContextMenu();
         contextMenu.getItems()

@@ -1,4 +1,4 @@
-package ru.mrchebik.highlight.syntax.switcher.javaCompiler.cell;
+package ru.mrchebik.language.java.highlight.syntax.switcher.javaCompiler.cell;
 
 import javafx.scene.Node;
 import javafx.scene.control.TabPane;
@@ -6,9 +6,9 @@ import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import ru.mrchebik.gui.node.codearea.CustomCodeArea;
-import ru.mrchebik.highlight.syntax.switcher.javaCompiler.JavaCompilerSyntax;
-import ru.mrchebik.model.Project;
+import ru.mrchebik.language.java.highlight.syntax.switcher.javaCompiler.JavaCompilerSyntax;
 import ru.mrchebik.process.save.SaveTabsProcess;
+import ru.mrchebik.project.Project;
 
 import javax.tools.Diagnostic;
 import javax.tools.JavaFileObject;

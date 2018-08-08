@@ -6,12 +6,10 @@
 > IDE for Java developers.
 
 ## Features
-* Autocomplete (keywords / source) / Paired symbols
-* Highlight (without names) / Syntax / Paired symbols
+* Autocomplete (without global)
+* Highlight (without names)
 * IO streams
-* Launch multi _java_ files from source folder
-* Setting JDK path
-* TreeStructure of project
+* Project structure
 
 ## Demonstration - v0.2.0
 ![Coconut-IDE - Screenshot](https://github.com/MrChebik/Coconut-IDE/blob/master/coconut-ide-demonstration.webp?raw=true)

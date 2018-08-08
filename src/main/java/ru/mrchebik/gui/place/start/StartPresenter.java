@@ -10,7 +10,7 @@ import javafx.scene.image.ImageView;
 import javafx.stage.DirectoryChooser;
 import javafx.util.Duration;
 import ru.mrchebik.gui.place.create.project.CreateProjectPlace;
-import ru.mrchebik.model.Projects;
+import ru.mrchebik.project.Projects;
 import ru.mrchebik.settings.PropertyCollector;
 
 import javax.inject.Inject;
@@ -56,9 +56,7 @@ public class StartPresenter implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        propertyCollector = PropertyCollector.create();
-
-        if (!propertyCollector.isJDKCorrect() && propertyCollector.getProperty("jdk") == null) {
+        if (!PropertyCollector.isJDKCorrect() && PropertyCollector.getProperty("jdk") == null) {
             createProject.setDisable(true);
         }
 

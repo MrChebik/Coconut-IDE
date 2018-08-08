@@ -1,14 +1,14 @@
-package ru.mrchebik.highlight.syntax;
+package ru.mrchebik.language.java.highlight.syntax;
 
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TreeView;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import ru.mrchebik.gui.node.codearea.CustomCodeArea;
-import ru.mrchebik.highlight.syntax.switcher.javaCompiler.JavaCompilerSyntax;
-import ru.mrchebik.highlight.syntax.switcher.javaSymbolSolver.JavaSymbolSolverSyntax;
-import ru.mrchebik.model.Project;
+import ru.mrchebik.language.java.highlight.syntax.switcher.javaCompiler.JavaCompilerSyntax;
+import ru.mrchebik.language.java.highlight.syntax.switcher.javaSymbolSolver.JavaSymbolSolverSyntax;
 import ru.mrchebik.process.save.SaveTabsProcess;
+import ru.mrchebik.project.Project;
 import ru.mrchebik.settings.PropertyCollector;
 
 import java.nio.file.Path;
@@ -24,16 +24,8 @@ public class Syntax {
     @NonNull
     private TreeView<Path> treeView;
 
-    private PropertyCollector propertyCollector;
-    private boolean isJDKCorrect;
-
     public void compute(CustomCodeArea customCodeArea) {
-        if (propertyCollector == null) {
-            propertyCollector = PropertyCollector.create();
-            isJDKCorrect = propertyCollector.isJDKCorrect();
-        }
-
-        if (isJDKCorrect) {
+        if (PropertyCollector.isJDKCorrect()) {
             JavaCompilerSyntax processSyntax = new JavaCompilerSyntax(customCodeArea, project, saveTabsProcess, tabPane, treeView);
             processSyntax.start();
         } else {

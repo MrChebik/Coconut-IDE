@@ -10,12 +10,12 @@ import ru.mrchebik.gui.place.rename.file.RenameFilePlace;
 import ru.mrchebik.gui.place.rename.folder.RenameFolderPlace;
 import ru.mrchebik.model.ActionPlaces;
 import ru.mrchebik.model.CustomIcons;
-import ru.mrchebik.model.Project;
 import ru.mrchebik.model.screen.Screen;
 import ru.mrchebik.model.screen.measurement.Point;
 import ru.mrchebik.model.screen.measurement.Scale;
 import ru.mrchebik.process.io.ErrorProcess;
 import ru.mrchebik.process.io.ExecutorCommand;
+import ru.mrchebik.project.Project;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -37,7 +37,7 @@ public class WorkPlace {
         initializeInject();
 
         stage = new Stage();
-        stage.setTitle(project.getTitle());
+        stage.setTitle(Project.getTitle());
 
         Screen screen = new Screen();
         Scale scale = screen.calculateScale();
@@ -84,7 +84,7 @@ public class WorkPlace {
         Path pathOut = Paths.get(path.toString(), "out");
         Path pathSource = Paths.get(path.toString(), "src");
 
-        project = new Project(name, path, pathOut, pathSource, errorProcess, executorCommand);
-        project.build();
+        /*project = new Project(name, path, pathOut, pathSource, errorProcess, executorCommand);
+        project.build();*/
     }
 }

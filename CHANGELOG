@@ -1,4 +1,5 @@
-=== v0.2.4 - master
+=== v0.3.0 - master
+* Updated API.
 CodeArea:
     + Auto adding `\` to `"""` combination, the same with `'`.
     + Remove same / mirror symbols with their pair.

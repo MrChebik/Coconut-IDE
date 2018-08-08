@@ -1,13 +1,14 @@
-package ru.mrchebik.highlight.syntax.switcher.javaCompiler;
+package ru.mrchebik.language.java.highlight.syntax.switcher.javaCompiler;
 
 import javafx.application.Platform;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TreeView;
 import ru.mrchebik.gui.node.codearea.CustomCodeArea;
-import ru.mrchebik.highlight.syntax.switcher.javaCompiler.cell.HighlightCell;
-import ru.mrchebik.highlight.syntax.switcher.javaCompiler.tab.HighlightTab;
-import ru.mrchebik.model.Project;
+import ru.mrchebik.language.java.highlight.syntax.switcher.javaCompiler.area.HighlightArea;
+import ru.mrchebik.language.java.highlight.syntax.switcher.javaCompiler.cell.HighlightCell;
+import ru.mrchebik.language.java.highlight.syntax.switcher.javaCompiler.tab.HighlightTab;
 import ru.mrchebik.process.save.SaveTabsProcess;
+import ru.mrchebik.project.Project;
 
 import javax.tools.*;
 import java.io.File;
@@ -16,8 +17,6 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
-
-import static ru.mrchebik.highlight.syntax.switcher.javaCompiler.area.HighlightArea.highlightArea;
 
 public class JavaCompilerSyntax extends Thread {
     protected static CustomCodeArea customCodeArea;
@@ -48,10 +47,10 @@ public class JavaCompilerSyntax extends Thread {
         DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<>();
         StandardJavaFileManager fileManager = compiler.getStandardFileManager(diagnostics, Locale.getDefault(), null);
 
-        String[] compileOptions = new String[]{"-d", project.getPathOut().toString()};
+        String[] compileOptions = new String[]{"-d", Project.pathOut.toString()};
         Iterable<String> compilationOptions = Arrays.asList(compileOptions);
 
-        List<JavaFileObject> javaObjects = scanRecursivelyForJavaObjects(project.getPathSource().toFile(), fileManager);
+        List<JavaFileObject> javaObjects = scanRecursivelyForJavaObjects(Project.pathSource.toFile(), fileManager);
 
         JavaCompiler.CompilationTask task = compiler.getTask(null, fileManager, diagnostics, compilationOptions, null, javaObjects);
 
@@ -59,7 +58,7 @@ public class JavaCompilerSyntax extends Thread {
         JavaCompilerSyntax.diagnostics = diagnostics.getDiagnostics();
         HighlightCell.highlight();
         HighlightTab.highlight();
-        highlightArea();
+        HighlightArea.highlightArea();
 
         Platform.runLater(() -> {
             try {
