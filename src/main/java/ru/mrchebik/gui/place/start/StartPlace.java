@@ -22,7 +22,10 @@ public class StartPlace extends Application {
 
         stage = primaryStage;
         stage.setTitle("Coconut-IDE");
-        stage.setResizable(false);
+        stage.setMinWidth(600);
+        stage.setMaxWidth(600);
+        stage.setMinHeight(400);
+        stage.setMaxHeight(400);
 
         Screen screen = new Screen();
         Point point = screen.calculateCenter(600, 400);
