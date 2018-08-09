@@ -5,6 +5,7 @@ import javafx.stage.Stage;
 import lombok.Getter;
 import lombok.Setter;
 import ru.mrchebik.gui.place.StageHelper;
+import ru.mrchebik.gui.place.ViewHelper;
 import ru.mrchebik.screen.measurement.Scale;
 
 import java.nio.file.Path;
@@ -20,11 +21,10 @@ public class RenameFolderPlace extends StageHelper {
     public void start() {
         super.stage = new Stage();
 
-        var view = new RenameFolderView();
         initWindow(super.stage,
                 "Rename Folder",
                 Modality.APPLICATION_MODAL,
                 Scale.PLACE_RENAME_FOLDER,
-                view.getView());
+                ViewHelper.PLACE_RENAME_FOLDER);
     }
 }

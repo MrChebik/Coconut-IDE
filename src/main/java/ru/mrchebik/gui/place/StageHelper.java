@@ -33,6 +33,21 @@ public class StageHelper extends Application {
         stage.show();
     }
 
+    protected void initWindow(Stage stage, String title, Modality modality, Scale scale, ViewHelper view) {
+        stage.setTitle(title);
+        stage.getIcons().add(Icons.LOGO.get());
+
+        if (!modality.equals(Modality.NONE))
+            stage.initModality(modality);
+
+        setResizableFalse(stage, scale);
+        setPosition(stage, scale);
+
+        var scene = new Scene(view.getView().getView());
+        stage.setScene(scene);
+        stage.show();
+    }
+
     private void setResizableFalse(Stage stage, Scale scale) {
         var width = scale.getWidth();
         var height = scale.getHeight();

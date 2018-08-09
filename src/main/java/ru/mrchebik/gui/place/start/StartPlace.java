@@ -4,6 +4,7 @@ import com.airhacks.afterburner.injection.Injector;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import ru.mrchebik.gui.place.StageHelper;
+import ru.mrchebik.gui.place.ViewHelper;
 import ru.mrchebik.screen.measurement.Scale;
 
 import java.util.HashMap;
@@ -24,11 +25,10 @@ public class StartPlace extends StageHelper {
     private void initializeGui(Stage stage) {
         super.stage = stage;
 
-        var view = new StartView();
         initWindow(stage,
                 "Coconut-IDE",
                 Modality.NONE,
                 Scale.PLACE_START,
-                view.getView());
+                ViewHelper.PLACE_START);
     }
 }
