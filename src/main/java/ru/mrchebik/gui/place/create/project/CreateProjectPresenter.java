@@ -121,7 +121,6 @@ public class CreateProjectPresenter implements Initializable {
         return projectPath.getText().startsWith(projects.getCorePathString());
     }
 
-    @SneakyThrows(IOException.class)
     private void startWorkPlace() {
         String name = projectName.getText();
         Path path = Paths.get(projectPath.getText());

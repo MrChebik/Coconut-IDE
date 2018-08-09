@@ -20,7 +20,6 @@ import java.util.Locale;
 
 public class JavaCompilerSyntax extends Thread {
     protected static CustomCodeArea customCodeArea;
-    private Project project;
     private SaveTabsProcess saveTabsProcess;
     protected static TabPane tabPane;
     protected static TreeView<Path> treeView;
@@ -28,11 +27,9 @@ public class JavaCompilerSyntax extends Thread {
     public static List<Diagnostic<? extends JavaFileObject>> diagnostics;
 
     public JavaCompilerSyntax(CustomCodeArea customCodeArea,
-                       Project project,
                        SaveTabsProcess saveTabsProcess,
                        TabPane tabPane,
                        TreeView<Path> treeView) {
-        this.project = project;
         this.saveTabsProcess = saveTabsProcess;
         JavaCompilerSyntax.customCodeArea = customCodeArea;
         JavaCompilerSyntax.tabPane = tabPane;

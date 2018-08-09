@@ -15,7 +15,6 @@ import ru.mrchebik.process.io.ExecutorCommand;
 import ru.mrchebik.project.Project;
 import ru.mrchebik.screen.measurement.Scale;
 
-import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
@@ -24,9 +23,8 @@ import java.util.Map;
 public class WorkPlace extends StageHelper {
     private ErrorProcess errorProcess;
     private ExecutorCommand executorCommand;
-    private Project project;
 
-    public void start(String name, Path path) throws IOException {
+    public void start(String name, Path path) {
         initializeExecutorAndError();
         initializeProject(name, path);
         initializeInject();
@@ -56,7 +54,6 @@ public class WorkPlace extends StageHelper {
                 this);
 
         Map<Object, Object> customProperties = new HashMap<>();
-        customProperties.put("project", project);
         customProperties.put("executorCommand", executorCommand);
         customProperties.put("errorProcess", errorProcess);
         customProperties.put("places", places);

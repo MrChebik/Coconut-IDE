@@ -49,8 +49,6 @@ public class WorkPresenter implements Initializable {
     private ExecutorCommand executorCommand;
     @Inject
     private ActionPlaces places;
-    @Inject
-    private Project project;
 
     private CommandPath commandPath;
     private InputTextToOutputArea inputTextToOutputArea;
@@ -130,10 +128,10 @@ public class WorkPresenter implements Initializable {
 
         commandPath = CommandPath.create();
 
-        Syntax syntax = new Syntax(project, saveTabsProcess, tabPane, treeView);
+        Syntax syntax = new Syntax(saveTabsProcess, tabPane, treeView);
         tabUpdater = new TabUpdater(tabPane, Highlight.create(), syntax, places.getWorkPlace().getStage(), analyzer);
 
-        treeUpdater = new TreeUpdater(project, treeView, tabUpdater);
+        treeUpdater = new TreeUpdater(treeView, tabUpdater);
         treeUpdater.setRootToTreeView();
 
         executorCommand.setOutputArea(outputArea);
@@ -163,7 +161,7 @@ public class WorkPresenter implements Initializable {
         TreeItem<Path> item = treeView.getRoot().getChildren().get(1).getChildren().get(0);
 
         treeView.getSelectionModel().select(item);
-        treeView.setCellFactory(new StructureUpdateGraphic(commandPath, places, project));
+        treeView.setCellFactory(new StructureUpdateGraphic(commandPath, places));
     }
 
     private void startSaveTabsProcess() {

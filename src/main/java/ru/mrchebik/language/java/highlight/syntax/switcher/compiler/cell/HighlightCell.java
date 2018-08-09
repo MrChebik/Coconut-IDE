@@ -8,7 +8,6 @@ import javafx.scene.control.TreeView;
 import ru.mrchebik.gui.node.codearea.CustomCodeArea;
 import ru.mrchebik.language.java.highlight.syntax.switcher.compiler.JavaCompilerSyntax;
 import ru.mrchebik.process.save.SaveTabsProcess;
-import ru.mrchebik.project.Project;
 
 import javax.tools.Diagnostic;
 import javax.tools.JavaFileObject;
@@ -25,8 +24,8 @@ public class HighlightCell extends JavaCompilerSyntax {
     private static List<TreeItem<Path>> treeItems;
     private static List<Node> cells;
 
-    public HighlightCell(CustomCodeArea customCodeArea, Project project, SaveTabsProcess saveTabsProcess, TabPane tabPane, TreeView<Path> treeView) {
-        super(customCodeArea, project, saveTabsProcess, tabPane, treeView);
+    public HighlightCell(CustomCodeArea customCodeArea, SaveTabsProcess saveTabsProcess, TabPane tabPane, TreeView<Path> treeView) {
+        super(customCodeArea, saveTabsProcess, tabPane, treeView);
     }
 
     private static List<TreeItem<Path>> getAllTreeItems(TreeItem<Path> root) {

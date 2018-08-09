@@ -20,7 +20,6 @@ import java.util.TimerTask;
 
 @AllArgsConstructor
 public class TreeUpdater {
-    private Project project;
     private TreeView<Path> treeView;
     private TabUpdater tabUpdater;
 
@@ -33,10 +32,10 @@ public class TreeUpdater {
 
             WatcherStructure watcherStructure = null;
             if (Files.isDirectory(path)) {
-                watcherStructure = new WatcherStructure(path, project, tabUpdater, this);
+                watcherStructure = new WatcherStructure(path, tabUpdater, this);
             }
 
-            TreeItem<Path> newItem = new CustomTreeItem(path, watcherStructure, project, tabUpdater, this);
+            TreeItem<Path> newItem = new CustomTreeItem(path, watcherStructure, tabUpdater, this);
             if (Files.isDirectory(path)) {
                 newItem.setGraphic(new ImageView(Icons.FOLDER_COLLAPSE.get()));
                 newItem.expandedProperty().addListener(expanderListener());
@@ -93,9 +92,9 @@ public class TreeUpdater {
     }
 
     private TreeItem<Path> setRootItem(Path path) {
-        WatcherStructure rootInWatcher = new WatcherStructure(path, project, tabUpdater, this);
+        WatcherStructure rootInWatcher = new WatcherStructure(path, tabUpdater, this);
 
-        TreeItem<Path> rootNode = new CustomTreeItem(path, rootInWatcher, project, tabUpdater, this);
+        TreeItem<Path> rootNode = new CustomTreeItem(path, rootInWatcher, tabUpdater, this);
         rootNode.setExpanded(true);
         rootNode.setGraphic(new ImageView(Icons.FOLDER_EXPAND.get()));
         rootNode.expandedProperty().addListener(expanderListener());
@@ -104,7 +103,7 @@ public class TreeUpdater {
     }
 
     public void setRootToTreeView() {
-        WatcherStructure rootOutWatcher = new WatcherStructure(Project.path.getParent(), project, tabUpdater, this);
+        WatcherStructure rootOutWatcher = new WatcherStructure(Project.path.getParent(), tabUpdater, this);
         rootOutWatcher.start();
 
         TreeItem<Path> rootNode = setRootItem(Project.path);

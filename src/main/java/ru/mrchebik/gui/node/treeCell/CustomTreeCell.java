@@ -4,8 +4,7 @@ import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.control.TreeCell;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
 import ru.mrchebik.gui.node.treeCell.event.PasteEvent;
 import ru.mrchebik.helper.FileHelper;
 import ru.mrchebik.model.ActionPlaces;
@@ -15,14 +14,10 @@ import ru.mrchebik.project.Project;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class CustomTreeCell extends TreeCell<Path> {
-    @NonNull
     private CommandPath commandPath;
-    @NonNull
     private ActionPlaces places;
-    @NonNull
-    private Project project;
 
     @Override
     public void updateItem(Path path, boolean empty) {

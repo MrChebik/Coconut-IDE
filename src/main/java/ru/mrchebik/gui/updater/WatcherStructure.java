@@ -17,8 +17,6 @@ public class WatcherStructure extends Thread {
     @NonNull
     private Path path;
     @NonNull
-    private Project project;
-    @NonNull
     private TabUpdater tabUpdater;
     @NonNull
     private TreeUpdater treeUpdater;

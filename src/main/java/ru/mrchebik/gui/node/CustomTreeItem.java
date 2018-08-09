@@ -9,7 +9,6 @@ import ru.mrchebik.gui.updater.TabUpdater;
 import ru.mrchebik.gui.updater.TreeUpdater;
 import ru.mrchebik.gui.updater.WatcherStructure;
 import ru.mrchebik.icons.Icons;
-import ru.mrchebik.project.Project;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -17,7 +16,6 @@ import java.nio.file.Path;
 import java.util.stream.Collectors;
 
 public class CustomTreeItem extends TreeItem<Path> {
-    private Project project;
     private TabUpdater tabUpdater;
     private TreeUpdater treeUpdater;
 
@@ -29,12 +27,11 @@ public class CustomTreeItem extends TreeItem<Path> {
         return Files.isDirectory(getValue());
     }
 
-    public CustomTreeItem(Path f, WatcherStructure watcherStructure, Project project, TabUpdater tabUpdater, TreeUpdater treeUpdater) {
+    public CustomTreeItem(Path f, WatcherStructure watcherStructure, TabUpdater tabUpdater, TreeUpdater treeUpdater) {
         super(f);
         if (watcherStructure != null) {
             watcherStructure.start();
         }
-        this.project = project;
         this.tabUpdater = tabUpdater;
         this.treeUpdater = treeUpdater;
     }
@@ -64,16 +61,14 @@ public class CustomTreeItem extends TreeItem<Path> {
             return Files.list(getValue())
                     .map(e -> {
                         WatcherStructure watcherStructure = null;
-                        if (Files.isDirectory(e)) {
-                            watcherStructure = new WatcherStructure(e, project, tabUpdater, treeUpdater);
-                        }
+                        if (Files.isDirectory(e))
+                            watcherStructure = new WatcherStructure(e, tabUpdater, treeUpdater);
 
-                        CustomTreeItem item = new CustomTreeItem(e, watcherStructure, project, tabUpdater, treeUpdater);
+                        CustomTreeItem item = new CustomTreeItem(e, watcherStructure, tabUpdater, treeUpdater);
 
                         item.setGraphic(new ImageView((item.isDirectory() ? Icons.FOLDER_COLLAPSE : Icons.FILE).get()));
-                        if (isDirectory()) {
+                        if (isDirectory())
                             item.expandedProperty().addListener(treeUpdater.expanderListener());
-                        }
 
                         return item;
                     })
