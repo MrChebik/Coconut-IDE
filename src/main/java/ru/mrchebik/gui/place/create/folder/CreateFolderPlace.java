@@ -5,9 +5,9 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import lombok.Getter;
 import lombok.Setter;
+import ru.mrchebik.gui.place.StageHelper;
 import ru.mrchebik.icons.Icons;
-import ru.mrchebik.screen.Screen;
-import ru.mrchebik.screen.measurement.Point;
+import ru.mrchebik.screen.measurement.Scale;
 
 import java.nio.file.Path;
 
@@ -25,16 +25,11 @@ public class CreateFolderPlace {
         stage = new Stage();
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.setTitle("Create Folder");
-        stage.setWidth(400);
-        stage.setHeight(150);
-        stage.setResizable(false);
-
-        Screen screen = new Screen();
-        Point point = screen.calculateCenter(400, 150);
-        stage.setX(point.getX());
-        stage.setY(point.getY());
-
         stage.getIcons().add(Icons.LOGO.get());
+
+        var scale = new Scale(400, 150);
+        StageHelper.setResizableFalse(stage, scale);
+        StageHelper.setPosition(stage, scale);
 
         CreateFolderView createFolderView = new CreateFolderView();
         Scene scene = new Scene(createFolderView.getView());

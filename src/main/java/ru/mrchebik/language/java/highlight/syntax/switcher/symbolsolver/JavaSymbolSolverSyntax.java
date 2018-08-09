@@ -1,4 +1,4 @@
-package ru.mrchebik.language.java.highlight.syntax.switcher.javaSymbolSolver;
+package ru.mrchebik.language.java.highlight.syntax.switcher.symbolsolver;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseProblemException;

@@ -19,7 +19,7 @@ import ru.mrchebik.gui.node.codearea.CustomCodeArea;
 import ru.mrchebik.icons.Icons;
 import ru.mrchebik.language.java.highlight.Highlight;
 import ru.mrchebik.language.java.highlight.syntax.Syntax;
-import ru.mrchebik.language.java.highlight.syntax.switcher.javaCompiler.tab.HighlightTab;
+import ru.mrchebik.language.java.highlight.syntax.switcher.compiler.tab.HighlightTab;
 
 import java.io.IOException;
 import java.nio.file.Files;

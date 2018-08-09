@@ -1,12 +1,12 @@
-package ru.mrchebik.language.java.highlight.syntax.switcher.javaCompiler;
+package ru.mrchebik.language.java.highlight.syntax.switcher.compiler;
 
 import javafx.application.Platform;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TreeView;
 import ru.mrchebik.gui.node.codearea.CustomCodeArea;
-import ru.mrchebik.language.java.highlight.syntax.switcher.javaCompiler.area.HighlightArea;
-import ru.mrchebik.language.java.highlight.syntax.switcher.javaCompiler.cell.HighlightCell;
-import ru.mrchebik.language.java.highlight.syntax.switcher.javaCompiler.tab.HighlightTab;
+import ru.mrchebik.language.java.highlight.syntax.switcher.compiler.area.HighlightArea;
+import ru.mrchebik.language.java.highlight.syntax.switcher.compiler.cell.HighlightCell;
+import ru.mrchebik.language.java.highlight.syntax.switcher.compiler.tab.HighlightTab;
 import ru.mrchebik.process.save.SaveTabsProcess;
 import ru.mrchebik.project.Project;
 

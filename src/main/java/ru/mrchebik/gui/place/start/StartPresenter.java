@@ -7,8 +7,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.DirectoryChooser;
 import javafx.util.Duration;
+import ru.mrchebik.gui.key.KeyHelper;
 import ru.mrchebik.gui.place.create.project.CreateProjectPlace;
 import ru.mrchebik.project.Projects;
 import ru.mrchebik.settings.PropertyCollector;
@@ -32,7 +34,6 @@ public class StartPresenter implements Initializable {
     private StartPlace startPlace;
 
     private CreateProjectPlace createProjectPlace;
-    private PropertyCollector propertyCollector;
 
     @FXML
     private void handleNewProject() {
@@ -40,8 +41,14 @@ public class StartPresenter implements Initializable {
     }
 
     @FXML
+    private void handleNewProjectWithKey(KeyEvent event) {
+        if (KeyHelper.isEnter(event))
+            initializeCreateProjectPlace();
+    }
+
+    @FXML
     private void handleSetupJDK() {
-        String jdkProperty = propertyCollector.getProperty("jdk");
+        String jdkProperty = PropertyCollector.getProperty("jdk");
         File target = Paths.get(jdkProperty == null ? System.getProperty("java.home") : jdkProperty).toFile();
 
         DirectoryChooser directoryChooser = new DirectoryChooser();
@@ -83,9 +90,9 @@ public class StartPresenter implements Initializable {
     }
 
     private void setJDK(String pathString) {
-        Path pathJavac = Paths.get(pathString, "bin", propertyCollector.getJavac());
+        Path pathJavac = Paths.get(pathString, "bin", PropertyCollector.getJavac());
         if (Files.exists(pathJavac)) {
-            propertyCollector.writeProperty("jdk", pathString);
+            PropertyCollector.writeProperty("jdk", pathString);
             createProject.setDisable(false);
         }
     }

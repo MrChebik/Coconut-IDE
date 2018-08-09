@@ -9,7 +9,7 @@ import javafx.scene.image.ImageView;
 import lombok.AllArgsConstructor;
 import ru.mrchebik.gui.node.CustomTreeItem;
 import ru.mrchebik.icons.Icons;
-import ru.mrchebik.language.java.highlight.syntax.switcher.javaCompiler.cell.HighlightCell;
+import ru.mrchebik.language.java.highlight.syntax.switcher.compiler.cell.HighlightCell;
 import ru.mrchebik.project.Project;
 
 import java.nio.file.Files;

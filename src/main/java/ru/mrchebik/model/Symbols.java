@@ -1,7 +1,5 @@
 package ru.mrchebik.model;
 
-import lombok.Getter;
-
 public class Symbols {
     public static final String[] mirrorSymbols = { "{}", "[]", "<>", "()" };
     public static final String[] sameSymbols = { "\"\"", "\'\'" };
@@ -18,7 +16,7 @@ public class Symbols {
             "new", "package", "private", "protected", "public",
             "return", "short", "static", "strictfp", "super",
             "switch", "synchronized", "this", "throw", "throws",
-            "transient", "try", "void", "volatile", "while"
+            "transient", "try", "var", "void", "volatile", "while"
     };
 
     public static final String[] JAVADOC_KEYWORDS = new String[]{

@@ -61,7 +61,7 @@ public class CreateProjectPresenter implements Initializable {
         directoryChooser.setInitialDirectory(target);
         directoryChooser.setTitle("Choose Folder");
 
-        File file = directoryChooser.showDialog(createProjectPlace.getStage());
+        File file = directoryChooser.showDialog(createProjectPlace.getChildStage());
         if (file != null) {
             projectName.setText(file.getName());
             projectPath.setText(file.getPath());

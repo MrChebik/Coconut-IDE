@@ -1,48 +1,32 @@
 package ru.mrchebik.gui.place.rename.folder;
 
-import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import lombok.Getter;
 import lombok.Setter;
-import ru.mrchebik.icons.Icons;
-import ru.mrchebik.screen.Screen;
-import ru.mrchebik.screen.measurement.Point;
+import ru.mrchebik.gui.place.StageHelper;
+import ru.mrchebik.screen.measurement.Scale;
 
 import java.nio.file.Path;
 
-public class RenameFolderPlace {
+public class RenameFolderPlace extends StageHelper {
     @Getter @Setter
     private Path path;
-
-    private Stage stage;
 
     public static RenameFolderPlace create() {
         return new RenameFolderPlace();
     }
 
     public void start() {
-        stage = new Stage();
-        stage.initModality(Modality.APPLICATION_MODAL);
-        stage.setTitle("Rename File");
-        stage.setWidth(400);
-        stage.setHeight(150);
-        stage.setResizable(false);
+        super.childStage = new Stage();
 
-        Screen screen = new Screen();
-        Point point = screen.calculateCenter(400, 150);
-        stage.setX(point.getX());
-        stage.setY(point.getY());
+        var scale = new Scale(400, 150);
+        var view = new RenameFolderView();
 
-        stage.getIcons().add(Icons.LOGO.get());
-
-        RenameFolderView renameFolderView = new RenameFolderView();
-        Scene scene = new Scene(renameFolderView.getView());
-        stage.setScene(scene);
-        stage.show();
-    }
-
-    public void close() {
-        stage.close();
+        StageHelper.initWindow(super.childStage,
+                "Rename Folder",
+                Modality.APPLICATION_MODAL,
+                scale,
+                view.getView());
     }
 }

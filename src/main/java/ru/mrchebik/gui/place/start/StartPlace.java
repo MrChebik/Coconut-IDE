@@ -2,11 +2,11 @@ package ru.mrchebik.gui.place.start;
 
 import com.airhacks.afterburner.injection.Injector;
 import javafx.application.Application;
-import javafx.scene.Scene;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import lombok.Getter;
-import ru.mrchebik.icons.Icons;
-import ru.mrchebik.screen.Screen;
+import ru.mrchebik.gui.place.StageHelper;
+import ru.mrchebik.screen.measurement.Scale;
 
 import java.util.HashMap;
 
@@ -33,28 +33,13 @@ public class StartPlace extends Application {
     private void initializeGui(Stage stage) {
         this.stage = stage;
 
-        stage.setTitle("Coconut-IDE");
-        stage.getIcons().add(Icons.LOGO.get());
-        this.setResizableFalse(stage, 600, 400);
-        this.setPosition(stage, 600, 400);
+        var scale = new Scale(600, 400);
+        var view = new StartView();
 
-        var startView = new StartView();
-        var scene = new Scene(startView.getView());
-        stage.setScene(scene);
-        stage.show();
-    }
-
-    private void setResizableFalse(Stage stage, int width, int height) {
-        stage.setMinWidth(width);
-        stage.setMaxWidth(width);
-        stage.setMinHeight(height);
-        stage.setMaxHeight(height);
-    }
-
-    private void setPosition(Stage stage, int width, int height) {
-        var point = Screen.calculateCenter(width, height);
-
-        stage.setX(point.getX());
-        stage.setY(point.getY());
+        StageHelper.initWindow(stage,
+                "Coconut-IDE",
+                Modality.NONE,
+                scale,
+                view.getView());
     }
 }

@@ -15,15 +15,15 @@ public class TaskHelper {
 
     public static void chain(Task... tasks) {
         new Task(() -> {
-            for (int i = 0; i < tasks.length; i++) {
+            for (var task : tasks) {
                 try {
-                    tasks[i].join();
+                    task.join();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
 
                 if (!ErrorProcess.isWasError()) {
-                    ExecutorCommand.execute(tasks[i].getCommand());
+                    ExecutorCommand.execute(task.getCommand());
                 }
             }
         }).start();

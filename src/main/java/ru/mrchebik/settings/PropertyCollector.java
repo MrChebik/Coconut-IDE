@@ -15,7 +15,7 @@ import java.util.Properties;
 public class PropertyCollector {
     private static final Path SETTINGS_PATH = Paths.get(System.getProperty("user.home"), ".coconut-ide");
 
-    private Path pathProperties;
+    private static Path pathProperties;
     private static Properties properties;
     private static String javac;
 
@@ -31,7 +31,7 @@ public class PropertyCollector {
         if (javac == null) {
             javac = "javac";
 
-            String os = System.getProperty("os.name");
+            var os = System.getProperty("os.name");
             if (os.contains("Windows")) {
                 javac += ".exe";
             }
@@ -61,7 +61,7 @@ public class PropertyCollector {
     }
 
     @SneakyThrows
-    public void writeProperty(String key, String value) {
+    public static void writeProperty(String key, String value) {
         properties.setProperty(key, value);
 
         File file = pathProperties.toFile();

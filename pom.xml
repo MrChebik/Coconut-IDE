@@ -18,8 +18,8 @@
                     <source>1.10</source>
                     <target>1.10</target>
                     <compilerArgs>
-                        <arg>--add-exports</arg>
-                        <arg>java.base/jdk.internal=tools.jar</arg>
+                        <arg>--add-exports=java.base/jdk.internal=tools.jar</arg>
+                        <!--<arg>&#45;&#45;add-modules=java.xml.ws.annotation</arg>-->
                     </compilerArgs>
                 </configuration>
             </plugin>
