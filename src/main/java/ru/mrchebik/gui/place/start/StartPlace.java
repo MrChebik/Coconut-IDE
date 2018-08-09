@@ -5,40 +5,19 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import lombok.Getter;
-import ru.mrchebik.model.CustomIcons;
-import ru.mrchebik.model.screen.Screen;
-import ru.mrchebik.model.screen.measurement.Point;
+import ru.mrchebik.icons.Icons;
+import ru.mrchebik.screen.Screen;
 
 import java.util.HashMap;
-import java.util.Map;
 
 public class StartPlace extends Application {
     @Getter
     private Stage stage;
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage) {
         initializeInjection();
-
-        stage = primaryStage;
-        stage.setTitle("Coconut-IDE");
-        stage.setMinWidth(600);
-        stage.setMaxWidth(600);
-        stage.setMinHeight(400);
-        stage.setMaxHeight(400);
-
-        Screen screen = new Screen();
-        Point point = screen.calculateCenter(600, 400);
-        stage.setX(point.getX());
-        stage.setY(point.getY());
-
-        CustomIcons customIcons = new CustomIcons();
-        stage.getIcons().add(customIcons.getLogo());
-
-        StartView startView = new StartView();
-        Scene scene = new Scene(startView.getView());
-        stage.setScene(scene);
-        stage.show();
+        initializeGui(primaryStage);
     }
 
     public void close() {
@@ -46,8 +25,36 @@ public class StartPlace extends Application {
     }
 
     private void initializeInjection() {
-        Map<Object, Object> customProperties = new HashMap<>();
-        customProperties.put("startPlace", this);
-        Injector.setConfigurationSource(customProperties::get);
+        var injections = new HashMap<>();
+        injections.put("startPlace", this);
+        Injector.setConfigurationSource(injections::get);
+    }
+
+    private void initializeGui(Stage stage) {
+        this.stage = stage;
+
+        stage.setTitle("Coconut-IDE");
+        stage.getIcons().add(Icons.LOGO.get());
+        this.setResizableFalse(stage, 600, 400);
+        this.setPosition(stage, 600, 400);
+
+        var startView = new StartView();
+        var scene = new Scene(startView.getView());
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    private void setResizableFalse(Stage stage, int width, int height) {
+        stage.setMinWidth(width);
+        stage.setMaxWidth(width);
+        stage.setMinHeight(height);
+        stage.setMaxHeight(height);
+    }
+
+    private void setPosition(Stage stage, int width, int height) {
+        var point = Screen.calculateCenter(width, height);
+
+        stage.setX(point.getX());
+        stage.setY(point.getY());
     }
 }

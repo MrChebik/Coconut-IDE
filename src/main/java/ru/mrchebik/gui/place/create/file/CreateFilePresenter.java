@@ -9,7 +9,7 @@ import ru.mrchebik.project.Project;
 
 import javax.inject.Inject;
 
-import static ru.mrchebik.gui.place.PresenterHelper.isEnter;
+import static ru.mrchebik.gui.key.KeyHelper.isEnter;
 
 public class CreateFilePresenter {
     @FXML

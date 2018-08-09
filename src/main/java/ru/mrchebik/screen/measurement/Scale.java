@@ -1,4 +1,4 @@
-package ru.mrchebik.model.screen.measurement;
+package ru.mrchebik.screen.measurement;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

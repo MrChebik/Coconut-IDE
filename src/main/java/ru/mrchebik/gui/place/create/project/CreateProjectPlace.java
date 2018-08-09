@@ -4,9 +4,9 @@ import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import lombok.Getter;
-import ru.mrchebik.model.CustomIcons;
-import ru.mrchebik.model.screen.Screen;
-import ru.mrchebik.model.screen.measurement.Point;
+import ru.mrchebik.icons.Icons;
+import ru.mrchebik.screen.Screen;
+import ru.mrchebik.screen.measurement.Point;
 
 public class CreateProjectPlace {
     @Getter
@@ -25,8 +25,7 @@ public class CreateProjectPlace {
         stage.setX(point.getX());
         stage.setY(point.getY());
 
-        CustomIcons customIcons = new CustomIcons();
-        stage.getIcons().add(customIcons.getLogo());
+        stage.getIcons().add(Icons.LOGO.get());
 
         CreateProjectView createProjectView = new CreateProjectView();
         Scene scene = new Scene(createProjectView.getView());

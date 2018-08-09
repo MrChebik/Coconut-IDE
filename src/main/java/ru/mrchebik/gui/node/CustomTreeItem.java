@@ -8,7 +8,7 @@ import lombok.SneakyThrows;
 import ru.mrchebik.gui.updater.TabUpdater;
 import ru.mrchebik.gui.updater.TreeUpdater;
 import ru.mrchebik.gui.updater.WatcherStructure;
-import ru.mrchebik.model.CustomIcons;
+import ru.mrchebik.icons.Icons;
 import ru.mrchebik.project.Project;
 
 import java.io.IOException;
@@ -70,8 +70,7 @@ public class CustomTreeItem extends TreeItem<Path> {
 
                         CustomTreeItem item = new CustomTreeItem(e, watcherStructure, project, tabUpdater, treeUpdater);
 
-                        CustomIcons customIcons = new CustomIcons();
-                        item.setGraphic(new ImageView(item.isDirectory() ? customIcons.getFolderCollapseImage() : customIcons.getFileImage()));
+                        item.setGraphic(new ImageView((item.isDirectory() ? Icons.FOLDER_COLLAPSE : Icons.FILE).get()));
                         if (isDirectory()) {
                             item.expandedProperty().addListener(treeUpdater.expanderListener());
                         }

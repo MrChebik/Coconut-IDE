@@ -7,7 +7,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.DirectoryChooser;
 import lombok.SneakyThrows;
-import ru.mrchebik.gui.place.PresenterHelper;
 import ru.mrchebik.gui.place.start.StartPlace;
 import ru.mrchebik.gui.place.work.WorkPlace;
 import ru.mrchebik.project.Projects;
@@ -21,7 +20,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ResourceBundle;
 
-public class CreateProjectPresenter extends PresenterHelper implements Initializable {
+import static ru.mrchebik.gui.key.KeyHelper.isEnter;
+
+public class CreateProjectPresenter implements Initializable {
     @FXML
     private TextField projectName;
     @FXML
@@ -42,16 +43,14 @@ public class CreateProjectPresenter extends PresenterHelper implements Initializ
 
     @FXML
     private void handleCreateProjectWithKeyOnName(KeyEvent event) {
-        if (super.isEnter(event)) {
+        if (isEnter(event))
             newProject();
-        }
     }
 
     @FXML
     private void handleCreateProjectWithKeyOnPath(KeyEvent event) {
-        if (super.isEnter(event)) {
+        if (isEnter(event))
             newProject();
-        }
     }
 
     @FXML

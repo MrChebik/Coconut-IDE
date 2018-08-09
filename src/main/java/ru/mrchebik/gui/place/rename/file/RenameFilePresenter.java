@@ -4,7 +4,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import lombok.SneakyThrows;
-import ru.mrchebik.gui.place.PresenterHelper;
 import ru.mrchebik.model.ActionPlaces;
 
 import javax.inject.Inject;
@@ -12,7 +11,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-public class RenameFilePresenter extends PresenterHelper {
+import static ru.mrchebik.gui.key.KeyHelper.isEnter;
+
+public class RenameFilePresenter {
     @FXML
     private TextField name;
     @Inject
@@ -25,7 +26,7 @@ public class RenameFilePresenter extends PresenterHelper {
 
     @FXML
     private void handleRenameWithKey(KeyEvent event) {
-        if (super.isEnter(event)) {
+        if (isEnter(event)) {
             renameFile();
         }
     }

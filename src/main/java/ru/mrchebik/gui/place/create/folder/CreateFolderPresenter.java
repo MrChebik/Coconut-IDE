@@ -3,7 +3,6 @@ package ru.mrchebik.gui.place.create.folder;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
-import ru.mrchebik.gui.place.PresenterHelper;
 import ru.mrchebik.helper.FileHelper;
 import ru.mrchebik.model.ActionPlaces;
 import ru.mrchebik.project.Project;
@@ -11,7 +10,9 @@ import ru.mrchebik.project.Project;
 import javax.inject.Inject;
 import java.nio.file.Path;
 
-public class CreateFolderPresenter extends PresenterHelper {
+import static ru.mrchebik.gui.key.KeyHelper.isEnter;
+
+public class CreateFolderPresenter {
     @FXML
     private TextField name;
     @Inject
@@ -26,7 +27,7 @@ public class CreateFolderPresenter extends PresenterHelper {
 
     @FXML
     private void handleCreateFolderWithKey(KeyEvent event) {
-        if (super.isEnter(event)) {
+        if (isEnter(event)) {
             createFolder();
         }
     }

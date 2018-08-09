@@ -8,14 +8,14 @@ import ru.mrchebik.gui.place.create.file.CreateFilePlace;
 import ru.mrchebik.gui.place.create.folder.CreateFolderPlace;
 import ru.mrchebik.gui.place.rename.file.RenameFilePlace;
 import ru.mrchebik.gui.place.rename.folder.RenameFolderPlace;
+import ru.mrchebik.icons.Icons;
 import ru.mrchebik.model.ActionPlaces;
-import ru.mrchebik.model.CustomIcons;
-import ru.mrchebik.model.screen.Screen;
-import ru.mrchebik.model.screen.measurement.Point;
-import ru.mrchebik.model.screen.measurement.Scale;
 import ru.mrchebik.process.io.ErrorProcess;
 import ru.mrchebik.process.io.ExecutorCommand;
 import ru.mrchebik.project.Project;
+import ru.mrchebik.screen.Screen;
+import ru.mrchebik.screen.measurement.Point;
+import ru.mrchebik.screen.measurement.Scale;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -48,8 +48,7 @@ public class WorkPlace {
         stage.setX(point.getX());
         stage.setY(point.getY());
 
-        CustomIcons customIcons = new CustomIcons();
-        stage.getIcons().add(customIcons.getLogo());
+        stage.getIcons().add(Icons.LOGO.get());
 
         stage.setOnCloseRequest(event -> System.exit(0));
 

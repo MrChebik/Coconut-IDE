@@ -1,9 +1,9 @@
-package ru.mrchebik.gui.place;
+package ru.mrchebik.gui.key;
 
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
-public class PresenterHelper {
+public class KeyHelper {
     public static boolean isEnter(KeyEvent event) {
         return event.getCode() == KeyCode.ENTER;
     }

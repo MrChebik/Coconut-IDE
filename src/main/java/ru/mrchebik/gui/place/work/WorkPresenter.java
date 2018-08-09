@@ -16,11 +16,11 @@ import ru.mrchebik.gui.place.work.event.InputTextToOutputArea;
 import ru.mrchebik.gui.place.work.event.structure.StructureUpdateGraphic;
 import ru.mrchebik.gui.updater.TabUpdater;
 import ru.mrchebik.gui.updater.TreeUpdater;
+import ru.mrchebik.icons.Icons;
 import ru.mrchebik.language.java.highlight.Highlight;
 import ru.mrchebik.language.java.highlight.syntax.Syntax;
 import ru.mrchebik.model.ActionPlaces;
 import ru.mrchebik.model.CommandPath;
-import ru.mrchebik.model.CustomIcons;
 import ru.mrchebik.process.io.ErrorProcess;
 import ru.mrchebik.process.io.ExecutorCommand;
 import ru.mrchebik.process.save.SaveTabs;
@@ -158,8 +158,7 @@ public class WorkPresenter implements Initializable {
 
     private void setUpTreeView() {
         treeView.getSelectionModel().select(2);
-        CustomIcons customIcons = new CustomIcons();
-        treeView.getRoot().getChildren().get(1).setGraphic(new ImageView(customIcons.getFolderExpandImage()));
+        treeView.getRoot().getChildren().get(1).setGraphic(new ImageView(Icons.FOLDER_EXPAND.get()));
 
         TreeItem<Path> item = treeView.getRoot().getChildren().get(1).getChildren().get(0);
 

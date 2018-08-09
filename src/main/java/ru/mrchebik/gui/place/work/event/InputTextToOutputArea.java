@@ -5,14 +5,16 @@ import javafx.scene.input.KeyEvent;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import ru.mrchebik.gui.place.PresenterHelper;
 import ru.mrchebik.process.io.ExecutorCommand;
 
 import java.io.IOException;
 import java.io.OutputStream;
 
+import static ru.mrchebik.gui.key.KeyHelper.isBackSpace;
+import static ru.mrchebik.gui.key.KeyHelper.isEnter;
+
 @RequiredArgsConstructor
-public class InputTextToOutputArea extends PresenterHelper implements EventHandler<KeyEvent> {
+public class InputTextToOutputArea implements EventHandler<KeyEvent> {
     @Setter
     private String input = "";
     @NonNull

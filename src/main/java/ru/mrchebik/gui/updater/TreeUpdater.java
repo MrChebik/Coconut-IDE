@@ -8,8 +8,8 @@ import javafx.scene.control.TreeView;
 import javafx.scene.image.ImageView;
 import lombok.AllArgsConstructor;
 import ru.mrchebik.gui.node.CustomTreeItem;
+import ru.mrchebik.icons.Icons;
 import ru.mrchebik.language.java.highlight.syntax.switcher.javaCompiler.cell.HighlightCell;
-import ru.mrchebik.model.CustomIcons;
 import ru.mrchebik.project.Project;
 
 import java.nio.file.Files;
@@ -37,13 +37,11 @@ public class TreeUpdater {
             }
 
             TreeItem<Path> newItem = new CustomTreeItem(path, watcherStructure, project, tabUpdater, this);
-            CustomIcons customIcons = new CustomIcons();
             if (Files.isDirectory(path)) {
-                newItem.setGraphic(new ImageView(customIcons.getFolderCollapseImage()));
+                newItem.setGraphic(new ImageView(Icons.FOLDER_COLLAPSE.get()));
                 newItem.expandedProperty().addListener(expanderListener());
-            } else {
-                newItem.setGraphic(new ImageView(customIcons.getFileImage()));
-            }
+            } else
+                newItem.setGraphic(new ImageView(Icons.FILE.get()));
 
             parent.getChildren().add(newItem);
 
@@ -57,12 +55,10 @@ public class TreeUpdater {
 
             TreeItem t = (TreeItem) bb.getBean();
 
-            CustomIcons customIcons = new CustomIcons();
-            t.setGraphic(new ImageView(newValue ? customIcons.getFolderExpandImage() : customIcons.getFolderCollapseImage()));
+            t.setGraphic(new ImageView((newValue ? Icons.FOLDER_EXPAND : Icons.FOLDER_COLLAPSE).get()));
 
-            if (newValue) {
+            if (newValue)
                 scheduleHighlight();
-            }
         };
     }
 
@@ -101,8 +97,7 @@ public class TreeUpdater {
 
         TreeItem<Path> rootNode = new CustomTreeItem(path, rootInWatcher, project, tabUpdater, this);
         rootNode.setExpanded(true);
-        CustomIcons customIcons = new CustomIcons();
-        rootNode.setGraphic(new ImageView(customIcons.getFolderExpandImage()));
+        rootNode.setGraphic(new ImageView(Icons.FOLDER_EXPAND.get()));
         rootNode.expandedProperty().addListener(expanderListener());
 
         return rootNode;

@@ -16,10 +16,10 @@ import org.fxmisc.flowless.VirtualizedScrollPane;
 import ru.mrchebik.autocomplete.AnalyzerAutocomplete;
 import ru.mrchebik.gui.node.CustomTreeItem;
 import ru.mrchebik.gui.node.codearea.CustomCodeArea;
+import ru.mrchebik.icons.Icons;
 import ru.mrchebik.language.java.highlight.Highlight;
 import ru.mrchebik.language.java.highlight.syntax.Syntax;
 import ru.mrchebik.language.java.highlight.syntax.switcher.javaCompiler.tab.HighlightTab;
-import ru.mrchebik.model.CustomIcons;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -54,8 +54,7 @@ public class TabUpdater {
 
         Tab tab = new Tab();
         tab.setText(item.getValue().getFileName().toString());
-        CustomIcons customIcons = new CustomIcons();
-        tab.setGraphic(new ImageView(customIcons.getFileImage()));
+        tab.setGraphic(new ImageView(Icons.FILE.get()));
         tab.setUserData(item.getValue());
 
         VirtualizedScrollPane scrollPane = new VirtualizedScrollPane<>(scaleVirtualized);

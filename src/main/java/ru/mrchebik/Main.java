@@ -14,7 +14,8 @@ public class Main {
     }
 
     private static void ifTravisCi(String[] args) {
-        if (args.length > 1 && "-exitOnSec".equals(args[0])) {
+        if (args.length > 1 &&
+                "-exitOnSec".equals(args[0])) {
             var timer = new Timer();
             var task = new TimerTask() {
                 @Override
@@ -22,7 +23,8 @@ public class Main {
                     System.exit(0);
                 }
             };
-            timer.schedule(task, Integer.parseInt(args[1]) * 1000);
+            var seconds = Integer.parseInt(args[1]) * 1000;
+            timer.schedule(task, seconds);
         }
     }
 }

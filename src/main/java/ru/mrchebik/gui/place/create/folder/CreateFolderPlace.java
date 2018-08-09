@@ -5,9 +5,9 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import lombok.Getter;
 import lombok.Setter;
-import ru.mrchebik.model.CustomIcons;
-import ru.mrchebik.model.screen.Screen;
-import ru.mrchebik.model.screen.measurement.Point;
+import ru.mrchebik.icons.Icons;
+import ru.mrchebik.screen.Screen;
+import ru.mrchebik.screen.measurement.Point;
 
 import java.nio.file.Path;
 
@@ -34,8 +34,7 @@ public class CreateFolderPlace {
         stage.setX(point.getX());
         stage.setY(point.getY());
 
-        CustomIcons customIcons = new CustomIcons();
-        stage.getIcons().add(customIcons.getLogo());
+        stage.getIcons().add(Icons.LOGO.get());
 
         CreateFolderView createFolderView = new CreateFolderView();
         Scene scene = new Scene(createFolderView.getView());
