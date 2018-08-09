@@ -9,6 +9,7 @@ import ru.mrchebik.gui.place.create.project.CreateProjectView;
 import ru.mrchebik.gui.place.rename.file.RenameFileView;
 import ru.mrchebik.gui.place.rename.folder.RenameFolderView;
 import ru.mrchebik.gui.place.start.StartView;
+import ru.mrchebik.gui.place.work.WorkView;
 
 @AllArgsConstructor
 public enum ViewHelper {
@@ -17,7 +18,8 @@ public enum ViewHelper {
     PLACE_CREATE_FOLDER(new CreateFolderView()),
     PLACE_CREATE_PROJECT(new CreateProjectView()),
     PLACE_RENAME_FILE(new RenameFileView()),
-    PLACE_RENAME_FOLDER(new RenameFolderView());
+    PLACE_RENAME_FOLDER(new RenameFolderView()),
+    PLACE_WORK(new WorkView());
 
     @Getter
     private FXMLView view;

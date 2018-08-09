@@ -4,6 +4,7 @@ import com.airhacks.afterburner.injection.Injector;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import ru.mrchebik.gui.place.StageHelper;
+import ru.mrchebik.gui.place.ViewHelper;
 import ru.mrchebik.gui.place.create.file.CreateFilePlace;
 import ru.mrchebik.gui.place.create.folder.CreateFolderPlace;
 import ru.mrchebik.gui.place.rename.file.RenameFilePlace;
@@ -32,12 +33,11 @@ public class WorkPlace extends StageHelper {
 
         super.stage = new Stage();
 
-        var view = new WorkView();
         initWindow(super.stage,
                 Project.getTitle(),
                 Modality.APPLICATION_MODAL,
                 Scale.PLACE_WORK,
-                view.getView());
+                ViewHelper.PLACE_WORK);
 
         setOnClose(() -> System.exit(0));
     }

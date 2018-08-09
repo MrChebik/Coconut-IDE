@@ -1,7 +1,6 @@
 package ru.mrchebik.gui.place;
 
 import javafx.application.Application;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -16,21 +15,6 @@ public class StageHelper extends Application {
 
     public void close() {
         stage.close();
-    }
-
-    protected void initWindow(Stage stage, String title, Modality modality, Scale scale, Parent view) {
-        stage.setTitle(title);
-        stage.getIcons().add(Icons.LOGO.get());
-
-        if (!modality.equals(Modality.NONE))
-            stage.initModality(modality);
-
-        setResizableFalse(stage, scale);
-        setPosition(stage, scale);
-
-        var scene = new Scene(view);
-        stage.setScene(scene);
-        stage.show();
     }
 
     protected void initWindow(Stage stage, String title, Modality modality, Scale scale, ViewHelper view) {
