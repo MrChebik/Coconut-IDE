@@ -2,9 +2,8 @@ package ru.mrchebik.gui.node.codearea.event;
 
 import javafx.application.Platform;
 import org.fxmisc.richtext.CodeArea;
-import ru.mrchebik.model.ParentSymbol;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Stack;
 
@@ -14,11 +13,11 @@ public class CaretPosition {
     private int caretPos;
     private String currText;
     private int lastPosCaret = -1;
-    private List<ParentSymbol> parents;
+    private List<SameSymbolType> parents;
     private String prevClass;
     private String prevClassSaved;
 
-    private boolean calcHighlight(ParentSymbol parent, int caretPos) {
+    private boolean calcHighlight(SameSymbolType parent, int caretPos) {
         if (currText.charAt(caretPos) == parent.getLeft()) {
             calcNext(parent, caretPos, "figure");
 
@@ -33,7 +32,7 @@ public class CaretPosition {
     }
 
     private boolean calcLeft() {
-        for (ParentSymbol parent : parents) {
+        for (SameSymbolType parent : parents) {
             if (caretPos > 1) {
                 if (calcHighlight(parent, caretPos - 1)) {
                     caretPos--;
@@ -45,7 +44,7 @@ public class CaretPosition {
         return false;
     }
 
-    private void calcNext(ParentSymbol parentSymbol, int pos, String classCss) {
+    private void calcNext(SameSymbolType parentSymbol, int pos, String classCss) {
         String text = codeArea.getText();
         Stack<Character> stack = new Stack<>();
         for (int i = pos; i < text.length(); i++) {
@@ -55,7 +54,7 @@ public class CaretPosition {
         }
     }
 
-    private void calcPrev(ParentSymbol parentSymbol, int pos, String classCss) {
+    private void calcPrev(SameSymbolType parentSymbol, int pos, String classCss) {
         String text = codeArea.getText();
         Stack<Character> stack = new Stack<>();
         for (int i = pos; i > 0; i--) {
@@ -66,7 +65,7 @@ public class CaretPosition {
     }
 
     private boolean calcRight() {
-        for (ParentSymbol parent : parents) {
+        for (SameSymbolType parent : parents) {
             if (caretPos < currText.length()) {
                 if (calcHighlight(parent, caretPos)) {
                     return true;
@@ -93,7 +92,7 @@ public class CaretPosition {
 
     private void clearPrevHighlight() {
         if (isInDuration()) {
-            for (ParentSymbol parent : parents) {
+            for (SameSymbolType parent : parents) {
                 char symbol = currText.charAt(lastPosCaret);
                 if (symbol == parent.getLeft()) {
                     calcNext(parent, lastPosCaret, prevClassSaved);
@@ -124,37 +123,27 @@ public class CaretPosition {
                 if (stack.size() == 0) {
                     if (codeArea.getStyleOfChar(pos).size() != 0) {
                         String currClass = codeArea.getStyleOfChar(pos).iterator().next();
-                        if (pos != lastPosCaret && !currClass.equals(prevClass)) {
+                        if (pos != lastPosCaret && !currClass.equals(prevClass))
                             prevClassSaved = currClass;
-                        }
                         prevClass = currClass;
-                    } else {
+                    } else
                         prevClassSaved = "empty";
-                    }
 
                     Platform.runLater(() -> codeArea.setStyleClass(pos, pos + 1, classCss));
                     Platform.runLater(() -> codeArea.setStyleClass(i, i + 1, classCss));
 
                     return true;
                 }
-            } else {
+            } else
                 return true;
-            }
         }
 
         return false;
     }
 
-    private void computeParents() {
-        parents = new ArrayList<>();
-        parents.add(new ParentSymbol('{', '}'));
-        parents.add(new ParentSymbol('(', ')'));
-        parents.add(new ParentSymbol('[', ']'));
-    }
-
     public static CaretPosition create() {
         CaretPosition caretPosition = new CaretPosition();
-        caretPosition.computeParents();
+        caretPosition.parents.addAll(Arrays.asList(SameSymbolType.class.getEnumConstants()));
 
         return caretPosition;
     }

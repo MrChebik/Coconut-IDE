@@ -1,10 +1,14 @@
-package ru.mrchebik.model;
+package ru.mrchebik.gui.node.codearea.event;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @AllArgsConstructor
-public class ParentSymbol {
+public enum SameSymbolType {
+    FIGURE('{', '}'),
+    ROUND ('(', ')'),
+    SQUARE('[', ']');
+
     @Getter
     private char left;
     @Getter
