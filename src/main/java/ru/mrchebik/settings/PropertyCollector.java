@@ -16,7 +16,7 @@ public class PropertyCollector {
     private static final Path SETTINGS_PATH = Paths.get(System.getProperty("user.home"), ".coconut-ide");
 
     private static Path pathProperties;
-    private static Properties properties;
+    private static Properties properties = new Properties();
     private static String javac;
 
     @SneakyThrows(IOException.class)
@@ -50,7 +50,6 @@ public class PropertyCollector {
         if (!Files.exists(pathProperties)) {
             Files.createFile(pathProperties);
         }
-        properties = new Properties();
         properties.load(new FileInputStream(new File(String.valueOf(pathProperties.toFile()))));
     }
 

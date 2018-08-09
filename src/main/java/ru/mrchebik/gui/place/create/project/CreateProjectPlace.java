@@ -7,15 +7,13 @@ import ru.mrchebik.screen.measurement.Scale;
 
 public class CreateProjectPlace extends StageHelper {
     public void start() {
-        super.childStage = new Stage();
+        super.stage = new Stage();
 
-        var scale = new Scale(500, 200);
         var view = new CreateProjectView();
-
-        StageHelper.initWindow(super.childStage,
+        initWindow(super.stage,
                 "New Project",
                 Modality.APPLICATION_MODAL,
-                scale,
+                Scale.PLACE_CREATE_PROJECT,
                 view.getView());
     }
 }

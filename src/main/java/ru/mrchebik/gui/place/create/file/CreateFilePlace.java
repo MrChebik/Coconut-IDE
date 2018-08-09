@@ -18,15 +18,13 @@ public class CreateFilePlace extends StageHelper {
     }
 
     public void start() {
-        super.childStage = new Stage();
+        super.stage = new Stage();
 
-        var scale = new Scale(400, 150);
         var view = new CreateFileView();
-
-        StageHelper.initWindow(super.childStage,
+        initWindow(super.stage,
                 "Create File",
                 Modality.APPLICATION_MODAL,
-                scale,
+                Scale.PLACE_CREATE_FILE,
                 view.getView());
     }
 }

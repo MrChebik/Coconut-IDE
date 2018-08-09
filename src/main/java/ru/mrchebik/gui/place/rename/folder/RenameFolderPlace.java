@@ -18,15 +18,13 @@ public class RenameFolderPlace extends StageHelper {
     }
 
     public void start() {
-        super.childStage = new Stage();
+        super.stage = new Stage();
 
-        var scale = new Scale(400, 150);
         var view = new RenameFolderView();
-
-        StageHelper.initWindow(super.childStage,
+        initWindow(super.stage,
                 "Rename Folder",
                 Modality.APPLICATION_MODAL,
-                scale,
+                Scale.PLACE_RENAME_FOLDER,
                 view.getView());
     }
 }

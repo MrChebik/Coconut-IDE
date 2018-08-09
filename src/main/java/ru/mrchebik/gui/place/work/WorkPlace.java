@@ -1,20 +1,17 @@
 package ru.mrchebik.gui.place.work;
 
 import com.airhacks.afterburner.injection.Injector;
-import javafx.scene.Scene;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
-import lombok.Getter;
+import ru.mrchebik.gui.place.StageHelper;
 import ru.mrchebik.gui.place.create.file.CreateFilePlace;
 import ru.mrchebik.gui.place.create.folder.CreateFolderPlace;
 import ru.mrchebik.gui.place.rename.file.RenameFilePlace;
 import ru.mrchebik.gui.place.rename.folder.RenameFolderPlace;
-import ru.mrchebik.icons.Icons;
 import ru.mrchebik.model.ActionPlaces;
 import ru.mrchebik.process.io.ErrorProcess;
 import ru.mrchebik.process.io.ExecutorCommand;
 import ru.mrchebik.project.Project;
-import ru.mrchebik.screen.Screen;
-import ru.mrchebik.screen.measurement.Point;
 import ru.mrchebik.screen.measurement.Scale;
 
 import java.io.IOException;
@@ -23,10 +20,7 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
-public class WorkPlace {
-    @Getter
-    private Stage stage;
-
+public class WorkPlace extends StageHelper {
     private ErrorProcess errorProcess;
     private ExecutorCommand executorCommand;
     private Project project;
@@ -36,26 +30,16 @@ public class WorkPlace {
         initializeProject(name, path);
         initializeInject();
 
-        stage = new Stage();
-        stage.setTitle(Project.getTitle());
+        super.stage = new Stage();
 
-        Screen screen = new Screen();
-        Scale scale = screen.calculateScale();
-        stage.setWidth(scale.getWidth());
-        stage.setHeight(scale.getHeight());
+        var view = new WorkView();
+        initWindow(super.stage,
+                Project.getTitle(),
+                Modality.APPLICATION_MODAL,
+                Scale.PLACE_WORK,
+                view.getView());
 
-        Point point = screen.calculateCenter(stage.getWidth(), stage.getHeight());
-        stage.setX(point.getX());
-        stage.setY(point.getY());
-
-        stage.getIcons().add(Icons.LOGO.get());
-
-        stage.setOnCloseRequest(event -> System.exit(0));
-
-        WorkView workView = new WorkView();
-        Scene scene = new Scene(workView.getView());
-        stage.setScene(scene);
-        stage.show();
+        setOnClose(() -> System.exit(0));
     }
 
     private void initializeExecutorAndError() {

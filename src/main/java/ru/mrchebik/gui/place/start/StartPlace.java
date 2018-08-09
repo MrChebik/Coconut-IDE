@@ -1,27 +1,18 @@
 package ru.mrchebik.gui.place.start;
 
 import com.airhacks.afterburner.injection.Injector;
-import javafx.application.Application;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import lombok.Getter;
 import ru.mrchebik.gui.place.StageHelper;
 import ru.mrchebik.screen.measurement.Scale;
 
 import java.util.HashMap;
 
-public class StartPlace extends Application {
-    @Getter
-    private Stage stage;
-
+public class StartPlace extends StageHelper {
     @Override
     public void start(Stage primaryStage) {
         initializeInjection();
         initializeGui(primaryStage);
-    }
-
-    public void close() {
-        stage.close();
     }
 
     private void initializeInjection() {
@@ -31,15 +22,13 @@ public class StartPlace extends Application {
     }
 
     private void initializeGui(Stage stage) {
-        this.stage = stage;
+        super.stage = stage;
 
-        var scale = new Scale(600, 400);
         var view = new StartView();
-
-        StageHelper.initWindow(stage,
+        initWindow(stage,
                 "Coconut-IDE",
                 Modality.NONE,
-                scale,
+                Scale.PLACE_START,
                 view.getView());
     }
 }

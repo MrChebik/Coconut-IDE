@@ -1,5 +1,6 @@
 package ru.mrchebik.gui.place;
 
+import javafx.application.Application;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
@@ -9,15 +10,15 @@ import ru.mrchebik.icons.Icons;
 import ru.mrchebik.screen.Screen;
 import ru.mrchebik.screen.measurement.Scale;
 
-public class StageHelper {
+public class StageHelper extends Application {
     @Getter
-    protected Stage childStage;
+    protected Stage stage;
 
     public void close() {
-        childStage.close();
+        stage.close();
     }
 
-    public static void initWindow(Stage stage, String title, Modality modality, Scale scale, Parent view) {
+    protected void initWindow(Stage stage, String title, Modality modality, Scale scale, Parent view) {
         stage.setTitle(title);
         stage.getIcons().add(Icons.LOGO.get());
 
@@ -32,7 +33,7 @@ public class StageHelper {
         stage.show();
     }
 
-    public static void setResizableFalse(Stage stage, Scale scale) {
+    private void setResizableFalse(Stage stage, Scale scale) {
         var width = scale.getWidth();
         var height = scale.getHeight();
 
@@ -42,11 +43,20 @@ public class StageHelper {
         stage.setMaxHeight(height);
     }
 
-    public static void setPosition(Stage stage, Scale scale) {
+    private void setPosition(Stage stage, Scale scale) {
         var point = Screen.calculateCenter(scale.getWidth(),
                 scale.getHeight());
 
         stage.setX(point.getX());
         stage.setY(point.getY());
+    }
+
+    protected void setOnClose(Runnable handler) {
+        stage.setOnCloseRequest(event -> handler.run());
+    }
+
+    @Override
+    public void start(Stage primaryStage) {
+        throw new UnsupportedOperationException();
     }
 }
