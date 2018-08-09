@@ -16,13 +16,10 @@ import ru.mrchebik.project.Projects;
 import ru.mrchebik.settings.PropertyCollector;
 
 import javax.inject.Inject;
-import java.io.File;
 import java.net.URL;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.ResourceBundle;
 
 public class StartPresenter implements Initializable {
@@ -48,26 +45,24 @@ public class StartPresenter implements Initializable {
 
     @FXML
     private void handleSetupJDK() {
-        String jdkProperty = PropertyCollector.getProperty("jdk");
-        File target = Paths.get(jdkProperty == null ? System.getProperty("java.home") : jdkProperty).toFile();
+        var jdkProperty = PropertyCollector.getProperty("jdk");
+        var target = Paths.get(jdkProperty == null ? System.getProperty("java.home") : jdkProperty).toFile();
 
-        DirectoryChooser directoryChooser = new DirectoryChooser();
+        var directoryChooser = new DirectoryChooser();
         directoryChooser.setInitialDirectory(target);
         directoryChooser.setTitle("Choose JDK Folder");
 
-        File file = directoryChooser.showDialog(startPlace.getStage());
-        if (file != null) {
+        var file = directoryChooser.showDialog(startPlace.getStage());
+        if (file != null)
             setJDK(file.getPath());
-        }
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        if (!PropertyCollector.isJDKCorrect() && PropertyCollector.getProperty("jdk") == null) {
+        if (!PropertyCollector.isJDKCorrect() && PropertyCollector.getProperty("jdk") == null)
             createProject.setDisable(true);
-        }
 
-        ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(2000), coconutPng);
+        var scaleTransition = new ScaleTransition(Duration.millis(2000), coconutPng);
         scaleTransition.setToX(1.1f);
         scaleTransition.setToY(1.1f);
         scaleTransition.setCycleCount(Timeline.INDEFINITE);
@@ -82,7 +77,7 @@ public class StartPresenter implements Initializable {
     }
 
     private void initializeInjection() {
-        Map<Object, Object> customProperties = new HashMap<>();
+        var customProperties = new HashMap<>();
         customProperties.put("createProjectPlace", createProjectPlace);
         customProperties.put("startPlace", startPlace);
         customProperties.put("projects", Projects.create());
@@ -90,7 +85,7 @@ public class StartPresenter implements Initializable {
     }
 
     private void setJDK(String pathString) {
-        Path pathJavac = Paths.get(pathString, "bin", PropertyCollector.getJavac());
+        var pathJavac = Paths.get(pathString, "bin", PropertyCollector.getJavac());
         if (Files.exists(pathJavac)) {
             PropertyCollector.writeProperty("jdk", pathString);
             createProject.setDisable(false);

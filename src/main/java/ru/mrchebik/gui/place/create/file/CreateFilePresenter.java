@@ -5,7 +5,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import ru.mrchebik.helper.FileHelper;
 import ru.mrchebik.model.ActionPlaces;
-import ru.mrchebik.project.Project;
 
 import javax.inject.Inject;
 
@@ -16,8 +15,6 @@ public class CreateFilePresenter {
     private TextField name;
     @Inject
     private ActionPlaces places;
-    @Inject
-    private Project project;
 
     @FXML
     private void handleCreateFile() {

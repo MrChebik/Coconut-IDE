@@ -9,7 +9,6 @@ import ru.mrchebik.model.ActionPlaces;
 import javax.inject.Inject;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 
 import static ru.mrchebik.gui.key.KeyHelper.isEnter;
 
@@ -26,16 +25,15 @@ public class RenameFolderPresenter {
 
     @FXML
     private void handleRenameWithKey(KeyEvent event) {
-        if (isEnter(event)) {
+        if (isEnter(event))
             renameFile();
-        }
     }
 
     @SneakyThrows(IOException.class)
     private void renameFile() {
-        Path path = places.closeAndGetRenameFolderPlace();
-        String nameOfFolder = name.getText();
-        Path pathRename = path.getParent().resolve(nameOfFolder);
+        var path = places.closeAndGetRenameFolderPlace();
+        var nameOfFolder = name.getText();
+        var pathRename = path.getParent().resolve(nameOfFolder);
         Files.move(path, pathRename);
     }
 }

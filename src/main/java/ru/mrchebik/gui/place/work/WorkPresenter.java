@@ -3,12 +3,13 @@ package ru.mrchebik.gui.place.work;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.*;
+import javafx.scene.control.TabPane;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TreeView;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import org.fxmisc.flowless.ScaledVirtualized;
 import org.fxmisc.flowless.VirtualizedScrollPane;
-import org.fxmisc.richtext.CodeArea;
 import ru.mrchebik.autocomplete.AnalyzerAutocomplete;
 import ru.mrchebik.gui.node.CustomTreeItem;
 import ru.mrchebik.gui.node.codearea.CustomCodeArea;
@@ -55,7 +56,6 @@ public class WorkPresenter implements Initializable {
     private SaveTabsProcess saveTabsProcess;
     private TabUpdater tabUpdater;
     private TreeUpdater treeUpdater;
-    private AnalyzerAutocomplete analyzer;
 
     @FXML
     private void handleCompileProject() {
@@ -69,12 +69,11 @@ public class WorkPresenter implements Initializable {
     @FXML
     private void handleDoubleClick(MouseEvent e) {
         if (e.getClickCount() == 2) {
-            SelectionModel selectionModel = treeView.getSelectionModel();
-            CustomTreeItem item = (CustomTreeItem) selectionModel.getSelectedItem();
+            var selectionModel = treeView.getSelectionModel();
+            var item = (CustomTreeItem) selectionModel.getSelectedItem();
 
-            if (!item.isDirectory() && lengthOfOpenTabPathLessThanOne(item)) {
+            if (!item.isDirectory() && lengthOfOpenTabPathLessThanOne(item))
                 tabUpdater.addObjectToTab(item);
-            }
         }
     }
 
@@ -83,7 +82,7 @@ public class WorkPresenter implements Initializable {
         Platform.runLater(() -> {
             handlePrepareToAction();
 
-            Path path = (Path) tabPane.getSelectionModel().getSelectedItem().getUserData();
+            var path = (Path) tabPane.getSelectionModel().getSelectedItem().getUserData();
             //project.run(path);
         });
     }
@@ -99,17 +98,17 @@ public class WorkPresenter implements Initializable {
     }
 
     private void addTabOfMain() {
-        Path path = Paths.get(Project.pathSource.toString(), "Main.java");
-        TreeItem<Path> root = treeView.getRoot();
-        CustomTreeItem mainFile = (CustomTreeItem) treeUpdater.getItem(root, path);
+        var path = Paths.get(Project.pathSource.toString(), "Main.java");
+        var root = treeView.getRoot();
+        var mainFile = (CustomTreeItem) treeUpdater.getItem(root, path);
 
         tabUpdater.addObjectToTab(mainFile);
     }
 
     private void moveCaretInMain() {
-        VirtualizedScrollPane scrollPane = (VirtualizedScrollPane) tabPane.getTabs().get(0).getContent();
-        ScaledVirtualized<CodeArea> scaledVirtualized = (ScaledVirtualized) scrollPane.getContent();
-        CustomCodeArea area = (CustomCodeArea) scaledVirtualized.getChildrenUnmodifiable().get(0);
+        var scrollPane = (VirtualizedScrollPane) tabPane.getTabs().get(0).getContent();
+        var scaledVirtualized = (ScaledVirtualized) scrollPane.getContent();
+        var area = (CustomCodeArea) scaledVirtualized.getChildrenUnmodifiable().get(0);
         Platform.runLater(area::requestFocus);
         area.moveTo(73);
     }
@@ -120,7 +119,7 @@ public class WorkPresenter implements Initializable {
     }
 
     private void initializeVariables() {
-        analyzer = new AnalyzerAutocomplete();
+        AnalyzerAutocomplete analyzer = new AnalyzerAutocomplete();
         analyzer.initialize(Project.pathSource);
         analyzer.getDatabase().setKeywords(Arrays.asList(KEYWORDS));
 
@@ -128,7 +127,7 @@ public class WorkPresenter implements Initializable {
 
         commandPath = CommandPath.create();
 
-        Syntax syntax = new Syntax(saveTabsProcess, tabPane, treeView);
+        var syntax = new Syntax(saveTabsProcess, tabPane, treeView);
         tabUpdater = new TabUpdater(tabPane, Highlight.create(), syntax, places.getWorkPlace().getStage(), analyzer);
 
         treeUpdater = new TreeUpdater(treeView, tabUpdater);
@@ -158,7 +157,7 @@ public class WorkPresenter implements Initializable {
         treeView.getSelectionModel().select(2);
         treeView.getRoot().getChildren().get(1).setGraphic(new ImageView(Icons.FOLDER_EXPAND.get()));
 
-        TreeItem<Path> item = treeView.getRoot().getChildren().get(1).getChildren().get(0);
+        var item = treeView.getRoot().getChildren().get(1).getChildren().get(0);
 
         treeView.getSelectionModel().select(item);
         treeView.setCellFactory(new StructureUpdateGraphic(commandPath, places));

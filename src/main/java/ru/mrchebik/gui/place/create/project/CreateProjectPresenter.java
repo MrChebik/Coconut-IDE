@@ -16,7 +16,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ResourceBundle;
 
@@ -55,13 +54,13 @@ public class CreateProjectPresenter implements Initializable {
 
     @FXML
     private void handleEditPath() {
-        File target = computeFile();
+        var target = computeFile();
 
-        DirectoryChooser directoryChooser = new DirectoryChooser();
+        var directoryChooser = new DirectoryChooser();
         directoryChooser.setInitialDirectory(target);
         directoryChooser.setTitle("Choose Folder");
 
-        File file = directoryChooser.showDialog(createProjectPlace.getStage());
+        var file = directoryChooser.showDialog(createProjectPlace.getStage());
         if (file != null) {
             projectName.setText(file.getName());
             projectPath.setText(file.getPath());
@@ -82,19 +81,22 @@ public class CreateProjectPresenter implements Initializable {
     }
 
     private File computeFile() {
-        Path path = Paths.get(projectPath.getText());
-        Path pathTarget = Files.exists(path) ? path : Paths.get(System.getProperty("user.home"));
+        var path = Paths.get(projectPath.getText());
+        var pathTarget = Files.exists(path) ?
+                    path
+                :
+                    Paths.get(System.getProperty("user.home"));
 
         return pathTarget.toFile();
     }
 
     private void computePropertyProjectName(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-        if (!wasChanged && pathStartsWithPathOfProjects()) {
+        if (!wasChanged &&
+                pathStartsWithPathOfProjects()) {
             projectPath.setText(projects.getCorePathString() + newValue);
             wasChanged = false;
-        } else {
+        } else
             wasChanged = true;
-        }
     }
 
     private void computePropertyProjectPath(ObservableValue<? extends String> observable, String oldValue, String newValue) {
@@ -104,10 +106,9 @@ public class CreateProjectPresenter implements Initializable {
 
     @SneakyThrows(IOException.class)
     private void initializeCorePath() {
-        Path path = projects.getCorePath();
-        if (!Files.exists(path)) {
+        var path = projects.getCorePath();
+        if (!Files.exists(path))
             Files.createDirectory(path);
-        }
     }
 
     private void newProject() {
@@ -122,10 +123,10 @@ public class CreateProjectPresenter implements Initializable {
     }
 
     private void startWorkPlace() {
-        String name = projectName.getText();
-        Path path = Paths.get(projectPath.getText());
+        var name = projectName.getText();
+        var path = Paths.get(projectPath.getText());
 
-        WorkPlace workPlace = new WorkPlace();
+        var workPlace = new WorkPlace();
         workPlace.start(name, path);
     }
 }

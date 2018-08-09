@@ -1,10 +1,10 @@
-package ru.mrchebik.gui.node.codearea.event;
+package ru.mrchebik.language.java.highlight.pair;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @AllArgsConstructor
-public enum SameSymbolType {
+public enum JavaPairSymbolsType {
     FIGURE('{', '}'),
     ROUND ('(', ')'),
     SQUARE('[', ']');
