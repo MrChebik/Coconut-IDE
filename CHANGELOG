@@ -1,6 +1,7 @@
 === v0.3.0 - master
 * Required Java 10.
 * Updated API.
+* Fixed memory leak.
 * Fixed window title `Rename Folder`.
 CodeArea:
     + Auto adding `\` to `"""` combination, the same with `'`.
@@ -9,6 +10,8 @@ CodeArea:
     * Fixed removing selected area after Enter/Backspace/Semicolon.
 Highlight:
     + `var` keyword.
+Start:
+    + Enter listeners to buttons.
 
 === v0.2.3
 Autocomplete:

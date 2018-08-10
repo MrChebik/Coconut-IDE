@@ -1,12 +1,13 @@
-package ru.mrchebik.model;
+package ru.mrchebik.language.java.symbols;
 
-public class Symbols {
-    public static final String[] mirrorSymbols = { "{}", "[]", "<>", "()" };
-    public static final String[] sameSymbols = { "\"\"", "\'\'" };
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
-    public static final String CUSTOM_TAB = "    ";
-
-    public static final String[] KEYWORDS = new String[]{
+@AllArgsConstructor
+public enum SymbolsType {
+    MIRROR(new String[]{ "{}", "[]", "<>", "()" }),
+    SAME(new String[]{ "\"\"", "\'\'" }),
+    KEYWORDS(new String[]{
             "abstract", "assert", "boolean", "break", "byte",
             "case", "catch", "char", "class", "const",
             "continue", "default", "do", "double", "else",
@@ -17,15 +18,16 @@ public class Symbols {
             "return", "short", "static", "strictfp", "super",
             "switch", "synchronized", "this", "throw", "throws",
             "transient", "try", "var", "void", "volatile", "while"
-    };
-
-    public static final String[] JAVADOC_KEYWORDS = new String[]{
+    }),
+    JAVADOC(new String[]{
             "@author", "@version", "@since", "@see", "@param",
             "@return", "@exception", "@throws", "@deprecated",
             "@link", "@value"
-    };
-
-    public static final String[] COMMENT_KEYWORDS = new String[]{
+    }),
+    COMMENT(new String[]{
             "TASK", "TODO"
-    };
+    });
+
+    @Getter
+    private String[] symbols;
 }

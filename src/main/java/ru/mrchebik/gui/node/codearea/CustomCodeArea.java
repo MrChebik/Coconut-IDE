@@ -18,6 +18,8 @@ import ru.mrchebik.autocomplete.Autocomplete;
 import ru.mrchebik.gui.node.codearea.event.CaretPosition;
 import ru.mrchebik.language.java.highlight.Highlight;
 import ru.mrchebik.language.java.highlight.syntax.Syntax;
+import ru.mrchebik.language.java.symbols.CustomSymbolsType;
+import ru.mrchebik.language.java.symbols.SymbolsType;
 
 import java.time.Duration;
 import java.util.*;
@@ -29,7 +31,6 @@ import java.util.stream.IntStream;
 import static javafx.scene.input.KeyCode.*;
 import static org.fxmisc.wellbehaved.event.EventPattern.anyOf;
 import static org.fxmisc.wellbehaved.event.EventPattern.keyPressed;
-import static ru.mrchebik.model.Symbols.*;
 
 public class CustomCodeArea extends CodeArea {
     @Getter
@@ -69,7 +70,7 @@ public class CustomCodeArea extends CodeArea {
             if (event.getCode() == TAB) {
                 position = deleteSelection(position);
 
-                this.insertText(position, CUSTOM_TAB);
+                this.insertText(position, CustomSymbolsType.TAB.getCustom());
             } else if (event.getCode() == KeyCode.SEMICOLON) {
                 deleteSelection(-1);
 
@@ -93,7 +94,7 @@ public class CustomCodeArea extends CodeArea {
                         getTabLength(position).equals(paragraph)) {
                     this.deleteText(position - paragraph.length() - 1, position);
                 } else if (position >= 4 &&
-                            CUSTOM_TAB.equals(this.getText(position - 4, position))) {
+                        CustomSymbolsType.TAB.getCustom().equals(this.getText(position - 4, position))) {
                     int spaces = 0;
 
                     for (int i = this.getCaretColumn() - 1; i >= 0; i--) {
@@ -112,8 +113,8 @@ public class CustomCodeArea extends CodeArea {
                 } else if (deleteSelection(-1) == -1) {
                     if (this.getText().length() > 1) {
                         String snippet = this.getText(position - 1, position + 1);
-                        List<String> mirror = Arrays.asList(mirrorSymbols);
-                        List<String> same = Arrays.asList(sameSymbols);
+                        List<String> mirror = Arrays.asList(SymbolsType.MIRROR.getSymbols());
+                        List<String> same = Arrays.asList(SymbolsType.SAME.getSymbols());
 
                         if (mirror.contains(snippet) ||
                                 same.contains(snippet)) {
@@ -161,7 +162,7 @@ public class CustomCodeArea extends CodeArea {
                 brackets.pop();
             }
         }
-        return IntStream.range(0, brackets.size()).mapToObj(i -> CUSTOM_TAB).collect(Collectors.joining());
+        return IntStream.range(0, brackets.size()).mapToObj(i -> CustomSymbolsType.TAB.getCustom()).collect(Collectors.joining());
     }
 
     private void applyHighlighting(StyleSpans<Collection<String>> highlighting) {

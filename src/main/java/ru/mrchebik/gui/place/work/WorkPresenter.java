@@ -20,6 +20,7 @@ import ru.mrchebik.gui.updater.TreeUpdater;
 import ru.mrchebik.icons.Icons;
 import ru.mrchebik.language.java.highlight.Highlight;
 import ru.mrchebik.language.java.highlight.syntax.Syntax;
+import ru.mrchebik.language.java.symbols.SymbolsType;
 import ru.mrchebik.model.ActionPlaces;
 import ru.mrchebik.model.CommandPath;
 import ru.mrchebik.process.ExecutorCommand;
@@ -34,8 +35,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.ResourceBundle;
-
-import static ru.mrchebik.model.Symbols.KEYWORDS;
 
 public class WorkPresenter implements Initializable {
     @FXML
@@ -121,7 +120,7 @@ public class WorkPresenter implements Initializable {
     private void initializeVariables() {
         AnalyzerAutocomplete analyzer = new AnalyzerAutocomplete();
         analyzer.initialize(Project.pathSource);
-        analyzer.getDatabase().setKeywords(Arrays.asList(KEYWORDS));
+        analyzer.getDatabase().setKeywords(Arrays.asList(SymbolsType.KEYWORDS.getSymbols()));
 
         errorProcess.setTextArea(outputArea);
 

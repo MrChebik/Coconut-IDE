@@ -24,7 +24,11 @@ public class StageHelper extends Application {
         if (!modality.equals(Modality.NONE))
             stage.initModality(modality);
 
-        setResizableFalse(stage, scale);
+        if (!scale.equals(Scale.PLACE_WORK)) {
+            setResizableFalse(stage, scale);
+            stage.setResizable(false);
+        }
+
         setPosition(stage, scale);
 
         var scene = new Scene(view.getView().getView());
@@ -37,9 +41,7 @@ public class StageHelper extends Application {
         var height = scale.getHeight();
 
         stage.setMinWidth(width);
-        stage.setMaxWidth(width);
         stage.setMinHeight(height);
-        stage.setMaxHeight(height);
     }
 
     private void setPosition(Stage stage, Scale scale) {

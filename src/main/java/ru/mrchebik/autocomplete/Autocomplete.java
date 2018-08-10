@@ -13,6 +13,8 @@ import lombok.Getter;
 import lombok.Setter;
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.model.PlainTextChange;
+import ru.mrchebik.language.java.symbols.CustomSymbolsType;
+import ru.mrchebik.language.java.symbols.SymbolsType;
 import ru.mrchebik.model.EditWord;
 import ru.mrchebik.model.autocomplete.AutocompleteDatabase;
 import ru.mrchebik.model.autocomplete.AutocompleteItem;
@@ -24,10 +26,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
-
-import static ru.mrchebik.model.Symbols.CUSTOM_TAB;
-import static ru.mrchebik.model.Symbols.mirrorSymbols;
-import static ru.mrchebik.model.Symbols.sameSymbols;
 
 public class Autocomplete extends Popup {
     private EditWord editWord;
@@ -191,9 +189,9 @@ public class Autocomplete extends Popup {
             String nextChar = codeArea.getText(position, position + 1);
 
             if (Character.isMirrored(firstChar)) {
-                if (Arrays.stream(mirrorSymbols).anyMatch(item -> item.endsWith(nextChar))) {
+                if (Arrays.stream(SymbolsType.MIRROR.getSymbols()).anyMatch(item -> item.endsWith(nextChar))) {
                     String text = codeArea.getText(0, position);
-                    char target = Arrays.stream(mirrorSymbols).filter(option -> option.endsWith(nextChar)).findFirst().get().charAt(0);
+                    char target = Arrays.stream(SymbolsType.MIRROR.getSymbols()).filter(option -> option.endsWith(nextChar)).findFirst().get().charAt(0);
                     boolean isOpened = false;
 
                     for (int i = 0; i < text.length(); i++) {
@@ -206,17 +204,17 @@ public class Autocomplete extends Popup {
                         codeArea.deleteText(position, position + 1);
                         codeArea.moveTo(position + 1);
                     } else {
-                        pasteSimilarSymbol(inserted, mirrorSymbols, true);
+                        pasteSimilarSymbol(inserted, SymbolsType.MIRROR.getSymbols(), true);
                     }
                 } else {
-                    pasteSimilarSymbol(inserted, mirrorSymbols, true);
+                    pasteSimilarSymbol(inserted, SymbolsType.MIRROR.getSymbols(), true);
                 }
 
                 return;
-            } else if (Arrays.stream(sameSymbols).anyMatch(item -> item.contains(inserted))) {
-                if (Arrays.stream(sameSymbols).anyMatch(item -> item.contains(nextChar))) {
+            } else if (Arrays.stream(SymbolsType.SAME.getSymbols()).anyMatch(item -> item.contains(inserted))) {
+                if (Arrays.stream(SymbolsType.SAME.getSymbols()).anyMatch(item -> item.contains(nextChar))) {
                     String text = codeArea.getText(0, position);
-                    char target = Arrays.stream(sameSymbols).filter(option -> option.startsWith(nextChar)).findFirst().get().charAt(0);
+                    char target = Arrays.stream(SymbolsType.SAME.getSymbols()).filter(option -> option.startsWith(nextChar)).findFirst().get().charAt(0);
                     boolean isOpened = false;
 
                     for (int i = 0; i < text.length(); i++) {
@@ -229,7 +227,7 @@ public class Autocomplete extends Popup {
                         codeArea.deleteText(position, position + 1);
                         codeArea.moveTo(position + 1);
                     } else {
-                        pasteSimilarSymbol(inserted, sameSymbols, false);
+                        pasteSimilarSymbol(inserted, SymbolsType.SAME.getSymbols(), false);
                     }
                 } else {
                     String text = codeArea.getText(0, position);
@@ -241,7 +239,7 @@ public class Autocomplete extends Popup {
                                 previousPair.charAt(0) == inserted.charAt(0)) {
                             codeArea.insertText(position - 2, "\\");
                         } else {
-                            char target = Arrays.stream(sameSymbols).filter(option -> option.startsWith(inserted)).findFirst().get().charAt(0);
+                            char target = Arrays.stream(SymbolsType.SAME.getSymbols()).filter(option -> option.startsWith(inserted)).findFirst().get().charAt(0);
                             boolean isOpened = false;
 
                             for (int i = 0; i < text.length(); i++) {
@@ -267,20 +265,20 @@ public class Autocomplete extends Popup {
                                         return;
                                     }
                                 }
-                                pasteSimilarSymbol(inserted, sameSymbols, false);
+                                pasteSimilarSymbol(inserted, SymbolsType.SAME.getSymbols(), false);
                             } else {
-                                pasteSimilarSymbol(inserted, sameSymbols, false);
+                                pasteSimilarSymbol(inserted, SymbolsType.SAME.getSymbols(), false);
                             }
                         }
                     } else {
-                        pasteSimilarSymbol(inserted, sameSymbols, false);
+                        pasteSimilarSymbol(inserted, SymbolsType.SAME.getSymbols(), false);
                     }
                 }
                 return;
             }
         }
 
-        if (".".equals(inserted) || " ".equals(inserted) || CUSTOM_TAB.equals(inserted) || !inserted.isEmpty() && inserted.charAt(0) == 10) {
+        if (".".equals(inserted) || " ".equals(inserted) || CustomSymbolsType.TAB.getCustom().equals(inserted) || !inserted.isEmpty() && inserted.charAt(0) == 10) {
             hideSnippet();
         } else {
             if (!inserted.isEmpty() && !" ".equals(inserted)) {

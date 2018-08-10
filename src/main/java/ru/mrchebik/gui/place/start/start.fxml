@@ -17,17 +17,17 @@
     </center>
     <bottom>
         <HBox alignment="CENTER" prefHeight="40.0" prefWidth="200.0">
-            <Button fx:id="createProject" mnemonicParsing="false" onMouseClicked="#handleNewProject" onKeyReleased="#handleNewProjectWithKey" text="New Project" />
+            <Button fx:id="createProject" mnemonicParsing="false" onMouseClicked="#newProject" onKeyReleased="#newProjectWithKey" />
         </HBox>
     </bottom>
     <top>
         <HBox alignment="CENTER_RIGHT" prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-            <Button mnemonicParsing="false" onMouseClicked="#handleSetupJDK" text="JDK">
+            <Button mnemonicParsing="false" onMouseClicked="#setupJdk" onKeyReleased="#setupJdkWithKey" text="JDK">
                 <HBox.margin>
                     <Insets right="6.0" />
                 </HBox.margin>
             <tooltip>
-               <Tooltip text="Syntax setting:&#10;Correct JDK path in System: JavaCompiler&#10;Otherwise: JavaSymbolSolver" />
+               <Tooltip fx:id="tooltipSetupHome" />
             </tooltip>
             </Button>
         </HBox>

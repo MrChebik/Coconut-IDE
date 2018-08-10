@@ -2,6 +2,7 @@ package ru.mrchebik.language.java.highlight;
 
 import org.fxmisc.richtext.model.StyleSpans;
 import org.fxmisc.richtext.model.StyleSpansBuilder;
+import ru.mrchebik.language.java.symbols.SymbolsType;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -10,10 +11,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static ru.mrchebik.model.Symbols.*;
-
 public class Highlight {
-    private static final String KEYWORD_PATTERN = "\\b(" + String.join("|", KEYWORDS) + ")\\b";
+    private static final String KEYWORD_PATTERN = "\\b(" + String.join("|", SymbolsType.KEYWORDS.getSymbols()) + ")\\b";
     private static final String PAREN_PATTERN = "[()]";
     private static final String BRACE_PATTERN = "[{}]";
     private static final String BRACKET_PATTERN = "[\\[]]";
@@ -24,9 +23,9 @@ public class Highlight {
     private static final String STRING_PATTERN = "\"([^\"\\\\]|\\\\.)*\"";
     private static final String COMMENT_ONE_PATTERN = "//[^\\n]*";
     private static final String COMMENT_MULTI_PATTERN = "/\\*[^\\*](.|\\R)*?\\*/";
-    private static final String COMMENT_KEYWORDS_PATTERN = "\\s(" + String.join("|", COMMENT_KEYWORDS) + "):?\\s";
+    private static final String COMMENT_KEYWORDS_PATTERN = "\\s(" + String.join("|", SymbolsType.COMMENT.getSymbols()) + "):?\\s";
     private static final String JAVADOC_PATTERN = "/\\*\\*(.|\\R)*?\\*/";
-    private static final String JAVADOC_KEYWORDS_PATTERN = "\\s(" + String.join("|", JAVADOC_KEYWORDS) + ")\\s";
+    private static final String JAVADOC_KEYWORDS_PATTERN = "\\s(" + String.join("|", SymbolsType.JAVADOC.getSymbols()) + ")\\s";
     private static final String JAVADOC_LINK_PATTERN = "\\s\\{@link\\s[\\w|\\.]+\\}\\s";
 
     private static final Pattern PATTERN = Pattern.compile(

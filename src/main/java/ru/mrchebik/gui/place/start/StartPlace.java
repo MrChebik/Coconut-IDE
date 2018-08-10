@@ -5,6 +5,8 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import ru.mrchebik.gui.place.StageHelper;
 import ru.mrchebik.gui.place.ViewHelper;
+import ru.mrchebik.locale.Locale;
+import ru.mrchebik.locale.base.BaseLocale;
 import ru.mrchebik.screen.measurement.Scale;
 
 import java.util.HashMap;
@@ -26,7 +28,7 @@ public class StartPlace extends StageHelper {
         super.stage = stage;
 
         initWindow(stage,
-                "Coconut-IDE",
+                Locale.STARTUP + " - " + BaseLocale.PROJECT,
                 Modality.NONE,
                 Scale.PLACE_START,
                 ViewHelper.PLACE_START);

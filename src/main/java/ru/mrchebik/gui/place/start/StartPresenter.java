@@ -6,18 +6,20 @@ import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
-import javafx.stage.DirectoryChooser;
 import javafx.util.Duration;
+import ru.mrchebik.call.startup.CallStartupWrapper;
 import ru.mrchebik.gui.key.KeyHelper;
 import ru.mrchebik.gui.place.create.project.CreateProjectPlace;
-import ru.mrchebik.settings.PropertyCollector;
+import ru.mrchebik.language.Language;
+import ru.mrchebik.language.LanguageType;
+import ru.mrchebik.language.java.call.JavaCallStartup;
+import ru.mrchebik.locale.Locale;
 
 import javax.inject.Inject;
 import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.ResourceBundle;
 
@@ -26,41 +28,46 @@ public class StartPresenter implements Initializable {
     private ImageView coconutPng;
     @FXML
     private Button createProject;
+    @FXML
+    private Tooltip tooltipSetupHome;
     @Inject
     private StartPlace startPlace;
 
     private CreateProjectPlace createProjectPlace;
+    private CallStartupWrapper startup;
 
     @FXML
-    private void handleNewProject() {
-        initializeCreateProjectPlace();
+    private void newProject() {
+        startup.callNewProject(createProjectPlace);
     }
 
     @FXML
-    private void handleNewProjectWithKey(KeyEvent event) {
+    private void newProjectWithKey(KeyEvent event) {
         if (KeyHelper.isEnter(event))
-            initializeCreateProjectPlace();
+            startup.callNewProject(createProjectPlace);
     }
 
     @FXML
-    private void handleSetupJDK() {
-        var jdkProperty = PropertyCollector.getProperty("jdk");
-        var target = Paths.get(jdkProperty == null ? System.getProperty("java.home") : jdkProperty).toFile();
+    private void setupJdk() {
+        setHomeAndEnable();
+    }
 
-        var directoryChooser = new DirectoryChooser();
-        directoryChooser.setInitialDirectory(target);
-        directoryChooser.setTitle("Choose JDK Folder");
-
-        var file = directoryChooser.showDialog(startPlace.getStage());
-        if (file != null)
-            setJDK(file.getPath());
+    @FXML
+    private void setupJdkWithKey(KeyEvent event) {
+        if (KeyHelper.isEnter(event))
+            setHomeAndEnable();
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        if (!PropertyCollector.isJDKCorrect() && PropertyCollector.getProperty("jdk") == null)
-            createProject.setDisable(true);
+        initLocale();
+        initStartup();
+        initNewProject();
+        initializeInjection();
+        initAnimation();
+    }
 
+    private void initAnimation() {
         var scaleTransition = new ScaleTransition(Duration.millis(2000), coconutPng);
         scaleTransition.setToX(1.1f);
         scaleTransition.setToY(1.1f);
@@ -69,10 +76,21 @@ public class StartPresenter implements Initializable {
         scaleTransition.play();
     }
 
-    private void initializeCreateProjectPlace() {
+    private void setHomeAndEnable() {
+        startup.callSetupHome(startPlace);
+
+        boolean isCorrect = startup.isCorrectHome();
+        createProject.setDisable(isCorrect);
+    }
+
+    private void initLocale() {
+        createProject.setText(Locale.NEW_PROJECT);
+        tooltipSetupHome.setText(Locale.SETUP_HOME_TOOLTIP);
+    }
+
+    private void initNewProject() {
         createProjectPlace = new CreateProjectPlace();
-        initializeInjection();
-        createProjectPlace.start();
+        createProject.setDisable(startup.isCorrectHome());
     }
 
     private void initializeInjection() {
@@ -82,11 +100,8 @@ public class StartPresenter implements Initializable {
         Injector.setConfigurationSource(customProperties::get);
     }
 
-    private void setJDK(String pathString) {
-        var pathJavac = Paths.get(pathString, "bin", PropertyCollector.getJavac());
-        if (Files.exists(pathJavac)) {
-            PropertyCollector.writeProperty("jdk", pathString);
-            createProject.setDisable(false);
-        }
+    private void initStartup() {
+        if (Language.languageType.equals(LanguageType.Java))
+            startup = new JavaCallStartup();
     }
 }
