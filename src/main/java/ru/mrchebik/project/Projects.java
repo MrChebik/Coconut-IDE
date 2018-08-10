@@ -1,23 +1,15 @@
 package ru.mrchebik.project;
 
-import lombok.Getter;
-
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class Projects {
-    @Getter
-    private Path corePath;
-    @Getter
-    private String corePathString;
+    public static Path path;
+    public static String pathString;
 
-    private Projects () {
-        corePath = Paths.get(System.getProperty("user.home"), "CoconutProjects");
-        corePathString = corePath.toString() + File.separator;
-    }
-
-    public static Projects create() {
-        return new Projects();
+    static {
+        path = Paths.get(System.getProperty("user.home"), "CoconutProjects");
+        pathString = path.toString() + File.separator;
     }
 }

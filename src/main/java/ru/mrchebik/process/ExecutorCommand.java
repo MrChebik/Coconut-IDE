@@ -8,7 +8,6 @@ import ru.mrchebik.process.io.ErrorProcess;
 import ru.mrchebik.process.io.InputProcess;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 
 public class ExecutorCommand {
@@ -21,9 +20,6 @@ public class ExecutorCommand {
 
     private static InputProcess inputProcess;
     private static Process process;
-
-    private ExecutorCommand() {
-    }
 
     public static ExecutorCommand create() {
         return new ExecutorCommand();
@@ -47,21 +43,21 @@ public class ExecutorCommand {
     }
 
     private static void initializeErrorStream() {
-        InputStream inputStream = process.getErrorStream();
+        var inputStream = process.getErrorStream();
         errorProcess.setInputStream(inputStream);
         errorProcess.start();
     }
 
     private static void initializeInputStream() {
-        InputStream inputStream = process.getInputStream();
+        var inputStream = process.getInputStream();
         /*inputProcess = new InputProcess(inputStream, outputArea);
         inputProcess.start();*/
     }
 
     @SneakyThrows(IOException.class)
     private static void initializeProcess(String command) {
-        String[] divideCommand = command.split(" ");
-        ProcessBuilder processBuilder = new ProcessBuilder(divideCommand);
+        var divideCommand = command.split(" ");
+        var processBuilder = new ProcessBuilder(divideCommand);
         process = processBuilder.start();
 
         //Platform.runLater(() -> outputArea.appendText("[COMMAND]: " + command + "\n"));

@@ -29,8 +29,6 @@ public class CreateProjectPresenter implements Initializable {
     @Inject
     private CreateProjectPlace createProjectPlace;
     @Inject
-    private Projects projects;
-    @Inject
     private StartPlace startPlace;
 
     private boolean wasChanged;
@@ -70,7 +68,7 @@ public class CreateProjectPresenter implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         initializeCorePath();
-        projectPath.setText(projects.getCorePathString());
+        projectPath.setText(Projects.pathString);
         projectPath.textProperty().addListener(this::computePropertyProjectPath);
         projectName.textProperty().addListener(this::computePropertyProjectName);
     }
@@ -93,7 +91,7 @@ public class CreateProjectPresenter implements Initializable {
     private void computePropertyProjectName(ObservableValue<? extends String> observable, String oldValue, String newValue) {
         if (!wasChanged &&
                 pathStartsWithPathOfProjects()) {
-            projectPath.setText(projects.getCorePathString() + newValue);
+            projectPath.setText(Projects.pathString + newValue);
             wasChanged = false;
         } else
             wasChanged = true;
@@ -106,7 +104,7 @@ public class CreateProjectPresenter implements Initializable {
 
     @SneakyThrows(IOException.class)
     private void initializeCorePath() {
-        var path = projects.getCorePath();
+        var path = Projects.path;
         if (!Files.exists(path))
             Files.createDirectory(path);
     }
@@ -119,7 +117,7 @@ public class CreateProjectPresenter implements Initializable {
     }
 
     private boolean pathStartsWithPathOfProjects() {
-        return projectPath.getText().startsWith(projects.getCorePathString());
+        return projectPath.getText().startsWith(Projects.pathString);
     }
 
     private void startWorkPlace() {

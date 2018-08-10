@@ -2,8 +2,8 @@ package ru.mrchebik.build;
 
 import ru.mrchebik.command.Command;
 import ru.mrchebik.command.CommandType;
+import ru.mrchebik.process.ExecutorCommand;
 import ru.mrchebik.process.io.ErrorProcess;
-import ru.mrchebik.process.io.ExecutorCommand;
 import ru.mrchebik.task.TaskHelper;
 
 import java.nio.file.Path;

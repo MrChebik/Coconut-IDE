@@ -10,8 +10,8 @@ import ru.mrchebik.gui.place.create.folder.CreateFolderPlace;
 import ru.mrchebik.gui.place.rename.file.RenameFilePlace;
 import ru.mrchebik.gui.place.rename.folder.RenameFolderPlace;
 import ru.mrchebik.model.ActionPlaces;
+import ru.mrchebik.process.ExecutorCommand;
 import ru.mrchebik.process.io.ErrorProcess;
-import ru.mrchebik.process.io.ExecutorCommand;
 import ru.mrchebik.project.Project;
 import ru.mrchebik.screen.measurement.Scale;
 

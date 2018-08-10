@@ -22,9 +22,8 @@ public class TaskHelper {
                     e.printStackTrace();
                 }
 
-                if (!ErrorProcess.isWasError()) {
+                if (!ErrorProcess.isWasError())
                     ExecutorCommand.execute(task.getCommand());
-                }
             }
         }).start();
     }

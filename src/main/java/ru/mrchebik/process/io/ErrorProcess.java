@@ -14,15 +14,12 @@ public class ErrorProcess {
     @Getter @Setter
     private static boolean wasError;
 
-    private ErrorProcess() {
-    }
-
     public static ErrorProcess create() {
         return new ErrorProcess();
     }
 
     public void start() {
-        ErrorThread errorThread = new ErrorThread(this);
+        var errorThread = new ErrorThread(this);
         errorThread.start();
     }
 }

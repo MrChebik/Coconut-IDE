@@ -21,7 +21,7 @@ public class ErrorThread extends Thread {
         String line;
         while ((line = reader.readLine()) != null) {
             errorProcess.setWasError(true);
-            String currLine = line;
+            var currLine = line;
             Platform.runLater(() -> errorProcess.getTextArea().appendText("\n" + currLine));
         }
     }

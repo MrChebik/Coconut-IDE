@@ -43,7 +43,7 @@ public class InputProcess extends Thread {
     }
 
     private void initializeTimer() {
-        Timer timer = new Timer();
+        var timer = new Timer();
         TimerTask task = new TimerTask() {
             @Override
             public void run() {

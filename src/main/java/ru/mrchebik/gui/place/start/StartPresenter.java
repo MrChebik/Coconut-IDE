@@ -12,7 +12,6 @@ import javafx.stage.DirectoryChooser;
 import javafx.util.Duration;
 import ru.mrchebik.gui.key.KeyHelper;
 import ru.mrchebik.gui.place.create.project.CreateProjectPlace;
-import ru.mrchebik.project.Projects;
 import ru.mrchebik.settings.PropertyCollector;
 
 import javax.inject.Inject;
@@ -80,7 +79,6 @@ public class StartPresenter implements Initializable {
         var customProperties = new HashMap<>();
         customProperties.put("createProjectPlace", createProjectPlace);
         customProperties.put("startPlace", startPlace);
-        customProperties.put("projects", Projects.create());
         Injector.setConfigurationSource(customProperties::get);
     }
 
