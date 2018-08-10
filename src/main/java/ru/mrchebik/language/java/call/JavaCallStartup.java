@@ -42,7 +42,6 @@ public class JavaCallStartup extends CallStartup implements CallStartupWrapper {
             PropertyCollector.writeProperty("jdk", pathString);
     }
 
-    //TODO Make wrapper and properties for the java
     public boolean isCorrectHome() {
         return !PropertyCollector.isJDKCorrect()
                 && PropertyCollector.getProperty("jdk") == null;
