@@ -11,11 +11,13 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.util.Duration;
 import ru.mrchebik.call.startup.CallStartupWrapper;
+import ru.mrchebik.controller.startup.StartupWrapper;
 import ru.mrchebik.gui.key.KeyHelper;
 import ru.mrchebik.gui.place.create.project.CreateProjectPlace;
 import ru.mrchebik.language.Language;
 import ru.mrchebik.language.LanguageType;
 import ru.mrchebik.language.java.call.JavaCallStartup;
+import ru.mrchebik.language.java.startup.JavaStartup;
 import ru.mrchebik.locale.Locale;
 
 import javax.inject.Inject;
@@ -34,17 +36,18 @@ public class StartPresenter implements Initializable {
     private StartPlace startPlace;
 
     private CreateProjectPlace createProjectPlace;
-    private CallStartupWrapper startup;
+    private CallStartupWrapper callStartup;
+    private StartupWrapper startup;
 
     @FXML
     private void newProject() {
-        startup.callNewProject(createProjectPlace);
+        callStartup.callNewProject(createProjectPlace);
     }
 
     @FXML
     private void newProjectWithKey(KeyEvent event) {
         if (KeyHelper.isEnter(event))
-            startup.callNewProject(createProjectPlace);
+            callStartup.callNewProject(createProjectPlace);
     }
 
     @FXML
@@ -77,7 +80,7 @@ public class StartPresenter implements Initializable {
     }
 
     private void setHomeAndEnable() {
-        startup.callSetupHome(startPlace);
+        callStartup.callSetupHome(startup, startPlace);
 
         boolean isCorrect = startup.isCorrectHome();
         createProject.setDisable(isCorrect);
@@ -101,7 +104,9 @@ public class StartPresenter implements Initializable {
     }
 
     private void initStartup() {
-        if (Language.languageType.equals(LanguageType.Java))
-            startup = new JavaCallStartup();
+        if (Language.languageType.equals(LanguageType.Java)) {
+            callStartup = new JavaCallStartup();
+            startup = new JavaStartup();
+        }
     }
 }

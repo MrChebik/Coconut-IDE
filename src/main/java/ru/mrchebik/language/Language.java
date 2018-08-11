@@ -12,8 +12,8 @@ public class Language {
         var languageCode = LanguageProperty.language;
         languageType = LanguageType.find(languageCode);
 
-        if (languageType.equals(LanguageType.Java))
-            if (Locale.localeType.equals(LocaleType.English))
-                EnJavaLocale.init();
+        if (languageType.equals(LanguageType.Java) &&
+                Locale.localeType.equals(LocaleType.English))
+            EnJavaLocale.init();
     }
 }

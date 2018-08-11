@@ -5,7 +5,11 @@ public abstract class Startup implements StartupWrapper {
         throw new UnsupportedOperationException();
     }
 
-    public void setupHome() {
+    public void setupHome(String path) {
+        throw new UnsupportedOperationException();
+    }
+
+    public boolean isCorrectHome() {
         throw new UnsupportedOperationException();
     }
 }
