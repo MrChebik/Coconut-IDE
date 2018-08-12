@@ -3,14 +3,13 @@ package ru.mrchebik.gui.place.create.file;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
+import ru.mrchebik.gui.key.KeyHelper;
 import ru.mrchebik.helper.FileHelper;
 import ru.mrchebik.model.ActionPlaces;
 
 import javax.inject.Inject;
 
-import static ru.mrchebik.gui.key.KeyHelper.isEnter;
-
-public class CreateFilePresenter {
+public class CreateFilePresenter extends KeyHelper {
     @FXML
     private TextField name;
     @Inject

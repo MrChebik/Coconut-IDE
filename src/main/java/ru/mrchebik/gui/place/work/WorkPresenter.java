@@ -11,6 +11,7 @@ import javafx.scene.input.MouseEvent;
 import org.fxmisc.flowless.ScaledVirtualized;
 import org.fxmisc.flowless.VirtualizedScrollPane;
 import ru.mrchebik.autocomplete.AnalyzerAutocomplete;
+import ru.mrchebik.gui.key.KeyHelper;
 import ru.mrchebik.gui.node.CustomTreeItem;
 import ru.mrchebik.gui.node.codearea.CustomCodeArea;
 import ru.mrchebik.gui.place.work.event.InputTextToOutputArea;
@@ -36,7 +37,7 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.ResourceBundle;
 
-public class WorkPresenter implements Initializable {
+public class WorkPresenter extends KeyHelper implements Initializable {
     @FXML
     private TextArea outputArea;
     @FXML

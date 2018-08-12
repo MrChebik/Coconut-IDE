@@ -6,9 +6,9 @@ import ru.mrchebik.call.startup.CallStartupWrapper;
 import ru.mrchebik.controller.startup.StartupWrapper;
 import ru.mrchebik.gui.place.create.project.CreateProjectPlace;
 import ru.mrchebik.gui.place.start.StartPlace;
-import ru.mrchebik.settings.PropertyCollector;
+import ru.mrchebik.language.java.settings.JavaPropertyCollector;
 
-import java.nio.file.Paths;
+import java.io.File;
 
 public class JavaCallStartup extends CallStartup implements CallStartupWrapper {
     @Override
@@ -18,21 +18,14 @@ public class JavaCallStartup extends CallStartup implements CallStartupWrapper {
 
     @Override
     public void callSetupHome(StartupWrapper startup, StartPlace startPlace) {
-        var jdkProperty = PropertyCollector.getProperty("jdk");
-        var target = Paths.get
-                (jdkProperty == null ?
-                        System.getProperty("java.home")
-                        :
-                        jdkProperty
-                )
-                .toFile();
-
+        var valueJdk = JavaPropertyCollector.getProperty("jdk");
+        var folderJdk = new File(valueJdk);
         var directoryChooser = new DirectoryChooser();
-        directoryChooser.setInitialDirectory(target);
+        directoryChooser.setInitialDirectory(folderJdk);
         directoryChooser.setTitle("Select the folder of the JDK");
 
-        var file = directoryChooser.showDialog(startPlace.getStage());
-        if (file != null)
-            startup.setupHome(file.getPath());
+        var selectedFile = directoryChooser.showDialog(startPlace.getStage());
+        if (selectedFile != null)
+            startup.setupHome(selectedFile.getPath());
     }
 }

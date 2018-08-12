@@ -1,6 +1,5 @@
 package ru.mrchebik.gui.place.start;
 
-import com.airhacks.afterburner.injection.Injector;
 import javafx.animation.ScaleTransition;
 import javafx.animation.Timeline;
 import javafx.fxml.FXML;
@@ -14,6 +13,7 @@ import ru.mrchebik.call.startup.CallStartupWrapper;
 import ru.mrchebik.controller.startup.StartupWrapper;
 import ru.mrchebik.gui.key.KeyHelper;
 import ru.mrchebik.gui.place.create.project.CreateProjectPlace;
+import ru.mrchebik.injection.Injection;
 import ru.mrchebik.language.Language;
 import ru.mrchebik.language.LanguageType;
 import ru.mrchebik.language.java.call.JavaCallStartup;
@@ -22,10 +22,9 @@ import ru.mrchebik.locale.Locale;
 
 import javax.inject.Inject;
 import java.net.URL;
-import java.util.HashMap;
 import java.util.ResourceBundle;
 
-public class StartPresenter implements Initializable {
+public class StartPresenter extends KeyHelper implements Initializable {
     @FXML
     private ImageView coconutPng;
     @FXML
@@ -46,18 +45,18 @@ public class StartPresenter implements Initializable {
 
     @FXML
     private void newProjectWithKey(KeyEvent event) {
-        if (KeyHelper.isEnter(event))
+        if (isEnter(event))
             callStartup.callNewProject(createProjectPlace);
     }
 
     @FXML
-    private void setupJdk() {
+    private void setupHome() {
         setHomeAndEnable();
     }
 
     @FXML
-    private void setupJdkWithKey(KeyEvent event) {
-        if (KeyHelper.isEnter(event))
+    private void setupHomeWithKey(KeyEvent event) {
+        if (isEnter(event))
             setHomeAndEnable();
     }
 
@@ -66,7 +65,7 @@ public class StartPresenter implements Initializable {
         initLocale();
         initStartup();
         initNewProject();
-        initializeInjection();
+        Injection.initInjection(startPlace, createProjectPlace);
         initAnimation();
     }
 
@@ -94,13 +93,6 @@ public class StartPresenter implements Initializable {
     private void initNewProject() {
         createProjectPlace = new CreateProjectPlace();
         createProject.setDisable(startup.isCorrectHome());
-    }
-
-    private void initializeInjection() {
-        var customProperties = new HashMap<>();
-        customProperties.put("createProjectPlace", createProjectPlace);
-        customProperties.put("startPlace", startPlace);
-        Injector.setConfigurationSource(customProperties::get);
     }
 
     private void initStartup() {

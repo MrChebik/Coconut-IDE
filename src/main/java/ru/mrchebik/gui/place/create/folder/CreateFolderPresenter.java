@@ -3,14 +3,13 @@ package ru.mrchebik.gui.place.create.folder;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
+import ru.mrchebik.gui.key.KeyHelper;
 import ru.mrchebik.helper.FileHelper;
 import ru.mrchebik.model.ActionPlaces;
 
 import javax.inject.Inject;
 
-import static ru.mrchebik.gui.key.KeyHelper.isEnter;
-
-public class CreateFolderPresenter {
+public class CreateFolderPresenter extends KeyHelper {
     @FXML
     private TextField name;
     @Inject

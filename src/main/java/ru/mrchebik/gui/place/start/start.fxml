@@ -22,7 +22,7 @@
     </bottom>
     <top>
         <HBox alignment="CENTER_RIGHT" prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-            <Button mnemonicParsing="false" onMouseClicked="#setupJdk" onKeyReleased="#setupJdkWithKey" text="JDK">
+            <Button mnemonicParsing="false" onMouseClicked="#setupHome" onKeyReleased="#setupHomeWithKey" text="JDK">
                 <HBox.margin>
                     <Insets right="6.0" />
                 </HBox.margin>

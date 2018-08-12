@@ -4,15 +4,14 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import lombok.SneakyThrows;
+import ru.mrchebik.gui.key.KeyHelper;
 import ru.mrchebik.model.ActionPlaces;
 
 import javax.inject.Inject;
 import java.io.IOException;
 import java.nio.file.Files;
 
-import static ru.mrchebik.gui.key.KeyHelper.isEnter;
-
-public class RenameFolderPresenter {
+public class RenameFolderPresenter extends KeyHelper {
     @FXML
     private TextField name;
     @Inject
