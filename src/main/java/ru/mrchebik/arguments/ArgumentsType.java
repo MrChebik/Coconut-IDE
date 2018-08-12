@@ -11,7 +11,7 @@ import java.util.stream.IntStream;
 @AllArgsConstructor
 public enum ArgumentsType {
     CI("NONE", "--ci",
-            "Continious Integration testing", ContinuousIntegration::init),
+            "Continuous Integration testing", ContinuousIntegration::init),
     HELP("-h", "--help",
             "Show commands", () -> {
         System.out.println("Available commands:");
