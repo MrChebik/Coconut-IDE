@@ -8,4 +8,4 @@ jdk:
   - oraclejdk10
 script:
 - mvn package
-- java -jar ./target/coconut-ide*.jar -exitOnSec 3
+- java -jar ./target/coconut-ide*.jar --ci

@@ -12,6 +12,6 @@ public class ContinuousIntegration {
                 System.exit(0);
             }
         };
-        timer.schedule(task, 3000);
+        timer.schedule(task, 5000);
     }
 }
