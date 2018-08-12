@@ -2,14 +2,13 @@ package ru.mrchebik.arguments;
 
 import lombok.AllArgsConstructor;
 import ru.mrchebik.ci.ContinuousIntegration;
-import ru.mrchebik.helper.arguments.ArgumentsTypeHelper;
 import ru.mrchebik.project.VersionType;
 
 import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @AllArgsConstructor
-public enum ArgumentsType {
+enum ArgumentsType {
     CI("", "--ci",
             "Continuous Integration testing", ContinuousIntegration::init),
     HELP("-h", "--help",
@@ -25,15 +24,15 @@ public enum ArgumentsType {
         System.exit(0);
     });
 
-    public String brief;
-    public String full;
-    public String info;
-    public Runnable runnable;
+    String brief;
+    String full;
+    String info;
+    Runnable runnable;
 
-    public static AtomicInteger longestBrief;
-    public static AtomicInteger longestFull;
+    static AtomicInteger longestBrief;
+    static AtomicInteger longestFull;
 
-    public static void search(String arg) {
+    static void search(String arg) {
         Arrays.stream(ArgumentsType.values())
                 .filter(item -> {
                     boolean isMatch = item.brief.equals(arg) ||
@@ -48,12 +47,12 @@ public enum ArgumentsType {
     }
 
     private static void printInfo() {
-        ArgumentsTypeHelper.initLongestArgs();
+        ArgumentsTypeHelper.initLongest();
 
         Arrays.stream(ArgumentsType.values())
                 .forEach(item -> {
                     var briefSpace = ArgumentsTypeHelper.initSpaces(longestBrief, item.brief);
-                    var briefAfter = ArgumentsTypeHelper.initAfter (item.brief);
+                    var briefAfter = ArgumentsTypeHelper.initAfterBrief(item.brief);
                     var  fullSpace = ArgumentsTypeHelper.initSpaces(longestFull , item.full );
 
                     System.out.println(briefSpace + briefAfter + fullSpace + "   " + item.info);
