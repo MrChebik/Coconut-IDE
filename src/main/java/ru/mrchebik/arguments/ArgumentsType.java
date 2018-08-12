@@ -2,19 +2,19 @@ package ru.mrchebik.arguments;
 
 import lombok.AllArgsConstructor;
 import ru.mrchebik.ci.ContinuousIntegration;
+import ru.mrchebik.helper.arguments.ArgumentsTypeHelper;
 import ru.mrchebik.project.VersionType;
 
 import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.IntStream;
 
 @AllArgsConstructor
 public enum ArgumentsType {
-    CI("NONE", "--ci",
+    CI("", "--ci",
             "Continuous Integration testing", ContinuousIntegration::init),
     HELP("-h", "--help",
             "Show commands", () -> {
-        System.out.println("Available commands:");
+        System.out.println("Available arguments:");
         printInfo();
         System.exit(0);
     }),
@@ -25,20 +25,22 @@ public enum ArgumentsType {
         System.exit(0);
     });
 
-    private String brief;
-    private String full;
-    private String info;
-    private Runnable runnable;
+    public String brief;
+    public String full;
+    public String info;
+    public Runnable runnable;
 
-    public static void find(String arg) {
+    public static AtomicInteger longestBrief;
+    public static AtomicInteger longestFull;
+
+    public static void search(String arg) {
         Arrays.stream(ArgumentsType.values())
                 .filter(item -> {
                     boolean isMatch = item.brief.equals(arg) ||
                                         item.full.equals(arg);
 
-                    if (isMatch) {
+                    if (isMatch)
                         item.runnable.run();
-                    }
 
                     return isMatch;
                 })
@@ -46,46 +48,15 @@ public enum ArgumentsType {
     }
 
     private static void printInfo() {
-        var longestBrief = new AtomicInteger(-1);
-        var longestFull  = new AtomicInteger(-1);
+        ArgumentsTypeHelper.initLongestArgs();
 
         Arrays.stream(ArgumentsType.values())
                 .forEach(item -> {
-                    int currBrief;
-                    if ("NONE".equals(item.brief)) {
-                        currBrief = 0;
-                    } else {
-                        currBrief = item.brief.length();
-                    }
-                    var currFull  = item.full .length();
+                    var briefSpace = ArgumentsTypeHelper.initSpaces(longestBrief, item.brief);
+                    var briefAfter = ArgumentsTypeHelper.initAfter (item.brief);
+                    var  fullSpace = ArgumentsTypeHelper.initSpaces(longestFull , item.full );
 
-                    if (longestBrief.get() < currBrief) {
-                        longestBrief.set(currBrief);
-                    }
-                    if (longestFull.get() < currFull) {
-                        longestFull.set(currFull);
-                    }
-                });
-
-        Arrays.stream(ArgumentsType.values())
-                .forEach(item -> {
-                    int differenceBrief;
-                    if ("NONE".equals(item.brief)) {
-                        differenceBrief = longestBrief.get();
-                    } else {
-                        differenceBrief = longestBrief.get() - item.brief.length();
-                    }
-                    int differenceFull = longestFull.get() - item.full.length();
-
-                    var briefSpace = new StringBuilder();
-                    var  fullSpace = new StringBuilder();
-                    IntStream.range(0, differenceBrief).forEach(item1 -> briefSpace.append(' '));
-                    IntStream.range(0, differenceFull + 1).forEach(item1 -> fullSpace.append(' '));
-
-                    System.out.println(("NONE".equals(item.brief) ?
-                            briefSpace + "  "
-                                    :
-                            item.brief + ", " + briefSpace) + item.full + fullSpace + item.info);
+                    System.out.println(briefSpace + briefAfter + fullSpace + "   " + item.info);
                 });
     }
 }
