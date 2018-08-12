@@ -1,12 +1,15 @@
 package ru.mrchebik.project;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 
 @AllArgsConstructor
 public enum  VersionType {
-    IDE("0.3.0");
+    IDE("Coconut-IDE 0.3.0 - alpha - cleanup");
 
-    @Getter
     private String version;
+
+    @Override
+    public String toString() {
+        return version;
+    }
 }

@@ -9,6 +9,12 @@ import java.nio.file.Paths;
 
 public class JavaStartup extends Startup implements StartupWrapper {
     @Override
+    public boolean isCorrectHome() {
+        return !PropertyCollector.isJDKCorrect()
+                && PropertyCollector.getProperty("jdk") == null;
+    }
+
+    @Override
     public void newProject() {
         throw new UnsupportedOperationException();
     }
@@ -18,11 +24,5 @@ public class JavaStartup extends Startup implements StartupWrapper {
         var pathJavac = Paths.get(path, "bin", PropertyCollector.getJavac());
         if (Files.exists(pathJavac))
             PropertyCollector.writeProperty("jdk", path);
-    }
-
-    @Override
-    public boolean isCorrectHome() {
-        return !PropertyCollector.isJDKCorrect()
-                && PropertyCollector.getProperty("jdk") == null;
     }
 }

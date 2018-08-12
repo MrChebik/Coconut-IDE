@@ -24,6 +24,6 @@ public class Project {
         return name + " - [" +
                 (path.startsWith(projects) ?
                         "~/" + projects.getFileName().toString() + "/" + projects.relativize(path) : path)
-                + "] - Coconut-IDE " + VersionType.IDE;
+                + "] - " + VersionType.IDE;
     }
 }

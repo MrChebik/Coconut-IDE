@@ -8,7 +8,6 @@ public abstract class CallStartup implements CallStartupWrapper {
     public void callNewProject(CreateProjectPlace place) {
         throw new UnsupportedOperationException();
     }
-
     public void callSetupHome(StartupWrapper startup, StartPlace startPlace) {
         throw new UnsupportedOperationException();
     }
