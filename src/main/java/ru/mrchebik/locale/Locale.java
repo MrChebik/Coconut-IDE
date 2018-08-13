@@ -10,6 +10,8 @@ public class Locale {
     public static String STARTUP;
     public static String NEW_PROJECT;
     public static String SETUP_HOME_TOOLTIP;
+    public static String SETUP_HOME_TITLE;
+    public static String NEW_PROJECT_TITLE;
 
     static {
         var localeCode = LocaleProperty.locale;

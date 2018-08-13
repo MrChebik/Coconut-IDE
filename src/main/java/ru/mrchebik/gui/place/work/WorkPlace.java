@@ -64,7 +64,7 @@ public class WorkPlace extends StageHelper {
         Path pathOut = Paths.get(path.toString(), "out");
         Path pathSource = Paths.get(path.toString(), "src");
 
-        /*project = new Project(name, path, pathOut, pathSource, errorProcess, executorCommand);
-        project.build();*/
+        Project.init(name, path, pathOut, pathSource);//, errorProcess, executorCommand);
+        Project.build();
     }
 }

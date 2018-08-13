@@ -7,6 +7,7 @@ import ru.mrchebik.controller.startup.StartupWrapper;
 import ru.mrchebik.gui.place.create.project.CreateProjectPlace;
 import ru.mrchebik.gui.place.start.StartPlace;
 import ru.mrchebik.language.java.settings.JavaPropertyCollector;
+import ru.mrchebik.locale.Locale;
 
 import java.io.File;
 
@@ -22,7 +23,7 @@ public class JavaCallStartup extends CallStartup implements CallStartupWrapper {
         var folderJdk = new File(valueJdk);
         var directoryChooser = new DirectoryChooser();
         directoryChooser.setInitialDirectory(folderJdk);
-        directoryChooser.setTitle("Select the folder of the JDK");
+        directoryChooser.setTitle(Locale.SETUP_HOME_TOOLTIP);
 
         var selectedFile = directoryChooser.showDialog(startPlace.getStage());
         if (selectedFile != null)

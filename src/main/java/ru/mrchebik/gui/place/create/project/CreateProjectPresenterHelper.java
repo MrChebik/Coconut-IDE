@@ -5,6 +5,7 @@ import javafx.stage.DirectoryChooser;
 import lombok.SneakyThrows;
 import ru.mrchebik.gui.place.start.StartPlace;
 import ru.mrchebik.gui.place.work.WorkPlace;
+import ru.mrchebik.locale.Locale;
 import ru.mrchebik.project.Projects;
 
 import java.io.File;
@@ -20,7 +21,7 @@ class CreateProjectPresenterHelper {
 
         var directoryChooser = new DirectoryChooser();
         directoryChooser.setInitialDirectory(target);
-        directoryChooser.setTitle("Choose Folder");
+        directoryChooser.setTitle(Locale.NEW_PROJECT_TITLE);
 
         var file = directoryChooser.showDialog(createProjectPlace.getStage());
         if (file != null)

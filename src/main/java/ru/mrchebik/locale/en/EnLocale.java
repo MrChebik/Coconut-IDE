@@ -6,5 +6,6 @@ public class EnLocale {
     public static void init() {
         Locale.STARTUP = "Startup";
         Locale.NEW_PROJECT = "New Project";
+        Locale.NEW_PROJECT_TITLE = "Choose folder";
     }
 }
