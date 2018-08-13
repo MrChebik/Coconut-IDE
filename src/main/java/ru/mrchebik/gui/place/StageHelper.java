@@ -27,6 +27,8 @@ public class StageHelper extends Application {
         if (!scale.equals(Scale.PLACE_WORK)) {
             setResizableFalse(stage, scale);
             stage.setResizable(false);
+        } else {
+            setSize(stage, scale);
         }
 
         setPosition(stage, scale);
@@ -56,6 +58,18 @@ public class StageHelper extends Application {
 
         stage.setMinWidth(width);
         stage.setMinHeight(height);
+    }
+
+    private void setSize(Stage stage,
+                         Scale scale) {
+        if (scale.isOverriden())
+            scale.init();
+
+        var width = scale.getWidth();
+        var height = scale.getHeight();
+
+        stage.setWidth(width);
+        stage.setHeight(height);
     }
 
     private void setPosition(Stage stage,

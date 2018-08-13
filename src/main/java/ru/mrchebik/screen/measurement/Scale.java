@@ -14,9 +14,15 @@ public enum Scale {
     PLACE_RENAME_FILE(400, 150),
     PLACE_RENAME_FOLDER(400, 150),
     PLACE_WORK() {
+        @Override
         public void init() {
             setWidth(Screen.bounds.getWidth() / 100 * 75);
             setHeight(Screen.bounds.getHeight() / 100 * 75);
+        }
+
+        @Override
+        public boolean isOverriden() {
+            return true;
         }
     };
 
@@ -27,4 +33,12 @@ public enum Scale {
     private double width;
     @Getter @Setter
     private double height;
+
+    public void init() {
+        throw new UnsupportedOperationException();
+    }
+
+    public boolean isOverriden() {
+        return false;
+    }
 }

@@ -24,7 +24,7 @@ public class InputTextToOutputArea implements EventHandler<KeyEvent> {
 
     @Override
     public void handle(KeyEvent event) {
-        outputStream = executorCommand.getOutputStream();
+        outputStream = ExecutorCommand.getOutputStream();
         if (outputStream != null) {
             if (isEnter(event)) {
                 handleEnter();
@@ -52,7 +52,7 @@ public class InputTextToOutputArea implements EventHandler<KeyEvent> {
             outputStream.write(input.getBytes());
             outputStream.flush();
         } catch (IOException ignored) {
-            executorCommand.setOutputStream(null);
+            ExecutorCommand.setOutputStream(null);
         } finally {
             input = "";
         }

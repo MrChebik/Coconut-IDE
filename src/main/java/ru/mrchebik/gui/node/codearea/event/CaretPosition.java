@@ -4,6 +4,7 @@ import javafx.application.Platform;
 import org.fxmisc.richtext.CodeArea;
 import ru.mrchebik.language.java.highlight.pair.JavaPairSymbolsType;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Stack;
@@ -144,6 +145,7 @@ public class CaretPosition {
 
     public static CaretPosition create() {
         CaretPosition caretPosition = new CaretPosition();
+        caretPosition.parents = new ArrayList<>();
         caretPosition.parents.addAll(Arrays.asList(JavaPairSymbolsType.class.getEnumConstants()));
 
         return caretPosition;

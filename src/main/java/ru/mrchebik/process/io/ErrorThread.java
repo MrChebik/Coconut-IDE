@@ -16,11 +16,11 @@ public class ErrorThread extends Thread {
     @Override
     @SneakyThrows(IOException.class)
     public void run() {
-        errorProcess.setWasError(false);
+        ErrorProcess.setWasError(false);
         @Cleanup BufferedReader reader = new BufferedReader(new InputStreamReader(errorProcess.getInputStream()));
         String line;
         while ((line = reader.readLine()) != null) {
-            errorProcess.setWasError(true);
+            ErrorProcess.setWasError(true);
             var currLine = line;
             Platform.runLater(() -> errorProcess.getTextArea().appendText("\n" + currLine));
         }

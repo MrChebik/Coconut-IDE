@@ -177,7 +177,7 @@ public class CustomCodeArea extends CodeArea {
         String text = this.getText();
         Task<StyleSpans<Collection<String>>> task = new Task<StyleSpans<Collection<String>>>() {
             @Override
-            protected StyleSpans<Collection<String>> call() throws Exception {
+            protected StyleSpans<Collection<String>> call() {
                 return highlight.computeHighlighting(text);
             }
         };

@@ -23,7 +23,7 @@ public class JavaCallStartup extends CallStartup implements CallStartupWrapper {
         var folderJdk = new File(valueJdk);
         var directoryChooser = new DirectoryChooser();
         directoryChooser.setInitialDirectory(folderJdk);
-        directoryChooser.setTitle(Locale.SETUP_HOME_TOOLTIP);
+        directoryChooser.setTitle(Locale.SETUP_HOME_TITLE);
 
         var selectedFile = directoryChooser.showDialog(startPlace.getStage());
         if (selectedFile != null)

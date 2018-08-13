@@ -17,7 +17,6 @@ public class RenameFolderPlace extends StageHelper {
     public static RenameFolderPlace create() {
         return new RenameFolderPlace();
     }
-
     public void start() {
         super.stage = new Stage();
 

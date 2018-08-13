@@ -100,7 +100,7 @@ public class WorkPresenter extends KeyHelper implements Initializable {
     private void addTabOfMain() {
         var path = Paths.get(Project.pathSource.toString(), "Main.java");
         var root = treeView.getRoot();
-        var mainFile = (CustomTreeItem) treeUpdater.getItem(root, path);
+        var mainFile = (CustomTreeItem) TreeUpdater.getItem(root, path);
 
         tabUpdater.addObjectToTab(mainFile);
     }
@@ -134,7 +134,7 @@ public class WorkPresenter extends KeyHelper implements Initializable {
         treeUpdater.setRootToTreeView();
 
         executorCommand.setOutputArea(outputArea);
-        executorCommand.setErrorProcess(errorProcess);
+        ExecutorCommand.setErrorProcess(errorProcess);
 
         inputTextToOutputArea = new InputTextToOutputArea(executorCommand);
     }
