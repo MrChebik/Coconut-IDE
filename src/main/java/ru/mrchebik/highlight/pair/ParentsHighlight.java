@@ -1,30 +1,29 @@
-package ru.mrchebik.gui.node.codearea.event;
+package ru.mrchebik.highlight.pair;
 
 import javafx.application.Platform;
 import org.fxmisc.richtext.CodeArea;
-import ru.mrchebik.language.java.highlight.pair.JavaPairSymbolsType;
+import ru.mrchebik.language.Language;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Stack;
 
-public class CaretPosition {
+public class ParentsHighlight {
     private CodeArea codeArea;
 
     private int caretPos;
     private String currText;
     private int lastPosCaret = -1;
-    private List<JavaPairSymbolsType> parents;
+    private List<PairSymbols> parents;
     private String prevClass;
     private String prevClassSaved;
 
-    private boolean calcHighlight(JavaPairSymbolsType parent, int caretPos) {
-        if (currText.charAt(caretPos) == parent.getLeft()) {
+    private boolean calcHighlight(PairSymbols parent, int caretPos) {
+        if (currText.charAt(caretPos) == parent.left) {
             calcNext(parent, caretPos, "figure");
 
             return true;
-        } else if (currText.charAt(caretPos) == parent.getRight()) {
+        } else if (currText.charAt(caretPos) == parent.right) {
             calcPrev(parent, caretPos, "figure");
 
             return true;
@@ -34,7 +33,7 @@ public class CaretPosition {
     }
 
     private boolean calcLeft() {
-        for (JavaPairSymbolsType parent : parents) {
+        for (PairSymbols parent : parents) {
             if (caretPos > 1) {
                 if (calcHighlight(parent, caretPos - 1)) {
                     caretPos--;
@@ -46,28 +45,28 @@ public class CaretPosition {
         return false;
     }
 
-    private void calcNext(JavaPairSymbolsType parentSymbol, int pos, String classCss) {
+    private void calcNext(PairSymbols parentSymbol, int pos, String classCss) {
         String text = codeArea.getText();
         Stack<Character> stack = new Stack<>();
         for (int i = pos; i < text.length(); i++) {
-            if (computeFragment(text, stack, i, parentSymbol.getLeft(), parentSymbol.getRight(), pos, classCss)) {
+            if (computeFragment(text, stack, i, parentSymbol.left, parentSymbol.right, pos, classCss)) {
                 return;
             }
         }
     }
 
-    private void calcPrev(JavaPairSymbolsType parentSymbol, int pos, String classCss) {
+    private void calcPrev(PairSymbols parentSymbol, int pos, String classCss) {
         String text = codeArea.getText();
         Stack<Character> stack = new Stack<>();
         for (int i = pos; i > 0; i--) {
-            if (computeFragment(text, stack, i, parentSymbol.getRight(), parentSymbol.getLeft(), pos, classCss)) {
+            if (computeFragment(text, stack, i, parentSymbol.right, parentSymbol.left, pos, classCss)) {
                 return;
             }
         }
     }
 
     private boolean calcRight() {
-        for (JavaPairSymbolsType parent : parents) {
+        for (PairSymbols parent : parents) {
             if (caretPos < currText.length()) {
                 if (calcHighlight(parent, caretPos)) {
                     return true;
@@ -94,12 +93,12 @@ public class CaretPosition {
 
     private void clearPrevHighlight() {
         if (isInDuration()) {
-            for (JavaPairSymbolsType parent : parents) {
+            for (PairSymbols parent : parents) {
                 char symbol = currText.charAt(lastPosCaret);
-                if (symbol == parent.getLeft()) {
+                if (symbol == parent.left) {
                     calcNext(parent, lastPosCaret, prevClassSaved);
                 }
-                if (symbol == parent.getRight()) {
+                if (symbol == parent.right) {
                     calcPrev(parent, lastPosCaret, prevClassSaved);
                 }
             }
@@ -143,12 +142,12 @@ public class CaretPosition {
         return false;
     }
 
-    public static CaretPosition create() {
-        CaretPosition caretPosition = new CaretPosition();
-        caretPosition.parents = new ArrayList<>();
-        caretPosition.parents.addAll(Arrays.asList(JavaPairSymbolsType.class.getEnumConstants()));
+    public static ParentsHighlight create() {
+        ParentsHighlight parentsHighlight = new ParentsHighlight();
+        parentsHighlight.parents = new ArrayList<>();
+        parentsHighlight.parents.addAll(Language.pairs);
 
-        return caretPosition;
+        return parentsHighlight;
     }
 
     private void highlightParents() {

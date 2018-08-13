@@ -15,7 +15,7 @@ import org.fxmisc.wellbehaved.event.Nodes;
 import org.reactfx.util.Try;
 import ru.mrchebik.autocomplete.AnalyzerAutocomplete;
 import ru.mrchebik.autocomplete.Autocomplete;
-import ru.mrchebik.gui.node.codearea.event.CaretPosition;
+import ru.mrchebik.highlight.pair.ParentsHighlight;
 import ru.mrchebik.language.java.highlight.Highlight;
 import ru.mrchebik.language.java.highlight.syntax.Syntax;
 import ru.mrchebik.language.java.symbols.CustomSymbolsType;
@@ -38,7 +38,7 @@ public class CustomCodeArea extends CodeArea {
     @Getter @Setter
     private String name;
 
-    private CaretPosition caretPosition;
+    private ParentsHighlight parentsHighlight;
     private Executor executor;
     private Highlight highlight;
     private Syntax syntax;
@@ -126,8 +126,8 @@ public class CustomCodeArea extends CodeArea {
             }
         });
 
-        caretPosition = CaretPosition.create();
-        this.caretPositionProperty().addListener(listener -> caretPosition.compute(this));
+        parentsHighlight = ParentsHighlight.create();
+        this.caretPositionProperty().addListener(listener -> parentsHighlight.compute(this));
         this.setParagraphGraphicFactory(LineNumberFactory.get(this));
         this.multiPlainChanges()
                 .successionEnds(Duration.ofMillis(350))
@@ -169,7 +169,7 @@ public class CustomCodeArea extends CodeArea {
         codeAreaCSS = new CodeArea(this.getText());
 
         codeAreaCSS.setStyleSpans(0, highlighting);
-        caretPosition.compute(codeAreaCSS);
+        parentsHighlight.compute(codeAreaCSS);
         syntax.compute(this);
     }
 
