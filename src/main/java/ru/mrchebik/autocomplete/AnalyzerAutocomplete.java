@@ -7,8 +7,6 @@ import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.TypeDeclaration;
 import lombok.Getter;
-import ru.mrchebik.model.autocomplete.AutocompleteClass;
-import ru.mrchebik.model.autocomplete.AutocompleteDatabase;
 
 import java.io.File;
 import java.io.IOException;

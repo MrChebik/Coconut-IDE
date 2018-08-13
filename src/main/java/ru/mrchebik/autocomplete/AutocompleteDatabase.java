@@ -1,4 +1,4 @@
-package ru.mrchebik.model.autocomplete;
+package ru.mrchebik.autocomplete;
 
 import lombok.Getter;
 import lombok.Setter;

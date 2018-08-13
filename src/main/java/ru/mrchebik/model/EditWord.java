@@ -5,41 +5,39 @@ import lombok.Setter;
 
 public class EditWord {
     @Getter
-    private String word;
+    private static String word;
     @Getter @Setter
-    private int begin;
+    private static int begin;
     @Getter
-    private int end;
+    private static int end;
     @Getter @Setter
-    private double beginGlobal;
+    private static double beginGlobal;
 
-    public EditWord() {
+    static {
         word = "";
         beginGlobal = -1;
     }
 
-    public void clear() {
+    public static void clear() {
         word = "";
-        if (end != -1) {
+        if (end != -1)
             begin = end + 1;
-        } else {
+        else
             begin = -1;
-            end = -1;
-        }
         beginGlobal = -1;
     }
 
-    public void concat(String fragment) {
+    public static void concat(String fragment) {
         word = word.concat(fragment);
         end = begin + word.length();
     }
 
-    public void remove(String fragment, int caretPos) {
+    public static void remove(String fragment, int caretPos) {
         word = word.substring(0, caretPos - begin) + word.substring(caretPos - begin + fragment.length());
         end = begin + word.length();
     }
 
-    public boolean isOutRange(int position) {
+    public static boolean isOutRange(int position) {
         return !word.isEmpty() &&
                 position < begin || position > end;
     }

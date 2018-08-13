@@ -14,8 +14,7 @@ public class ExistFileToSave {
 
     @SneakyThrows(IOException.class)
     public void save() {
-        byte[] linesByte = lines.getBytes();
-
+        var linesByte = lines.getBytes();
         Files.write(path, linesByte);
     }
 }

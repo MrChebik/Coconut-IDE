@@ -16,9 +16,6 @@ import org.fxmisc.richtext.model.PlainTextChange;
 import ru.mrchebik.language.java.symbols.CustomSymbolsType;
 import ru.mrchebik.language.java.symbols.SymbolsType;
 import ru.mrchebik.model.EditWord;
-import ru.mrchebik.model.autocomplete.AutocompleteDatabase;
-import ru.mrchebik.model.autocomplete.AutocompleteItem;
-import ru.mrchebik.model.autocomplete.TextPackage;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -28,8 +25,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 public class Autocomplete extends Popup {
-    private EditWord editWord;
-
     private CodeArea codeArea;
     private Stage stage;
     private boolean begin;
@@ -47,7 +42,6 @@ public class Autocomplete extends Popup {
     public Autocomplete(CodeArea codeArea, Stage stage, AutocompleteDatabase database) {
         super();
 
-        this.editWord = new EditWord();
         this.begin = true;
         this.wasSameSymbol = false;
         this.index = new AtomicInteger();
@@ -58,9 +52,8 @@ public class Autocomplete extends Popup {
         this.database = database;
 
         codeArea.focusedProperty().addListener((arg0, oldPropertyValue, newPropertyValue) -> {
-            if (!newPropertyValue) {
+            if (!newPropertyValue)
                 hideSnippet();
-            }
         });
 
         listOptions = new ListView<>();
@@ -69,9 +62,8 @@ public class Autocomplete extends Popup {
 
         EventHandler<KeyEvent> eventEnterOrTab = keyEvent -> {
             if (keyEvent.getCode() == KeyCode.ENTER ||
-                    keyEvent.getCode() == KeyCode.TAB) {
+                    keyEvent.getCode() == KeyCode.TAB)
                 doOption();
-            }
         };
 
         listOptions.setOnKeyPressed(eventEnterOrTab);
@@ -80,17 +72,15 @@ public class Autocomplete extends Popup {
 
     private void setOptions(List<AutocompleteItem> options) {
         listOptions.getItems().clear();
-        if (options.size() < 5) {
+        if (options.size() < 5)
             listOptions.setPrefHeight(options.size() * 16 + options.size() * 4);
-        } else {
+        else
             listOptions.setPrefHeight(100);
-        }
         options.forEach(this::getMaxLength);
         options.forEach(option -> {
             StringBuilder blank = new StringBuilder();
-            for (int i = 0; i < maxLength.get() - option.getText().length(); i++) {
+            for (int i = 0; i < maxLength.get() - option.getText().length(); i++)
                 blank.append(" ");
-            }
             CodeArea codeArea = new CodeArea(option.getType() + " " + option.getText() + blank + (option.getPackageName().isEmpty() ? " " : " | " + option.getPackageName()));
             codeArea.setPrefHeight(16);
             codeArea.setEditable(false);
@@ -134,11 +124,10 @@ public class Autocomplete extends Popup {
 
     private void calcMaxLength(String text) {
         int length = text.length();
-        if (maxLength.get() == 0) {
+        if (maxLength.get() == 0)
             maxLength.set(length);
-        } else if (length > maxLength.get()) {
+        else if (length > maxLength.get())
             maxLength.set(length);
-        }
     }
 
     private void doOption() {
@@ -148,7 +137,7 @@ public class Autocomplete extends Popup {
             String insertImport = "";
             String packageName = item.getAccessibleRoleDescription();
 
-            codeArea.insertText(editWord.getEnd(), inserted.substring(editWord.getEnd() - editWord.getBegin()));
+            codeArea.insertText(EditWord.getEnd(), inserted.substring(EditWord.getEnd() - EditWord.getBegin()));
 
             int lastPosition = codeArea.getCaretPosition() - (inserted.contains("()") ? 1 : 0);
             if (!packageName.isEmpty() &&
@@ -164,9 +153,8 @@ public class Autocomplete extends Popup {
                 } else if (indexPackage != -1) {
                     insertImport = "\n\nimport " + item.getAccessibleRoleDescription() + ";\n\n";
                     indexInsert =  codeArea.getText().substring(indexPackage).indexOf(";");
-                } else {
+                } else
                     insertImport = "import " + item.getAccessibleRoleDescription() + ";\n\n";
-                }
                 codeArea.insertText(indexInsert, insertImport);
             }
             codeArea.moveTo(lastPosition + insertImport.length());
@@ -194,21 +182,17 @@ public class Autocomplete extends Popup {
                     char target = Arrays.stream(SymbolsType.MIRROR.getSymbols()).filter(option -> option.endsWith(nextChar)).findFirst().get().charAt(0);
                     boolean isOpened = false;
 
-                    for (int i = 0; i < text.length(); i++) {
-                        if (text.charAt(i) == target) {
+                    for (int i = 0; i < text.length(); i++)
+                        if (text.charAt(i) == target)
                             isOpened = !isOpened;
-                        }
-                    }
 
                     if (!isOpened) {
                         codeArea.deleteText(position, position + 1);
                         codeArea.moveTo(position + 1);
-                    } else {
+                    } else
                         pasteSimilarSymbol(inserted, SymbolsType.MIRROR.getSymbols(), true);
-                    }
-                } else {
+                } else
                     pasteSimilarSymbol(inserted, SymbolsType.MIRROR.getSymbols(), true);
-                }
 
                 return;
             } else if (Arrays.stream(SymbolsType.SAME.getSymbols()).anyMatch(item -> item.contains(inserted))) {
@@ -217,18 +201,15 @@ public class Autocomplete extends Popup {
                     char target = Arrays.stream(SymbolsType.SAME.getSymbols()).filter(option -> option.startsWith(nextChar)).findFirst().get().charAt(0);
                     boolean isOpened = false;
 
-                    for (int i = 0; i < text.length(); i++) {
-                        if (text.charAt(i) == target) {
+                    for (int i = 0; i < text.length(); i++)
+                        if (text.charAt(i) == target)
                             isOpened = !isOpened;
-                        }
-                    }
 
                     if (!isOpened) {
                         codeArea.deleteText(position, position + 1);
                         codeArea.moveTo(position + 1);
-                    } else {
+                    } else
                         pasteSimilarSymbol(inserted, SymbolsType.SAME.getSymbols(), false);
-                    }
                 } else {
                     String text = codeArea.getText(0, position);
 
@@ -236,22 +217,20 @@ public class Autocomplete extends Popup {
                             position - 3 > -1) {
                         String previousPair = text.substring(position - 3, position - 1);
                         if (previousPair.charAt(0) == previousPair.charAt(1) &&
-                                previousPair.charAt(0) == inserted.charAt(0)) {
+                                previousPair.charAt(0) == inserted.charAt(0))
                             codeArea.insertText(position - 2, "\\");
-                        } else {
+                        else {
                             char target = Arrays.stream(SymbolsType.SAME.getSymbols()).filter(option -> option.startsWith(inserted)).findFirst().get().charAt(0);
                             boolean isOpened = false;
 
-                            for (int i = 0; i < text.length(); i++) {
-                                if (text.charAt(i) == target) {
+                            for (int i = 0; i < text.length(); i++)
+                                if (text.charAt(i) == target)
                                     isOpened = !isOpened;
-                                }
-                            }
 
                             if (!isOpened) {
                                 String additionalCondition = codeArea.getText(position, codeArea.getText().length());
 
-                                for (int i = 0; i < additionalCondition.length(); i++) {
+                                for (int i = 0; i < additionalCondition.length(); i++)
                                     if (additionalCondition.charAt(i) == target) {
                                         codeArea.insertText(position - 1, "\\");
                                         new Thread(() -> {
@@ -264,15 +243,12 @@ public class Autocomplete extends Popup {
                                         }).start();
                                         return;
                                     }
-                                }
                                 pasteSimilarSymbol(inserted, SymbolsType.SAME.getSymbols(), false);
-                            } else {
+                            } else
                                 pasteSimilarSymbol(inserted, SymbolsType.SAME.getSymbols(), false);
-                            }
                         }
-                    } else {
+                    } else
                         pasteSimilarSymbol(inserted, SymbolsType.SAME.getSymbols(), false);
-                    }
                 }
                 return;
             }
@@ -282,31 +258,30 @@ public class Autocomplete extends Popup {
             hideSnippet();
         } else {
             if (!inserted.isEmpty() && !" ".equals(inserted)) {
-                if (editWord.getWord().length() == 0) {
+                if (EditWord.getWord().length() == 0) {
                     int caretPos = codeArea.getCaretPosition();
                     if (caretPos == 0) {
-                        editWord.setBegin(0);
+                        EditWord.setBegin(0);
                     } else {
-                        editWord.setBegin(caretPos - 1);
+                        EditWord.setBegin(caretPos - 1);
                     }
                 }
-                editWord.concat(changeList.get(0).getInserted());
+                EditWord.concat(changeList.get(0).getInserted());
             } else {
-                if (!editWord.getWord().isEmpty()) {
+                if (!EditWord.getWord().isEmpty()) {
                     try {
-                        editWord.remove(changeList.get(0).getRemoved(), codeArea.getCaretPosition());
+                        EditWord.remove(changeList.get(0).getRemoved(), codeArea.getCaretPosition());
                     } catch (StringIndexOutOfBoundsException ignored) {
-                        editWord.clear();
+                        EditWord.clear();
                     }
-                } else {
-                    editWord.clear();
-                }
+                } else
+                    EditWord.clear();
             }
 
-            if (!editWord.getWord().isEmpty()) {
+            if (!EditWord.getWord().isEmpty()) {
                 List<AutocompleteItem> options = new ArrayList<>();
 
-                List<String> optionsKeywords = database.getKeywords().stream().filter(word -> word.startsWith(editWord.getWord())).collect(Collectors.toList());
+                List<String> optionsKeywords = database.getKeywords().stream().filter(word -> word.startsWith(EditWord.getWord())).collect(Collectors.toList());
                 List<TextPackage> optionsClass = new ArrayList<>();
                 List<TextPackage> optionsMethods = new ArrayList<>();
                 List<TextPackage> optionsVariables = new ArrayList<>();
@@ -314,18 +289,15 @@ public class Autocomplete extends Popup {
                 database.getClassList().forEach(classItem -> {
                     String packageName = classItem.getPackageClass() + "." + classItem.getNameClass();
 
-                    if (classItem.getNameClass().startsWith(editWord.getWord())) {
+                    if (classItem.getNameClass().startsWith(EditWord.getWord()))
                         optionsClass.add(new TextPackage(classItem.getNameClass(), packageName));
-                    }
                     classItem.getVariables().forEach(variable -> {
-                        if (variable.startsWith(editWord.getWord())) {
+                        if (variable.startsWith(EditWord.getWord()))
                             optionsVariables.add(new TextPackage(variable, packageName));
-                        }
                     });
                     classItem.getMethods().forEach(method -> {
-                        if (method.startsWith(editWord.getWord())) {
+                        if (method.startsWith(EditWord.getWord()))
                             optionsMethods.add(new TextPackage(method, packageName));
-                        }
                     });
                 });
 
@@ -353,11 +325,11 @@ public class Autocomplete extends Popup {
                     Bounds bounds = codeArea.caretBoundsProperty().getValue().get();
                     double y = bounds.getMaxY();
 
-                    if (editWord.getBeginGlobal() == -1) {
+                    if (EditWord.getBeginGlobal() == -1) {
                         double x = bounds.getMaxX() - 30;
-                        editWord.setBeginGlobal(x);
+                        EditWord.setBeginGlobal(x);
 
-                        setX(editWord.getBeginGlobal());
+                        setX(EditWord.getBeginGlobal());
                     }
 
                     setY(y);
@@ -368,12 +340,10 @@ public class Autocomplete extends Popup {
                         show(stage);
                         setHideTemporarily(false);
                     }
-                } else {
+                } else
                     hideTemporarily();
-                }
-            } else {
+            } else
                 hideTemporarily();
-            }
         }
     }
 
@@ -384,12 +354,12 @@ public class Autocomplete extends Popup {
             wasSameSymbol = !mirror;
             int position = codeArea.getCaretPosition();
             codeArea.insertText(position, Character.toString(findSame.get().charAt(1)));
-            editWord.clear();
+            EditWord.clear();
         }
     }
 
     private void hideSnippet() {
-        editWord.clear();
+        EditWord.clear();
         hideTemporarily();
     }
 
@@ -402,9 +372,8 @@ public class Autocomplete extends Popup {
 
     public void checkCaretPosition() {
         int position = codeArea.getCaretPosition();
-        boolean isOutRange = editWord.isOutRange(position);
-        if (isOutRange) {
+        boolean isOutRange = EditWord.isOutRange(position);
+        if (isOutRange)
             hideSnippet();
-        }
     }
 }
