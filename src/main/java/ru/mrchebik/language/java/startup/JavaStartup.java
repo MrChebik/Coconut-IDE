@@ -10,8 +10,8 @@ import java.nio.file.Paths;
 public class JavaStartup extends Startup implements StartupWrapper {
     @Override
     public boolean isCorrectHome() {
-        return !PropertyCollector.isJDKCorrect()
-                && PropertyCollector.getProperty("jdk") == null;
+        return !PropertyCollector.isJDKCorrect() &&
+                PropertyCollector.getProperty("jdk") == null;
     }
 
     @Override

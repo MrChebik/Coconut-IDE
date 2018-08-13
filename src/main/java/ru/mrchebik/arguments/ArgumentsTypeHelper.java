@@ -22,7 +22,8 @@ class ArgumentsTypeHelper {
                 });
     }
 
-    static String initSpaces(AtomicInteger atomic, String text) {
+    static String initSpaces(AtomicInteger atomic,
+                             String        text) {
         int diff = atomic.get() - text.length();
 
         return text + (diff == 0 ?
@@ -31,7 +32,8 @@ class ArgumentsTypeHelper {
                 String.format("%" + diff + "s", ""));
     }
 
-    private static void longest(AtomicInteger atomic, String argument) {
+    private static void longest(AtomicInteger atomic,
+                                String        argument) {
         int length = argument.length();
 
         if (atomic.get() < length)

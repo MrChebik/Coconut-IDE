@@ -13,11 +13,11 @@ public class StageHelper extends Application {
     @Getter
     protected Stage stage;
 
-    public void close() {
-        stage.close();
-    }
-
-    protected void initWindow(Stage stage, String title, Modality modality, Scale scale, ViewHelper view) {
+    protected void initWindow(Stage      stage,
+                              String     title,
+                              Modality   modality,
+                              Scale      scale,
+                              ViewHelper view) {
         stage.setTitle(title);
         stage.getIcons().add(Icons.LOGO.get());
 
@@ -36,7 +36,21 @@ public class StageHelper extends Application {
         stage.show();
     }
 
-    private void setResizableFalse(Stage stage, Scale scale) {
+    protected void setOnClose(Runnable handler) {
+        stage.setOnCloseRequest(event -> handler.run());
+    }
+
+    public void close() {
+        stage.close();
+    }
+
+    @Override
+    public void start(Stage primaryStage) {
+        throw new UnsupportedOperationException();
+    }
+
+    private void setResizableFalse(Stage stage,
+                                   Scale scale) {
         var width = scale.getWidth();
         var height = scale.getHeight();
 
@@ -44,20 +58,12 @@ public class StageHelper extends Application {
         stage.setMinHeight(height);
     }
 
-    private void setPosition(Stage stage, Scale scale) {
+    private void setPosition(Stage stage,
+                             Scale scale) {
         var point = Screen.calculateCenter(scale.getWidth(),
                 scale.getHeight());
 
         stage.setX(point.getX());
         stage.setY(point.getY());
-    }
-
-    protected void setOnClose(Runnable handler) {
-        stage.setOnCloseRequest(event -> handler.run());
-    }
-
-    @Override
-    public void start(Stage primaryStage) {
-        throw new UnsupportedOperationException();
     }
 }
