@@ -6,7 +6,6 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.TypeDeclaration;
-import lombok.Getter;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,15 +17,15 @@ import java.util.List;
 import java.util.Objects;
 
 public class AnalyzerAutocomplete {
-    @Getter
-    private AutocompleteDatabase database;
-    private List<File> javaFiles = new ArrayList<>();
+    public static AutocompleteDatabase database;
+    public static List<File> javaFiles;
 
-    public AnalyzerAutocomplete() {
+    static {
         database = new AutocompleteDatabase();
+        javaFiles = new ArrayList<>();
     }
 
-    public void initialize(Path source) {
+    public static void initialize(Path source) {
         listJavaFilesForFolder(source.toFile());
 
         javaFiles.forEach(file -> {
@@ -38,17 +37,15 @@ public class AnalyzerAutocomplete {
         });
     }
 
-    private void listJavaFilesForFolder(File entry) {
-        for (final File fileEntry : Objects.requireNonNull(entry.listFiles())) {
-            if (fileEntry.isDirectory()) {
+    private static void listJavaFilesForFolder(File entry) {
+        for (final File fileEntry : Objects.requireNonNull(entry.listFiles()))
+            if (fileEntry.isDirectory())
                 listJavaFilesForFolder(fileEntry);
-            } else if (fileEntry.getName().endsWith(".java")) {
+            else if (fileEntry.getName().endsWith(".java"))
                 javaFiles.add(fileEntry);
-            }
-        }
     }
 
-    public void callAnalysis(String text) {
+    public static void callAnalysis(String text) {
         try {
             AutocompleteClass autocompleteClass = new AutocompleteClass();
 
@@ -56,28 +53,25 @@ public class AnalyzerAutocomplete {
             if (unit.getTypes().size() > 0) {
                 TypeDeclaration declaration = unit.getType(0);
 
-                if (unit.getPackageDeclaration().isPresent()) {
+                if (unit.getPackageDeclaration().isPresent())
                     autocompleteClass.setPackageClass(unit.getPackageDeclaration().get().getNameAsString());
-                } else {
+                else
                     autocompleteClass.setPackageClass("");
-                }
 
                 autocompleteClass.setNameClass(declaration.getNameAsString());
 
-                if (declaration.getFields().size() > 0) {
+                if (declaration.getFields().size() > 0)
                     declaration.getFields().forEach(field -> {
                         FieldDeclaration fieldDeclaration = (FieldDeclaration) field;
                         fieldDeclaration.getVariables().forEach(variable -> {
                             autocompleteClass.addVariable(variable.getNameAsString());
                         });
                     });
-                }
-                if (declaration.getMethods().size() > 0) {
+                if (declaration.getMethods().size() > 0)
                     declaration.getMethods().forEach(method -> {
                         MethodDeclaration methodDeclaration = (MethodDeclaration) method;
                         autocompleteClass.addMethod(methodDeclaration.getNameAsString());
                     });
-                }
 
                 database.addClass(autocompleteClass);
             }

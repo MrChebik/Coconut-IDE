@@ -1,15 +1,13 @@
 package ru.mrchebik.command;
 
-import ru.mrchebik.binaries.Binaries;
+import java.nio.file.Path;
 
 public abstract class Command implements CommandWrapper {
-    public static Binaries binaries;
-
     public String getCompile() {
         throw new UnsupportedOperationException();
     }
 
-    public String getRun() {
+    public String getRun(Path path) {
         throw new UnsupportedOperationException();
     }
 }

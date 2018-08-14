@@ -20,7 +20,7 @@ enum ArgumentsType {
     VERSION("-v", "--version",
             "Print current version / his stage build / branch of project",
             () -> {
-        System.out.print(VersionType.IDE.toStringFull());
+        System.out.println(VersionType.IDE.toStringFull());
         System.exit(0);
     });
 

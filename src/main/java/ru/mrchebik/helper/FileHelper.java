@@ -64,11 +64,10 @@ public class FileHelper {
         Path relative = pathSource.relativize(path);
         String relativePathWithoutExtension = getPathWithoutExtension(relative);
 
-        if (relativePathWithoutExtension.contains(File.separator)) {
-            return relativePathWithoutExtension.replaceAll(File.separator, ".");
-        } else {
-            return relativePathWithoutExtension;
-        }
+        return relativePathWithoutExtension.contains(File.separator) ?
+                relativePathWithoutExtension.replaceAll(File.separator, ".")
+                :
+                relativePathWithoutExtension;
     }
 
     @SneakyThrows(IOException.class)

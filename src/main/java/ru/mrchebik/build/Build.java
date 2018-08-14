@@ -1,7 +1,6 @@
 package ru.mrchebik.build;
 
-import ru.mrchebik.command.Command;
-import ru.mrchebik.command.CommandType;
+import ru.mrchebik.command.CommandWrapper;
 import ru.mrchebik.process.ExecutorCommand;
 import ru.mrchebik.process.io.ErrorProcess;
 import ru.mrchebik.task.TaskHelper;
@@ -9,19 +8,17 @@ import ru.mrchebik.task.TaskHelper;
 import java.nio.file.Path;
 
 public class Build extends BuildModel implements BuildWrapper {
-    public static Command command;
-
-    public Build(ErrorProcess errorProcess, ExecutorCommand executorCommand) {
-        super(errorProcess, executorCommand);
+    public Build(ErrorProcess errorProcess, ExecutorCommand executorCommand, CommandWrapper commandWrapper) {
+        super(errorProcess, executorCommand, commandWrapper);
     }
 
     public void compile() {
-        TaskHelper.doTask(CommandType.COMPILE);
+        TaskHelper.doTask(command.getCompile());
     }
 
     public void run(Path path) {
-        var compile = TaskHelper.makeTask(CommandType.COMPILE);
-        var run = TaskHelper.makeTask(CommandType.RUN);
+        var compile = TaskHelper.makeTask(command.getCompile());
+        var run = TaskHelper.makeTask(command.getRun(path));
 
         TaskHelper.chain(compile, run);
     }

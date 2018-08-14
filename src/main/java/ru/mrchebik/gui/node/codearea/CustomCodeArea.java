@@ -45,13 +45,13 @@ public class CustomCodeArea extends CodeArea {
 
     private Autocomplete autocomplete;
 
-    public CustomCodeArea(String text, Highlight highlight, Syntax syntax, Stage stage, AnalyzerAutocomplete analyzer, String name) {
+    public CustomCodeArea(String text, Highlight highlight, Syntax syntax, Stage stage, String name) {
         executor = Executors.newSingleThreadExecutor();
         this.highlight = highlight;
         this.syntax = syntax;
         this.name = name;
 
-        autocomplete = new Autocomplete(this, stage, analyzer.getDatabase());
+        autocomplete = new Autocomplete(this, stage, AnalyzerAutocomplete.database);
 
         InputMap<Event> prevent = InputMap.consume(
                 anyOf(
@@ -80,13 +80,13 @@ public class CustomCodeArea extends CodeArea {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    analyzer.callAnalysis(this.getText());
+                    AnalyzerAutocomplete.callAnalysis(this.getText());
                 }).start();
             } else if (event.getCode() == ENTER) {
                 position = deleteSelection(position);
 
                 this.insertText(position, "\n" + getTabLength(position));
-                analyzer.callAnalysis(this.getText());
+                AnalyzerAutocomplete.callAnalysis(this.getText());
             } else if (event.getCode() == KeyCode.BACK_SPACE) {
                 String paragraph = this.getParagraph(this.getCurrentParagraph()).getText();
 

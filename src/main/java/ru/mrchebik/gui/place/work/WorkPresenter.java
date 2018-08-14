@@ -11,6 +11,8 @@ import javafx.scene.input.MouseEvent;
 import org.fxmisc.flowless.ScaledVirtualized;
 import org.fxmisc.flowless.VirtualizedScrollPane;
 import ru.mrchebik.autocomplete.AnalyzerAutocomplete;
+import ru.mrchebik.build.Build;
+import ru.mrchebik.build.BuildWrapper;
 import ru.mrchebik.gui.key.KeyHelper;
 import ru.mrchebik.gui.node.CustomTreeItem;
 import ru.mrchebik.gui.node.codearea.CustomCodeArea;
@@ -19,6 +21,7 @@ import ru.mrchebik.gui.place.work.event.structure.StructureUpdateGraphic;
 import ru.mrchebik.gui.updater.TabUpdater;
 import ru.mrchebik.gui.updater.TreeUpdater;
 import ru.mrchebik.icons.Icons;
+import ru.mrchebik.language.Language;
 import ru.mrchebik.language.java.highlight.Highlight;
 import ru.mrchebik.language.java.highlight.syntax.Syntax;
 import ru.mrchebik.language.java.symbols.SymbolsType;
@@ -57,12 +60,14 @@ public class WorkPresenter extends KeyHelper implements Initializable {
     private TabUpdater tabUpdater;
     private TreeUpdater treeUpdater;
 
+    private BuildWrapper build;
+
     @FXML
     private void handleCompileProject() {
         Platform.runLater(() -> {
             handlePrepareToAction();
 
-            //project.compile();
+            build.compile();
         });
     }
 
@@ -83,7 +88,7 @@ public class WorkPresenter extends KeyHelper implements Initializable {
             handlePrepareToAction();
 
             var path = (Path) tabPane.getSelectionModel().getSelectedItem().getUserData();
-            //project.run(path);
+            build.run(path);
         });
     }
 
@@ -119,16 +124,17 @@ public class WorkPresenter extends KeyHelper implements Initializable {
     }
 
     private void initializeVariables() {
-        AnalyzerAutocomplete analyzer = new AnalyzerAutocomplete();
-        analyzer.initialize(Project.pathSource);
-        analyzer.getDatabase().setKeywords(Arrays.asList(SymbolsType.KEYWORDS.getSymbols()));
+        build = new Build(ErrorProcess.create(), ExecutorCommand.create(), Language.command);
+
+        AnalyzerAutocomplete.initialize(Project.pathSource);
+        AnalyzerAutocomplete.database.setKeywords(Arrays.asList(SymbolsType.KEYWORDS.getSymbols()));
 
         errorProcess.setTextArea(outputArea);
 
         commandPath = CommandPath.create();
 
         var syntax = new Syntax(saveTabsProcess, tabPane, treeView);
-        tabUpdater = new TabUpdater(tabPane, Highlight.create(), syntax, places.getWorkPlace().getStage(), analyzer);
+        tabUpdater = new TabUpdater(tabPane, Highlight.create(), syntax, places.getWorkPlace().getStage());
 
         treeUpdater = new TreeUpdater(treeView, tabUpdater);
         treeUpdater.setRootToTreeView();
