@@ -38,7 +38,6 @@ public class CustomCodeArea extends CodeArea {
     @Getter @Setter
     private String name;
 
-    private ParentsHighlight parentsHighlight;
     private Executor executor;
     private Highlight highlight;
     private Syntax syntax;
@@ -126,8 +125,7 @@ public class CustomCodeArea extends CodeArea {
             }
         });
 
-        parentsHighlight = ParentsHighlight.create();
-        this.caretPositionProperty().addListener(listener -> parentsHighlight.compute(this));
+        this.caretPositionProperty().addListener(listener -> ParentsHighlight.compute(this));
         this.setParagraphGraphicFactory(LineNumberFactory.get(this));
         this.multiPlainChanges()
                 .successionEnds(Duration.ofMillis(350))
@@ -169,7 +167,7 @@ public class CustomCodeArea extends CodeArea {
         codeAreaCSS = new CodeArea(this.getText());
 
         codeAreaCSS.setStyleSpans(0, highlighting);
-        parentsHighlight.compute(codeAreaCSS);
+        //ParentsHighlight.compute(codeAreaCSS);
         syntax.compute(this);
     }
 

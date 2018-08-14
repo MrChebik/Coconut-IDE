@@ -1,30 +1,32 @@
 package ru.mrchebik.highlight.pair;
 
-import javafx.application.Platform;
 import org.fxmisc.richtext.CodeArea;
 import ru.mrchebik.language.Language;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Stack;
 
 public class ParentsHighlight {
-    private CodeArea codeArea;
+    private static CodeArea codeArea;
 
-    private int caretPos;
-    private String currText;
-    private int lastPosCaret = -1;
-    private List<PairSymbols> parents;
-    private String prevClass;
-    private String prevClassSaved;
+    private static int caretPos;
+    private static String currText;
+    private static int lastPosCaret;
+    private static int lastOtherPos;
 
-    private boolean calcHighlight(PairSymbols parent, int caretPos) {
-        if (currText.charAt(caretPos) == parent.left) {
-            calcNext(parent, caretPos, "figure");
+    private static Stack<Character> stack;
+
+    static {
+        lastPosCaret = -1;
+        stack = new Stack<>();
+    }
+
+    private static boolean calcHighlight(PairSymbols pair, int caretPos) {
+        if (currText.charAt(caretPos) == pair.left) {
+            calcNext(pair, caretPos);
 
             return true;
-        } else if (currText.charAt(caretPos) == parent.right) {
-            calcPrev(parent, caretPos, "figure");
+        } else if (currText.charAt(caretPos) == pair.right) {
+            calcPrev(pair, caretPos);
 
             return true;
         }
@@ -32,10 +34,10 @@ public class ParentsHighlight {
         return false;
     }
 
-    private boolean calcLeft() {
-        for (PairSymbols parent : parents)
+    private static boolean calcLeft() {
+        for (PairSymbols pair : Language.pairs)
             if (caretPos > 0 &&
-                    calcHighlight(parent, caretPos - 1)) {
+                    calcHighlight(pair, caretPos - 1)) {
                 caretPos--;
                 return true;
             }
@@ -43,64 +45,55 @@ public class ParentsHighlight {
         return false;
     }
 
-    private void calcNext(PairSymbols parentSymbol, int pos, String classCss) {
-        String text = codeArea.getText();
-        Stack<Character> stack = new Stack<>();
-        for (int i = pos; i < text.length(); i++)
-            if (computeFragment(text, stack, i, parentSymbol.left, parentSymbol.right, pos, classCss))
+    private static void calcNext(PairSymbols parentSymbol, int pos) {
+        for (int i = pos; i < currText.length(); i++)
+            if (computeFragment(currText, i, parentSymbol.left, parentSymbol.right, pos))
                 return;
     }
 
-    private void calcPrev(PairSymbols parentSymbol, int pos, String classCss) {
-        String text = codeArea.getText();
-        Stack<Character> stack = new Stack<>();
+    private static void calcPrev(PairSymbols parentSymbol, int pos) {
         for (int i = pos; i >= 0; i--)
-            if (computeFragment(text, stack, i, parentSymbol.right, parentSymbol.left, pos, classCss))
+            if (computeFragment(currText, i, parentSymbol.right, parentSymbol.left, pos))
                 return;
     }
 
-    private boolean calcRight() {
-        for (PairSymbols parent : parents)
+    private static boolean calcRight() {
+        for (PairSymbols pair : Language.pairs)
             if (caretPos < currText.length() &&
-                    calcHighlight(parent, caretPos))
+                    calcHighlight(pair, caretPos))
                 return true;
 
         return false;
     }
 
-    private void caretNext() {
+    private static void caretNext() {
         if (calcRight())
             return;
         calcLeft();
     }
 
-    private void caretPrev() {
+    private static void caretPrev() {
         if (calcLeft())
             return;
         calcRight();
     }
 
-    private void clearPrevHighlight() {
-        if (isInDuration())
-            for (PairSymbols parent : parents) {
-                char symbol = currText.charAt(lastPosCaret);
-                if (symbol == parent.left)
-                    calcNext(parent, lastPosCaret, prevClassSaved);
-                if (symbol == parent.right)
-                    calcPrev(parent, lastPosCaret, prevClassSaved);
-            }
+    private static void clearPrevHighlight() {
+        if (isInDuration()) {
+            codeArea.setStyleClass(lastPosCaret, lastPosCaret + 1, "empty");
+            codeArea.setStyleClass(lastOtherPos, lastOtherPos + 1, "empty");
+        }
     }
 
-    public void compute(CodeArea codeArea) {
-        this.codeArea = codeArea;
-        
-        currText = codeArea.getText();
+    public static void compute(CodeArea area) {
+        codeArea = area;
+        currText = area.getText();
 
         clearPrevHighlight();
         highlightParents();
     }
 
-    private boolean computeFragment(String text, Stack<Character> stack, int i, char fragment, char mirrFrag, int pos, String classCss) {
+    private static boolean computeFragment(String text, int i, char fragment, char mirrFrag, int pos) {
         if (text.charAt(i) == fragment)
             stack.push(fragment);
         else if (text.charAt(i) == mirrFrag) {
@@ -108,16 +101,13 @@ public class ParentsHighlight {
                 stack.pop();
 
                 if (stack.size() == 0) {
-                    if (codeArea.getStyleOfChar(pos).size() != 0) {
-                        String currClass = codeArea.getStyleOfChar(pos).iterator().next();
-                        if (pos != lastPosCaret && !currClass.equals(prevClass))
-                            prevClassSaved = currClass;
-                        prevClass = currClass;
-                    } else
-                        prevClassSaved = "empty";
+                    codeArea.setStyleClass(pos, pos + 1, "figure");
+                    codeArea.setStyleClass(i, i + 1, "figure");
 
-                    Platform.runLater(() -> codeArea.setStyleClass(pos, pos + 1, classCss));
-                    Platform.runLater(() -> codeArea.setStyleClass(i, i + 1, classCss));
+                    lastPosCaret = pos;
+                    lastOtherPos = i;
+
+                    stack.clear();
 
                     return true;
                 }
@@ -128,30 +118,20 @@ public class ParentsHighlight {
         return false;
     }
 
-    public static ParentsHighlight create() {
-        ParentsHighlight parentsHighlight = new ParentsHighlight();
-        parentsHighlight.parents = new ArrayList<>();
-        parentsHighlight.parents.addAll(Language.pairs);
-
-        return parentsHighlight;
-    }
-
-    private void highlightParents() {
+    private static void highlightParents() {
         caretPos = codeArea.getCaretPosition();
 
         if (isLeftDirection())
             caretPrev();
         else
             caretNext();
-
-        lastPosCaret = caretPos;
     }
 
-    private boolean isInDuration() {
+    private static boolean isInDuration() {
         return lastPosCaret > -1 && lastPosCaret < currText.length();
     }
 
-    private boolean isLeftDirection() {
+    private static boolean isLeftDirection() {
         return caretPos + 1 == lastPosCaret || caretPos == lastPosCaret;
     }
 }
