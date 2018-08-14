@@ -174,7 +174,10 @@ public class Autocomplete extends Popup {
         if (inserted.length() == 1) {
             char firstChar = inserted.charAt(0);
             int position = codeArea.getCaretPosition();
-            String nextChar = codeArea.getText(position, position + 1);
+            String nextChar = codeArea.getText(position, codeArea.getLength() < position + 1 ?
+                    position
+                    :
+                    position + 1);
 
             if (Character.isMirrored(firstChar)) {
                 if (Arrays.stream(SymbolsType.MIRROR.getSymbols()).anyMatch(item -> item.endsWith(nextChar))) {

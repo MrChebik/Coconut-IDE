@@ -33,14 +33,12 @@ public class ParentsHighlight {
     }
 
     private boolean calcLeft() {
-        for (PairSymbols parent : parents) {
-            if (caretPos > 1) {
-                if (calcHighlight(parent, caretPos - 1)) {
-                    caretPos--;
-                    return true;
-                }
+        for (PairSymbols parent : parents)
+            if (caretPos > 0 &&
+                    calcHighlight(parent, caretPos - 1)) {
+                caretPos--;
+                return true;
             }
-        }
 
         return false;
     }
@@ -48,61 +46,49 @@ public class ParentsHighlight {
     private void calcNext(PairSymbols parentSymbol, int pos, String classCss) {
         String text = codeArea.getText();
         Stack<Character> stack = new Stack<>();
-        for (int i = pos; i < text.length(); i++) {
-            if (computeFragment(text, stack, i, parentSymbol.left, parentSymbol.right, pos, classCss)) {
+        for (int i = pos; i < text.length(); i++)
+            if (computeFragment(text, stack, i, parentSymbol.left, parentSymbol.right, pos, classCss))
                 return;
-            }
-        }
     }
 
     private void calcPrev(PairSymbols parentSymbol, int pos, String classCss) {
         String text = codeArea.getText();
         Stack<Character> stack = new Stack<>();
-        for (int i = pos; i > 0; i--) {
-            if (computeFragment(text, stack, i, parentSymbol.right, parentSymbol.left, pos, classCss)) {
+        for (int i = pos; i >= 0; i--)
+            if (computeFragment(text, stack, i, parentSymbol.right, parentSymbol.left, pos, classCss))
                 return;
-            }
-        }
     }
 
     private boolean calcRight() {
-        for (PairSymbols parent : parents) {
-            if (caretPos < currText.length()) {
-                if (calcHighlight(parent, caretPos)) {
-                    return true;
-                }
-            }
-        }
+        for (PairSymbols parent : parents)
+            if (caretPos < currText.length() &&
+                    calcHighlight(parent, caretPos))
+                return true;
 
         return false;
     }
 
     private void caretNext() {
-        if (calcRight()) {
+        if (calcRight())
             return;
-        }
         calcLeft();
     }
 
     private void caretPrev() {
-        if (calcLeft()) {
+        if (calcLeft())
             return;
-        }
         calcRight();
     }
 
     private void clearPrevHighlight() {
-        if (isInDuration()) {
+        if (isInDuration())
             for (PairSymbols parent : parents) {
                 char symbol = currText.charAt(lastPosCaret);
-                if (symbol == parent.left) {
+                if (symbol == parent.left)
                     calcNext(parent, lastPosCaret, prevClassSaved);
-                }
-                if (symbol == parent.right) {
+                if (symbol == parent.right)
                     calcPrev(parent, lastPosCaret, prevClassSaved);
-                }
             }
-        }
     }
 
     public void compute(CodeArea codeArea) {
@@ -115,9 +101,9 @@ public class ParentsHighlight {
     }
 
     private boolean computeFragment(String text, Stack<Character> stack, int i, char fragment, char mirrFrag, int pos, String classCss) {
-        if (text.charAt(i) == fragment) {
+        if (text.charAt(i) == fragment)
             stack.push(fragment);
-        } else if (text.charAt(i) == mirrFrag) {
+        else if (text.charAt(i) == mirrFrag) {
             if (stack.peek() == fragment) {
                 stack.pop();
 
@@ -153,11 +139,10 @@ public class ParentsHighlight {
     private void highlightParents() {
         caretPos = codeArea.getCaretPosition();
 
-        if (isLeftDirection()) {
+        if (isLeftDirection())
             caretPrev();
-        } else {
+        else
             caretNext();
-        }
 
         lastPosCaret = caretPos;
     }
