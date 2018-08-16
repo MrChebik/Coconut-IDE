@@ -15,7 +15,7 @@ import org.fxmisc.wellbehaved.event.Nodes;
 import org.reactfx.util.Try;
 import ru.mrchebik.autocomplete.AnalyzerAutocomplete;
 import ru.mrchebik.autocomplete.Autocomplete;
-import ru.mrchebik.highlight.pair.ParentsHighlight;
+import ru.mrchebik.highlight.CaretHighlight;
 import ru.mrchebik.language.java.highlight.Highlight;
 import ru.mrchebik.language.java.highlight.syntax.Syntax;
 import ru.mrchebik.language.java.symbols.CustomSymbolsType;
@@ -125,7 +125,7 @@ public class CustomCodeArea extends CodeArea {
             }
         });
 
-        this.caretPositionProperty().addListener(listener -> ParentsHighlight.compute(this));
+        this.caretPositionProperty().addListener(listener -> CaretHighlight.compute(this));
         this.setParagraphGraphicFactory(LineNumberFactory.get(this));
         this.multiPlainChanges()
                 .successionEnds(Duration.ofMillis(350))
@@ -167,7 +167,6 @@ public class CustomCodeArea extends CodeArea {
         codeAreaCSS = new CodeArea(this.getText());
 
         codeAreaCSS.setStyleSpans(0, highlighting);
-        //ParentsHighlight.compute(codeAreaCSS);
         syntax.compute(this);
     }
 

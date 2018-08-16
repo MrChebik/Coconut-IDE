@@ -10,9 +10,8 @@ CodeArea:
     * Fixed removing selected area after Enter/Backspace/Semicolon.
 Highlight:
     + `var` keyword.
-    * Improved performance for pair:
-        # clear previous highlight
-        # removed highlight when text changed
+    + Redesigned backlight. All code elements are now highlighted without basic keywords.
+    * Improved performance of caret highlight.
     * Fixed pairs.
 Start:
     + Enter listeners to buttons.
