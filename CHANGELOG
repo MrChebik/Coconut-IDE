@@ -11,7 +11,7 @@ CodeArea:
 Highlight:
     + `var` keyword.
     + Redesigned backlight. All code elements are now highlighted without basic keywords.
-    * Improved performance of caret highlight.
+    * Improved performance of caret highlight, removing unnecessary passage of the highlight to the listener of changes.
     * Fixed pairs.
 Start:
     + Enter listeners to buttons.

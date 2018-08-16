@@ -5,7 +5,12 @@ public class PairSymbols {
     public char right;
 
     public PairSymbols(PairSymbolsType type) {
-        left = type.getLeft();
-        right = type.getRight();
+        left = type.left;
+        right = type.right;
+    }
+
+    public PairSymbols(char left, char right) {
+        this.left = left;
+        this.right = right;
     }
 }
