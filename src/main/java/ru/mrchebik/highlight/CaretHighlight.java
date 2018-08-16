@@ -21,6 +21,7 @@ public class CaretHighlight {
     private static int lastOtherPos;
 
     private static List<JavaToken> tokenBrackets;
+    private static List<JavaToken> otherTokenBrackets;
     private static JavaToken tokenUser;
 
     private static Stack<Character> stack;
@@ -139,59 +140,71 @@ public class CaretHighlight {
         System.out.println(codeArea.getText(codeArea.getCurrentParagraph()));
         System.out.println(codeArea.getCaretColumn() > 0 ? String.format("%" + codeArea.getCaretColumn() + "s", "^") : "^");*/
 
-        clearHighlight();
-        CompilationUnit unit = JavaParser.parse(currText);
-        if (unit.getTypes().size() > 0) {
-            int paragraph = codeArea.getCurrentParagraph() + 1;
-            int column = codeArea.getCaretColumn() + 1;
+        try {
+            clearHighlight();
+            CompilationUnit unit = JavaParser.parse(currText);
+            if (unit.getTypes().size() > 0) {
+                int paragraph = codeArea.getCurrentParagraph() + 1;
+                int column = codeArea.getCaretColumn() + 1;
 
-            TokenRange allRange = unit.getType(0).getTokenRange().get();
-            Range other = new Range(new Position(paragraph, column), new Position(paragraph, column));
-            allRange.forEach(token -> {
-                Range range = token.getRange().get();
-                    //System.out.println(token.getKind() + " // " + range.begin.line + " - " + other.begin.line + " // " + (range.begin.column) + " - " + (other.begin.column) + " // " + (range.end.column) + " - " + (other.end.column) + " || " + token.getText());
-                if (range.begin.line == other.begin.line &&
-                        (range.begin.column == range.end.column
-                                ?
-                                (range.begin.column == other.begin.column ?
-                                        range.end.column == other.end.column
-                                                :
-                                        (range.begin.column == other.begin.column - 1 &&
-                                                range.end.column == other.end.column - 1))
-                                :
-                                (range.begin.column <= other.begin.column &&
-                                        range.end.column >= other.end.column))) {
-                        //System.out.println("+++" + " // " + token.getKind());
-                    if (token.getKind() == 1 || token.getKind() == 92 || token.getKind() == 94 || token.getKind() == 3 || token.getKind() == 96) {
-                        JavaToken previous = null;
-                        JavaToken next = null;
-                        if (token.getPreviousToken().isPresent()) {
-                            previous = token.getPreviousToken().get();
-                        }
-                        if (token.getNextToken().isPresent()) {
-                            next = token.getNextToken().get();
-                        }
-                        boolean isCurrent = false;
-                        if (previous.getRange().get().begin.line == paragraph && previous.getKind() != 1 && (previous.getKind() == 89 || previous.getKind() == 94 || previous.getKind() == 95 || previous.getKind() == 92 || previous.getKind() == 93 || previous.getKind() == 96 || previous.getKind() == 97)) {
-                                //System.out.println("PREV");
-                            highlight(previous, "figure", false);
-                        }
-                        if (token.getKind() == 92 || token.getKind() == 93 || token.getKind() == 94 || token.getKind() == 95 || token.getKind() == 96 || token.getKind() == 97) {
+                TokenRange allRange = unit.getType(0).getTokenRange().get();
+                Range other = new Range(new Position(paragraph, column), new Position(paragraph, column));
+                allRange.forEach(token -> {
+                    Range range = token.getRange().get();
+                    System.out.println(token.getKind() + " // " + range.begin.line + " - " + other.begin.line + " // " + (range.begin.column) + " - " + (other.begin.column) + " // " + (range.end.column) + " - " + (other.end.column) + " || " + token.getText());
+                    if (range.begin.line == other.begin.line &&
+                            (range.begin.column == range.end.column
+                                    ?
+                                    (range.begin.column == other.begin.column ?
+                                            range.end.column == other.end.column
+                                            :
+                                            (range.begin.column == other.begin.column - 1 &&
+                                                    range.end.column == other.end.column - 1))
+                                    :
+                                    (range.begin.column <= other.begin.column &&
+                                            range.end.column >= other.end.column))) {
+                        System.out.println("+++" + " // " + token.getKind());
+                        if (isSpace(token) || isEnter(token) || isBracket(token)/* token.getKind() == 92 || token.getKind() == 94 || token.getKind() == 96*/) {
+                            JavaToken previous = null;
+                            JavaToken next = null;
+                            if (token.getPreviousToken().isPresent()) {
+                                previous = token.getPreviousToken().get();
+                            }
+                            if (token.getNextToken().isPresent()) {
+                                next = token.getNextToken().get();
+                            }
+                            boolean isCurrent = false;
+                            if ((previous != null && (isCurrLine(previous, paragraph) && (isBracket(previous) || isWord(previous)) && !isSpace(previous)))) {
+                                System.out.println("PREV");
+                                highlight(previous, "figure", false);
+                            }
+                            if (isBracket(token)) {
+                                highlight(token, "figure", false);
+                                isCurrent = true;
+                            }
+                            if ((previous == null || (isBracket(previous) || isWord(previous))) && !isCurrent &&
+                                    (next == null || (isCurrLine(next, paragraph) && !isSpace(next) && (isWord(next) || isBracket(next))))) {
+                                System.out.println("NEXT");
+                                highlight(next, "figure", false);
+                            }
+
+                            if (isOpenBracket(token)) {
+
+                            }
+                        } else if (isWord(token) || isBracket(token)/*token.getKind() == 95|| token.getKind() == 93 || token.getKind() == 97*/) {
                             highlight(token, "figure", false);
-                            isCurrent = true;
                         }
-                        if (!isCurrent && (previous != null && previous.getKind() == 89) && (next.getRange().get().begin.line == paragraph && next.getKind() != 1 && (next.getKind() == 89 || (previous != null ? previous.getKind() == 89: true) || previous.getKind() == 94 || previous.getKind() == 95 || previous.getKind() == 92 || previous.getKind() == 93 || previous.getKind() == 96 || previous.getKind() == 97))) {
-                                //System.out.println("NEXT");
-                            highlight(next, "figure", false);
-                        }
-                    } else if (token.getKind() == 89 || token.getKind() == 95|| token.getKind() == 93 || token.getKind() == 97) {
-                        highlight(token, "figure", false);
                     }
-                }
-            });
-        }
+                });
+            }
+
+            if (tokenBrackets.size() > 1 &&
+                    tokenUser != null) {
+                highlight(tokenUser, "empty", true);
+            }
+        } catch (ParseProblemException ignored) {}
         //unit.getType(0).getTokenRange().get().forEach(t -> System.out.println(t.getRange().get().toString()));
-            //System.out.println("===");
+            System.out.println("===");
 
         /*if (!isHighlighted()) {
             clearPrevHighlight();
@@ -202,14 +215,54 @@ public class CaretHighlight {
         prevPosCaret = caretPos;*/
     }
 
+    private static boolean isBracket(JavaToken token) {
+        return token.getKind() == 92 ||  // (
+                token.getKind() == 93 || // )
+                token.getKind() == 94 || // {
+                token.getKind() == 95 || // }
+                token.getKind() == 96 || // [
+                token.getKind() == 97;   // ]
+    }
+
+    private static boolean isOpenBracket(JavaToken token) {
+        return token.getKind() == 92 ||  // (
+                token.getKind() == 94 || // {
+                token.getKind() == 96;   // [
+    }
+
+    private static boolean isCloseBracket(JavaToken token) {
+        return token.getKind() == 93 ||  // )
+                token.getKind() == 94 || // }
+                token.getKind() == 96;   // ]
+    }
+
+    private static boolean isCurrLine(JavaToken token, int paragraph) {
+        return token.getRange().get().begin.line == paragraph;
+    }
+
+    private static boolean isWord(JavaToken token) {
+        return token.getKind() == 89;
+    }
+
+    private static boolean isSpace(JavaToken token) {
+        return token.getKind() == 1;
+    }
+
+    private static boolean isEnter(JavaToken token) {
+        return token.getKind() == 3;
+    }
+
     private static void clear() {
         tokenBrackets = new ArrayList<>();
+        otherTokenBrackets = new ArrayList<>();
         tokenUser = null;
     }
 
     private static void clearHighlight() {
         if (tokenBrackets.size() != 0)
             tokenBrackets.forEach(token -> highlight(token, "empty", true));
+        if (otherTokenBrackets.size() != 0)
+            otherTokenBrackets.forEach(token -> highlight(token, "empty", true));
         if (tokenUser != null)
             highlight(tokenUser, "empty", true);
         clear();
@@ -245,3 +298,4 @@ public class CaretHighlight {
                 caretPos + 1 == lastOtherPos || caretPos == lastOtherPos || caretPos == lastOtherPos + 1);
     }
 }
+//{}{{}{{{}}}}
