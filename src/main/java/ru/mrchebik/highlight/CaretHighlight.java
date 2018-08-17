@@ -14,11 +14,7 @@ import java.util.Stack;
 public class CaretHighlight {
     private static CodeArea codeArea;
 
-    private static int caretPos;
     private static String currText;
-    private static int prevPosCaret;
-    private static int lastPosCaret;
-    private static int lastOtherPos;
 
     private static int paragraph;
     private static int column;
@@ -31,79 +27,8 @@ public class CaretHighlight {
     private static List<Stack<String>> stack;
 
     static {
-        /*lastPosCaret = -1;
-        stack = new Stack<>();*/
-
         clear();
     }
-
-    /*private static boolean calcHighlight(PairSymbols pair, int caretPos) {
-        if (currText.charAt(caretPos) == pair.left) {
-            calcNext(pair, caretPos);
-
-            return true;
-        } else if (currText.charAt(caretPos) == pair.right) {
-            calcPrev(pair, caretPos);
-
-            return true;
-        }
-
-        return false;
-    }
-
-    private static boolean calcLeft() {
-        try {
-        for (PairSymbols pair : Language.pairs)
-            if (caretPos > 0 &&
-                    calcHighlight(pair, caretPos - 1)) {
-                caretPos--;
-                return true;
-            }
-        } catch (Exception ignore) {}
-
-        return false;
-    }
-
-    private static void calcNext(PairSymbols parentSymbol, int pos) {
-        for (int i = pos; i < currText.length(); i++)
-            if (computeFragment(currText, i, parentSymbol.left, parentSymbol.right, pos))
-                return;
-    }
-
-    private static void calcPrev(PairSymbols parentSymbol, int pos) {
-        for (int i = pos; i >= 0; i--)
-            if (computeFragment(currText, i, parentSymbol.right, parentSymbol.left, pos))
-                return;
-    }
-
-    private static boolean calcRight() {
-        try {
-            for (PairSymbols pair : Language.pairs)
-                if (calcHighlight(pair, caretPos))
-                    return true;
-        } catch (Exception ignore) {}
-
-        return false;
-    }
-
-    private static void caretNext() {
-        if (calcRight())
-            return;
-        calcLeft();
-    }
-
-    private static void caretPrev() {
-        if (calcLeft())
-            return;
-        calcRight();
-    }
-
-    private static void clearPrevHighlight() {
-        if (isInDuration()) {
-            codeArea.setStyleClass(lastPosCaret, lastPosCaret + 1, "empty");
-            codeArea.setStyleClass(lastOtherPos, lastOtherPos + 1, "empty");
-        }
-    }*/
 
     public static void compute(CodeArea area) {
         codeArea = area;
@@ -112,32 +37,7 @@ public class CaretHighlight {
         highlightParents();
     }
 
-    /*private static boolean computeFragment(String text, int i, char fragment, char mirrFrag, int pos) {
-        if (text.charAt(i) == fragment)
-            stack.push(fragment);
-        else if (text.charAt(i) == mirrFrag) {
-            if (stack.peek() == fragment) {
-                stack.pop();
-
-                if (stack.size() == 0) {
-                    codeArea.setStyleClass(pos, pos + 1, "figure");
-                    codeArea.setStyleClass(i, i + 1, "figure");
-
-                    lastPosCaret = pos;
-                    lastOtherPos = i;
-
-                    return true;
-                }
-            } else
-                return true;
-        }
-
-        return false;
-    }*/
-
     private static void highlightParents() {
-        caretPos = codeArea.getCaretPosition();
-
         try {
             clearHighlight();
             CompilationUnit unit = JavaParser.parse(currText);
@@ -163,12 +63,7 @@ public class CaretHighlight {
                         if (token.getNextToken().isPresent())
                             next = token.getNextToken().get();
 
-                        if (isBracket(token) || isWord(token))
-                            highlight(token, "figure", false, false);
-                        if (!isSpace(token))
-                            isCurrWord = true;
-                        if (isBracket(token))
-                            wrapSearchBracket(token, PairSymbolsType.find(token.getText().charAt(0)));
+                        currSearch(token);
                         prevSearch(previous, token);
                         nextSearch(next, token);
 
@@ -177,15 +72,9 @@ public class CaretHighlight {
                 }
 
 
-                if (!isWas && paragraph == codeArea.getParagraphs().size() && column - 1 == codeArea.getParagraphLength(paragraph - 1) ) {
+                if (!isWas) {
                     JavaToken token = allRange.getEnd();
-
-                    if (isBracket(token) || isWord(token))
-                        highlight(token, "figure", false, false);
-                    if (!isSpace(token))
-                        isCurrWord = true;
-                    if (isBracket(token))
-                        wrapSearchBracket(token, PairSymbolsType.find(token.getText().charAt(0)));
+                    currSearch(token);
                 }
             }
 
@@ -194,14 +83,6 @@ public class CaretHighlight {
                 highlight(tokenUser, "empty", true, false);
             }
         } catch (ParseProblemException ignored) {}
-
-        /*if (!isHighlighted()) {
-            clearPrevHighlight();
-            caretNext();
-        }*/
-
-        /*stack.clear();
-        prevPosCaret = caretPos;*/
     }
 
     private static void wrapSearchBracket(JavaToken token, PairSymbols pair) {
@@ -229,8 +110,6 @@ public class CaretHighlight {
                 if (stack.get(index).size() == 0) {
                     highlight(token, "figure", false, true);
                     return;
-                    /*lastPosCaret = pos;
-                    lastOtherPos = i;*/
                 }
             } else
                 System.out.println("ERROR");
@@ -254,7 +133,7 @@ public class CaretHighlight {
                     var prevToken = token.getPreviousToken().get();
                     prevSearch(prevToken, initial);
                 }
-            } else if ((isBracket(token) || isWord(token)) && (initial.equals(token.getNextToken().get()) || !isSpace(token.getNextToken().get())) && initial.getRange().get().begin.column == column) {
+            } else if ((isBracket(token) || isWord(token)) && (!isWord(token) || (initial.equals(token.getNextToken().get()) || !isSpace(token.getNextToken().get()))) && initial.getRange().get().begin.column == column && (!isSpace(token.getNextToken().get()) || (initial.equals(token.getNextToken().get()) || isEnter(initial)))) {
                 highlight(token, "figure", false, false);
                 if (isBracket(token))
                     wrapSearchBracket(token, PairSymbolsType.find(token.getText().charAt(0)));
@@ -274,6 +153,15 @@ public class CaretHighlight {
             }
     }
 
+    private static void currSearch(JavaToken token) {
+        if (isBracket(token) || isWord(token))
+            highlight(token, "figure", false, false);
+        if (!isSpace(token))
+            isCurrWord = true;
+        if (isBracket(token))
+            wrapSearchBracket(token, PairSymbolsType.find(token.getText().charAt(0)));
+    }
+
     private static boolean isBracket(JavaToken token) {
         return token.getKind() == 92 ||  // (
                 token.getKind() == 93 || // )
@@ -281,18 +169,6 @@ public class CaretHighlight {
                 token.getKind() == 95 || // }
                 token.getKind() == 96 || // [
                 token.getKind() == 97;   // ]
-    }
-
-    private static boolean isOpenBracket(JavaToken token) {
-        return token.getKind() == 92 ||  // (
-                token.getKind() == 94 || // {
-                token.getKind() == 96;   // [
-    }
-
-    private static boolean isCloseBracket(JavaToken token) {
-        return token.getKind() == 93 ||  // )
-                token.getKind() == 94 || // }
-                token.getKind() == 96;   // ]
     }
 
     private static boolean isCurrLine(JavaToken token) {
@@ -359,9 +235,4 @@ public class CaretHighlight {
             }
         }
     }
-
-    /*private static boolean isInDuration() {
-        return lastPosCaret > -1 && lastPosCaret < currText.length();
-    }*/
 }
-//{}{{}{{{}}}}
