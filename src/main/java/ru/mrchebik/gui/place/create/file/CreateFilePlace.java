@@ -11,7 +11,8 @@ import ru.mrchebik.screen.measurement.Scale;
 import java.nio.file.Path;
 
 public class CreateFilePlace extends StageHelper {
-    @Getter @Setter
+    @Getter
+    @Setter
     private Path path;
 
     public static CreateFilePlace create() {

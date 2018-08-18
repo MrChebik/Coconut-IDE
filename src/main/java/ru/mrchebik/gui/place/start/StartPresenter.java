@@ -57,13 +57,13 @@ public class StartPresenter extends KeyHelper implements Initializable {
     }
 
     @Override
-    public void initialize(URL            location,
+    public void initialize(URL location,
                            ResourceBundle resources) {
-                             initStartup   ();
-        StartPresenterHelper.initLocale    (createProject, tooltipSetupHome);
+        initStartup();
+        StartPresenterHelper.initLocale(createProject, tooltipSetupHome);
         StartPresenterHelper.initNewProject(createProject, startup);
-        StartPresenterHelper.initAnimation (coconutPng);
-        Injection           .initInjection (startPlace, createProjectPlace);
+        StartPresenterHelper.initAnimation(coconutPng);
+        Injection.initInjection(startPlace, createProjectPlace);
     }
 
     private void initStartup() {

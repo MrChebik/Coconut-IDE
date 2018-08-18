@@ -6,29 +6,32 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
-<BorderPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.mrchebik.gui.place.start.StartPresenter">
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="400.0" prefWidth="600.0"
+            xmlns="http://javafx.com/javafx/8.0.111" fx:controller="ru.mrchebik.gui.place.start.StartPresenter">
     <center>
-        <ImageView fx:id="coconutPng" fitHeight="275.0" fitWidth="275.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
+        <ImageView fx:id="coconutPng" fitHeight="275.0" fitWidth="275.0" pickOnBounds="true" preserveRatio="true"
+                   BorderPane.alignment="CENTER">
             <BorderPane.margin>
-                <Insets top="-35.0" />
+                <Insets top="-35.0"/>
             </BorderPane.margin>
-            <Image url="/img/coconut.png" />
+            <Image url="/img/coconut.png"/>
         </ImageView>
     </center>
     <bottom>
         <HBox alignment="CENTER" prefHeight="40.0" prefWidth="200.0">
-            <Button fx:id="createProject" mnemonicParsing="false" onMouseClicked="#newProject" onKeyReleased="#newProjectWithKey" />
+            <Button fx:id="createProject" mnemonicParsing="false" onMouseClicked="#newProject"
+                    onKeyReleased="#newProjectWithKey"/>
         </HBox>
     </bottom>
     <top>
         <HBox alignment="CENTER_RIGHT" prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
             <Button mnemonicParsing="false" onMouseClicked="#setupHome" onKeyReleased="#setupHomeWithKey" text="JDK">
                 <HBox.margin>
-                    <Insets right="6.0" />
+                    <Insets right="6.0"/>
                 </HBox.margin>
-            <tooltip>
-               <Tooltip fx:id="tooltipSetupHome" />
-            </tooltip>
+                <tooltip>
+                    <Tooltip fx:id="tooltipSetupHome"/>
+                </tooltip>
             </Button>
         </HBox>
     </top>

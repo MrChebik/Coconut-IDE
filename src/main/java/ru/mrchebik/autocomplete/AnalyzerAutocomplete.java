@@ -75,6 +75,7 @@ public class AnalyzerAutocomplete {
 
                 database.addClass(autocompleteClass);
             }
-        } catch (ParseProblemException ignored) {}
+        } catch (ParseProblemException ignored) {
+        }
     }
 }

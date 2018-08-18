@@ -1,15 +1,13 @@
 package ru.mrchebik.build;
 
 import ru.mrchebik.command.CommandWrapper;
-import ru.mrchebik.process.ExecutorCommand;
-import ru.mrchebik.process.io.ErrorProcess;
 import ru.mrchebik.task.TaskHelper;
 
 import java.nio.file.Path;
 
 public class Build extends BuildModel implements BuildWrapper {
-    public Build(ErrorProcess errorProcess, ExecutorCommand executorCommand, CommandWrapper commandWrapper) {
-        super(errorProcess, executorCommand, commandWrapper);
+    public Build(CommandWrapper commandWrapper) {
+        super(commandWrapper);
     }
 
     public void compile() {

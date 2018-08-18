@@ -6,10 +6,6 @@ public class LanguageProperty {
     public static String language;
 
     static {
-        language = PropertyCollector.getProperty("language");
-        if (language == null) {
-            PropertyCollector.writeProperty("language", "java");
-            language = "java";
-        }
+        language = PropertyCollector.initVariable("language", "java");
     }
 }

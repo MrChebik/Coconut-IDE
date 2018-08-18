@@ -23,6 +23,24 @@ public class TreeUpdater {
     private TreeView<Path> treeView;
     private TabUpdater tabUpdater;
 
+    public static TreeItem<Path> getItem(TreeItem<Path> root, Path path) {
+        if (root.getValue().equals(path))
+            return root;
+
+        for (TreeItem<Path> child : root.getChildren()) {
+            if (!path.equals(child.getValue())) {
+                if (!child.getChildren().isEmpty()) {
+                    TreeItem<Path> item = getItem(child, path);
+                    if (item != null)
+                        return item;
+                }
+            } else
+                return child;
+        }
+
+        return null;
+    }
+
     void createObject(Path path, boolean isRoot) {
         if (isRoot) {
             TreeItem<Path> rootNode = setRootItem(path);
@@ -59,24 +77,6 @@ public class TreeUpdater {
             if (newValue)
                 scheduleHighlight();
         };
-    }
-
-    public static TreeItem<Path> getItem(TreeItem<Path> root, Path path) {
-        if (root.getValue().equals(path))
-            return root;
-
-        for (TreeItem<Path> child : root.getChildren()) {
-            if (!path.equals(child.getValue())) {
-                if (!child.getChildren().isEmpty()) {
-                    TreeItem<Path> item = getItem(child, path);
-                    if (item != null)
-                        return item;
-                }
-            } else
-                return child;
-        }
-
-        return null;
     }
 
     void removeObject(Path path) {

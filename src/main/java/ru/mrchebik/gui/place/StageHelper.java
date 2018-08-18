@@ -13,10 +13,10 @@ public class StageHelper extends Application {
     @Getter
     protected Stage stage;
 
-    protected void initWindow(Stage      stage,
-                              String     title,
-                              Modality   modality,
-                              Scale      scale,
+    protected void initWindow(Stage stage,
+                              String title,
+                              Modality modality,
+                              Scale scale,
                               ViewHelper view) {
         stage.setTitle(title);
         stage.getIcons().add(Icons.LOGO.get());
@@ -53,8 +53,8 @@ public class StageHelper extends Application {
 
     private void setResizableFalse(Stage stage,
                                    Scale scale) {
-        var width = scale.getWidth();
-        var height = scale.getHeight();
+        var width = scale.width;
+        var height = scale.height;
 
         stage.setMinWidth(width);
         stage.setMinHeight(height);
@@ -65,8 +65,8 @@ public class StageHelper extends Application {
         if (scale.isOverriden())
             scale.init();
 
-        var width = scale.getWidth();
-        var height = scale.getHeight();
+        var width = scale.width;
+        var height = scale.height;
 
         stage.setWidth(width);
         stage.setHeight(height);
@@ -74,10 +74,10 @@ public class StageHelper extends Application {
 
     private void setPosition(Stage stage,
                              Scale scale) {
-        var point = Screen.calculateCenter(scale.getWidth(),
-                scale.getHeight());
+        var point = Screen.calculateCenter(scale.width,
+                scale.height);
 
-        stage.setX(point.getX());
-        stage.setY(point.getY());
+        stage.setX(point.x);
+        stage.setY(point.y);
     }
 }

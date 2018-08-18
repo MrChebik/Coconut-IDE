@@ -7,9 +7,11 @@ public class KeyHelper {
     public static boolean isEnter(KeyEvent event) {
         return event.getCode() == KeyCode.ENTER;
     }
+
     public static boolean isBackSpace(KeyEvent event) {
         return event.getCode() == KeyCode.BACK_SPACE;
     }
+
     public static boolean isSemicolon(KeyEvent event) {
         return event.getCode() == KeyCode.SEMICOLON;
     }

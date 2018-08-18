@@ -11,13 +11,13 @@ import ru.mrchebik.controller.startup.StartupWrapper;
 import ru.mrchebik.locale.Locale;
 
 class StartPresenterHelper {
-    static void initLocale(Button  button,
+    static void initLocale(Button button,
                            Tooltip tooltip) {
         button.setText(Locale.NEW_PROJECT);
         tooltip.setText(Locale.SETUP_HOME_TOOLTIP);
     }
 
-    static void initNewProject(Button         button,
+    static void initNewProject(Button button,
                                StartupWrapper startup) {
         button.setDisable(startup.isCorrectHome());
     }
@@ -31,10 +31,10 @@ class StartPresenterHelper {
         scaleTransition.play();
     }
 
-    static void setHomeAndEnable(Button             button,
+    static void setHomeAndEnable(Button button,
                                  CallStartupWrapper callStartup,
-                                 StartPlace         place,
-                                 StartupWrapper     startup) {
+                                 StartPlace place,
+                                 StartupWrapper startup) {
         callStartup.callSetupHome(startup, place);
 
         boolean isCorrect = startup.isCorrectHome();

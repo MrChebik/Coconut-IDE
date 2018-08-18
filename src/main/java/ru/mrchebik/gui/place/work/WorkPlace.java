@@ -10,8 +10,6 @@ import ru.mrchebik.gui.place.create.folder.CreateFolderPlace;
 import ru.mrchebik.gui.place.rename.file.RenameFilePlace;
 import ru.mrchebik.gui.place.rename.folder.RenameFolderPlace;
 import ru.mrchebik.model.ActionPlaces;
-import ru.mrchebik.process.ExecutorCommand;
-import ru.mrchebik.process.io.ErrorProcess;
 import ru.mrchebik.project.Project;
 import ru.mrchebik.screen.measurement.Scale;
 
@@ -21,11 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class WorkPlace extends StageHelper {
-    private ErrorProcess errorProcess;
-    private ExecutorCommand executorCommand;
-
     public void start(String name, Path path) {
-        initializeExecutorAndError();
         initializeProject(name, path);
         initializeInject();
 
@@ -40,11 +34,6 @@ public class WorkPlace extends StageHelper {
         setOnClose(() -> System.exit(0));
     }
 
-    private void initializeExecutorAndError() {
-        executorCommand = ExecutorCommand.create();
-        errorProcess = ErrorProcess.create();
-    }
-
     private void initializeInject() {
         ActionPlaces places = new ActionPlaces(
                 CreateFilePlace.create(),
@@ -54,8 +43,6 @@ public class WorkPlace extends StageHelper {
                 this);
 
         Map<Object, Object> customProperties = new HashMap<>();
-        customProperties.put("executorCommand", executorCommand);
-        customProperties.put("errorProcess", errorProcess);
         customProperties.put("places", places);
         Injector.setConfigurationSource(customProperties::get);
     }

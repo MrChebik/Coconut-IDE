@@ -2,6 +2,7 @@ package ru.mrchebik.language.java.startup;
 
 import ru.mrchebik.controller.startup.Startup;
 import ru.mrchebik.controller.startup.StartupWrapper;
+import ru.mrchebik.language.java.settings.JavaPropertyCollector;
 import ru.mrchebik.settings.PropertyCollector;
 
 import java.nio.file.Files;
@@ -10,7 +11,7 @@ import java.nio.file.Paths;
 public class JavaStartup extends Startup implements StartupWrapper {
     @Override
     public boolean isCorrectHome() {
-        return !PropertyCollector.isJDKCorrect() &&
+        return !JavaPropertyCollector.isJdkCorrect() &&
                 PropertyCollector.getProperty("jdk") == null;
     }
 
@@ -21,7 +22,7 @@ public class JavaStartup extends Startup implements StartupWrapper {
 
     @Override
     public void setupHome(String path) {
-        var pathJavac = Paths.get(path, "bin", PropertyCollector.getJavac());
+        var pathJavac = Paths.get(path, "bin", JavaPropertyCollector.javac);
         if (Files.exists(pathJavac))
             PropertyCollector.writeProperty("jdk", path);
     }

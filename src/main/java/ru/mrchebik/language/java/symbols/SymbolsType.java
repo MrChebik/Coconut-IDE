@@ -5,8 +5,8 @@ import lombok.Getter;
 
 @AllArgsConstructor
 public enum SymbolsType {
-    MIRROR(new String[]{ "{}", "[]", "<>", "()" }),
-    SAME(new String[]{ "\"\"", "\'\'" }),
+    MIRROR(new String[]{"{}", "[]", "<>", "()"}),
+    SAME(new String[]{"\"\"", "\'\'"}),
     KEYWORDS(new String[]{
             "abstract", "assert", "boolean", "break", "byte",
             "case", "catch", "char", "class", "const",

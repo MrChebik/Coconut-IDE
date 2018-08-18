@@ -47,9 +47,8 @@ public class InputProcess extends Thread {
         TimerTask task = new TimerTask() {
             @Override
             public void run() {
-                if (open) {
+                if (open)
                     print();
-                }
             }
         };
         timer.schedule(task, 5, 5);

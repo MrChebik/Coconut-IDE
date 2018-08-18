@@ -11,12 +11,14 @@ import ru.mrchebik.screen.measurement.Scale;
 import java.nio.file.Path;
 
 public class RenameFolderPlace extends StageHelper {
-    @Getter @Setter
+    @Getter
+    @Setter
     private Path path;
 
     public static RenameFolderPlace create() {
         return new RenameFolderPlace();
     }
+
     public void start() {
         super.stage = new Stage();
 

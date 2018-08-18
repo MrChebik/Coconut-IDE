@@ -10,7 +10,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class AutocompleteDatabase {
     @Getter
     private List<AutocompleteClass> classList;
-    @Getter @Setter
+    @Getter
+    @Setter
     private List<String> keywords;
 
     private AtomicInteger index;

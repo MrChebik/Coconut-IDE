@@ -17,7 +17,6 @@ import ru.mrchebik.gui.node.CustomTreeItem;
 import ru.mrchebik.gui.node.codearea.CustomCodeArea;
 import ru.mrchebik.icons.Icons;
 import ru.mrchebik.language.java.highlight.Highlight;
-import ru.mrchebik.language.java.highlight.syntax.Syntax;
 import ru.mrchebik.language.java.highlight.syntax.switcher.compiler.tab.HighlightTab;
 
 import java.io.IOException;
@@ -31,12 +30,11 @@ import java.util.stream.Collectors;
 public class TabUpdater {
     private TabPane tabPane;
     private Highlight highlight;
-    private Syntax syntax;
     private Stage stage;
 
     public void addObjectToTab(CustomTreeItem item) {
         String text = getText(item.getValue());
-        CustomCodeArea customCodeArea = new CustomCodeArea(text, highlight, syntax, stage, item.getValue().getFileName().toString());
+        CustomCodeArea customCodeArea = new CustomCodeArea(text, highlight, stage, item.getValue().getFileName().toString());
         ScaledVirtualized<CustomCodeArea> scaleVirtualized = new ScaledVirtualized<>(customCodeArea);
 
         customCodeArea.addEventFilter(ScrollEvent.ANY, e -> {

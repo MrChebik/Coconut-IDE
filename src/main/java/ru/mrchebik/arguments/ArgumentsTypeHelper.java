@@ -13,7 +13,7 @@ class ArgumentsTypeHelper {
 
     static void initLongest() {
         ArgumentsType.longestBrief = new AtomicInteger(-1);
-        ArgumentsType.longestFull  = new AtomicInteger(-1);
+        ArgumentsType.longestFull = new AtomicInteger(-1);
 
         Arrays.stream(ArgumentsType.values())
                 .forEach(item -> {
@@ -23,7 +23,7 @@ class ArgumentsTypeHelper {
     }
 
     static String initSpaces(AtomicInteger atomic,
-                             String        text) {
+                             String text) {
         int diff = atomic.get() - text.length();
 
         return text + (diff == 0 ?
@@ -33,7 +33,7 @@ class ArgumentsTypeHelper {
     }
 
     private static void longest(AtomicInteger atomic,
-                                String        argument) {
+                                String argument) {
         int length = argument.length();
 
         if (atomic.get() < length)

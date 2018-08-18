@@ -44,10 +44,10 @@ public class CreateProjectPresenter extends KeyHelper implements Initializable {
     }
 
     @Override
-    public void initialize(URL            location,
+    public void initialize(URL location,
                            ResourceBundle resources) {
-        CreateProjectPresenterHelper.initCorePath   ();
+        CreateProjectPresenterHelper.initCorePath();
         CreateProjectPresenterHelper.initProjectPath(projectPath);
-        CreateProjectPresenterHelper.initListeners  (projectName, projectPath);
+        CreateProjectPresenterHelper.initListeners(projectName, projectPath);
     }
 }

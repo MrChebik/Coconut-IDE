@@ -23,17 +23,25 @@ public class CustomTreeItem extends TreeItem<Path> {
     private boolean isFirstTimeLeaf = true;
     private boolean isLeaf;
 
+    public CustomTreeItem(Path f, WatcherStructure watcherStructure, TabUpdater tabUpdater, TreeUpdater treeUpdater) {
+        super(f);
+        if (watcherStructure != null)
+            watcherStructure.start();
+        this.tabUpdater = tabUpdater;
+        this.treeUpdater = treeUpdater;
+    }
+
     public boolean isDirectory() {
         return Files.isDirectory(getValue());
     }
 
-    public CustomTreeItem(Path f, WatcherStructure watcherStructure, TabUpdater tabUpdater, TreeUpdater treeUpdater) {
-        super(f);
-        if (watcherStructure != null) {
-            watcherStructure.start();
+    @Override
+    public boolean isLeaf() {
+        if (isFirstTimeLeaf) {
+            isFirstTimeLeaf = false;
+            isLeaf = Files.exists(getValue()) && !Files.isDirectory(getValue());
         }
-        this.tabUpdater = tabUpdater;
-        this.treeUpdater = treeUpdater;
+        return isLeaf;
     }
 
     @Override
@@ -44,15 +52,6 @@ public class CustomTreeItem extends TreeItem<Path> {
         }
 
         return super.getChildren();
-    }
-
-    @Override
-    public boolean isLeaf() {
-        if (isFirstTimeLeaf) {
-            isFirstTimeLeaf = false;
-            isLeaf = Files.exists(getValue()) && !Files.isDirectory(getValue());
-        }
-        return isLeaf;
     }
 
     @SneakyThrows(IOException.class)

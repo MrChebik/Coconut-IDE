@@ -17,7 +17,6 @@ import ru.mrchebik.autocomplete.AnalyzerAutocomplete;
 import ru.mrchebik.autocomplete.Autocomplete;
 import ru.mrchebik.language.Language;
 import ru.mrchebik.language.java.highlight.Highlight;
-import ru.mrchebik.language.java.highlight.syntax.Syntax;
 import ru.mrchebik.language.java.symbols.CustomSymbolsType;
 import ru.mrchebik.language.java.symbols.SymbolsType;
 
@@ -35,19 +34,18 @@ import static org.fxmisc.wellbehaved.event.EventPattern.keyPressed;
 public class CustomCodeArea extends CodeArea {
     @Getter
     private CodeArea codeAreaCSS;
-    @Getter @Setter
+    @Getter
+    @Setter
     private String name;
 
     private Executor executor;
     private Highlight highlight;
-    private Syntax syntax;
 
     private Autocomplete autocomplete;
 
-    public CustomCodeArea(String text, Highlight highlight, Syntax syntax, Stage stage, String name) {
+    public CustomCodeArea(String text, Highlight highlight, Stage stage, String name) {
         executor = Executors.newSingleThreadExecutor();
         this.highlight = highlight;
-        this.syntax = syntax;
         this.name = name;
 
         autocomplete = new Autocomplete(this, stage, AnalyzerAutocomplete.database);
@@ -167,7 +165,7 @@ public class CustomCodeArea extends CodeArea {
         codeAreaCSS = new CodeArea(this.getText());
 
         codeAreaCSS.setStyleSpans(0, highlighting);
-        syntax.compute(this);
+        Language.initSyntax().compute(this);
     }
 
     private Task<StyleSpans<Collection<String>>> computeHighlightingAsync() {

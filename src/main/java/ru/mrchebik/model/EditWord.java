@@ -6,11 +6,13 @@ import lombok.Setter;
 public class EditWord {
     @Getter
     private static String word;
-    @Getter @Setter
+    @Getter
+    @Setter
     private static int begin;
     @Getter
     private static int end;
-    @Getter @Setter
+    @Getter
+    @Setter
     private static double beginGlobal;
 
     static {

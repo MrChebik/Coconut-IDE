@@ -7,23 +7,16 @@ import ru.mrchebik.highlight.caret.CaretHighlightFactory;
 import ru.mrchebik.highlight.pair.PairSymbolsType;
 import ru.mrchebik.language.java.highlight.bracket.JavaBracketHighlight;
 
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 import java.util.Objects;
 
 public class JavaCaretHighlight extends CaretHighlightFactory {
     protected static boolean isCurrWord;
     private static JavaBracketHighlight bracketHighlight;
-    private static List<JavaToken> tokenBrackets;
-    private static List<JavaToken> otherTokenBrackets;
     private static JavaToken tokenUser;
 
     public JavaCaretHighlight() {
         bracketHighlight = new JavaBracketHighlight();
-
-        tokenBrackets = new ArrayList<>();
-        otherTokenBrackets = new ArrayList<>();
     }
 
     protected static void doHighlightBracket(JavaToken token, boolean isPrevSearch) {
@@ -68,11 +61,6 @@ public class JavaCaretHighlight extends CaretHighlightFactory {
         return isBracket(token) || isWord(token);
     }
 
-    private static void clearBracketList(List<JavaToken> tokens) {
-        if (tokens.size() != 0)
-            tokens.forEach(token -> highlight(token, "empty"));
-    }
-
     public static void doHighlight(JavaToken token, String style, boolean other) {
         if (token.getRange().isPresent()) {
             addTokenToStore(token, other);
@@ -90,10 +78,8 @@ public class JavaCaretHighlight extends CaretHighlightFactory {
     private static void addTokenToStore(JavaToken token, boolean other) {
         if (token.getKind() == 89)
             tokenUser = token;
-        else if (other)
-            otherTokenBrackets.add(token);
         else
-            tokenBrackets.add(token);
+            bracketHighlight.addTokenToStore(token, other);
     }
 
     private static boolean isCaretOnToken(JavaToken token) {
@@ -107,8 +93,7 @@ public class JavaCaretHighlight extends CaretHighlightFactory {
 
     @Override
     protected void clearVariables() {
-        tokenBrackets.clear();
-        otherTokenBrackets.clear();
+        bracketHighlight.clearBrackets();
         tokenUser = null;
 
         isCurrWord = false;
@@ -119,14 +104,14 @@ public class JavaCaretHighlight extends CaretHighlightFactory {
     @Override
     protected void clearHighlight() {
         try {
-            clearBracketList(tokenBrackets);
-            clearBracketList(otherTokenBrackets);
+            bracketHighlight.clearBracketLists();
             if (Objects.nonNull(tokenUser))
                 highlight(tokenUser, "empty");
         } catch (IndexOutOfBoundsException | ParseProblemException ignored) {
         }
     }
 
+    @Override
     protected void highlightNear() {
         try {
             var unit = JavaParser.parse(currText);

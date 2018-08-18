@@ -6,9 +6,11 @@ import lombok.Setter;
 import java.nio.file.Path;
 
 public class CommandPath {
-    @Getter @Setter
+    @Getter
+    @Setter
     private String command;
-    @Getter @Setter
+    @Getter
+    @Setter
     private Path path;
 
     private CommandPath() {

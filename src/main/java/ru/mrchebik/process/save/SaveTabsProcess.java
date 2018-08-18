@@ -1,28 +1,18 @@
 package ru.mrchebik.process.save;
 
-import javafx.scene.control.TabPane;
+import ru.mrchebik.injection.CollectorComponents;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class SaveTabsProcess extends Thread {
-    private TabPane tabPane;
-
-    private SaveTabsProcess(TabPane tabPane) {
-        this.tabPane = tabPane;
-    }
-
-    public static SaveTabsProcess create(TabPane tabPane) {
-        return new SaveTabsProcess(tabPane);
+    public static void runSynch() {
+        SaveTabs.create(CollectorComponents.tabPane.getTabs()).run();
     }
 
     @Override
     public void run() {
-        schedule(() -> SaveTabs.create(tabPane.getTabs()).start());
-    }
-
-    public void runSynch() {
-        SaveTabs.create(tabPane.getTabs()).run();
+        schedule(() -> SaveTabs.create(CollectorComponents.tabPane.getTabs()).start());
     }
 
     private void schedule(Runnable r) {

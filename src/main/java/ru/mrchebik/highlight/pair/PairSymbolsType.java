@@ -7,7 +7,7 @@ import java.util.Arrays;
 @AllArgsConstructor
 public enum PairSymbolsType {
     FIGURE('{', '}'),
-    ROUND ('(', ')'),
+    ROUND('(', ')'),
     SQUARE('[', ']');
 
     public char left;

@@ -5,7 +5,18 @@ import ru.mrchebik.highlight.bracket.BracketHighlightFactory;
 import ru.mrchebik.highlight.pair.PairSymbols;
 import ru.mrchebik.language.java.highlight.caret.JavaCaretHighlight;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class JavaBracketHighlight extends BracketHighlightFactory {
+    protected static List<JavaToken> tokenBrackets;
+    protected static List<JavaToken> otherTokenBrackets;
+
+    public JavaBracketHighlight() {
+        tokenBrackets = new ArrayList<>();
+        otherTokenBrackets = new ArrayList<>();
+    }
+
     public void wrapSearchBracket(JavaToken token, PairSymbols pair) {
         String fragment, mirrFrag;
         int index;
@@ -44,5 +55,27 @@ public class JavaBracketHighlight extends BracketHighlightFactory {
                 token.getNextToken().orElse(null);
         if (token1 != null)
             searchBracket(token1, fragment, mirrFrag, index);
+    }
+
+    public void addTokenToStore(JavaToken token, boolean other) {
+        if (other)
+            otherTokenBrackets.add(token);
+        else
+            tokenBrackets.add(token);
+    }
+
+    public void clearBrackets() {
+        tokenBrackets.clear();
+        otherTokenBrackets.clear();
+    }
+
+    public void clearBracketLists() {
+        clearBracketList(tokenBrackets);
+        clearBracketList(otherTokenBrackets);
+    }
+
+    private void clearBracketList(List<JavaToken> tokens) {
+        if (tokens.size() != 0)
+            tokens.forEach(token -> JavaCaretHighlight.highlight(token, "empty"));
     }
 }

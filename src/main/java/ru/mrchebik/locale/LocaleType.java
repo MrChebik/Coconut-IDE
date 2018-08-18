@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import java.util.Arrays;
 
 @AllArgsConstructor
-public enum  LocaleType {
+public enum LocaleType {
     English("en");
 
     private String locale;

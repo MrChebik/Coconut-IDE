@@ -2,38 +2,29 @@ package ru.mrchebik.gui.place.work.event;
 
 import javafx.event.EventHandler;
 import javafx.scene.input.KeyEvent;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import ru.mrchebik.process.ExecutorCommand;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Objects;
 
 import static ru.mrchebik.gui.key.KeyHelper.isBackSpace;
 import static ru.mrchebik.gui.key.KeyHelper.isEnter;
 
-@RequiredArgsConstructor
 public class InputTextToOutputArea implements EventHandler<KeyEvent> {
-    @Setter
-    private String input = "";
-    @NonNull
-    private ExecutorCommand executorCommand;
-
+    public static String input = "";
     private OutputStream outputStream;
 
     @Override
     public void handle(KeyEvent event) {
-        outputStream = ExecutorCommand.getOutputStream();
-        if (outputStream != null) {
-            if (isEnter(event)) {
+        outputStream = ExecutorCommand.outputStream;
+        if (Objects.nonNull(outputStream))
+            if (isEnter(event))
                 handleEnter();
-            } else if (isBackSpace(event)) {
+            else if (isBackSpace(event))
                 handleBackSpace();
-            } else {
+            else
                 addText(event.getText());
-            }
-        }
     }
 
     private void addText(String text) {
@@ -41,9 +32,8 @@ public class InputTextToOutputArea implements EventHandler<KeyEvent> {
     }
 
     private void handleBackSpace() {
-        if (input.length() > 0) {
+        if (input.length() > 0)
             input = input.substring(0, input.length() - 1);
-        }
     }
 
     private void handleEnter() {
@@ -52,7 +42,7 @@ public class InputTextToOutputArea implements EventHandler<KeyEvent> {
             outputStream.write(input.getBytes());
             outputStream.flush();
         } catch (IOException ignored) {
-            ExecutorCommand.setOutputStream(null);
+            ExecutorCommand.outputStream = null;
         } finally {
             input = "";
         }

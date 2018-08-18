@@ -21,14 +21,12 @@ import ru.mrchebik.gui.place.work.event.structure.StructureUpdateGraphic;
 import ru.mrchebik.gui.updater.TabUpdater;
 import ru.mrchebik.gui.updater.TreeUpdater;
 import ru.mrchebik.icons.Icons;
+import ru.mrchebik.injection.CollectorComponents;
 import ru.mrchebik.language.Language;
 import ru.mrchebik.language.java.highlight.Highlight;
-import ru.mrchebik.language.java.highlight.syntax.Syntax;
 import ru.mrchebik.language.java.symbols.SymbolsType;
 import ru.mrchebik.model.ActionPlaces;
 import ru.mrchebik.model.CommandPath;
-import ru.mrchebik.process.ExecutorCommand;
-import ru.mrchebik.process.io.ErrorProcess;
 import ru.mrchebik.process.save.SaveTabs;
 import ru.mrchebik.process.save.SaveTabsProcess;
 import ru.mrchebik.project.Project;
@@ -48,15 +46,9 @@ public class WorkPresenter extends KeyHelper implements Initializable {
     @FXML
     private TreeView<Path> treeView;
     @Inject
-    private ErrorProcess errorProcess;
-    @Inject
-    private ExecutorCommand executorCommand;
-    @Inject
     private ActionPlaces places;
 
     private CommandPath commandPath;
-    private InputTextToOutputArea inputTextToOutputArea;
-    private SaveTabsProcess saveTabsProcess;
     private TabUpdater tabUpdater;
     private TreeUpdater treeUpdater;
 
@@ -94,6 +86,8 @@ public class WorkPresenter extends KeyHelper implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        CollectorComponents.setComponents(outputArea, tabPane, treeView);
+
         startSaveTabsProcess();
         initializeVariables();
         setUpOutputArea();
@@ -124,25 +118,17 @@ public class WorkPresenter extends KeyHelper implements Initializable {
     }
 
     private void initializeVariables() {
-        build = new Build(ErrorProcess.create(), ExecutorCommand.create(), Language.command);
+        build = new Build(Language.command);
 
         AnalyzerAutocomplete.initialize(Project.pathSource);
         AnalyzerAutocomplete.database.setKeywords(Arrays.asList(SymbolsType.KEYWORDS.getSymbols()));
 
-        errorProcess.setTextArea(outputArea);
-
         commandPath = CommandPath.create();
 
-        var syntax = new Syntax(saveTabsProcess, tabPane, treeView);
-        tabUpdater = new TabUpdater(tabPane, Highlight.create(), syntax, places.getWorkPlace().getStage());
+        tabUpdater = new TabUpdater(tabPane, Highlight.create(), places.getWorkPlace().getStage());
 
         treeUpdater = new TreeUpdater(treeView, tabUpdater);
         treeUpdater.setRootToTreeView();
-
-        executorCommand.setOutputArea(outputArea);
-        ExecutorCommand.setErrorProcess(errorProcess);
-
-        inputTextToOutputArea = new InputTextToOutputArea(executorCommand);
     }
 
     private boolean lengthOfOpenTabPathLessThanOne(CustomTreeItem item) {
@@ -151,12 +137,14 @@ public class WorkPresenter extends KeyHelper implements Initializable {
 
     private void setEmptyValues() {
         outputArea.setText("");
-        inputTextToOutputArea.setInput("");
+        InputTextToOutputArea.input = "";
     }
 
     private void setUpOutputArea() {
         outputArea.setEditable(false);
-        outputArea.setOnKeyPressed(inputTextToOutputArea);
+
+        var event = new InputTextToOutputArea();
+        outputArea.setOnKeyPressed(event);
     }
 
     private void setUpTreeView() {
@@ -170,7 +158,6 @@ public class WorkPresenter extends KeyHelper implements Initializable {
     }
 
     private void startSaveTabsProcess() {
-        saveTabsProcess = SaveTabsProcess.create(tabPane);
-        saveTabsProcess.start();
+        new SaveTabsProcess().start();
     }
 }

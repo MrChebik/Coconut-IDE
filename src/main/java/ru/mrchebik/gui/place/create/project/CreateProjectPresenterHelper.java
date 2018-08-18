@@ -55,13 +55,13 @@ class CreateProjectPresenterHelper {
         closeWindows(startPlace, createProjectPlace);
     }
 
-    private static void closeWindows(StartPlace         startPlace,
+    private static void closeWindows(StartPlace startPlace,
                                      CreateProjectPlace createProjectPlace) {
         startPlace.close();
         createProjectPlace.close();
     }
 
-    private static void computePropertyProjectName(String    newValue,
+    private static void computePropertyProjectName(String newValue,
                                                    TextField path) {
         if (!wasChanged &&
                 path.getText().startsWith(Projects.pathString)) {
@@ -81,7 +81,7 @@ class CreateProjectPresenterHelper {
         return pathTarget.toFile();
     }
 
-    private static void computePropertyProjectPath(String    newValue,
+    private static void computePropertyProjectPath(String newValue,
                                                    TextField path) {
         path.setText(newValue);
         wasChanged = true;

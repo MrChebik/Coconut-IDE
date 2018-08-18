@@ -1,8 +1,6 @@
 package ru.mrchebik.screen.measurement;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
 import ru.mrchebik.screen.Screen;
 
 @AllArgsConstructor
@@ -16,8 +14,8 @@ public enum Scale {
     PLACE_WORK() {
         @Override
         public void init() {
-            setWidth(Screen.bounds.getWidth() / 100 * 75);
-            setHeight(Screen.bounds.getHeight() / 100 * 75);
+            width = Screen.bounds.getWidth() / 100 * 75;
+            height = Screen.bounds.getHeight() / 100 * 75;
         }
 
         @Override
@@ -26,13 +24,11 @@ public enum Scale {
         }
     };
 
+    public double width;
+    public double height;
+
     Scale() {
     }
-
-    @Getter @Setter
-    private double width;
-    @Getter @Setter
-    private double height;
 
     public void init() {
         throw new UnsupportedOperationException();

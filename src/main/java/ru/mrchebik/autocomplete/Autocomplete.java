@@ -25,19 +25,17 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 public class Autocomplete extends Popup {
+    private final ListView<CodeArea> listOptions;
     private CodeArea codeArea;
     private Stage stage;
     private boolean begin;
     private boolean wasSameSymbol;
     private AtomicInteger index;
     private AtomicInteger maxLength;
-
     private AutocompleteDatabase database;
-
-    @Getter @Setter
+    @Getter
+    @Setter
     private boolean hideTemporarily = true;
-
-    private final ListView<CodeArea> listOptions;
 
     public Autocomplete(CodeArea codeArea, Stage stage, AutocompleteDatabase database) {
         super();
@@ -152,7 +150,7 @@ public class Autocomplete extends Popup {
                     indexInsert = indexImport;
                 } else if (indexPackage != -1) {
                     insertImport = "\n\nimport " + item.getAccessibleRoleDescription() + ";\n\n";
-                    indexInsert =  codeArea.getText().substring(indexPackage).indexOf(";");
+                    indexInsert = codeArea.getText().substring(indexPackage).indexOf(";");
                 } else
                     insertImport = "import " + item.getAccessibleRoleDescription() + ";\n\n";
                 codeArea.insertText(indexInsert, insertImport);

@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Objects;
 import java.util.Properties;
 
 public class PropertyCollector {
@@ -17,37 +18,17 @@ public class PropertyCollector {
 
     private static Path pathProperties;
     private static Properties properties = new Properties();
-    private static String javac;
 
     static {
-        SETTINGS_PATH = Paths.get(System.getProperty("user.home"), ".coconut-ide");
-        if (!Files.exists(SETTINGS_PATH))
-            try {
-                Files.createDirectory(SETTINGS_PATH);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
+        initializeSettingsPath();
         initializeApplicationProperties();
-    }
-
-    public static String getJavac() {
-        if (javac == null) {
-            javac = "javac";
-
-            var os = System.getProperty("os.name");
-            if (os.contains("Windows"))
-                javac += ".exe";
-        }
-
-        return javac;
     }
 
     public static String getProperty(String key) {
         return properties.getProperty(key);
     }
 
-    @SneakyThrows
+    @SneakyThrows(IOException.class)
     private static void initializeApplicationProperties() {
         pathProperties = SETTINGS_PATH.resolve("application.properties");
         if (!Files.exists(pathProperties))
@@ -55,18 +36,29 @@ public class PropertyCollector {
         properties.load(new FileInputStream(new File(String.valueOf(pathProperties.toFile()))));
     }
 
-    public static boolean isJDKCorrect() {
-        var javaHome = Paths.get(System.getProperty("java.home"));
-        return Files.exists(javaHome.resolve("bin").resolve(getJavac())) ||
-                Files.exists(javaHome.getParent().resolve("bin").resolve(getJavac()));
+    @SneakyThrows(IOException.class)
+    private static void initializeSettingsPath() {
+        SETTINGS_PATH = Paths.get(System.getProperty("user.home"), ".coconut-ide");
+        if (!Files.exists(SETTINGS_PATH))
+            Files.createDirectory(SETTINGS_PATH);
     }
 
-    @SneakyThrows
+    @SneakyThrows(IOException.class)
     public static void writeProperty(String key, String value) {
         properties.setProperty(key, value);
 
         var file = pathProperties.toFile();
         @Cleanup FileOutputStream fos = new FileOutputStream(file);
         properties.store(fos, "Update");
+    }
+
+    public static String initVariable(String key, String defaultValue) {
+        var result = PropertyCollector.getProperty(key);
+        if (Objects.isNull(result)) {
+            PropertyCollector.writeProperty(key, defaultValue);
+            result = defaultValue;
+        }
+
+        return result;
     }
 }

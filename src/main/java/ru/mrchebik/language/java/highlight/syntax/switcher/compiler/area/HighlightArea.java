@@ -1,21 +1,12 @@
 package ru.mrchebik.language.java.highlight.syntax.switcher.compiler.area;
 
-import javafx.scene.control.TabPane;
-import javafx.scene.control.TreeView;
-import ru.mrchebik.gui.node.codearea.CustomCodeArea;
 import ru.mrchebik.language.java.highlight.syntax.switcher.compiler.JavaCompilerSyntax;
-import ru.mrchebik.process.save.SaveTabsProcess;
 
 import javax.tools.Diagnostic;
 import javax.tools.JavaFileObject;
 import java.io.File;
-import java.nio.file.Path;
 
 public class HighlightArea extends JavaCompilerSyntax {
-    public HighlightArea(CustomCodeArea customCodeArea, SaveTabsProcess saveTabsProcess, TabPane tabPane, TreeView<Path> treeView) {
-        super(customCodeArea, saveTabsProcess, tabPane, treeView);
-    }
-
     public static void highlightArea() {
         diagnostics.stream()
                 .filter(JavaCompilerSyntax::isErrorKind)

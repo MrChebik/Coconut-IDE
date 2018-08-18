@@ -7,9 +7,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AutocompleteClass {
-    @Getter @Setter
+    @Getter
+    @Setter
     private String packageClass;
-    @Getter @Setter
+    @Getter
+    @Setter
     private String nameClass;
     @Getter
     private List<String> variables;

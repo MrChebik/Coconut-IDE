@@ -20,23 +20,22 @@ enum ArgumentsType {
     VERSION("-v", "--version",
             "Print current version / his stage build / branch of project",
             () -> {
-        System.out.println(VersionType.IDE.toStringFull());
-        System.exit(0);
-    });
+                System.out.println(VersionType.IDE.toStringFull());
+                System.exit(0);
+            });
 
+    static AtomicInteger longestBrief;
+    static AtomicInteger longestFull;
     String brief;
     String full;
     String info;
     Runnable runnable;
 
-    static AtomicInteger longestBrief;
-    static AtomicInteger longestFull;
-
     static void search(String arg) {
         Arrays.stream(ArgumentsType.values())
                 .filter(item -> {
                     boolean isMatch = item.brief.equals(arg) ||
-                                        item.full.equals(arg);
+                            item.full.equals(arg);
 
                     if (isMatch)
                         item.runnable.run();
@@ -53,7 +52,7 @@ enum ArgumentsType {
                 .forEach(item -> {
                     var briefSpace = ArgumentsTypeHelper.initSpaces(longestBrief, item.brief);
                     var briefAfter = ArgumentsTypeHelper.initAfterBrief(item.brief);
-                    var  fullSpace = ArgumentsTypeHelper.initSpaces(longestFull , item.full );
+                    var fullSpace = ArgumentsTypeHelper.initSpaces(longestFull, item.full);
 
                     System.out.println(briefSpace + briefAfter + fullSpace + "   " + item.info);
                 });

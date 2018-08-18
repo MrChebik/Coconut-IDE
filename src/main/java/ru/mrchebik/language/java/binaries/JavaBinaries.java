@@ -18,21 +18,21 @@ public class JavaBinaries extends Binaries implements BinariesWrapper {
         String pathJdk = PropertyCollector.getProperty("jdk");
 
         return pathJdk == null ?
-                    bin
+                bin
                 :
-                    pathJdk + File.separator + "bin" + File.separator + bin;
+                pathJdk + File.separator + "bin" + File.separator + bin;
     }
 
     @Override
     public String getBinary(BinariesType type) {
         String suffix = System.getProperty("os.name").contains("Windows") ?
-                    ".exe"
+                ".exe"
                 :
-                    "";
+                "";
         String binary = BinariesType.COMPILE.equals(type) ?
-                    compile
+                compile
                 :
-                    run;
+                run;
 
         return binary + suffix;
     }

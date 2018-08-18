@@ -21,7 +21,7 @@ public class TaskHelper {
                     e.printStackTrace();
                 }
 
-                if (!ErrorProcess.isWasError())
+                if (!ErrorProcess.wasError)
                     task.run();
             }
         }).start();

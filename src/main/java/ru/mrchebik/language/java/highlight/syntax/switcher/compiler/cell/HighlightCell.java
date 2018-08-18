@@ -1,13 +1,10 @@
 package ru.mrchebik.language.java.highlight.syntax.switcher.compiler.cell;
 
 import javafx.scene.Node;
-import javafx.scene.control.TabPane;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeView;
-import ru.mrchebik.gui.node.codearea.CustomCodeArea;
+import ru.mrchebik.injection.CollectorComponents;
 import ru.mrchebik.language.java.highlight.syntax.switcher.compiler.JavaCompilerSyntax;
-import ru.mrchebik.process.save.SaveTabsProcess;
 
 import javax.tools.Diagnostic;
 import javax.tools.JavaFileObject;
@@ -24,13 +21,9 @@ public class HighlightCell extends JavaCompilerSyntax {
     private static List<TreeItem<Path>> treeItems;
     private static List<Node> cells;
 
-    public HighlightCell(CustomCodeArea customCodeArea, SaveTabsProcess saveTabsProcess, TabPane tabPane, TreeView<Path> treeView) {
-        super(customCodeArea, saveTabsProcess, tabPane, treeView);
-    }
-
     private static List<TreeItem<Path>> getAllTreeItems(TreeItem<Path> root) {
         List<TreeItem<Path>> treeItems = new ArrayList<>();
-        if (root.equals(treeView.getRoot())) {
+        if (root.equals(CollectorComponents.treeView.getRoot())) {
             treeItems.add(root);
         }
 
@@ -46,10 +39,10 @@ public class HighlightCell extends JavaCompilerSyntax {
 
     public static void highlight() {
         if (diagnostics != null) {
-            Set<Node> treeCells = treeView.lookupAll(".tree-cell");
+            Set<Node> treeCells = CollectorComponents.treeView.lookupAll(".tree-cell");
             cells = new ArrayList<>(treeCells);
             cells = cells.parallelStream().filter(c -> ((TreeCell) c).getTreeItem() != null).collect(Collectors.toList());
-            treeItems = getAllTreeItems(treeView.getRoot());
+            treeItems = getAllTreeItems(CollectorComponents.treeView.getRoot());
 
             diagnostics.stream()
                     .filter(JavaCompilerSyntax::isErrorKind)
