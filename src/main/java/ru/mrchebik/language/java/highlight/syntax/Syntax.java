@@ -18,12 +18,10 @@ public class Syntax {
     private TreeView<Path> treeView;
 
     public void compute(CustomCodeArea customCodeArea) {
-        if (PropertyCollector.isJDKCorrect()) {
-            JavaCompilerSyntax processSyntax = new JavaCompilerSyntax(customCodeArea, saveTabsProcess, tabPane, treeView);
-            processSyntax.start();
-        } else {
-            JavaSymbolSolverSyntax processSyntax = new JavaSymbolSolverSyntax(customCodeArea);
-            processSyntax.start();
-        }
+        SyntaxWrapper syntax = PropertyCollector.isJDKCorrect() ?
+                new JavaCompilerSyntax(customCodeArea, saveTabsProcess, tabPane, treeView)
+                :
+                new JavaSymbolSolverSyntax(customCodeArea);
+        syntax.start();
     }
 }

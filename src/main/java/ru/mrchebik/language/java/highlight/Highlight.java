@@ -65,9 +65,9 @@ public class Highlight {
         lastKwEnd = 0;
         while (matcher.find()) {
             String styleClass = null;
-            if (isKEYWORD()) {
+            if (isKEYWORD())
                 styleClass = "keyword";
-            } else if (isPAREN()) {
+            else if (isPAREN()) {
                 styleClass = "paren";
             } else if (isBRACE()) {
                 styleClass = "brace";

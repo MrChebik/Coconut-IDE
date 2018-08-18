@@ -9,7 +9,7 @@
 Hello World - Error - Autocomplete
 ## Features
 * Autocomplete (without global)
-* Highlight (without names)
+* Highlight
 * IO streams
 * Project structure
 ## Requirements

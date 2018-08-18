@@ -4,6 +4,8 @@ import javafx.application.Platform;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TreeView;
 import ru.mrchebik.gui.node.codearea.CustomCodeArea;
+import ru.mrchebik.language.Language;
+import ru.mrchebik.language.java.highlight.syntax.SyntaxWrapper;
 import ru.mrchebik.language.java.highlight.syntax.switcher.compiler.area.HighlightArea;
 import ru.mrchebik.language.java.highlight.syntax.switcher.compiler.cell.HighlightCell;
 import ru.mrchebik.language.java.highlight.syntax.switcher.compiler.tab.HighlightTab;
@@ -18,7 +20,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 
-public class JavaCompilerSyntax extends Thread {
+public class JavaCompilerSyntax extends Thread implements SyntaxWrapper {
     protected static CustomCodeArea customCodeArea;
     private SaveTabsProcess saveTabsProcess;
     protected static TabPane tabPane;
@@ -60,6 +62,7 @@ public class JavaCompilerSyntax extends Thread {
         Platform.runLater(() -> {
             try {
                 customCodeArea.setStyleSpans(0, customCodeArea.getCodeAreaCSS().getStyleSpans(0, customCodeArea.getText().length()));
+                Language.caretHighlight.compute(customCodeArea);
             } catch (IndexOutOfBoundsException ignored) {}
         });
     }

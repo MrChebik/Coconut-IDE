@@ -7,12 +7,13 @@ import javafx.application.Platform;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import ru.mrchebik.gui.node.codearea.CustomCodeArea;
+import ru.mrchebik.language.java.highlight.syntax.SyntaxWrapper;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @RequiredArgsConstructor
-public class JavaSymbolSolverSyntax extends Thread {
+public class JavaSymbolSolverSyntax extends Thread implements SyntaxWrapper {
     @NonNull
     private CustomCodeArea customCodeArea;
 
