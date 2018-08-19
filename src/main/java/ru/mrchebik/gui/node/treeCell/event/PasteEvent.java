@@ -19,8 +19,8 @@ public class PasteEvent implements EventHandler<ActionEvent> {
     @Override
     @SneakyThrows(IOException.class)
     public void handle(ActionEvent event) {
-        String command = commandPath.getCommand();
-        Path pathCommand = commandPath.getPath();
+        String command = commandPath.command;
+        Path pathCommand = commandPath.path;
 
         if (command != null) {
             Path moveTo = path.resolve(pathCommand.getFileName());

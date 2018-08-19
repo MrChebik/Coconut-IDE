@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 public class ExecutorCommand {
-    private static InputProcess inputProcess;
     public static OutputStream outputStream;
     private static Process process;
 
@@ -23,9 +22,9 @@ public class ExecutorCommand {
         initializeInputStream();
         outputStream = process.getOutputStream();
         process.waitFor();
-        Platform.runLater(() -> CollectorComponents.outputArea.appendText(inputProcess.getLine().toString()));
-        inputProcess.setOpen(false);
-        Platform.runLater(() -> CollectorComponents.outputArea.appendText((!inputProcess.isFirstLine() || ErrorProcess.wasError ? "\n\n" : "") + "[PROCESS]: " + (ErrorProcess.wasError ? "Failure" : "Success") + "\n"));
+        Platform.runLater(() -> CollectorComponents.outputArea.appendText(InputProcess.line.toString()));
+        InputProcess.open = false;
+        Platform.runLater(() -> CollectorComponents.outputArea.appendText((!InputProcess.firstLine || ErrorProcess.wasError ? "\n\n" : "") + "[PROCESS]: " + (ErrorProcess.wasError ? "Failure" : "Success") + "\n"));
         outputStream = null;
 
         CollectorComponents.outputArea.setEditable(false);
@@ -38,7 +37,7 @@ public class ExecutorCommand {
 
     private static void initializeInputStream() {
         var inputStream = process.getInputStream();
-        inputProcess = new InputProcess(inputStream, CollectorComponents.outputArea);
+        var inputProcess = new InputProcess(inputStream);
         inputProcess.start();
     }
 

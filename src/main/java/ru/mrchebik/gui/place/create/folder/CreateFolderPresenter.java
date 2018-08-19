@@ -5,15 +5,11 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import ru.mrchebik.gui.key.KeyHelper;
 import ru.mrchebik.helper.FileHelper;
-import ru.mrchebik.model.ActionPlaces;
-
-import javax.inject.Inject;
+import ru.mrchebik.injection.CollectorComponents;
 
 public class CreateFolderPresenter extends KeyHelper {
     @FXML
     private TextField name;
-    @Inject
-    private ActionPlaces places;
 
     @FXML
     private void handleCreateFolder() {
@@ -27,7 +23,7 @@ public class CreateFolderPresenter extends KeyHelper {
     }
 
     private void createFolder() {
-        var pathFromPlace = places.closeAndGetCreateFolderPlace();
+        var pathFromPlace = CollectorComponents.createFolderPlace.closeAndGetPath();
         var nameOfFolder = name.getText();
         var path = pathFromPlace.resolve(nameOfFolder);
         FileHelper.createFolder(path);

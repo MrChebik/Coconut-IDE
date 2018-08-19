@@ -2,7 +2,6 @@ package ru.mrchebik.gui.place;
 
 import com.airhacks.afterburner.views.FXMLView;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 import ru.mrchebik.gui.place.create.file.CreateFileView;
 import ru.mrchebik.gui.place.create.folder.CreateFolderView;
 import ru.mrchebik.gui.place.create.project.CreateProjectView;
@@ -21,6 +20,5 @@ public enum ViewHelper {
     PLACE_RENAME_FOLDER(new RenameFolderView()),
     PLACE_WORK(new WorkView());
 
-    @Getter
-    private FXMLView view;
+    public FXMLView view;
 }

@@ -2,7 +2,7 @@ package ru.mrchebik.helper;
 
 import javafx.scene.control.TextField;
 import lombok.SneakyThrows;
-import ru.mrchebik.model.ActionPlaces;
+import ru.mrchebik.injection.CollectorComponents;
 import ru.mrchebik.project.Project;
 
 import java.io.File;
@@ -16,8 +16,8 @@ import java.util.stream.Stream;
 import static ru.mrchebik.project.Project.pathSource;
 
 public class FileHelper {
-    public static void createFilePresenter(ActionPlaces places, TextField name) {
-        Path pathFromPlace = places.closeAndGetCreateFilePlace();
+    public static void createFilePresenter(TextField name) {
+        Path pathFromPlace = CollectorComponents.createFilePlace.closeAndGetPath();
         String nameOfFile = name.getText();
         Path path = pathFromPlace.resolve(nameOfFile);
         FileHelper.createFile(path);

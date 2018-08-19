@@ -7,7 +7,7 @@ import javafx.scene.control.TreeCell;
 import lombok.AllArgsConstructor;
 import ru.mrchebik.gui.node.treeCell.event.PasteEvent;
 import ru.mrchebik.helper.FileHelper;
-import ru.mrchebik.model.ActionPlaces;
+import ru.mrchebik.injection.CollectorComponents;
 import ru.mrchebik.model.CommandPath;
 import ru.mrchebik.project.Project;
 
@@ -17,7 +17,6 @@ import java.nio.file.Path;
 @AllArgsConstructor
 public class CustomTreeCell extends TreeCell<Path> {
     private CommandPath commandPath;
-    private ActionPlaces places;
 
     @Override
     public void updateItem(Path path, boolean empty) {
@@ -51,29 +50,28 @@ public class CustomTreeCell extends TreeCell<Path> {
             delete.setDisable(true);
         }
 
-        createFile.setOnAction(event -> places.runCreateFilePlace(path));
+        createFile.setOnAction(event -> CollectorComponents.createFilePlace.runAndSetPath(path));
 
-        createFolder.setOnAction(event -> places.runCreateFolderPlace(path));
+        createFolder.setOnAction(event -> CollectorComponents.createFolderPlace.runAndSetPath(path));
 
         copy.setOnAction(event -> {
-            commandPath.setCommand("Copy");
-            commandPath.setPath(path);
+            commandPath.command = "Copy";
+            commandPath.path = path;
         });
 
         cut.setOnAction(event -> {
-            commandPath.setCommand("Cut");
-            commandPath.setPath(path);
+            commandPath.command = "Cut";
+            commandPath.path = path;
         });
 
         PasteEvent pasteEvent = new PasteEvent(commandPath, path);
         paste.setOnAction(pasteEvent);
 
         rename.setOnAction(event -> {
-            if (Files.isDirectory(path)) {
-                places.runRenameFilePlace(path);
-            } else {
-                places.runRenameFolderPlace(path);
-            }
+            if (Files.isDirectory(path))
+                CollectorComponents.renameFilePlace.runAndSetPath(path);
+            else
+                CollectorComponents.renameFolderPlace.runAndSetPath(path);
         });
 
         delete.setOnAction(event -> FileHelper.deleteFile(path));

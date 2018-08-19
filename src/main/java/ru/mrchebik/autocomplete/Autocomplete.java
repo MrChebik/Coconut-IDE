@@ -15,7 +15,6 @@ import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.model.PlainTextChange;
 import ru.mrchebik.language.java.symbols.CustomSymbolsType;
 import ru.mrchebik.language.java.symbols.SymbolsType;
-import ru.mrchebik.model.EditWord;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -135,7 +134,7 @@ public class Autocomplete extends Popup {
             String insertImport = "";
             String packageName = item.getAccessibleRoleDescription();
 
-            codeArea.insertText(EditWord.getEnd(), inserted.substring(EditWord.getEnd() - EditWord.getBegin()));
+            codeArea.insertText(EditWord.end, inserted.substring(EditWord.end - EditWord.begin));
 
             int lastPosition = codeArea.getCaretPosition() - (inserted.contains("()") ? 1 : 0);
             if (!packageName.isEmpty() &&
@@ -259,17 +258,17 @@ public class Autocomplete extends Popup {
             hideSnippet();
         } else {
             if (!inserted.isEmpty() && !" ".equals(inserted)) {
-                if (EditWord.getWord().length() == 0) {
+                if (EditWord.word.length() == 0) {
                     int caretPos = codeArea.getCaretPosition();
                     if (caretPos == 0) {
-                        EditWord.setBegin(0);
+                        EditWord.begin = (0);
                     } else {
-                        EditWord.setBegin(caretPos - 1);
+                        EditWord.begin = caretPos - 1;
                     }
                 }
                 EditWord.concat(changeList.get(0).getInserted());
             } else {
-                if (!EditWord.getWord().isEmpty()) {
+                if (!EditWord.word.isEmpty()) {
                     try {
                         EditWord.remove(changeList.get(0).getRemoved(), codeArea.getCaretPosition());
                     } catch (StringIndexOutOfBoundsException ignored) {
@@ -279,10 +278,10 @@ public class Autocomplete extends Popup {
                     EditWord.clear();
             }
 
-            if (!EditWord.getWord().isEmpty()) {
+            if (!EditWord.word.isEmpty()) {
                 List<AutocompleteItem> options = new ArrayList<>();
 
-                List<String> optionsKeywords = database.getKeywords().stream().filter(word -> word.startsWith(EditWord.getWord())).collect(Collectors.toList());
+                List<String> optionsKeywords = database.getKeywords().stream().filter(word -> word.startsWith(EditWord.word)).collect(Collectors.toList());
                 List<TextPackage> optionsClass = new ArrayList<>();
                 List<TextPackage> optionsMethods = new ArrayList<>();
                 List<TextPackage> optionsVariables = new ArrayList<>();
@@ -290,14 +289,14 @@ public class Autocomplete extends Popup {
                 database.getClassList().forEach(classItem -> {
                     String packageName = classItem.getPackageClass() + "." + classItem.getNameClass();
 
-                    if (classItem.getNameClass().startsWith(EditWord.getWord()))
+                    if (classItem.getNameClass().startsWith(EditWord.word))
                         optionsClass.add(new TextPackage(classItem.getNameClass(), packageName));
                     classItem.getVariables().forEach(variable -> {
-                        if (variable.startsWith(EditWord.getWord()))
+                        if (variable.startsWith(EditWord.word))
                             optionsVariables.add(new TextPackage(variable, packageName));
                     });
                     classItem.getMethods().forEach(method -> {
-                        if (method.startsWith(EditWord.getWord()))
+                        if (method.startsWith(EditWord.word))
                             optionsMethods.add(new TextPackage(method, packageName));
                     });
                 });
@@ -326,11 +325,11 @@ public class Autocomplete extends Popup {
                     Bounds bounds = codeArea.caretBoundsProperty().getValue().get();
                     double y = bounds.getMaxY();
 
-                    if (EditWord.getBeginGlobal() == -1) {
+                    if (EditWord.beginGlobal == -1) {
                         double x = bounds.getMaxX() - 30;
-                        EditWord.setBeginGlobal(x);
+                        EditWord.beginGlobal = x;
 
-                        setX(EditWord.getBeginGlobal());
+                        setX(EditWord.beginGlobal);
                     }
 
                     setY(y);

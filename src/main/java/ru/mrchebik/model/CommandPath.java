@@ -1,17 +1,10 @@
 package ru.mrchebik.model;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import java.nio.file.Path;
 
 public class CommandPath {
-    @Getter
-    @Setter
-    private String command;
-    @Getter
-    @Setter
-    private Path path;
+    public String command;
+    public Path path;
 
     private CommandPath() {
     }

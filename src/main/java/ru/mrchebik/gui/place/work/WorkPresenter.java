@@ -16,6 +16,10 @@ import ru.mrchebik.build.BuildWrapper;
 import ru.mrchebik.gui.key.KeyHelper;
 import ru.mrchebik.gui.node.CustomTreeItem;
 import ru.mrchebik.gui.node.codearea.CustomCodeArea;
+import ru.mrchebik.gui.place.create.file.CreateFilePlace;
+import ru.mrchebik.gui.place.create.folder.CreateFolderPlace;
+import ru.mrchebik.gui.place.rename.file.RenameFilePlace;
+import ru.mrchebik.gui.place.rename.folder.RenameFolderPlace;
 import ru.mrchebik.gui.place.work.event.InputTextToOutputArea;
 import ru.mrchebik.gui.place.work.event.structure.StructureUpdateGraphic;
 import ru.mrchebik.gui.updater.TabUpdater;
@@ -25,7 +29,6 @@ import ru.mrchebik.injection.CollectorComponents;
 import ru.mrchebik.language.Language;
 import ru.mrchebik.language.java.highlight.Highlight;
 import ru.mrchebik.language.java.symbols.SymbolsType;
-import ru.mrchebik.model.ActionPlaces;
 import ru.mrchebik.model.CommandPath;
 import ru.mrchebik.process.save.SaveTabs;
 import ru.mrchebik.process.save.SaveTabsProcess;
@@ -46,7 +49,7 @@ public class WorkPresenter extends KeyHelper implements Initializable {
     @FXML
     private TreeView<Path> treeView;
     @Inject
-    private ActionPlaces places;
+    private WorkPlace workPlace;
 
     private CommandPath commandPath;
     private TabUpdater tabUpdater;
@@ -86,14 +89,22 @@ public class WorkPresenter extends KeyHelper implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        CollectorComponents.setComponents(outputArea, tabPane, treeView);
-
+        initCollectorComponents();
         startSaveTabsProcess();
         initializeVariables();
         setUpOutputArea();
         setUpTreeView();
         addTabOfMain();
         moveCaretInMain();
+    }
+
+    private void initCollectorComponents() {
+        var createFilePlace = new CreateFilePlace();
+        var createFolderPlace = new CreateFolderPlace();
+        var renameFilePlace = new RenameFilePlace();
+        var renameFolderPlace = new RenameFolderPlace();
+
+        CollectorComponents.setComponents(outputArea, tabPane, treeView, createFilePlace, createFolderPlace, renameFilePlace, renameFolderPlace);
     }
 
     private void addTabOfMain() {
@@ -125,7 +136,7 @@ public class WorkPresenter extends KeyHelper implements Initializable {
 
         commandPath = CommandPath.create();
 
-        tabUpdater = new TabUpdater(tabPane, Highlight.create(), places.getWorkPlace().getStage());
+        tabUpdater = new TabUpdater(tabPane, Highlight.create(), workPlace.getStage());
 
         treeUpdater = new TreeUpdater(treeView, tabUpdater);
         treeUpdater.setRootToTreeView();
@@ -154,7 +165,7 @@ public class WorkPresenter extends KeyHelper implements Initializable {
         var item = treeView.getRoot().getChildren().get(1).getChildren().get(0);
 
         treeView.getSelectionModel().select(item);
-        treeView.setCellFactory(new StructureUpdateGraphic(commandPath, places));
+        treeView.setCellFactory(new StructureUpdateGraphic(commandPath));
     }
 
     private void startSaveTabsProcess() {

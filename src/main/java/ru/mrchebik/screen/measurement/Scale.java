@@ -6,11 +6,11 @@ import ru.mrchebik.screen.Screen;
 @AllArgsConstructor
 public enum Scale {
     PLACE_START(600, 400),
-    PLACE_CREATE_FILE(400, 150),
-    PLACE_CREATE_FOLDER(400, 150),
+    PLACE_CREATE_FILE(360, 122),
+    PLACE_CREATE_FOLDER(360, 122),
     PLACE_CREATE_PROJECT(500, 175),
-    PLACE_RENAME_FILE(400, 150),
-    PLACE_RENAME_FOLDER(400, 150),
+    PLACE_RENAME_FILE(360, 122),
+    PLACE_RENAME_FOLDER(360, 122),
     PLACE_WORK() {
         @Override
         public void init() {

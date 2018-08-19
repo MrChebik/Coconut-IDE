@@ -5,17 +5,14 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import lombok.SneakyThrows;
 import ru.mrchebik.gui.key.KeyHelper;
-import ru.mrchebik.model.ActionPlaces;
+import ru.mrchebik.injection.CollectorComponents;
 
-import javax.inject.Inject;
 import java.io.IOException;
 import java.nio.file.Files;
 
 public class RenameFilePresenter extends KeyHelper {
     @FXML
     private TextField name;
-    @Inject
-    private ActionPlaces places;
 
     @FXML
     private void handleRename() {
@@ -30,7 +27,7 @@ public class RenameFilePresenter extends KeyHelper {
 
     @SneakyThrows(IOException.class)
     private void renameFile() {
-        var path = places.closeAndGetRenameFilePlace();
+        var path = CollectorComponents.renameFilePlace.closeAndGetPath();
         var nameOfFile = name.getText();
         var pathRename = path.getParent().resolve(nameOfFile);
         Files.move(path, pathRename);

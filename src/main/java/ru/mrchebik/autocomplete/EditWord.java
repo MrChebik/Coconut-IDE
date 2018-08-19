@@ -1,19 +1,10 @@
-package ru.mrchebik.model;
-
-import lombok.Getter;
-import lombok.Setter;
+package ru.mrchebik.autocomplete;
 
 public class EditWord {
-    @Getter
-    private static String word;
-    @Getter
-    @Setter
-    private static int begin;
-    @Getter
-    private static int end;
-    @Getter
-    @Setter
-    private static double beginGlobal;
+    public static String word;
+    public static int begin;
+    public static int end;
+    public static double beginGlobal;
 
     static {
         word = "";

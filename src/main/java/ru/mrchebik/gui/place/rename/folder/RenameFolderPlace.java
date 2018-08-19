@@ -2,23 +2,12 @@ package ru.mrchebik.gui.place.rename.folder;
 
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import lombok.Getter;
-import lombok.Setter;
-import ru.mrchebik.gui.place.StageHelper;
+import ru.mrchebik.gui.place.CellStageHelper;
 import ru.mrchebik.gui.place.ViewHelper;
 import ru.mrchebik.screen.measurement.Scale;
 
-import java.nio.file.Path;
-
-public class RenameFolderPlace extends StageHelper {
-    @Getter
-    @Setter
-    private Path path;
-
-    public static RenameFolderPlace create() {
-        return new RenameFolderPlace();
-    }
-
+public class RenameFolderPlace extends CellStageHelper {
+    @Override
     public void start() {
         super.stage = new Stage();
 

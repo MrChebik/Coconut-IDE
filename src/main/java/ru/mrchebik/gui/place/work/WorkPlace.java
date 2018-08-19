@@ -1,27 +1,20 @@
 package ru.mrchebik.gui.place.work;
 
-import com.airhacks.afterburner.injection.Injector;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import ru.mrchebik.gui.place.StageHelper;
 import ru.mrchebik.gui.place.ViewHelper;
-import ru.mrchebik.gui.place.create.file.CreateFilePlace;
-import ru.mrchebik.gui.place.create.folder.CreateFolderPlace;
-import ru.mrchebik.gui.place.rename.file.RenameFilePlace;
-import ru.mrchebik.gui.place.rename.folder.RenameFolderPlace;
-import ru.mrchebik.model.ActionPlaces;
+import ru.mrchebik.injection.Injection;
 import ru.mrchebik.project.Project;
 import ru.mrchebik.screen.measurement.Scale;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.Map;
 
 public class WorkPlace extends StageHelper {
     public void start(String name, Path path) {
         initializeProject(name, path);
-        initializeInject();
+        Injection.initInjection(this);
 
         super.stage = new Stage();
 
@@ -34,24 +27,11 @@ public class WorkPlace extends StageHelper {
         setOnClose(() -> System.exit(0));
     }
 
-    private void initializeInject() {
-        ActionPlaces places = new ActionPlaces(
-                CreateFilePlace.create(),
-                CreateFolderPlace.create(),
-                RenameFilePlace.create(),
-                RenameFolderPlace.create(),
-                this);
-
-        Map<Object, Object> customProperties = new HashMap<>();
-        customProperties.put("places", places);
-        Injector.setConfigurationSource(customProperties::get);
-    }
-
     private void initializeProject(String name, Path path) {
         Path pathOut = Paths.get(path.toString(), "out");
         Path pathSource = Paths.get(path.toString(), "src");
 
-        Project.init(name, path, pathOut, pathSource);//, errorProcess, executorCommand);
+        Project.init(name, path, pathOut, pathSource);
         Project.build();
     }
 }
