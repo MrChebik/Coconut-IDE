@@ -28,7 +28,7 @@ public class PropertyCollector {
         initializeProperties();
     }
 
-    private static void initializeProperties() {
+    public static void initializeProperties() {
         language = PropertyCollector.initVariable("language", "java");
         locale = PropertyCollector.initVariable("locale", "en");
     }

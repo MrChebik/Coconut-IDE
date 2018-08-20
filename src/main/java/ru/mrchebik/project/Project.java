@@ -1,6 +1,6 @@
 package ru.mrchebik.project;
 
-import ru.mrchebik.helper.FileHelper;
+import ru.mrchebik.helper.FileAction;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -22,13 +22,13 @@ public class Project {
     }
 
     public static void build() {
-        FileHelper.createFolder(path);
-        FileHelper.createFolder(pathOut);
-        FileHelper.createFolder(pathSource);
+        FileAction.createFolder(path);
+        FileAction.createFolder(pathOut);
+        FileAction.createFolder(pathSource);
 
         Path pathOfMain = Paths.get(pathSource.toString(), "Main.java");
-        FileHelper.createFile(pathOfMain);
-        FileHelper.writeClassMain(pathOfMain);
+        FileAction.createFile(pathOfMain);
+        FileAction.writeClassMain(pathOfMain);
     }
 
     public static String getTitle() {

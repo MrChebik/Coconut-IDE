@@ -3,7 +3,7 @@ package ru.mrchebik.gui.collector;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TreeView;
-import ru.mrchebik.gui.place.CellStageHelper;
+import ru.mrchebik.gui.place.CellStageAction;
 
 import java.nio.file.Path;
 
@@ -12,10 +12,10 @@ public class ComponentsCollector {
     public static TabPane tabPane;
     public static TreeView<Path> treeView;
 
-    public static CellStageHelper createFilePlace;
-    public static CellStageHelper createFolderPlace;
-    public static CellStageHelper renameFilePlace;
-    public static CellStageHelper renameFolderPlace;
+    public static CellStageAction createFilePlace;
+    public static CellStageAction createFolderPlace;
+    public static CellStageAction renameFilePlace;
+    public static CellStageAction renameFolderPlace;
 
     private ComponentsCollector() {
     }
@@ -23,10 +23,10 @@ public class ComponentsCollector {
     public static void setComponents(TextArea outputArea,
                                      TabPane tabPane,
                                      TreeView<Path> treeView,
-                                     CellStageHelper createFilePlace,
-                                     CellStageHelper createFolderPlace,
-                                     CellStageHelper renameFilePlace,
-                                     CellStageHelper renameFolderPlace) {
+                                     CellStageAction createFilePlace,
+                                     CellStageAction createFolderPlace,
+                                     CellStageAction renameFilePlace,
+                                     CellStageAction renameFolderPlace) {
         ComponentsCollector.outputArea = outputArea;
         ComponentsCollector.tabPane = tabPane;
         ComponentsCollector.treeView = treeView;

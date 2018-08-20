@@ -1,4 +1,4 @@
-package ru.mrchebik.gui.collector.contextmenu.treeview;
+package ru.mrchebik.gui.contextmenu.treeview.collector;
 
 import javafx.scene.Node;
 import javafx.scene.control.ContextMenu;
@@ -28,13 +28,13 @@ public class MenuTreeviewCollector {
     private static void initItems() {
         contextMenu = new ContextMenu();
 
-        createFile = new MenuItem(Locale.CREATE_FILE_MENU);
-        createFolder = new MenuItem(Locale.CREATE_FOLDER_MENU);
-        copy = new MenuItem(Locale.COPY_MENU);
-        cut = new MenuItem(Locale.CUT_MENU);
-        paste = new MenuItem(Locale.PASTE_MENU);
-        rename = new MenuItem(Locale.RENAME_BUTTON);
-        delete = new MenuItem(Locale.DELETE_MENU);
+        createFile = new MenuItem(Locale.getProperty("create_file_menu", true));
+        createFolder = new MenuItem(Locale.getProperty("create_folder_menu", true));
+        copy = new MenuItem(Locale.getProperty("copy_menu", true));
+        cut = new MenuItem(Locale.getProperty("cut_menu", true));
+        paste = new MenuItem(Locale.getProperty("paste_menu", true));
+        rename = new MenuItem(Locale.getProperty("rename_menu", true));
+        delete = new MenuItem(Locale.getProperty("delete_menu", true));
     }
 
     private static void addItems() {
@@ -49,8 +49,8 @@ public class MenuTreeviewCollector {
     }
 
     public static void handleRequest(ContextMenuEvent event, Path path) {
-        MenuTreeviewCollectorHelper.checkPath(path);
-        MenuTreeviewCollectorHelper.initListeners(path);
+        MenuTreeviewCollectorAction.checkPath(path);
+        MenuTreeviewCollectorAction.initListeners(path);
 
         contextMenu.show((Node) event.getSource(), event.getScreenX(), event.getScreenY());
     }

@@ -6,7 +6,9 @@ import java.util.Arrays;
 
 @AllArgsConstructor
 public enum LocaleType {
-    English("en");
+    English("en"),
+    Russian("ru"),
+    Ukrainian("ua");
 
     private String locale;
 

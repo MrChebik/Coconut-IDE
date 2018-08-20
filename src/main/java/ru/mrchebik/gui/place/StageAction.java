@@ -14,15 +14,19 @@ import ru.mrchebik.screen.measurement.Scale;
 
 import java.util.Arrays;
 
-public class StageHelper extends Application {
+public class StageAction extends Application {
     @Getter
     protected Stage stage;
+
+    public static void closeWindow(StageAction... helpers) {
+        Arrays.stream(helpers).forEach(StageAction::close);
+    }
 
     protected void initWindow(Stage stage,
                               String title,
                               Modality modality,
                               Scale scale,
-                              ViewHelper viewHelper) {
+                              ViewAction viewAction) {
         stage.setTitle(title);
         stage.getIcons().add(Icons.LOGO.get());
 
@@ -37,19 +41,10 @@ public class StageHelper extends Application {
 
         setPosition(stage, scale);
 
-        Scene scene = initScene(viewHelper);
+        Scene scene = initScene(viewAction);
         initFrame(scene);
         stage.setScene(scene);
         stage.show();
-    }
-
-    private Scene initScene(ViewHelper viewHelper) {
-        Parent view = viewHelper.view.getView();
-
-        return view.isNeedsLayout() ?
-                new Scene(view)
-                :
-                view.getScene();
     }
 
     private void initFrame(Scene scene) {
@@ -67,8 +62,13 @@ public class StageHelper extends Application {
         stage.setOnCloseRequest(event -> handler.run());
     }
 
-    public static void closeWindow(StageHelper... helpers) {
-        Arrays.stream(helpers).forEach(StageHelper::close);
+    private Scene initScene(ViewAction viewAction) {
+        Parent view = viewAction.view.getView();
+
+        return view.isNeedsLayout() ?
+                new Scene(view)
+                :
+                view.getScene();
     }
 
     @Override

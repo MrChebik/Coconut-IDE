@@ -1,5 +1,6 @@
-package ru.mrchebik.gui.collector.contextmenu.treeview;
+package ru.mrchebik.gui.contextmenu.treeview.collector;
 
+import ru.mrchebik.gui.contextmenu.treeview.MenuTreeviewAction;
 import ru.mrchebik.model.CommandPath;
 import ru.mrchebik.project.Project;
 
@@ -7,17 +8,17 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Objects;
 
-class MenuTreeviewCollectorHelper {
+class MenuTreeviewCollectorAction extends MenuTreeviewAction {
     static void initListeners(Path path) {
-        MenuTreeviewHelper.path = path;
+        MenuTreeviewAction.path = path;
 
-        MenuTreeviewCollector.createFile.setOnAction(event -> MenuTreeviewHelper.initCreateFile());
-        MenuTreeviewCollector.createFolder.setOnAction(event -> MenuTreeviewHelper.initCreateFolder());
-        MenuTreeviewCollector.copy.setOnAction(event -> MenuTreeviewHelper.initCopy());
-        MenuTreeviewCollector.cut.setOnAction(event -> MenuTreeviewHelper.initCut());
-        MenuTreeviewCollector.paste.setOnAction(event -> MenuTreeviewHelper.initPaste());
-        MenuTreeviewCollector.rename.setOnAction(event -> MenuTreeviewHelper.initRename());
-        MenuTreeviewCollector.delete.setOnAction(event -> MenuTreeviewHelper.initDelete());
+        MenuTreeviewCollector.createFile.setOnAction(event -> initCreateFile());
+        MenuTreeviewCollector.createFolder.setOnAction(event -> initCreateFolder());
+        MenuTreeviewCollector.copy.setOnAction(event -> initCopy());
+        MenuTreeviewCollector.cut.setOnAction(event -> initCut());
+        MenuTreeviewCollector.paste.setOnAction(event -> initPaste());
+        MenuTreeviewCollector.rename.setOnAction(event -> initRename());
+        MenuTreeviewCollector.delete.setOnAction(event -> initDelete());
     }
 
     static void checkPath(Path path) {

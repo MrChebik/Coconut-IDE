@@ -60,7 +60,7 @@ public class JavaCompilerSyntax extends Thread implements SyntaxWrapper {
 
         Platform.runLater(() -> {
             try {
-                customCodeArea.setStyleSpans(0, customCodeArea.getCodeAreaCSS().getStyleSpans(0, customCodeArea.getText().length()));
+                customCodeArea.setStyleSpans(0, customCodeArea.codeAreaCSS.getStyleSpans(0, customCodeArea.getText().length()));
                 Language.caretHighlight.compute(customCodeArea);
             } catch (IndexOutOfBoundsException ignored) {
             }

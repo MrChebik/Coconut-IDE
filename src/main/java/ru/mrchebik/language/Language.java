@@ -11,10 +11,8 @@ import ru.mrchebik.language.java.command.JavaCommand;
 import ru.mrchebik.language.java.highlight.caret.JavaCaretHighlight;
 import ru.mrchebik.language.java.highlight.syntax.switcher.compiler.JavaCompilerSyntax;
 import ru.mrchebik.language.java.highlight.syntax.switcher.symbolsolver.JavaSymbolSolverSyntax;
-import ru.mrchebik.language.java.locale.en.EnJavaLocale;
 import ru.mrchebik.language.java.settings.JavaPropertyCollector;
 import ru.mrchebik.locale.Locale;
-import ru.mrchebik.locale.LocaleType;
 import ru.mrchebik.settings.PropertyCollector;
 
 import java.util.ArrayList;
@@ -33,9 +31,8 @@ public class Language {
         pairs = new ArrayList<>();
 
         if (languageType.equals(LanguageType.Java)) {
-            if (Locale.localeType.equals(LocaleType.English)) {
-                EnJavaLocale.init();
-            }
+            Locale.initPart(languageType.toString());
+
             pairs.add(new PairSymbols(PairSymbolsType.FIGURE));
             pairs.add(new PairSymbols(PairSymbolsType.ROUND));
             pairs.add(new PairSymbols(PairSymbolsType.SQUARE));

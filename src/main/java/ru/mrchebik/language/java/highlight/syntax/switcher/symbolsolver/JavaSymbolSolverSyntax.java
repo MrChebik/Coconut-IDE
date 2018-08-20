@@ -57,12 +57,12 @@ public class JavaSymbolSolverSyntax extends Thread implements SyntaxWrapper {
                             beforeChars++;
                     }
 
-                    customCodeArea.getCodeAreaCSS().setStyleClass(beforeChars + column + startFound, (beforeChars + column + startFound) + found.length(), "error");
+                    customCodeArea.codeAreaCSS.setStyleClass(beforeChars + column + startFound, (beforeChars + column + startFound) + found.length(), "error");
                 }
             }
         }
 
-        customCodeArea.setStyleSpans(0, customCodeArea.getCodeAreaCSS().getStyleSpans(0, customCodeArea.getText().length()));
+        customCodeArea.setStyleSpans(0, customCodeArea.codeAreaCSS.getStyleSpans(0, customCodeArea.getText().length()));
 
             /*List<VariableDeclarationExpr> variableDeclarationExprs = Navigator.findAllNodesOfGivenClass(cu, VariableDeclarationExpr.class);
 

@@ -13,7 +13,7 @@ import java.util.stream.Stream;
 
 import static ru.mrchebik.project.Project.pathSource;
 
-public class FileHelper {
+public class FileAction {
     @SneakyThrows(IOException.class)
     public static void createFile(Path path) {
         if (!Files.exists(path))

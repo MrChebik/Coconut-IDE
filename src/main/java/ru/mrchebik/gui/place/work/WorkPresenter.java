@@ -18,12 +18,12 @@ import ru.mrchebik.gui.collector.ComponentsCollector;
 import ru.mrchebik.gui.key.KeyHelper;
 import ru.mrchebik.gui.node.CustomTreeItem;
 import ru.mrchebik.gui.node.codearea.CustomCodeArea;
+import ru.mrchebik.gui.node.treeCell.CustomTreeCell;
 import ru.mrchebik.gui.place.menu.create.file.CreateFilePlace;
 import ru.mrchebik.gui.place.menu.create.folder.CreateFolderPlace;
 import ru.mrchebik.gui.place.menu.rename.file.RenameFilePlace;
 import ru.mrchebik.gui.place.menu.rename.folder.RenameFolderPlace;
 import ru.mrchebik.gui.place.work.event.InputTextToOutputArea;
-import ru.mrchebik.gui.place.work.event.structure.StructureUpdateGraphic;
 import ru.mrchebik.gui.updater.TabUpdater;
 import ru.mrchebik.gui.updater.TreeUpdater;
 import ru.mrchebik.icons.Icons;
@@ -97,8 +97,8 @@ public class WorkPresenter extends KeyHelper implements Initializable {
     }
 
     private void initLocale(Button compile, Button run) {
-        compile.setText(Locale.COMPILE_BUTTON);
-        run.setText(Locale.RUN_BUTTON);
+        compile.setText(Locale.getProperty("compile_button", true));
+        run.setText(Locale.getProperty("run_button", true));
     }
 
     private void initCollectorComponents() {
@@ -166,7 +166,7 @@ public class WorkPresenter extends KeyHelper implements Initializable {
         var item = treeView.getRoot().getChildren().get(1).getChildren().get(0);
 
         treeView.getSelectionModel().select(item);
-        treeView.setCellFactory(new StructureUpdateGraphic());
+        treeView.setCellFactory(param -> new CustomTreeCell());
     }
 
     private void startSaveTabsProcess() {

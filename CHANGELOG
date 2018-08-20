@@ -1,7 +1,8 @@
 === v0.3.0 - cleanup
 + Arguments.
++ Languages: RU, UA.
 * Fixed memory leak.
-* Fixed window title of renames file/folder;
+* Fixed window title of renames file/folder.
 * Required Java 10.
 * Updated API.
 CodeArea:
@@ -11,7 +12,6 @@ CodeArea:
     * Fixed removing selected area after Enter/Backspace/Semicolon.
 Highlight:
     + `var` keyword.
-    + After entering, the lighting elements near caret.
     + Redesigned backlight. All code elements are now highlighted without basic keywords.
     * Fixed pairs.
 Start:

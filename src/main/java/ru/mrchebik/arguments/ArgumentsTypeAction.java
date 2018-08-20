@@ -3,7 +3,7 @@ package ru.mrchebik.arguments;
 import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicInteger;
 
-class ArgumentsTypeHelper {
+class ArgumentsTypeAction {
     static String initAfterBrief(String text) {
         return text.isEmpty() ?
                 "  "

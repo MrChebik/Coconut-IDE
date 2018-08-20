@@ -5,8 +5,6 @@ import javafx.event.Event;
 import javafx.scene.control.IndexRange;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
-import lombok.Getter;
-import lombok.Setter;
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.LineNumberFactory;
 import org.fxmisc.richtext.model.StyleSpans;
@@ -32,11 +30,8 @@ import static org.fxmisc.wellbehaved.event.EventPattern.anyOf;
 import static org.fxmisc.wellbehaved.event.EventPattern.keyPressed;
 
 public class CustomCodeArea extends CodeArea {
-    @Getter
-    private CodeArea codeAreaCSS;
-    @Getter
-    @Setter
-    private String name;
+    public CodeArea codeAreaCSS;
+    public String name;
 
     private Executor executor;
     private Highlight highlight;

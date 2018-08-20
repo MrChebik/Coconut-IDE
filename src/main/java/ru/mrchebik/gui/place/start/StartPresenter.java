@@ -8,7 +8,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import ru.mrchebik.call.startup.CallStartupWrapper;
 import ru.mrchebik.controller.startup.StartupWrapper;
-import ru.mrchebik.gui.key.KeyHelper;
 import ru.mrchebik.gui.place.create.project.CreateProjectPlace;
 import ru.mrchebik.injection.Injection;
 import ru.mrchebik.language.Language;
@@ -20,11 +19,11 @@ import javax.inject.Inject;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class StartPresenter extends KeyHelper implements Initializable {
+public class StartPresenter extends StartPresenterAction implements Initializable {
     @FXML
-    private Button createProject, setupHomeButton;
+    public Button createProject, setupHomeButton;
     @FXML
-    private Tooltip tooltipSetupHome;
+    public Tooltip tooltipSetupHome;
     @FXML
     private ImageView coconutPng;
     @Inject
@@ -47,21 +46,22 @@ public class StartPresenter extends KeyHelper implements Initializable {
 
     @FXML
     private void setupHome() {
-        StartPresenterHelper.setHomeAndEnable(createProject, callStartup, startPlace, startup);
+        setHomeAndEnable(createProject, callStartup, startPlace, startup);
     }
 
     @FXML
     private void setupHomeWithKey(KeyEvent event) {
         if (isEnter(event))
-            StartPresenterHelper.setHomeAndEnable(createProject, callStartup, startPlace, startup);
+            setHomeAndEnable(createProject, callStartup, startPlace, startup);
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        initPresenter();
         initStartup();
-        StartPresenterHelper.initLocale(createProject, tooltipSetupHome, setupHomeButton);
-        StartPresenterHelper.initNewProject(createProject, startup);
-        StartPresenterHelper.initAnimation(coconutPng);
+        initLocale();
+        initNewProject(createProject, startup);
+        initAnimation(coconutPng);
         Injection.initInjection(startPlace, createProjectPlace);
     }
 
@@ -71,5 +71,9 @@ public class StartPresenter extends KeyHelper implements Initializable {
             callStartup = new JavaCallStartup();
         }
         createProjectPlace = new CreateProjectPlace();
+    }
+
+    private void initPresenter() {
+        presenter = this;
     }
 }

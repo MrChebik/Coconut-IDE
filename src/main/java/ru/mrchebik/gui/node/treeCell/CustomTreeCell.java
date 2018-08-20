@@ -1,7 +1,7 @@
 package ru.mrchebik.gui.node.treeCell;
 
 import javafx.scene.control.TreeCell;
-import ru.mrchebik.gui.collector.contextmenu.treeview.MenuTreeviewCollector;
+import ru.mrchebik.gui.contextmenu.treeview.collector.MenuTreeviewCollector;
 
 import java.nio.file.Path;
 

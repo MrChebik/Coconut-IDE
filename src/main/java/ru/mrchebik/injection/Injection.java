@@ -1,7 +1,7 @@
 package ru.mrchebik.injection;
 
 import com.airhacks.afterburner.injection.Injector;
-import ru.mrchebik.helper.StringHelper;
+import ru.mrchebik.helper.StringAction;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -11,7 +11,7 @@ public class Injection {
         var injections = new HashMap<>();
         Arrays.stream(objects).forEach(object -> {
             var className = object.getClass().getSimpleName();
-            var modifName = StringHelper.lowerFirstChar(className);
+            var modifName = StringAction.lowerFirstChar(className);
             injections.put(modifName, object);
         });
         Injector.setConfigurationSource(injections::get);

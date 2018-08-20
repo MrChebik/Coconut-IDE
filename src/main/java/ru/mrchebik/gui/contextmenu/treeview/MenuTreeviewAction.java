@@ -1,8 +1,9 @@
-package ru.mrchebik.gui.collector.contextmenu.treeview;
+package ru.mrchebik.gui.contextmenu.treeview;
 
 import lombok.SneakyThrows;
 import ru.mrchebik.gui.collector.ComponentsCollector;
-import ru.mrchebik.helper.FileHelper;
+import ru.mrchebik.gui.contextmenu.treeview.collector.MenuTreeviewCollector;
+import ru.mrchebik.helper.FileAction;
 import ru.mrchebik.model.CommandPath;
 
 import java.io.IOException;
@@ -10,27 +11,27 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 
-public class MenuTreeviewHelper {
-    public static Path path;
+public class MenuTreeviewAction extends MenuTreeviewCollector {
+    protected static Path path;
 
-    public static void initCreateFile() {
+    protected static void initCreateFile() {
         ComponentsCollector.createFilePlace.runAndSetPath(path);
     }
 
-    public static void initCreateFolder() {
+    protected static void initCreateFolder() {
         ComponentsCollector.createFolderPlace.runAndSetPath(path);
     }
 
-    public static void initCopy() {
+    protected static void initCopy() {
         CommandPath.init("Copy", path);
     }
 
-    public static void initCut() {
+    protected static void initCut() {
         CommandPath.init("Cut", path);
     }
 
     @SneakyThrows(IOException.class)
-    public static void initPaste() {
+    protected static void initPaste() {
         Path moveTo = path.resolve(CommandPath.path.getFileName());
         if (isCut(CommandPath.command))
             Files.move(CommandPath.path, moveTo, StandardCopyOption.REPLACE_EXISTING);
@@ -42,14 +43,14 @@ public class MenuTreeviewHelper {
         return "Cut".equals(command);
     }
 
-    public static void initRename() {
+    protected static void initRename() {
         if (!Files.isDirectory(path))
             ComponentsCollector.renameFilePlace.runAndSetPath(path);
         else
             ComponentsCollector.renameFolderPlace.runAndSetPath(path);
     }
 
-    public static void initDelete() {
-        FileHelper.deleteFile(path);
+    protected static void initDelete() {
+        FileAction.deleteFile(path);
     }
 }

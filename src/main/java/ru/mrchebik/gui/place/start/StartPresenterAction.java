@@ -3,20 +3,24 @@ package ru.mrchebik.gui.place.start;
 import javafx.animation.ScaleTransition;
 import javafx.animation.Timeline;
 import javafx.scene.control.Button;
-import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
 import ru.mrchebik.call.startup.CallStartupWrapper;
 import ru.mrchebik.controller.startup.StartupWrapper;
+import ru.mrchebik.gui.key.KeyHelper;
 import ru.mrchebik.locale.Locale;
 
-class StartPresenterHelper {
-    static void initLocale(Button button,
-                           Tooltip tooltip,
-                           Button button1) {
-        button.setText(Locale.NEW_PROJECT);
-        tooltip.setText(Locale.SETUP_HOME_TOOLTIP);
-        button1.setText(Locale.SETUP_HOME_BUTTON);
+class StartPresenterAction extends KeyHelper {
+    protected static StartPresenter presenter;
+
+    public static void initLocale() {
+        presenter.createProject.setText(Locale.getProperty("new_project_button", true));
+        presenter.tooltipSetupHome.setText(Locale.getProperty("setup_home_tooltip", false));
+        presenter.setupHomeButton.setText(Locale.getProperty("setup_home_button", false));
+    }
+
+    void setPresenter(StartPresenter presenter) {
+        StartPresenterAction.presenter = presenter;
     }
 
     static void initNewProject(Button button,

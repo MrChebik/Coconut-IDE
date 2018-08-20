@@ -7,18 +7,18 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import ru.mrchebik.gui.collector.ComponentsCollector;
-import ru.mrchebik.gui.place.menu.MenuPresenterHelper;
+import ru.mrchebik.gui.place.menu.MenuPresenterAction;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class CreateFolderPresenter extends MenuPresenterHelper implements Initializable {
+public class CreateFolderPresenter extends MenuPresenterAction implements Initializable {
     @FXML
     private TextField name;
     @FXML
-    private Label nameL;
+    public Label nameL;
     @FXML
-    private Button button;
+    public Button button;
 
     @FXML
     private void handleCreateFolder() {
@@ -33,6 +33,6 @@ public class CreateFolderPresenter extends MenuPresenterHelper implements Initia
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        initLocale(nameL, button, false);
+        initLocale(nameL, button, true);
     }
 }

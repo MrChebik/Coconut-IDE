@@ -17,7 +17,7 @@ public class CreateProjectPresenter extends KeyHelper implements Initializable {
     @FXML
     private TextField projectName, projectPath;
     @FXML
-    private Button button;
+    private Button button, edit;
     @FXML
     private Label name, path;
     @Inject
@@ -27,31 +27,31 @@ public class CreateProjectPresenter extends KeyHelper implements Initializable {
 
     @FXML
     private void handleCreateProject() {
-        CreateProjectPresenterHelper.newProject(projectName, projectPath, startPlace, createProjectPlace);
+        CreateProjectPresenterAction.newProject(projectName, projectPath, startPlace, createProjectPlace);
     }
 
     @FXML
     private void handleCreateProjectWithKeyOnName(KeyEvent event) {
         if (isEnter(event))
-            CreateProjectPresenterHelper.newProject(projectName, projectPath, startPlace, createProjectPlace);
+            CreateProjectPresenterAction.newProject(projectName, projectPath, startPlace, createProjectPlace);
     }
 
     @FXML
     private void handleCreateProjectWithKeyOnPath(KeyEvent event) {
         if (isEnter(event))
-            CreateProjectPresenterHelper.newProject(projectName, projectPath, startPlace, createProjectPlace);
+            CreateProjectPresenterAction.newProject(projectName, projectPath, startPlace, createProjectPlace);
     }
 
     @FXML
     private void handleEditPath() {
-        CreateProjectPresenterHelper.callDirectoryChooser(projectName, projectPath, createProjectPlace);
+        CreateProjectPresenterAction.callDirectoryChooser(projectName, projectPath, createProjectPlace);
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        CreateProjectPresenterHelper.initLocale(button, name, path);
-        CreateProjectPresenterHelper.initCorePath();
-        CreateProjectPresenterHelper.initProjectPath(projectPath);
-        CreateProjectPresenterHelper.initListeners(projectName, projectPath);
+        CreateProjectPresenterAction.initLocale(button, edit, name, path);
+        CreateProjectPresenterAction.initCorePath();
+        CreateProjectPresenterAction.initProjectPath(projectPath);
+        CreateProjectPresenterAction.initListeners(projectName, projectPath);
     }
 }

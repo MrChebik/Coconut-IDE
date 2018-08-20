@@ -40,7 +40,7 @@ public class HighlightArea extends JavaCompilerSyntax {
         }
 
         try {
-            customCodeArea.getCodeAreaCSS().setStyleClass(start, end, "error");
+            customCodeArea.codeAreaCSS.setStyleClass(start, end, "error");
         } catch (IndexOutOfBoundsException ignored) {
         }
     }
@@ -49,7 +49,7 @@ public class HighlightArea extends JavaCompilerSyntax {
         String name = diagnostic.getSource().getName();
         int lastSlash = name.lastIndexOf(File.separator);
         String shortName = name.substring(lastSlash + 1);
-        String areaName = customCodeArea.getName();
+        String areaName = customCodeArea.name;
         long startPosError = diagnostic.getStartPosition();
 
         return isCurrArea(shortName, areaName, startPosError);

@@ -2,9 +2,12 @@ package ru.mrchebik.arguments;
 
 import lombok.AllArgsConstructor;
 import ru.mrchebik.ci.ContinuousIntegration;
+import ru.mrchebik.locale.Locale;
 import ru.mrchebik.project.VersionType;
+import ru.mrchebik.settings.PropertyCollector;
 
 import java.util.Arrays;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @AllArgsConstructor
@@ -22,7 +25,10 @@ enum ArgumentsType {
             () -> {
                 System.out.println(VersionType.IDE.toStringFull());
                 System.exit(0);
-            });
+            }),
+    LOCALE("", "--locale=[value]",
+            "Changing the interface language. Default value: 'en'", () -> {
+    });
 
     static AtomicInteger longestBrief;
     static AtomicInteger longestFull;
@@ -32,9 +38,12 @@ enum ArgumentsType {
     Runnable runnable;
 
     static void search(String arg) {
-        Arrays.stream(ArgumentsType.values())
+        Optional<ArgumentsType> type = Arrays.stream(ArgumentsType.values())
                 .filter(item -> {
                     boolean isMatch = item.brief.equals(arg) ||
+                            item.full.length() > 8 && item.full.startsWith("--locale=") ?
+                            arg.startsWith(item.full.substring(0, 9))
+                            :
                             item.full.equals(arg);
 
                     if (isMatch)
@@ -43,16 +52,25 @@ enum ArgumentsType {
                     return isMatch;
                 })
                 .findFirst();
+
+        if (type.isPresent())
+            if (type.get().full.startsWith("--locale=")) {
+                PropertyCollector.writeProperty("locale", arg.substring(9));
+                Locale.reset();
+            } else {
+                System.err.println("[ERROR][Argument]: A non-existent argument \"" + arg + "\"");
+                System.exit(2);
+            }
     }
 
     private static void printInfo() {
-        ArgumentsTypeHelper.initLongest();
+        ArgumentsTypeAction.initLongest();
 
         Arrays.stream(ArgumentsType.values())
                 .forEach(item -> {
-                    var briefSpace = ArgumentsTypeHelper.initSpaces(longestBrief, item.brief);
-                    var briefAfter = ArgumentsTypeHelper.initAfterBrief(item.brief);
-                    var fullSpace = ArgumentsTypeHelper.initSpaces(longestFull, item.full);
+                    var briefSpace = ArgumentsTypeAction.initSpaces(longestBrief, item.brief);
+                    var briefAfter = ArgumentsTypeAction.initAfterBrief(item.brief);
+                    var fullSpace = ArgumentsTypeAction.initSpaces(longestFull, item.full);
 
                     System.out.println(briefSpace + briefAfter + fullSpace + "   " + item.info);
                 });

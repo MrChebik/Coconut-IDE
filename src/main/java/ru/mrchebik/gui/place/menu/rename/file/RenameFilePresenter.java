@@ -7,18 +7,18 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import ru.mrchebik.gui.collector.ComponentsCollector;
-import ru.mrchebik.gui.place.menu.MenuPresenterHelper;
+import ru.mrchebik.gui.place.menu.MenuPresenterAction;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class RenameFilePresenter extends MenuPresenterHelper implements Initializable {
+public class RenameFilePresenter extends MenuPresenterAction implements Initializable {
     @FXML
     private TextField name;
     @FXML
-    private Label nameL;
+    public Label nameL;
     @FXML
-    private Button button;
+    public Button button;
 
     @FXML
     private void handleRename() {

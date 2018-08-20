@@ -5,7 +5,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.DirectoryChooser;
 import lombok.SneakyThrows;
-import ru.mrchebik.gui.place.StageHelper;
+import ru.mrchebik.gui.place.StageAction;
 import ru.mrchebik.gui.place.start.StartPlace;
 import ru.mrchebik.gui.place.work.WorkPlace;
 import ru.mrchebik.locale.Locale;
@@ -16,15 +16,17 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-class CreateProjectPresenterHelper {
+class CreateProjectPresenterAction {
     private static boolean wasChanged;
 
     static void initLocale(Button button,
+                           Button edit,
                            Label name,
                            Label path) {
-        button.setText(Locale.CREATE_BUTTON);
-        name.setText(Locale.NAME_LABEL + ":");
-        path.setText(Locale.PATH_LABEL + ":");
+        button.setText(Locale.getProperty("create_button", true));
+        edit.setText(Locale.getProperty("edit_button", true));
+        name.setText(Locale.getProperty("name_label", true) + ":");
+        path.setText(Locale.getProperty("path_label", true) + ":");
     }
 
     static void callDirectoryChooser(TextField name, TextField path, CreateProjectPlace createProjectPlace) {
@@ -32,7 +34,7 @@ class CreateProjectPresenterHelper {
 
         var directoryChooser = new DirectoryChooser();
         directoryChooser.setInitialDirectory(target);
-        directoryChooser.setTitle(Locale.NEW_PROJECT_TITLE);
+        directoryChooser.setTitle(Locale.getProperty("new_project_title", true));
 
         var file = directoryChooser.showDialog(createProjectPlace.getStage());
         if (file != null)
@@ -63,7 +65,7 @@ class CreateProjectPresenterHelper {
         //PropertyCollector.writeProject(projectName.getText(), projectPath.getText());
 
         initWorkPlace(name, path);
-        StageHelper.closeWindow(startPlace, createProjectPlace);
+        StageAction.closeWindow(startPlace, createProjectPlace);
     }
 
     private static void computePropertyProjectName(String newValue,

@@ -121,7 +121,7 @@ public class TabUpdater {
                 Platform.runLater(() -> tab.setText(newPath.getFileName().toString()));
                 tab.setUserData(newPath);
 
-                ((CustomCodeArea) ((VirtualizedScrollPane) tab.getContent()).getContent()).setName(newPath.getFileName().toString());
+                ((CustomCodeArea) ((VirtualizedScrollPane) tab.getContent()).getContent()).name = newPath.getFileName().toString();
             }
         }
     }

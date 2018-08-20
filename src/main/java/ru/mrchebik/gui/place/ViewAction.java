@@ -11,7 +11,7 @@ import ru.mrchebik.gui.place.start.StartView;
 import ru.mrchebik.gui.place.work.WorkView;
 
 @AllArgsConstructor
-public enum ViewHelper {
+public enum ViewAction {
     PLACE_START(new StartView()),
     PLACE_CREATE_FILE(new CreateFileView()),
     PLACE_CREATE_FOLDER(new CreateFolderView()),

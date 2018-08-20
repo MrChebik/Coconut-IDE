@@ -3,7 +3,7 @@ package ru.mrchebik.task;
 import ru.mrchebik.process.ExecutorCommand;
 import ru.mrchebik.process.io.ErrorProcess;
 
-public class TaskHelper {
+public class TaskAction {
     public static Task makeTask(String command) {
         return new Task(() -> ExecutorCommand.execute(command));
     }
