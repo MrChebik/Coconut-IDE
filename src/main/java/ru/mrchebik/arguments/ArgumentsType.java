@@ -53,14 +53,15 @@ enum ArgumentsType {
                 })
                 .findFirst();
 
-        if (type.isPresent())
+        if (type.isPresent()) {
             if (type.get().full.startsWith("--locale=")) {
                 PropertyCollector.writeProperty("locale", arg.substring(9));
                 Locale.reset();
-            } else {
-                System.err.println("[ERROR][Argument]: A non-existent argument \"" + arg + "\"");
-                System.exit(2);
             }
+        } else {
+            System.err.println("[ERROR][Argument]: A non-existent argument \"" + arg + "\"");
+            System.exit(2);
+        }
     }
 
     private static void printInfo() {
