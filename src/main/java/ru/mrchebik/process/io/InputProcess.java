@@ -5,7 +5,7 @@ import lombok.Cleanup;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import ru.mrchebik.injection.ComponentsCollector;
+import ru.mrchebik.gui.collector.ComponentsCollector;
 
 import java.io.BufferedReader;
 import java.io.IOException;

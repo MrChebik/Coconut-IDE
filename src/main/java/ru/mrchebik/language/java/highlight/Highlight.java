@@ -117,7 +117,7 @@ public class Highlight {
     private String getClassSubOfGroup(Matcher matcher, List<GroupClass> groupClasses) {
         for (GroupClass groupClass : groupClasses) {
             if (isEmptyGroupOrEqualsGroup(matcher, groupClass)) {
-                return groupClass.getThisClass();
+                return groupClass.thisClass;
             }
         }
 
@@ -145,7 +145,7 @@ public class Highlight {
     }
 
     private boolean isEmptyGroup(GroupClass groupClass) {
-        return "EMPTY".equals(groupClass.getGroup());
+        return "EMPTY".equals(groupClass.group);
     }
 
     private boolean isEmptyGroupOrEqualsGroup(Matcher matcher, GroupClass groupClass) {
@@ -153,7 +153,7 @@ public class Highlight {
     }
 
     private boolean isEqualsGroup(Matcher matcher, GroupClass groupClass) {
-        return matcher.group(groupClass.getGroup()) != null;
+        return matcher.group(groupClass.group) != null;
     }
 
     private boolean isJAVADOC() {

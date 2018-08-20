@@ -3,7 +3,7 @@ package ru.mrchebik.process.io;
 import javafx.application.Platform;
 import lombok.Cleanup;
 import lombok.SneakyThrows;
-import ru.mrchebik.injection.ComponentsCollector;
+import ru.mrchebik.gui.collector.ComponentsCollector;
 
 import java.io.BufferedReader;
 import java.io.IOException;

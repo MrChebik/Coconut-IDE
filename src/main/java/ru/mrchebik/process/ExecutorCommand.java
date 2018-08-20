@@ -2,7 +2,7 @@ package ru.mrchebik.process;
 
 import javafx.application.Platform;
 import lombok.SneakyThrows;
-import ru.mrchebik.injection.ComponentsCollector;
+import ru.mrchebik.gui.collector.ComponentsCollector;
 import ru.mrchebik.process.io.ErrorProcess;
 import ru.mrchebik.process.io.InputProcess;
 

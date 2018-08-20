@@ -6,8 +6,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
+import ru.mrchebik.gui.collector.ComponentsCollector;
 import ru.mrchebik.gui.place.menu.MenuPresenterHelper;
-import ru.mrchebik.injection.ComponentsCollector;
 
 import java.net.URL;
 import java.util.ResourceBundle;

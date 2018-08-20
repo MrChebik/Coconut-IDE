@@ -3,7 +3,7 @@ package ru.mrchebik.language.java.highlight.syntax.switcher.compiler.cell;
 import javafx.scene.Node;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
-import ru.mrchebik.injection.ComponentsCollector;
+import ru.mrchebik.gui.collector.ComponentsCollector;
 import ru.mrchebik.language.java.highlight.syntax.switcher.compiler.JavaCompilerSyntax;
 
 import javax.tools.Diagnostic;
@@ -23,15 +23,13 @@ public class HighlightCell extends JavaCompilerSyntax {
 
     private static List<TreeItem<Path>> getAllTreeItems(TreeItem<Path> root) {
         List<TreeItem<Path>> treeItems = new ArrayList<>();
-        if (root.equals(ComponentsCollector.treeView.getRoot())) {
+        if (root.equals(ComponentsCollector.treeView.getRoot()))
             treeItems.add(root);
-        }
 
         for (TreeItem<Path> child : root.getChildren()) {
             treeItems.add(child);
-            if (!child.getChildren().isEmpty()) {
+            if (!child.getChildren().isEmpty())
                 treeItems.addAll(getAllTreeItems(child));
-            }
         }
 
         return treeItems;
@@ -69,7 +67,7 @@ public class HighlightCell extends JavaCompilerSyntax {
         return null;
     }
 
-    public static void highlightCells(TreeItem treeItem) {
+    private static void highlightCells(TreeItem treeItem) {
         Optional<Node> item = cells.parallelStream()
                 .filter(c -> {
                     TreeCell treeCell = (TreeCell) c;

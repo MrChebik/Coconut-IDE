@@ -1,6 +1,6 @@
 package ru.mrchebik.process.save;
 
-import ru.mrchebik.injection.ComponentsCollector;
+import ru.mrchebik.gui.collector.ComponentsCollector;
 
 import java.util.Timer;
 import java.util.TimerTask;

@@ -1,6 +1,6 @@
 === v0.3.0 - cleanup
 + Arguments.
-* Fixed memory leaks.
+* Fixed memory leak.
 * Fixed window title of renames file/folder;
 * Required Java 10.
 * Updated API.

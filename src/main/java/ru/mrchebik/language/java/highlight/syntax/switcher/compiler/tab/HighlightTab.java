@@ -1,6 +1,6 @@
 package ru.mrchebik.language.java.highlight.syntax.switcher.compiler.tab;
 
-import ru.mrchebik.injection.ComponentsCollector;
+import ru.mrchebik.gui.collector.ComponentsCollector;
 import ru.mrchebik.language.java.highlight.syntax.switcher.compiler.JavaCompilerSyntax;
 
 import javax.tools.Diagnostic;

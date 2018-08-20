@@ -1,4 +1,4 @@
-package ru.mrchebik.injection;
+package ru.mrchebik.gui.collector;
 
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextArea;
