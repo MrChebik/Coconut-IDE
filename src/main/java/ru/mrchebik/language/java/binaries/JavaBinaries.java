@@ -14,13 +14,13 @@ public class JavaBinaries extends Binaries implements BinariesWrapper {
     }
 
     @Override
-    public String setBinary(String bin) {
+    public String setBinary(String binary) {
         String pathJdk = PropertyCollector.getProperty("jdk");
 
         return pathJdk == null ?
-                bin
+                binary
                 :
-                pathJdk + File.separator + "bin" + File.separator + bin;
+                pathJdk + File.separator + "bin" + File.separator + binary;
     }
 
     @Override

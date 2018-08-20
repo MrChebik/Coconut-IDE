@@ -1,6 +1,6 @@
 package ru.mrchebik.language.java.highlight.syntax.switcher.compiler.tab;
 
-import ru.mrchebik.injection.CollectorComponents;
+import ru.mrchebik.injection.ComponentsCollector;
 import ru.mrchebik.language.java.highlight.syntax.switcher.compiler.JavaCompilerSyntax;
 
 import javax.tools.Diagnostic;
@@ -13,7 +13,7 @@ public class HighlightTab extends JavaCompilerSyntax {
 
     public static void highlight() {
         if (diagnostics != null) {
-            CollectorComponents.tabPane.getTabs().forEach(t -> {
+            ComponentsCollector.tabPane.getTabs().forEach(t -> {
                 Path path = (Path) t.getUserData();
                 for (Diagnostic diagnostic : diagnostics) {
                     if (!"WARNING".equals(diagnostic.getKind().toString())) {

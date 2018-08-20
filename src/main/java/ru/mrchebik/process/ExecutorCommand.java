@@ -2,7 +2,7 @@ package ru.mrchebik.process;
 
 import javafx.application.Platform;
 import lombok.SneakyThrows;
-import ru.mrchebik.injection.CollectorComponents;
+import ru.mrchebik.injection.ComponentsCollector;
 import ru.mrchebik.process.io.ErrorProcess;
 import ru.mrchebik.process.io.InputProcess;
 
@@ -15,19 +15,19 @@ public class ExecutorCommand {
 
     @SneakyThrows(InterruptedException.class)
     public static void execute(String command) {
-        CollectorComponents.outputArea.setEditable(true);
+        ComponentsCollector.outputArea.setEditable(true);
 
         initializeProcess(command);
         initializeErrorStream();
         initializeInputStream();
         outputStream = process.getOutputStream();
         process.waitFor();
-        Platform.runLater(() -> CollectorComponents.outputArea.appendText(InputProcess.line.toString()));
+        Platform.runLater(() -> ComponentsCollector.outputArea.appendText(InputProcess.line.toString()));
         InputProcess.open = false;
-        Platform.runLater(() -> CollectorComponents.outputArea.appendText((!InputProcess.firstLine || ErrorProcess.wasError ? "\n\n" : "") + "[PROCESS]: " + (ErrorProcess.wasError ? "Failure" : "Success") + "\n"));
+        Platform.runLater(() -> ComponentsCollector.outputArea.appendText((!InputProcess.firstLine || ErrorProcess.wasError ? "\n\n" : "") + "[PROCESS]: " + (ErrorProcess.wasError ? "Failure" : "Success") + "\n"));
         outputStream = null;
 
-        CollectorComponents.outputArea.setEditable(false);
+        ComponentsCollector.outputArea.setEditable(false);
     }
 
     private static void initializeErrorStream() {
@@ -47,6 +47,6 @@ public class ExecutorCommand {
         var processBuilder = new ProcessBuilder(divideCommand);
         process = processBuilder.start();
 
-        Platform.runLater(() -> CollectorComponents.outputArea.appendText("[COMMAND]: " + command + "\n"));
+        Platform.runLater(() -> ComponentsCollector.outputArea.appendText("[COMMAND]: " + command + "\n"));
     }
 }

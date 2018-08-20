@@ -22,9 +22,9 @@ import java.util.ResourceBundle;
 
 public class StartPresenter extends KeyHelper implements Initializable {
     @FXML
-    Button createProject;
+    private Button createProject, setupHomeButton;
     @FXML
-    Tooltip tooltipSetupHome;
+    private Tooltip tooltipSetupHome;
     @FXML
     private ImageView coconutPng;
     @Inject
@@ -59,7 +59,7 @@ public class StartPresenter extends KeyHelper implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         initStartup();
-        StartPresenterHelper.initLocale(createProject, tooltipSetupHome);
+        StartPresenterHelper.initLocale(createProject, tooltipSetupHome, setupHomeButton);
         StartPresenterHelper.initNewProject(createProject, startup);
         StartPresenterHelper.initAnimation(coconutPng);
         Injection.initInjection(startPlace, createProjectPlace);

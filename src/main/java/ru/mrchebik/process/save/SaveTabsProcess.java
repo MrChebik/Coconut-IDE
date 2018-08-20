@@ -1,18 +1,18 @@
 package ru.mrchebik.process.save;
 
-import ru.mrchebik.injection.CollectorComponents;
+import ru.mrchebik.injection.ComponentsCollector;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class SaveTabsProcess extends Thread {
     public static void runSynch() {
-        SaveTabs.create(CollectorComponents.tabPane.getTabs()).run();
+        SaveTabs.create(ComponentsCollector.tabPane.getTabs()).run();
     }
 
     @Override
     public void run() {
-        schedule(() -> SaveTabs.create(CollectorComponents.tabPane.getTabs()).start());
+        schedule(() -> SaveTabs.create(ComponentsCollector.tabPane.getTabs()).start());
     }
 
     private void schedule(Runnable r) {

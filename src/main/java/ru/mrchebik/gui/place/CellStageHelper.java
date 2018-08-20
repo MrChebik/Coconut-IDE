@@ -10,7 +10,7 @@ public class CellStageHelper extends StageHelper {
     }
 
     public Path closeAndGetPath() {
-        super.close();
+        StageHelper.closeWindow(this);
 
         return path;
     }

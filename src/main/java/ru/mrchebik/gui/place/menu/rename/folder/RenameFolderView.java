@@ -1,4 +1,4 @@
-package ru.mrchebik.gui.place.rename.folder;
+package ru.mrchebik.gui.place.menu.rename.folder;
 
 import com.airhacks.afterburner.views.FXMLView;
 

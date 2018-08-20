@@ -18,14 +18,14 @@
             <RowConstraints minHeight="10.0" prefHeight="15.0"/>
             <RowConstraints/>
         </rowConstraints>
-        <Label text="Name:"/>
+        <Label fx:id="name"/>
         <TextField fx:id="projectName" onKeyReleased="#handleCreateProjectWithKeyOnName" prefHeight="26.0"
                    prefWidth="195.0" GridPane.columnIndex="1" GridPane.columnSpan="2">
             <opaqueInsets>
                 <Insets right="-1.0"/>
             </opaqueInsets>
         </TextField>
-        <Label text="Path:" GridPane.rowIndex="3"/>
+        <Label fx:id="path" GridPane.rowIndex="3"/>
         <TextField fx:id="projectPath" onKeyReleased="#handleCreateProjectWithKeyOnPath" GridPane.columnIndex="1"
                    GridPane.rowIndex="3"/>
         <HBox alignment="CENTER_RIGHT" prefHeight="26.0" prefWidth="200.0" GridPane.columnIndex="2"
@@ -34,6 +34,6 @@
         </HBox>
         <VBox prefHeight="15.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
     </GridPane>
-    <Button layoutX="400.0" layoutY="182.0" mnemonicParsing="false" onMouseClicked="#handleCreateProject" text="Create"
+    <Button fx:id="button" layoutX="400.0" layoutY="182.0" mnemonicParsing="false" onMouseClicked="#handleCreateProject"
             AnchorPane.bottomAnchor="30.0" AnchorPane.rightAnchor="30.0"/>
 </AnchorPane>

@@ -25,7 +25,8 @@
     </bottom>
     <top>
         <HBox alignment="CENTER_RIGHT" prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-            <Button mnemonicParsing="false" onMouseClicked="#setupHome" onKeyReleased="#setupHomeWithKey" text="JDK">
+            <Button mnemonicParsing="false" fx:id="setupHomeButton" onMouseClicked="#setupHome"
+                    onKeyReleased="#setupHomeWithKey">
                 <HBox.margin>
                     <Insets right="6.0"/>
                 </HBox.margin>

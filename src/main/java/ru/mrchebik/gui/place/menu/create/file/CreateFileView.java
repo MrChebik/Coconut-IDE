@@ -1,4 +1,4 @@
-package ru.mrchebik.gui.place.create.file;
+package ru.mrchebik.gui.place.menu.create.file;
 
 import com.airhacks.afterburner.views.FXMLView;
 

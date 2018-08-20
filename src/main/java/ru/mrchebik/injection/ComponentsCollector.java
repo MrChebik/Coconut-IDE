@@ -7,7 +7,7 @@ import ru.mrchebik.gui.place.CellStageHelper;
 
 import java.nio.file.Path;
 
-public class CollectorComponents {
+public class ComponentsCollector {
     public static TextArea outputArea;
     public static TabPane tabPane;
     public static TreeView<Path> treeView;
@@ -17,7 +17,7 @@ public class CollectorComponents {
     public static CellStageHelper renameFilePlace;
     public static CellStageHelper renameFolderPlace;
 
-    private CollectorComponents() {
+    private ComponentsCollector() {
     }
 
     public static void setComponents(TextArea outputArea,
@@ -27,13 +27,13 @@ public class CollectorComponents {
                                      CellStageHelper createFolderPlace,
                                      CellStageHelper renameFilePlace,
                                      CellStageHelper renameFolderPlace) {
-        CollectorComponents.outputArea = outputArea;
-        CollectorComponents.tabPane = tabPane;
-        CollectorComponents.treeView = treeView;
+        ComponentsCollector.outputArea = outputArea;
+        ComponentsCollector.tabPane = tabPane;
+        ComponentsCollector.treeView = treeView;
 
-        CollectorComponents.createFilePlace = createFilePlace;
-        CollectorComponents.createFolderPlace = createFolderPlace;
-        CollectorComponents.renameFilePlace = renameFilePlace;
-        CollectorComponents.renameFolderPlace = renameFolderPlace;
+        ComponentsCollector.createFilePlace = createFilePlace;
+        ComponentsCollector.createFolderPlace = createFolderPlace;
+        ComponentsCollector.renameFilePlace = renameFilePlace;
+        ComponentsCollector.renameFolderPlace = renameFolderPlace;
     }
 }

@@ -15,7 +15,7 @@ import ru.mrchebik.language.java.locale.en.EnJavaLocale;
 import ru.mrchebik.language.java.settings.JavaPropertyCollector;
 import ru.mrchebik.locale.Locale;
 import ru.mrchebik.locale.LocaleType;
-import ru.mrchebik.settings.language.LanguageProperty;
+import ru.mrchebik.settings.PropertyCollector;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +28,7 @@ public class Language {
     public static CaretHighlightFactory caretHighlight;
 
     public static void init() {
-        var languageCode = LanguageProperty.language;
+        var languageCode = PropertyCollector.language;
         languageType = LanguageType.find(languageCode);
         pairs = new ArrayList<>();
 

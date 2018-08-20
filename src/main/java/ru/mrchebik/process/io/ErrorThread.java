@@ -3,7 +3,7 @@ package ru.mrchebik.process.io;
 import javafx.application.Platform;
 import lombok.Cleanup;
 import lombok.SneakyThrows;
-import ru.mrchebik.injection.CollectorComponents;
+import ru.mrchebik.injection.ComponentsCollector;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -19,7 +19,7 @@ public class ErrorThread extends Thread {
         while ((line = reader.readLine()) != null) {
             ErrorProcess.wasError = true;
             var currLine = line;
-            Platform.runLater(() -> CollectorComponents.outputArea.appendText("\n" + currLine));
+            Platform.runLater(() -> ComponentsCollector.outputArea.appendText("\n" + currLine));
         }
     }
 }

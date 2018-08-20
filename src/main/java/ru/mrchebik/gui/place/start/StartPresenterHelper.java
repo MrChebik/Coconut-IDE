@@ -12,9 +12,11 @@ import ru.mrchebik.locale.Locale;
 
 class StartPresenterHelper {
     static void initLocale(Button button,
-                           Tooltip tooltip) {
+                           Tooltip tooltip,
+                           Button button1) {
         button.setText(Locale.NEW_PROJECT);
         tooltip.setText(Locale.SETUP_HOME_TOOLTIP);
+        button1.setText(Locale.SETUP_HOME_BUTTON);
     }
 
     static void initNewProject(Button button,

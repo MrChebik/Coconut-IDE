@@ -3,7 +3,7 @@ package ru.mrchebik.language.java.highlight.syntax.switcher.compiler.cell;
 import javafx.scene.Node;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
-import ru.mrchebik.injection.CollectorComponents;
+import ru.mrchebik.injection.ComponentsCollector;
 import ru.mrchebik.language.java.highlight.syntax.switcher.compiler.JavaCompilerSyntax;
 
 import javax.tools.Diagnostic;
@@ -23,7 +23,7 @@ public class HighlightCell extends JavaCompilerSyntax {
 
     private static List<TreeItem<Path>> getAllTreeItems(TreeItem<Path> root) {
         List<TreeItem<Path>> treeItems = new ArrayList<>();
-        if (root.equals(CollectorComponents.treeView.getRoot())) {
+        if (root.equals(ComponentsCollector.treeView.getRoot())) {
             treeItems.add(root);
         }
 
@@ -39,10 +39,10 @@ public class HighlightCell extends JavaCompilerSyntax {
 
     public static void highlight() {
         if (diagnostics != null) {
-            Set<Node> treeCells = CollectorComponents.treeView.lookupAll(".tree-cell");
+            Set<Node> treeCells = ComponentsCollector.treeView.lookupAll(".tree-cell");
             cells = new ArrayList<>(treeCells);
             cells = cells.parallelStream().filter(c -> ((TreeCell) c).getTreeItem() != null).collect(Collectors.toList());
-            treeItems = getAllTreeItems(CollectorComponents.treeView.getRoot());
+            treeItems = getAllTreeItems(ComponentsCollector.treeView.getRoot());
 
             diagnostics.stream()
                     .filter(JavaCompilerSyntax::isErrorKind)

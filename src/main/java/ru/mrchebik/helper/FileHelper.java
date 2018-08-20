@@ -1,8 +1,6 @@
 package ru.mrchebik.helper;
 
-import javafx.scene.control.TextField;
 import lombok.SneakyThrows;
-import ru.mrchebik.injection.CollectorComponents;
 import ru.mrchebik.project.Project;
 
 import java.io.File;
@@ -16,25 +14,16 @@ import java.util.stream.Stream;
 import static ru.mrchebik.project.Project.pathSource;
 
 public class FileHelper {
-    public static void createFilePresenter(TextField name) {
-        Path pathFromPlace = CollectorComponents.createFilePlace.closeAndGetPath();
-        String nameOfFile = name.getText();
-        Path path = pathFromPlace.resolve(nameOfFile);
-        FileHelper.createFile(path);
-    }
-
     @SneakyThrows(IOException.class)
     public static void createFile(Path path) {
-        if (!Files.exists(path)) {
+        if (!Files.exists(path))
             Files.createFile(path);
-        }
     }
 
     @SneakyThrows(IOException.class)
     public static void createFolder(Path path) {
-        if (!Files.exists(path)) {
+        if (!Files.exists(path))
             Files.createDirectory(path);
-        }
     }
 
     @SneakyThrows(IOException.class)

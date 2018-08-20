@@ -19,9 +19,18 @@ public class PropertyCollector {
     private static Path pathProperties;
     private static Properties properties = new Properties();
 
+    public static String language;
+    public static String locale;
+
     static {
         initializeSettingsPath();
         initializeApplicationProperties();
+        initializeProperties();
+    }
+
+    private static void initializeProperties() {
+        language = PropertyCollector.initVariable("language", "java");
+        locale = PropertyCollector.initVariable("locale", "en");
     }
 
     public static String getProperty(String key) {

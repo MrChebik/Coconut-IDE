@@ -2,11 +2,11 @@ package ru.mrchebik.gui.place;
 
 import com.airhacks.afterburner.views.FXMLView;
 import lombok.AllArgsConstructor;
-import ru.mrchebik.gui.place.create.file.CreateFileView;
-import ru.mrchebik.gui.place.create.folder.CreateFolderView;
 import ru.mrchebik.gui.place.create.project.CreateProjectView;
-import ru.mrchebik.gui.place.rename.file.RenameFileView;
-import ru.mrchebik.gui.place.rename.folder.RenameFolderView;
+import ru.mrchebik.gui.place.menu.create.file.CreateFileView;
+import ru.mrchebik.gui.place.menu.create.folder.CreateFolderView;
+import ru.mrchebik.gui.place.menu.rename.file.RenameFileView;
+import ru.mrchebik.gui.place.menu.rename.folder.RenameFolderView;
 import ru.mrchebik.gui.place.start.StartView;
 import ru.mrchebik.gui.place.work.WorkView;
 

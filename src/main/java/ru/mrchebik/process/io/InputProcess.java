@@ -5,7 +5,7 @@ import lombok.Cleanup;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import ru.mrchebik.injection.CollectorComponents;
+import ru.mrchebik.injection.ComponentsCollector;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -34,7 +34,7 @@ public class InputProcess extends Thread {
         while ((n = reader.read()) != -1) {
             line.append((char) n);
             if (firstLine) {
-                CollectorComponents.outputArea.appendText("\n");
+                ComponentsCollector.outputArea.appendText("\n");
                 firstLine = false;
             }
         }
@@ -56,7 +56,7 @@ public class InputProcess extends Thread {
         open = false;
         if (!line.toString().isEmpty())
             Platform.runLater(() -> {
-                CollectorComponents.outputArea.appendText(line.toString());
+                ComponentsCollector.outputArea.appendText(line.toString());
                 line = new StringBuilder();
                 open = true;
             });

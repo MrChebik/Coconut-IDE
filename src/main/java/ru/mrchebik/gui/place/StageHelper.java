@@ -12,6 +12,8 @@ import ru.mrchebik.icons.Icons;
 import ru.mrchebik.screen.Screen;
 import ru.mrchebik.screen.measurement.Scale;
 
+import java.util.Arrays;
+
 public class StageHelper extends Application {
     @Getter
     protected Stage stage;
@@ -65,8 +67,8 @@ public class StageHelper extends Application {
         stage.setOnCloseRequest(event -> handler.run());
     }
 
-    public void close() {
-        stage.close();
+    public static void closeWindow(StageHelper... helpers) {
+        Arrays.stream(helpers).forEach(StageHelper::close);
     }
 
     @Override
@@ -102,5 +104,9 @@ public class StageHelper extends Application {
 
         stage.setX(point.x);
         stage.setY(point.y);
+    }
+
+    private void close() {
+        stage.close();
     }
 }

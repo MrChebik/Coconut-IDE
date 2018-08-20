@@ -1,8 +1,11 @@
 package ru.mrchebik.gui.place.create.project;
 
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.DirectoryChooser;
 import lombok.SneakyThrows;
+import ru.mrchebik.gui.place.StageHelper;
 import ru.mrchebik.gui.place.start.StartPlace;
 import ru.mrchebik.gui.place.work.WorkPlace;
 import ru.mrchebik.locale.Locale;
@@ -15,6 +18,14 @@ import java.nio.file.Paths;
 
 class CreateProjectPresenterHelper {
     private static boolean wasChanged;
+
+    static void initLocale(Button button,
+                           Label name,
+                           Label path) {
+        button.setText(Locale.CREATE_BUTTON);
+        name.setText(Locale.NAME_LABEL + ":");
+        path.setText(Locale.PATH_LABEL + ":");
+    }
 
     static void callDirectoryChooser(TextField name, TextField path, CreateProjectPlace createProjectPlace) {
         var target = computeFile(path);
@@ -52,13 +63,7 @@ class CreateProjectPresenterHelper {
         //PropertyCollector.writeProject(projectName.getText(), projectPath.getText());
 
         initWorkPlace(name, path);
-        closeWindows(startPlace, createProjectPlace);
-    }
-
-    private static void closeWindows(StartPlace startPlace,
-                                     CreateProjectPlace createProjectPlace) {
-        startPlace.close();
-        createProjectPlace.close();
+        StageHelper.closeWindow(startPlace, createProjectPlace);
     }
 
     private static void computePropertyProjectName(String newValue,

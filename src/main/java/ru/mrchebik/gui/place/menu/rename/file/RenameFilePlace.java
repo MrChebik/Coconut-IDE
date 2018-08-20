@@ -1,20 +1,21 @@
-package ru.mrchebik.gui.place.create.file;
+package ru.mrchebik.gui.place.menu.rename.file;
 
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import ru.mrchebik.gui.place.CellStageHelper;
 import ru.mrchebik.gui.place.ViewHelper;
+import ru.mrchebik.locale.Locale;
 import ru.mrchebik.screen.measurement.Scale;
 
-public class CreateFilePlace extends CellStageHelper {
+public class RenameFilePlace extends CellStageHelper {
     @Override
     public void start() {
         super.stage = new Stage();
 
         initWindow(super.stage,
-                "Create File",
+                Locale.RENAME_FILE_TITLE,
                 Modality.APPLICATION_MODAL,
-                Scale.PLACE_CREATE_FILE,
-                ViewHelper.PLACE_CREATE_FILE);
+                Scale.PLACE_RENAME_FILE,
+                ViewHelper.PLACE_RENAME_FILE);
     }
 }
