@@ -1,8 +1,11 @@
 package ru.mrchebik.process.io;
 
 import javafx.application.Platform;
-import javafx.scene.control.TextArea;
-import lombok.*;
+import lombok.Cleanup;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
+import ru.mrchebik.gui.collector.ComponentsCollector;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -13,17 +16,12 @@ import java.util.TimerTask;
 
 @RequiredArgsConstructor
 public class InputProcess extends Thread {
-    @Getter
-    private boolean firstLine;
-    @Getter
-    private StringBuilder line;
-    @Setter
-    private boolean open;
+    public static boolean firstLine;
+    public static StringBuilder line;
+    public static boolean open;
 
     @NonNull
     private InputStream inputStream;
-    @NonNull
-    private TextArea textArea;
 
     @SneakyThrows(IOException.class)
     public void run() {
@@ -36,20 +34,19 @@ public class InputProcess extends Thread {
         while ((n = reader.read()) != -1) {
             line.append((char) n);
             if (firstLine) {
-                textArea.appendText("\n");
+                ComponentsCollector.outputArea.appendText("\n");
                 firstLine = false;
             }
         }
     }
 
     private void initializeTimer() {
-        Timer timer = new Timer();
+        var timer = new Timer();
         TimerTask task = new TimerTask() {
             @Override
             public void run() {
-                if (open) {
+                if (open)
                     print();
-                }
             }
         };
         timer.schedule(task, 5, 5);
@@ -59,8 +56,8 @@ public class InputProcess extends Thread {
         open = false;
         if (!line.toString().isEmpty())
             Platform.runLater(() -> {
-                textArea.appendText(line.toString());
-                line = new StringBuilder();
+                ComponentsCollector.outputArea.appendText(line.toString());
+                line.setLength(0);
                 open = true;
             });
     }

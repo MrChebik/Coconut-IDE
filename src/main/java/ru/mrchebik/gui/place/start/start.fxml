@@ -6,29 +6,43 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
-<BorderPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.mrchebik.gui.place.start.StartPresenter">
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="400.0" prefWidth="600.0"
+            xmlns="http://javafx.com/javafx/10.0.2" fx:controller="ru.mrchebik.gui.place.start.StartPresenter">
     <center>
-        <ImageView fx:id="coconutPng" fitHeight="275.0" fitWidth="275.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
+        <ImageView fx:id="coconutPng" fitHeight="275.0" fitWidth="275.0" pickOnBounds="true" preserveRatio="true"
+                   BorderPane.alignment="CENTER">
             <BorderPane.margin>
-                <Insets top="-35.0" />
+                <Insets top="-35.0"/>
             </BorderPane.margin>
-            <Image url="/img/coconut.png" />
+            <Image url="/img/coconut.png"/>
         </ImageView>
     </center>
     <bottom>
         <HBox alignment="CENTER" prefHeight="40.0" prefWidth="200.0">
-            <Button fx:id="createProject" mnemonicParsing="false" onMouseClicked="#handleNewProject" text="New Project" />
+            <Button fx:id="createProject" mnemonicParsing="false" onKeyReleased="#newProjectWithKey"
+                    onMouseClicked="#newProject">
+                <HBox.margin>
+                    <Insets right="10.0"/>
+                </HBox.margin>
+            </Button>
+            <Button fx:id="openProject" mnemonicParsing="false" onKeyReleased="#openProjectAWithKey"
+                    onMouseClicked="#openProjectA">
+                <HBox.margin>
+                    <Insets left="10.0"/>
+                </HBox.margin>
+            </Button>
         </HBox>
     </bottom>
     <top>
         <HBox alignment="CENTER_RIGHT" prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-            <Button mnemonicParsing="false" onMouseClicked="#handleSetupJDK" text="JDK">
+            <Button fx:id="setupHomeButton" mnemonicParsing="false" onKeyReleased="#setupHomeWithKey"
+                    onMouseClicked="#setupHome">
                 <HBox.margin>
-                    <Insets right="6.0" />
+                    <Insets right="6.0"/>
                 </HBox.margin>
-            <tooltip>
-               <Tooltip text="Syntax setting:&#10;Correct JDK path in System: JavaCompiler&#10;Otherwise: JavaSymbolSolver" />
-            </tooltip>
+                <tooltip>
+                    <Tooltip fx:id="tooltipSetupHome"/>
+                </tooltip>
             </Button>
         </HBox>
     </top>

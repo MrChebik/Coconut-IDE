@@ -8,8 +8,7 @@ import lombok.SneakyThrows;
 import ru.mrchebik.gui.updater.TabUpdater;
 import ru.mrchebik.gui.updater.TreeUpdater;
 import ru.mrchebik.gui.updater.WatcherStructure;
-import ru.mrchebik.model.CustomIcons;
-import ru.mrchebik.model.Project;
+import ru.mrchebik.icons.Icons;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -17,7 +16,6 @@ import java.nio.file.Path;
 import java.util.stream.Collectors;
 
 public class CustomTreeItem extends TreeItem<Path> {
-    private Project project;
     private TabUpdater tabUpdater;
     private TreeUpdater treeUpdater;
 
@@ -25,18 +23,25 @@ public class CustomTreeItem extends TreeItem<Path> {
     private boolean isFirstTimeLeaf = true;
     private boolean isLeaf;
 
+    public CustomTreeItem(Path f, WatcherStructure watcherStructure, TabUpdater tabUpdater, TreeUpdater treeUpdater) {
+        super(f);
+        if (watcherStructure != null)
+            watcherStructure.start();
+        this.tabUpdater = tabUpdater;
+        this.treeUpdater = treeUpdater;
+    }
+
     public boolean isDirectory() {
         return Files.isDirectory(getValue());
     }
 
-    public CustomTreeItem(Path f, WatcherStructure watcherStructure, Project project, TabUpdater tabUpdater, TreeUpdater treeUpdater) {
-        super(f);
-        if (watcherStructure != null) {
-            watcherStructure.start();
+    @Override
+    public boolean isLeaf() {
+        if (isFirstTimeLeaf) {
+            isFirstTimeLeaf = false;
+            isLeaf = Files.exists(getValue()) && !Files.isDirectory(getValue());
         }
-        this.project = project;
-        this.tabUpdater = tabUpdater;
-        this.treeUpdater = treeUpdater;
+        return isLeaf;
     }
 
     @Override
@@ -49,32 +54,20 @@ public class CustomTreeItem extends TreeItem<Path> {
         return super.getChildren();
     }
 
-    @Override
-    public boolean isLeaf() {
-        if (isFirstTimeLeaf) {
-            isFirstTimeLeaf = false;
-            isLeaf = Files.exists(getValue()) && !Files.isDirectory(getValue());
-        }
-        return isLeaf;
-    }
-
     @SneakyThrows(IOException.class)
     private ObservableList<TreeItem<Path>> buildChildren() {
         if (Files.isDirectory(getValue())) {
             return Files.list(getValue())
                     .map(e -> {
                         WatcherStructure watcherStructure = null;
-                        if (Files.isDirectory(e)) {
-                            watcherStructure = new WatcherStructure(e, project, tabUpdater, treeUpdater);
-                        }
+                        if (Files.isDirectory(e))
+                            watcherStructure = new WatcherStructure(e, tabUpdater, treeUpdater);
 
-                        CustomTreeItem item = new CustomTreeItem(e, watcherStructure, project, tabUpdater, treeUpdater);
+                        CustomTreeItem item = new CustomTreeItem(e, watcherStructure, tabUpdater, treeUpdater);
 
-                        CustomIcons customIcons = new CustomIcons();
-                        item.setGraphic(new ImageView(item.isDirectory() ? customIcons.getFolderCollapseImage() : customIcons.getFileImage()));
-                        if (isDirectory()) {
+                        item.setGraphic(new ImageView((item.isDirectory() ? Icons.FOLDER_COLLAPSE : Icons.FILE).get()));
+                        if (isDirectory())
                             item.expandedProperty().addListener(treeUpdater.expanderListener());
-                        }
 
                         return item;
                     })

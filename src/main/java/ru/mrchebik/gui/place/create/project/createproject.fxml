@@ -3,31 +3,37 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<AnchorPane xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.mrchebik.gui.place.create.project.CreateProjectPresenter">
-    <GridPane layoutX="50.0" layoutY="52.0" prefHeight="90.0" prefWidth="500.0" AnchorPane.bottomAnchor="110.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="30.0">
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/10.0.2"
+            fx:controller="ru.mrchebik.gui.place.create.project.CreateProjectPresenter">
+    <GridPane layoutX="50.0" layoutY="52.0" prefWidth="500.0" AnchorPane.bottomAnchor="78.0"
+              AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="30.0">
         <columnConstraints>
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="242.0" minWidth="10.0" prefWidth="83.0" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="458.0" minWidth="10.0" prefWidth="343.0" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="458.0" minWidth="10.0" prefWidth="74.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="242.0" minWidth="0.0" prefWidth="0.0"/>
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="458.0" minWidth="10.0" prefWidth="275.0"/>
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="458.0" minWidth="10.0" prefWidth="40.0"/>
         </columnConstraints>
         <rowConstraints>
-            <RowConstraints />
-            <RowConstraints />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" />
-            <RowConstraints />
+            <RowConstraints/>
+            <RowConstraints/>
+            <RowConstraints minHeight="10.0" prefHeight="15.0"/>
+            <RowConstraints/>
         </rowConstraints>
-        <Label text="Name:" />
-        <TextField fx:id="projectName" onKeyReleased="#handleCreateProjectWithKeyOnName" prefHeight="26.0" prefWidth="195.0" GridPane.columnIndex="1" GridPane.columnSpan="2">
+        <Label fx:id="name"/>
+        <TextField fx:id="projectName" onKeyReleased="#handleCreateProjectWithKeyOnName" prefHeight="26.0"
+                   prefWidth="195.0" GridPane.columnIndex="1" GridPane.columnSpan="2">
             <opaqueInsets>
-                <Insets right="-1.0" />
+                <Insets right="-1.0"/>
             </opaqueInsets>
         </TextField>
-        <Label text="Path:" GridPane.rowIndex="3" />
-        <TextField fx:id="projectPath" onKeyReleased="#handleCreateProjectWithKeyOnPath" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-        <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="3">
-            <Button mnemonicParsing="false" onMouseClicked="#handleEditPath" text="Edit" />
+        <Label fx:id="path" GridPane.rowIndex="3"/>
+        <TextField fx:id="projectPath" onKeyReleased="#handleCreateProjectWithKeyOnPath" GridPane.columnIndex="1"
+                   GridPane.rowIndex="3"/>
+        <HBox alignment="CENTER_RIGHT" prefHeight="26.0" prefWidth="200.0" GridPane.columnIndex="2"
+              GridPane.rowIndex="3">
+            <Button fx:id="edit" mnemonicParsing="false" onMouseClicked="#handleEditPath"/>
         </HBox>
-        <VBox prefHeight="15.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+        <VBox prefHeight="15.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
     </GridPane>
-    <Button layoutX="400.0" layoutY="182.0" mnemonicParsing="false" onMouseClicked="#handleCreateProject" text="Create" AnchorPane.bottomAnchor="22.0" AnchorPane.rightAnchor="30.0" />
+    <Button fx:id="button" layoutX="400.0" layoutY="182.0" mnemonicParsing="false" onMouseClicked="#handleCreateProject"
+            AnchorPane.bottomAnchor="30.0" AnchorPane.rightAnchor="30.0"/>
 </AnchorPane>

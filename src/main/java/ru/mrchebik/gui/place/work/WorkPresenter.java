@@ -8,88 +8,88 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import org.fxmisc.flowless.ScaledVirtualized;
 import org.fxmisc.flowless.VirtualizedScrollPane;
-import org.fxmisc.richtext.CodeArea;
+import ru.mrchebik.autocomplete.AnalyzerAutocomplete;
+import ru.mrchebik.autocomplete.Autocomplete;
+import ru.mrchebik.build.Build;
+import ru.mrchebik.build.BuildWrapper;
+import ru.mrchebik.gui.collector.ComponentsCollector;
+import ru.mrchebik.gui.key.KeyHelper;
 import ru.mrchebik.gui.node.CustomTreeItem;
 import ru.mrchebik.gui.node.codearea.CustomCodeArea;
+import ru.mrchebik.gui.node.treeCell.CustomTreeCell;
+import ru.mrchebik.gui.place.menu.create.file.CreateFilePlace;
+import ru.mrchebik.gui.place.menu.create.folder.CreateFolderPlace;
+import ru.mrchebik.gui.place.menu.rename.file.RenameFilePlace;
+import ru.mrchebik.gui.place.menu.rename.folder.RenameFolderPlace;
 import ru.mrchebik.gui.place.work.event.InputTextToOutputArea;
-import ru.mrchebik.gui.place.work.event.structure.StructureUpdateGraphic;
 import ru.mrchebik.gui.updater.TabUpdater;
 import ru.mrchebik.gui.updater.TreeUpdater;
-import ru.mrchebik.highlight.Highlight;
-import ru.mrchebik.highlight.syntax.Syntax;
-import ru.mrchebik.model.ActionPlaces;
-import ru.mrchebik.model.CommandPath;
-import ru.mrchebik.model.CustomIcons;
-import ru.mrchebik.model.Project;
-import ru.mrchebik.process.autocomplete.AnalyzerAutocomplete;
-import ru.mrchebik.process.io.ErrorProcess;
-import ru.mrchebik.process.io.ExecutorCommand;
+import ru.mrchebik.icons.Icons;
+import ru.mrchebik.language.Language;
+import ru.mrchebik.language.java.highlight.Highlight;
+import ru.mrchebik.locale.Locale;
+import ru.mrchebik.plugin.PluginWrapper;
+import ru.mrchebik.plugin.cpu.PluginCpu;
+import ru.mrchebik.plugin.ram.PluginRam;
 import ru.mrchebik.process.save.SaveTabs;
 import ru.mrchebik.process.save.SaveTabsProcess;
+import ru.mrchebik.project.Project;
 
 import javax.inject.Inject;
 import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
 import java.util.ResourceBundle;
 
-public class WorkPresenter implements Initializable {
+public class WorkPresenter extends KeyHelper implements Initializable {
     @FXML
     private TextArea outputArea;
     @FXML
     private TabPane tabPane;
     @FXML
     private TreeView<Path> treeView;
+    @FXML
+    private Button compile, run;
+    @FXML
+    private Label ram, cpu;
     @Inject
-    private ErrorProcess errorProcess;
-    @Inject
-    private ExecutorCommand executorCommand;
-    @Inject
-    private ActionPlaces places;
-    @Inject
-    private Project project;
+    private WorkPlace workPlace;
 
-    private CommandPath commandPath;
-    private InputTextToOutputArea inputTextToOutputArea;
-    private SaveTabsProcess saveTabsProcess;
     private TabUpdater tabUpdater;
-    private TreeUpdater treeUpdater;
-    private AnalyzerAutocomplete analyzer;
+
+    private BuildWrapper build;
 
     @FXML
     private void handleCompileProject() {
-        Platform.runLater(() -> {
-            handlePrepareToAction();
+        handlePrepareToAction();
 
-            project.compile();
-        });
+        build.compile();
     }
 
     @FXML
     private void handleDoubleClick(MouseEvent e) {
         if (e.getClickCount() == 2) {
-            SelectionModel selectionModel = treeView.getSelectionModel();
-            CustomTreeItem item = (CustomTreeItem) selectionModel.getSelectedItem();
+            var selectionModel = treeView.getSelectionModel();
+            var item = (CustomTreeItem) selectionModel.getSelectedItem();
 
-            if (!item.isDirectory() && lengthOfOpenTabPathLessThanOne(item)) {
+            if (!item.isDirectory() && lengthOfOpenTabPathLessThanOne(item))
                 tabUpdater.addObjectToTab(item);
-            }
         }
     }
 
     @FXML
     private void handleRunProject() {
-        Platform.runLater(() -> {
-            handlePrepareToAction();
+        handlePrepareToAction();
 
-            Path path = (Path) tabPane.getSelectionModel().getSelectedItem().getUserData();
-            project.run(path);
-        });
+        var path = (Path) tabPane.getSelectionModel().getSelectedItem().getUserData();
+        build.run(path);
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        initPlugins();
+        initLocale(compile, run);
+        initCollectorComponents();
         startSaveTabsProcess();
         initializeVariables();
         setUpOutputArea();
@@ -98,20 +98,46 @@ public class WorkPresenter implements Initializable {
         moveCaretInMain();
     }
 
+    private void initPlugins() {
+        PluginWrapper pluginCpu = new PluginCpu(cpu);
+        PluginWrapper pluginRam = new PluginRam(ram);
+
+        pluginCpu.start();
+        pluginRam.start();
+    }
+
+    private void initLocale(Button compile, Button run) {
+        compile.setText(Locale.getProperty("compile_button", true));
+        run.setText(Locale.getProperty("run_button", true));
+    }
+
+    private void initCollectorComponents() {
+        var createFilePlace = new CreateFilePlace();
+        var createFolderPlace = new CreateFolderPlace();
+        var renameFilePlace = new RenameFilePlace();
+        var renameFolderPlace = new RenameFolderPlace();
+
+        ComponentsCollector.setComponents(outputArea, tabPane, treeView, createFilePlace, createFolderPlace, renameFilePlace, renameFolderPlace);
+    }
+
     private void addTabOfMain() {
-        Path path = Paths.get(project.getPathSource().toString(), "Main.java");
-        TreeItem<Path> root = treeView.getRoot();
-        CustomTreeItem mainFile = (CustomTreeItem) treeUpdater.getItem(root, path);
+        var path = Paths.get(Project.pathSource.toString(), "Main.java");
+        var root = treeView.getRoot();
+        var mainFile = (CustomTreeItem) TreeUpdater.getItem(root, path);
 
         tabUpdater.addObjectToTab(mainFile);
     }
 
     private void moveCaretInMain() {
-        VirtualizedScrollPane scrollPane = (VirtualizedScrollPane) tabPane.getTabs().get(0).getContent();
-        ScaledVirtualized<CodeArea> scaledVirtualized = (ScaledVirtualized) scrollPane.getContent();
-        CustomCodeArea area = (CustomCodeArea) scaledVirtualized.getChildrenUnmodifiable().get(0);
+        var scrollPane = (VirtualizedScrollPane) tabPane.getTabs().get(0).getContent();
+        var scaledVirtualized = (ScaledVirtualized) scrollPane.getContent();
+        var area = (CustomCodeArea) scaledVirtualized.getChildrenUnmodifiable().get(0);
         Platform.runLater(area::requestFocus);
-        area.moveTo(73);
+
+        if (Project.isOpen)
+            area.insertText(0, "");
+        else
+            area.moveTo(73);
     }
 
     private void handlePrepareToAction() {
@@ -120,24 +146,15 @@ public class WorkPresenter implements Initializable {
     }
 
     private void initializeVariables() {
-        analyzer = new AnalyzerAutocomplete();
-        analyzer.initialize(project.getPathSource());
-        analyzer.getDatabase().setKeywords(Arrays.asList(Highlight.getKEYWORDS()));
+        build = new Build(Language.command);
 
-        errorProcess.setTextArea(outputArea);
+        AnalyzerAutocomplete.initialize(Project.pathSource);
 
-        commandPath = CommandPath.create();
+        Autocomplete autocomplete = new Autocomplete(workPlace.getStage());
+        tabUpdater = new TabUpdater(tabPane, Highlight.create(), autocomplete);
 
-        Syntax syntax = new Syntax(project, saveTabsProcess, tabPane, treeView);
-        tabUpdater = new TabUpdater(tabPane, Highlight.create(), syntax, places.getWorkPlace().getStage(), analyzer);
-
-        treeUpdater = new TreeUpdater(project, treeView, tabUpdater);
+        TreeUpdater treeUpdater = new TreeUpdater(treeView, tabUpdater);
         treeUpdater.setRootToTreeView();
-
-        executorCommand.setOutputArea(outputArea);
-        executorCommand.setErrorProcess(errorProcess);
-
-        inputTextToOutputArea = new InputTextToOutputArea(executorCommand);
     }
 
     private boolean lengthOfOpenTabPathLessThanOne(CustomTreeItem item) {
@@ -146,27 +163,27 @@ public class WorkPresenter implements Initializable {
 
     private void setEmptyValues() {
         outputArea.setText("");
-        inputTextToOutputArea.setInput("");
+        InputTextToOutputArea.input = "";
     }
 
     private void setUpOutputArea() {
         outputArea.setEditable(false);
-        outputArea.setOnKeyPressed(inputTextToOutputArea);
+
+        var event = new InputTextToOutputArea();
+        outputArea.setOnKeyPressed(event);
     }
 
     private void setUpTreeView() {
         treeView.getSelectionModel().select(2);
-        CustomIcons customIcons = new CustomIcons();
-        treeView.getRoot().getChildren().get(1).setGraphic(new ImageView(customIcons.getFolderExpandImage()));
+        treeView.getRoot().getChildren().get(1).setGraphic(new ImageView(Icons.FOLDER_EXPAND.get()));
 
-        TreeItem<Path> item = treeView.getRoot().getChildren().get(1).getChildren().get(0);
+        var item = treeView.getRoot().getChildren().get(1).getChildren().get(0);
 
         treeView.getSelectionModel().select(item);
-        treeView.setCellFactory(new StructureUpdateGraphic(commandPath, places, project));
+        treeView.setCellFactory(param -> new CustomTreeCell());
     }
 
     private void startSaveTabsProcess() {
-        saveTabsProcess = SaveTabsProcess.create(tabPane);
-        saveTabsProcess.start();
+        new SaveTabsProcess().start();
     }
 }

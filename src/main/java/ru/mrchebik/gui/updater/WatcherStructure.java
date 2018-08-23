@@ -4,7 +4,7 @@ import lombok.Cleanup;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import ru.mrchebik.model.Project;
+import ru.mrchebik.project.Project;
 
 import java.nio.file.*;
 import java.util.List;
@@ -16,8 +16,6 @@ import static java.nio.file.StandardWatchEventKinds.*;
 public class WatcherStructure extends Thread {
     @NonNull
     private Path path;
-    @NonNull
-    private Project project;
     @NonNull
     private TabUpdater tabUpdater;
     @NonNull
@@ -68,15 +66,15 @@ public class WatcherStructure extends Thread {
     }
 
     private boolean isPath(Path path) {
-        return Objects.equals(path, project.getPath());
+        return Objects.equals(path, Project.path);
     }
 
     private boolean isPathOut(Path path) {
-        return Objects.equals(path, project.getPathOut());
+        return Objects.equals(path, Project.pathOut);
     }
 
     private boolean isPathSource(Path path) {
-        return Objects.equals(path, project.getPathSource());
+        return Objects.equals(path, Project.pathSource);
     }
 
     private void tookEvent(WatchKey key) {
@@ -88,13 +86,13 @@ public class WatcherStructure extends Thread {
 
     private void updateCorePathIfRenameTo(Path path) {
         if (isPath(toRename)) {
-            project.setName(path.getFileName().toString());
-            project.setPath(path);
+            Project.name = path.getFileName().toString();
+            Project.path = path;
         }
         if (isPathOut(toRename))
-            project.setPathSource(path);
+            Project.pathSource = path;
         if (isPathSource(toRename))
-            project.setPathOut(path);
+            Project.pathOut = path;
     }
 
     @SneakyThrows

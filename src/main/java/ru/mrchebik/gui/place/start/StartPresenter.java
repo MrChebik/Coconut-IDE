@@ -1,94 +1,115 @@
 package ru.mrchebik.gui.place.start;
 
-import com.airhacks.afterburner.injection.Injector;
-import javafx.animation.ScaleTransition;
-import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.DirectoryChooser;
-import javafx.util.Duration;
+import ru.mrchebik.call.startup.CallStartupWrapper;
+import ru.mrchebik.controller.startup.StartupWrapper;
 import ru.mrchebik.gui.place.create.project.CreateProjectPlace;
-import ru.mrchebik.model.Projects;
-import ru.mrchebik.settings.PropertyCollector;
+import ru.mrchebik.gui.place.work.WorkPlace;
+import ru.mrchebik.injection.Injection;
+import ru.mrchebik.language.Language;
+import ru.mrchebik.language.LanguageType;
+import ru.mrchebik.language.java.call.JavaCallStartup;
+import ru.mrchebik.language.java.startup.JavaStartup;
+import ru.mrchebik.locale.Locale;
+import ru.mrchebik.project.Project;
+import ru.mrchebik.project.Projects;
 
 import javax.inject.Inject;
-import java.io.File;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.ResourceBundle;
 
-public class StartPresenter implements Initializable {
+public class StartPresenter extends StartPresenterAction implements Initializable {
+    @FXML
+    public Button createProject, openProject, setupHomeButton;
+    @FXML
+    public Tooltip tooltipSetupHome;
     @FXML
     private ImageView coconutPng;
-    @FXML
-    private Button createProject;
     @Inject
     private StartPlace startPlace;
 
+    private CallStartupWrapper callStartup;
     private CreateProjectPlace createProjectPlace;
-    private PropertyCollector propertyCollector;
+    private StartupWrapper startup;
 
     @FXML
-    private void handleNewProject() {
-        initializeCreateProjectPlace();
+    private void newProject() {
+        callStartup.callNewProject(createProjectPlace);
     }
 
     @FXML
-    private void handleSetupJDK() {
-        String jdkProperty = propertyCollector.getProperty("jdk");
-        File target = Paths.get(jdkProperty == null ? System.getProperty("java.home") : jdkProperty).toFile();
+    private void newProjectWithKey(KeyEvent event) {
+        if (isEnter(event))
+            callStartup.callNewProject(createProjectPlace);
+    }
 
-        DirectoryChooser directoryChooser = new DirectoryChooser();
-        directoryChooser.setInitialDirectory(target);
-        directoryChooser.setTitle("Choose JDK Folder");
+    @FXML
+    private void openProjectA() {
+        Path needed = Files.exists(Projects.path) ?
+                Projects.path
+                :
+                Paths.get(System.getProperty("user.home"));
 
-        File file = directoryChooser.showDialog(startPlace.getStage());
-        if (file != null) {
-            setJDK(file.getPath());
+        var folder = needed.toFile();
+        var directoryChooser = new DirectoryChooser();
+        directoryChooser.setInitialDirectory(folder);
+        directoryChooser.setTitle(Locale.getProperty("open_project_title", true));
+
+        var selectedFile = directoryChooser.showDialog(startPlace.getStage());
+        if (selectedFile != null) {
+            Project.isOpen = true;
+            startPlace.getStage().close();
+            var workPlace = new WorkPlace();
+            workPlace.start(selectedFile.getName(), selectedFile.toPath());
         }
+    }
+
+    @FXML
+    private void openProjectAWithKey(KeyEvent event) {
+        if (isEnter(event)) {
+
+        }
+    }
+
+    @FXML
+    private void setupHome() {
+        setHomeAndEnable(createProject, callStartup, startPlace, startup);
+    }
+
+    @FXML
+    private void setupHomeWithKey(KeyEvent event) {
+        if (isEnter(event))
+            setHomeAndEnable(createProject, callStartup, startPlace, startup);
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        propertyCollector = PropertyCollector.create();
-
-        if (!propertyCollector.isJDKCorrect() && propertyCollector.getProperty("jdk") == null) {
-            createProject.setDisable(true);
-        }
-
-        ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(2000), coconutPng);
-        scaleTransition.setToX(1.1f);
-        scaleTransition.setToY(1.1f);
-        scaleTransition.setCycleCount(Timeline.INDEFINITE);
-        scaleTransition.setAutoReverse(true);
-        scaleTransition.play();
+        initPresenter();
+        initStartup();
+        initLocale();
+        initNewProject(createProject, startup);
+        initAnimation(coconutPng);
+        Injection.initInjection(startPlace, createProjectPlace);
     }
 
-    private void initializeCreateProjectPlace() {
+    private void initStartup() {
+        if (Language.languageType.equals(LanguageType.Java)) {
+            startup = new JavaStartup();
+            callStartup = new JavaCallStartup();
+        }
         createProjectPlace = new CreateProjectPlace();
-        initializeInjection();
-        createProjectPlace.start();
     }
 
-    private void initializeInjection() {
-        Map<Object, Object> customProperties = new HashMap<>();
-        customProperties.put("createProjectPlace", createProjectPlace);
-        customProperties.put("startPlace", startPlace);
-        customProperties.put("projects", Projects.create());
-        Injector.setConfigurationSource(customProperties::get);
-    }
-
-    private void setJDK(String pathString) {
-        Path pathJavac = Paths.get(pathString, "bin", propertyCollector.getJavac());
-        if (Files.exists(pathJavac)) {
-            propertyCollector.writeProperty("jdk", pathString);
-            createProject.setDisable(false);
-        }
+    private void initPresenter() {
+        presenter = this;
     }
 }

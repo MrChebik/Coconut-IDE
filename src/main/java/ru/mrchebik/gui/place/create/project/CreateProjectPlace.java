@@ -1,40 +1,24 @@
 package ru.mrchebik.gui.place.create.project;
 
-import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import lombok.Getter;
-import ru.mrchebik.model.CustomIcons;
-import ru.mrchebik.model.screen.Screen;
-import ru.mrchebik.model.screen.measurement.Point;
+import ru.mrchebik.gui.place.StageAction;
+import ru.mrchebik.gui.place.ViewAction;
+import ru.mrchebik.locale.Locale;
+import ru.mrchebik.screen.measurement.Scale;
 
-public class CreateProjectPlace {
-    @Getter
-    private Stage stage;
-
-    public void start() {
-        stage = new Stage();
-        stage.initModality(Modality.APPLICATION_MODAL);
-        stage.setTitle("New Project");
-        stage.setWidth(500);
-        stage.setHeight(200);
-        stage.setResizable(false);
-
-        Screen screen = new Screen();
-        Point point = screen.calculateCenter(500, 200);
-        stage.setX(point.getX());
-        stage.setY(point.getY());
-
-        CustomIcons customIcons = new CustomIcons();
-        stage.getIcons().add(customIcons.getLogo());
-
-        CreateProjectView createProjectView = new CreateProjectView();
-        Scene scene = new Scene(createProjectView.getView());
-        stage.setScene(scene);
-        stage.show();
+public class CreateProjectPlace extends StageAction {
+    public static String setTitle() {
+        return Locale.getProperty("new_project_title", true);
     }
 
-    public void close() {
-        stage.close();
+    public void start() {
+        super.stage = new Stage();
+
+        initWindow(super.stage,
+                setTitle(),
+                Modality.APPLICATION_MODAL,
+                Scale.PLACE_CREATE_PROJECT,
+                ViewAction.PLACE_CREATE_PROJECT);
     }
 }

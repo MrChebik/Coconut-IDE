@@ -4,19 +4,18 @@ import javafx.concurrent.Task;
 import javafx.event.Event;
 import javafx.scene.control.IndexRange;
 import javafx.scene.input.KeyCode;
-import javafx.stage.Stage;
-import lombok.Getter;
-import lombok.Setter;
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.LineNumberFactory;
 import org.fxmisc.richtext.model.StyleSpans;
 import org.fxmisc.wellbehaved.event.InputMap;
 import org.fxmisc.wellbehaved.event.Nodes;
 import org.reactfx.util.Try;
-import ru.mrchebik.gui.node.codearea.event.CaretPosition;
-import ru.mrchebik.highlight.Highlight;
-import ru.mrchebik.highlight.syntax.Syntax;
-import ru.mrchebik.process.autocomplete.AnalyzerAutocomplete;
+import ru.mrchebik.autocomplete.AnalyzerAutocomplete;
+import ru.mrchebik.autocomplete.Autocomplete;
+import ru.mrchebik.language.Language;
+import ru.mrchebik.language.java.highlight.Highlight;
+import ru.mrchebik.language.java.symbols.CustomSymbolsType;
+import ru.mrchebik.language.java.symbols.SymbolsType;
 
 import java.time.Duration;
 import java.util.*;
@@ -25,34 +24,21 @@ import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static javafx.scene.input.KeyCode.BACK_SPACE;
-import static javafx.scene.input.KeyCode.ENTER;
-import static javafx.scene.input.KeyCode.TAB;
+import static javafx.scene.input.KeyCode.*;
 import static org.fxmisc.wellbehaved.event.EventPattern.anyOf;
 import static org.fxmisc.wellbehaved.event.EventPattern.keyPressed;
 
 public class CustomCodeArea extends CodeArea {
-    public static final String CUSTOM_TAB = "    ";
+    public CodeArea codeAreaCSS;
+    public String name;
 
-    @Getter
-    private CodeArea codeAreaCSS;
-    @Getter @Setter
-    private String name;
-
-    private CaretPosition caretPosition;
     private Executor executor;
     private Highlight highlight;
-    private Syntax syntax;
 
-    private Autocomplete autocomplete;
-
-    public CustomCodeArea(String text, Highlight highlight, Syntax syntax, Stage stage, AnalyzerAutocomplete analyzer, String name) {
+    public CustomCodeArea(String text, Highlight highlight, String name, Autocomplete autocomplete) {
         executor = Executors.newSingleThreadExecutor();
         this.highlight = highlight;
-        this.syntax = syntax;
         this.name = name;
-
-        autocomplete = new Autocomplete(this, stage, analyzer.getDatabase());
 
         InputMap<Event> prevent = InputMap.consume(
                 anyOf(
@@ -71,7 +57,7 @@ public class CustomCodeArea extends CodeArea {
             if (event.getCode() == TAB) {
                 position = deleteSelection(position);
 
-                this.insertText(position, CUSTOM_TAB);
+                this.insertText(position, CustomSymbolsType.TAB.getCustom());
             } else if (event.getCode() == KeyCode.SEMICOLON) {
                 deleteSelection(-1);
 
@@ -81,13 +67,13 @@ public class CustomCodeArea extends CodeArea {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    analyzer.callAnalysis(this.getText());
+                    AnalyzerAutocomplete.callAnalysis(this.getText(), false);
                 }).start();
             } else if (event.getCode() == ENTER) {
                 position = deleteSelection(position);
 
                 this.insertText(position, "\n" + getTabLength(position));
-                analyzer.callAnalysis(this.getText());
+                AnalyzerAutocomplete.callAnalysis(this.getText(), false);
             } else if (event.getCode() == KeyCode.BACK_SPACE) {
                 String paragraph = this.getParagraph(this.getCurrentParagraph()).getText();
 
@@ -95,7 +81,7 @@ public class CustomCodeArea extends CodeArea {
                         getTabLength(position).equals(paragraph)) {
                     this.deleteText(position - paragraph.length() - 1, position);
                 } else if (position >= 4 &&
-                            CUSTOM_TAB.equals(this.getText(position - 4, position))) {
+                        CustomSymbolsType.TAB.getCustom().equals(this.getText(position - 4, position))) {
                     int spaces = 0;
 
                     for (int i = this.getCaretColumn() - 1; i >= 0; i--) {
@@ -114,11 +100,11 @@ public class CustomCodeArea extends CodeArea {
                 } else if (deleteSelection(-1) == -1) {
                     if (this.getText().length() > 1) {
                         String snippet = this.getText(position - 1, position + 1);
-                        List<String> mirrorSymbols = Arrays.asList(Autocomplete.mirrorSymbols);
-                        List<String> sameSymbols = Arrays.asList(Autocomplete.sameSymbols);
+                        List<String> mirror = Arrays.asList(SymbolsType.MIRROR.getSymbols());
+                        List<String> same = Arrays.asList(SymbolsType.SAME.getSymbols());
 
-                        if (mirrorSymbols.contains(snippet) ||
-                                sameSymbols.contains(snippet)) {
+                        if (mirror.contains(snippet) ||
+                                same.contains(snippet)) {
                             this.deleteNextChar();
                         }
                     }
@@ -127,8 +113,12 @@ public class CustomCodeArea extends CodeArea {
             }
         });
 
-        caretPosition = CaretPosition.create();
-        this.caretPositionProperty().addListener(listener -> caretPosition.compute(this));
+        this.focusedProperty().addListener((arg0, oldPropertyValue, newPropertyValue) -> {
+            if (!newPropertyValue)
+                autocomplete.hideSnippet();
+        });
+
+        this.caretPositionProperty().addListener(listener -> Language.caretHighlight.compute(this));
         this.setParagraphGraphicFactory(LineNumberFactory.get(this));
         this.multiPlainChanges()
                 .successionEnds(Duration.ofMillis(350))
@@ -137,7 +127,7 @@ public class CustomCodeArea extends CodeArea {
                 .filterMap(this::getOptional)
                 .subscribe(this::applyHighlighting);
         this.multiPlainChanges()
-                .subscribe(autocomplete::callSnippet);
+                .subscribe(changes -> autocomplete.callSnippet(changes, this));
         this.replaceText(0, 0, text);
     }
 
@@ -163,22 +153,21 @@ public class CustomCodeArea extends CodeArea {
                 brackets.pop();
             }
         }
-        return IntStream.range(0, brackets.size()).mapToObj(i -> CUSTOM_TAB).collect(Collectors.joining());
+        return IntStream.range(0, brackets.size()).mapToObj(i -> CustomSymbolsType.TAB.getCustom()).collect(Collectors.joining());
     }
 
     private void applyHighlighting(StyleSpans<Collection<String>> highlighting) {
         codeAreaCSS = new CodeArea(this.getText());
 
         codeAreaCSS.setStyleSpans(0, highlighting);
-        caretPosition.compute(codeAreaCSS);
-        syntax.compute(this);
+        Language.initSyntax().compute(this);
     }
 
     private Task<StyleSpans<Collection<String>>> computeHighlightingAsync() {
         String text = this.getText();
-        Task<StyleSpans<Collection<String>>> task = new Task<StyleSpans<Collection<String>>>() {
+        Task<StyleSpans<Collection<String>>> task = new Task<>() {
             @Override
-            protected StyleSpans<Collection<String>> call() throws Exception {
+            protected StyleSpans<Collection<String>> call() {
                 return highlight.computeHighlighting(text);
             }
         };

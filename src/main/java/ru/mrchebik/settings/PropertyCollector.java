@@ -10,66 +10,62 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Objects;
 import java.util.Properties;
 
 public class PropertyCollector {
-    private final Path SETTINGS_PATH = Paths.get(System.getProperty("user.home"), ".coconut-ide");
+    public static String language;
+    public static String locale;
+    private static Path SETTINGS_PATH;
+    private static Path pathProperties;
+    private static Properties properties = new Properties();
 
-    private Path pathProperties;
-    private Properties properties;
-    private String javac;
-
-    @SneakyThrows(IOException.class)
-    private PropertyCollector() {
-        if (!Files.exists(SETTINGS_PATH)) {
-            Files.createDirectory(SETTINGS_PATH);
-        }
+    static {
+        initializeSettingsPath();
         initializeApplicationProperties();
+        initializeProperties();
     }
 
-    public static PropertyCollector create() {
-        return new PropertyCollector();
+    public static void initializeProperties() {
+        language = PropertyCollector.initVariable("language", "java");
+        locale = PropertyCollector.initVariable("locale", "en");
     }
 
-    public String getJavac() {
-        if (javac == null) {
-            javac = "javac";
-
-            String os = System.getProperty("os.name");
-            if (os.contains("Windows")) {
-                javac += ".exe";
-            }
-        }
-
-        return javac;
-    }
-
-    public String getProperty(String key) {
+    public static String getProperty(String key) {
         return properties.getProperty(key);
     }
 
-    @SneakyThrows
-    private void initializeApplicationProperties() {
+    @SneakyThrows(IOException.class)
+    private static void initializeApplicationProperties() {
         pathProperties = SETTINGS_PATH.resolve("application.properties");
-        if (!Files.exists(pathProperties)) {
+        if (!Files.exists(pathProperties))
             Files.createFile(pathProperties);
-        }
-        properties = new Properties();
         properties.load(new FileInputStream(new File(String.valueOf(pathProperties.toFile()))));
     }
 
-    public boolean isJDKCorrect() {
-        Path javaHome = Paths.get(System.getProperty("java.home"));
-        return Files.exists(javaHome.resolve("bin").resolve(getJavac())) ||
-                Files.exists(javaHome.getParent().resolve("bin").resolve(getJavac()));
+    @SneakyThrows(IOException.class)
+    private static void initializeSettingsPath() {
+        SETTINGS_PATH = Paths.get(System.getProperty("user.home"), ".coconut-ide");
+        if (!Files.exists(SETTINGS_PATH))
+            Files.createDirectory(SETTINGS_PATH);
     }
 
-    @SneakyThrows
-    public void writeProperty(String key, String value) {
+    @SneakyThrows(IOException.class)
+    public static void writeProperty(String key, String value) {
         properties.setProperty(key, value);
 
-        File file = pathProperties.toFile();
+        var file = pathProperties.toFile();
         @Cleanup FileOutputStream fos = new FileOutputStream(file);
         properties.store(fos, "Update");
+    }
+
+    public static String initVariable(String key, String defaultValue) {
+        var result = PropertyCollector.getProperty(key);
+        if (Objects.isNull(result)) {
+            PropertyCollector.writeProperty(key, defaultValue);
+            result = defaultValue;
+        }
+
+        return result;
     }
 }

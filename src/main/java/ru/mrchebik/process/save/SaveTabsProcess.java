@@ -1,40 +1,27 @@
 package ru.mrchebik.process.save;
 
-import javafx.scene.control.TabPane;
+import ru.mrchebik.gui.collector.ComponentsCollector;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
-/**
- * Created by mrchebik on 9/2/17.
- */
 public class SaveTabsProcess extends Thread {
-    private TabPane tabPane;
-
-    private SaveTabsProcess(TabPane tabPane) {
-        this.tabPane = tabPane;
-    }
-
-    public static SaveTabsProcess create(TabPane tabPane) {
-        return new SaveTabsProcess(tabPane);
+    public static void runSynch() {
+        SaveTabs.create(ComponentsCollector.tabPane.getTabs()).run();
     }
 
     @Override
     public void run() {
-        schedule(() -> SaveTabs.create(tabPane.getTabs()).start());
-    }
-
-    public void runSynch() {
-        SaveTabs.create(tabPane.getTabs()).run();
+        schedule(() -> SaveTabs.create(ComponentsCollector.tabPane.getTabs()).start());
     }
 
     private void schedule(Runnable r) {
-        TimerTask task = new TimerTask() {
+        var task = new TimerTask() {
             public void run() {
                 r.run();
             }
         };
-        Timer timer = new Timer();
+        var timer = new Timer();
         timer.schedule(task, (long) 5000, (long) 5000);
     }
 }

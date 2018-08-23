@@ -8,9 +8,9 @@ import javafx.scene.control.TreeView;
 import javafx.scene.image.ImageView;
 import lombok.AllArgsConstructor;
 import ru.mrchebik.gui.node.CustomTreeItem;
-import ru.mrchebik.highlight.syntax.switcher.javaCompiler.cell.HighlightCell;
-import ru.mrchebik.model.CustomIcons;
-import ru.mrchebik.model.Project;
+import ru.mrchebik.icons.Icons;
+import ru.mrchebik.language.java.highlight.syntax.switcher.compiler.cell.HighlightCell;
+import ru.mrchebik.project.Project;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -20,51 +20,8 @@ import java.util.TimerTask;
 
 @AllArgsConstructor
 public class TreeUpdater {
-    private Project project;
     private TreeView<Path> treeView;
     private TabUpdater tabUpdater;
-
-    void createObject(Path path, boolean isRoot) {
-        if (isRoot) {
-            TreeItem<Path> rootNode = setRootItem(path);
-            treeView.setRoot(rootNode);
-        } else {
-            TreeItem<Path> parent = getItem(treeView.getRoot(), path.getParent());
-
-            WatcherStructure watcherStructure = null;
-            if (Files.isDirectory(path)) {
-                watcherStructure = new WatcherStructure(path, project, tabUpdater, this);
-            }
-
-            TreeItem<Path> newItem = new CustomTreeItem(path, watcherStructure, project, tabUpdater, this);
-            CustomIcons customIcons = new CustomIcons();
-            if (Files.isDirectory(path)) {
-                newItem.setGraphic(new ImageView(customIcons.getFolderCollapseImage()));
-                newItem.expandedProperty().addListener(expanderListener());
-            } else {
-                newItem.setGraphic(new ImageView(customIcons.getFileImage()));
-            }
-
-            parent.getChildren().add(newItem);
-
-            sortItemsInTree(parent);
-        }
-    }
-
-    public ChangeListener<Boolean> expanderListener() {
-        return (observable, oldValue, newValue) -> {
-            BooleanProperty bb = (BooleanProperty) observable;
-
-            TreeItem t = (TreeItem) bb.getBean();
-
-            CustomIcons customIcons = new CustomIcons();
-            t.setGraphic(new ImageView(newValue ? customIcons.getFolderExpandImage() : customIcons.getFolderCollapseImage()));
-
-            if (newValue) {
-                scheduleHighlight();
-            }
-        };
-    }
 
     public static TreeItem<Path> getItem(TreeItem<Path> root, Path path) {
         if (root.getValue().equals(path))
@@ -84,8 +41,46 @@ public class TreeUpdater {
         return null;
     }
 
+    void createObject(Path path, boolean isRoot) {
+        if (isRoot) {
+            TreeItem<Path> rootNode = setRootItem(path);
+            treeView.setRoot(rootNode);
+        } else {
+            TreeItem<Path> parent = getItem(treeView.getRoot(), path.getParent());
+
+            WatcherStructure watcherStructure = null;
+            if (Files.isDirectory(path)) {
+                watcherStructure = new WatcherStructure(path, tabUpdater, this);
+            }
+
+            TreeItem<Path> newItem = new CustomTreeItem(path, watcherStructure, tabUpdater, this);
+            if (Files.isDirectory(path)) {
+                newItem.setGraphic(new ImageView(Icons.FOLDER_COLLAPSE.get()));
+                newItem.expandedProperty().addListener(expanderListener());
+            } else
+                newItem.setGraphic(new ImageView(Icons.FILE.get()));
+
+            parent.getChildren().add(newItem);
+
+            sortItemsInTree(parent);
+        }
+    }
+
+    public ChangeListener<Boolean> expanderListener() {
+        return (observable, oldValue, newValue) -> {
+            BooleanProperty bb = (BooleanProperty) observable;
+
+            TreeItem t = (TreeItem) bb.getBean();
+
+            t.setGraphic(new ImageView((newValue ? Icons.FOLDER_EXPAND : Icons.FOLDER_COLLAPSE).get()));
+
+            if (newValue)
+                scheduleHighlight();
+        };
+    }
+
     void removeObject(Path path) {
-        if (project.getPath().equals(path)) {
+        if (Project.path.equals(path)) {
             Platform.runLater(() -> {
                 treeView.setRoot(null);
             });
@@ -97,24 +92,21 @@ public class TreeUpdater {
     }
 
     private TreeItem<Path> setRootItem(Path path) {
-        WatcherStructure rootInWatcher = new WatcherStructure(path, project, tabUpdater, this);
+        WatcherStructure rootInWatcher = new WatcherStructure(path, tabUpdater, this);
 
-        TreeItem<Path> rootNode = new CustomTreeItem(path, rootInWatcher, project, tabUpdater, this);
+        TreeItem<Path> rootNode = new CustomTreeItem(path, rootInWatcher, tabUpdater, this);
         rootNode.setExpanded(true);
-        CustomIcons customIcons = new CustomIcons();
-        rootNode.setGraphic(new ImageView(customIcons.getFolderExpandImage()));
+        rootNode.setGraphic(new ImageView(Icons.FOLDER_EXPAND.get()));
         rootNode.expandedProperty().addListener(expanderListener());
 
         return rootNode;
     }
 
     public void setRootToTreeView() {
-        Path projectPath = project.getPath();
-
-        WatcherStructure rootOutWatcher = new WatcherStructure(projectPath.getParent(), project, tabUpdater, this);
+        WatcherStructure rootOutWatcher = new WatcherStructure(Project.path.getParent(), tabUpdater, this);
         rootOutWatcher.start();
 
-        TreeItem<Path> rootNode = setRootItem(projectPath);
+        TreeItem<Path> rootNode = setRootItem(Project.path);
 
         treeView.setRoot(rootNode);
     }
