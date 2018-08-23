@@ -17,10 +17,12 @@ import ru.mrchebik.language.java.symbols.CustomSymbolsType;
 import ru.mrchebik.language.java.symbols.SymbolsType;
 
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
-import static javafx.scene.input.KeyCode.KP_LEFT;
+import static javafx.scene.input.KeyCode.LEFT;
+import static javafx.scene.input.KeyCode.RIGHT;
 import static org.fxmisc.wellbehaved.event.EventPattern.anyOf;
 import static org.fxmisc.wellbehaved.event.EventPattern.keyPressed;
 
@@ -34,6 +36,8 @@ public class Autocomplete extends Popup {
     private static boolean begin;
     private static boolean wasSameSymbol;
     private static boolean hideTemporarily = true;
+
+    private static String cache;
 
     public Autocomplete(Stage stage) {
         Autocomplete.stage = stage;
@@ -51,7 +55,8 @@ public class Autocomplete extends Popup {
         mainArea.setOnMouseClicked(event -> doOption());
         mainArea.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER ||
-                    event.getCode() == KeyCode.TAB)
+                    event.getCode() == KeyCode.TAB ||
+                    event.getCode() == KeyCode.PERIOD)
                 doOption();
         });
         mainArea.addEventFilter(ScrollEvent.ANY, e -> {
@@ -71,7 +76,8 @@ public class Autocomplete extends Popup {
 
         InputMap<Event> prevent = InputMap.consume(
                 anyOf(
-                        keyPressed(KP_LEFT)
+                        keyPressed(LEFT),
+                        keyPressed(RIGHT)
                 )
         );
         Nodes.addInputMap(mainArea, prevent);
@@ -83,16 +89,22 @@ public class Autocomplete extends Popup {
     private void setOptions(List<AutocompleteItem> options) {
         mainArea.clear();
 
-        options.forEach(option -> mainArea.appendText(option.toString() + "\n"));
+        System.out.println(options);
+        System.out.println(mainArea);
+        options.forEach(option -> {
+            mainArea.appendText(option.toString() + "\n");
+        });
 
         mainArea.deletePreviousChar();
         mainArea.moveTo(0);
         mainArea.requestFollowCaret();
 
-        mainArea.setPrefHeight(options.size() < 5 ?
+        mainArea.setUserData(options);
+
+        mainArea.setPrefHeight(options.size() < 10 ?
                 options.size() * 16 + options.size() * 4
                 :
-                100);
+                200);
 
         AutocompleteDatabase.cache = options;
     }
@@ -115,11 +127,14 @@ public class Autocomplete extends Popup {
 
             // TODO invisible
             String CLASS_NAME = inserted;
+            EditWord.classN = ((List<AutocompleteItem>) mainArea.getUserData()).get(mainArea.getCurrentParagraph()).returnType;
+            AutocompleteDatabase.cache.clear();
 
             codeAreaFocused.insertText(EditWord.end, inserted.substring(EditWord.end - EditWord.begin));
 
             int lastPosition = codeAreaFocused.getCaretPosition() - (inserted.contains("()") ? 1 : 0);
             if (!packageName.isEmpty() &&
+                    !packageName.equals("java.lang") &&
                     !codeAreaFocused.getText().contains(packageName)) {
                 String text = codeAreaFocused.getText();
                 int indexImport = text.indexOf("import");
@@ -238,7 +253,38 @@ public class Autocomplete extends Popup {
             }
         }
 
-        if (".".equals(inserted) || " ".equals(inserted) || CustomSymbolsType.TAB.getCustom().equals(inserted) || !inserted.isEmpty() && inserted.charAt(0) == 10) {
+        if (".".equals(inserted)) {
+            if (EditWord.begin == EditWord.end) {
+                EditWord.begin++;
+                EditWord.end++;
+            }
+            if (EditWord.classN != null) {
+                List<AutocompleteItem> options = EditWord.classN.items;
+                options.sort(Comparator.comparingInt(a -> a.text.length()));
+
+                if (!options.isEmpty()) {
+                    Bounds bounds = codeAreaFocused.caretBoundsProperty().getValue().get();
+                    double y = bounds.getMaxY();
+
+                    if (EditWord.beginGlobal == -1) {
+                        EditWord.beginGlobal = bounds.getMaxX() - 30;
+
+                        setX(EditWord.beginGlobal);
+                    }
+
+                    setY(y);
+
+                    setOptions(options);
+
+                    if (hideTemporarily) {
+                        show(stage);
+                        hideTemporarily = false;
+                    }
+                } else
+                    hideTemporarily();
+            }
+        } else if (" ".equals(inserted) || CustomSymbolsType.TAB.getCustom().equals(inserted) || !inserted.isEmpty() && inserted.charAt(0) == 10) {
+            EditWord.classN = null;
             hideSnippet();
         } else {
             if (!inserted.isEmpty() && !" ".equals(inserted)) {
@@ -265,6 +311,7 @@ public class Autocomplete extends Popup {
 
             if (EditWord.word.length() != 0) {
                 List<AutocompleteItem> options = AutocompleteDatabase.searchClusters();
+                options.sort(Comparator.comparingInt(a -> a.text.length()));
 
                 if (!options.isEmpty()) {
                     Bounds bounds = codeAreaFocused.caretBoundsProperty().getValue().get();
@@ -290,6 +337,7 @@ public class Autocomplete extends Popup {
                 hideTemporarily();
         }
     }
+
 
     private void pasteSimilarSymbol(String symbol, String[] options, boolean mirror) {
         Optional<String> findSame = Arrays.stream(options).filter(option -> option.startsWith(symbol)).findFirst();
@@ -318,7 +366,10 @@ public class Autocomplete extends Popup {
     public void checkCaretPosition() {
         int position = codeAreaFocused.getCaretPosition();
         boolean isOutRange = EditWord.isOutRange(position);
-        if (isOutRange)
+        if (isOutRange &&
+                !(".".equals(codeAreaFocused.getText(position - 1, position)) && EditWord.classN != null)) {
+            EditWord.classN = null;
             hideSnippet();
+        }
     }
 }

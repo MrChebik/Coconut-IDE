@@ -15,6 +15,7 @@ class StartPresenterAction extends KeyHelper {
 
     public static void initLocale() {
         presenter.createProject.setText(Locale.getProperty("new_project_button", true));
+        presenter.openProject.setText(Locale.getProperty("open_project_button", true));
         presenter.tooltipSetupHome.setText(Locale.getProperty("setup_home_tooltip", false));
         presenter.setupHomeButton.setText(Locale.getProperty("setup_home_button", false));
     }

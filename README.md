@@ -6,7 +6,6 @@
 > IDE for Java developers.
 ## Demonstration - v0.2.0
 ![Coconut-IDE - Screenshot](https://github.com/MrChebik/Coconut-IDE/blob/master/coconut-ide-demonstration.webp?raw=true)  
-Hello World - Error - Autocomplete
 ## Requirements
 * Java: 10
 * RAM: 768 Mb

@@ -32,6 +32,8 @@ public class WorkPlace extends StageAction {
         Path pathSource = Paths.get(path.toString(), "src");
 
         Project.init(name, path, pathOut, pathSource);
-        Project.build();
+
+        if (!Project.isOpen)
+            Project.build();
     }
 }

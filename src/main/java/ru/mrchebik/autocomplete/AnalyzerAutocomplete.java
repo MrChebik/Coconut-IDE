@@ -39,9 +39,10 @@ public class AnalyzerAutocomplete {
         });
 
         analysis(3, "java", "java.lang");
-        //analysis(5, "javax");
-        //analysis(6, "javafx");
-        //analysis(7, "ALL");
+        analysis(5, "javax");
+        analysis(6, "javafx");
+        analysis(7, "ALL");
+        AutocompleteDatabase.weaveWeb();
     }
 
     public static void analysis(int cluster, String... packages) {
@@ -57,6 +58,8 @@ public class AnalyzerAutocomplete {
                                 "sun",
                                 "jdk",
                                 "java",
+                                "java.applet",
+                                "java.lang",
                                 "javax",
                                 "javafx")
                         .scan()
@@ -68,6 +71,7 @@ public class AnalyzerAutocomplete {
                         .disableDirScanning()
                         .removeTemporaryFilesAfterScan()
                         .whitelistPackages(packages)
+                        .blacklistPackages("java.applet")
                         .scan();
 
         ClassInfoList list = scanResult.getAllClasses()
@@ -91,14 +95,14 @@ public class AnalyzerAutocomplete {
 
             classInfo.getFieldInfo().forEach(field -> {
                 if (field.isPublic())
-                    AutocompleteDatabase.addItem(cluster, new AutocompleteItem("V", field.getName(), packageText, text), true);
+                    AutocompleteDatabase.addItem(cluster, new AutocompleteItem("V", field.getName(), "", text, field.getTypeDescriptor().toString().substring(field.getTypeDescriptor().toString().lastIndexOf(".") + 1)), true);
             });
             classInfo.getMethodInfo().forEach(method -> {
                 if (method.isPublic())
-                    AutocompleteDatabase.addItem(cluster, new AutocompleteItem("M", method.getName(), packageText, text), true);
+                    AutocompleteDatabase.addItem(cluster, new AutocompleteItem("M", method.getName(), "", text, method.getTypeDescriptor().toString().substring(method.getTypeDescriptor().toString().lastIndexOf(".") + 1)), true);
             });
 
-            AutocompleteDatabase.addItem(cluster, new AutocompleteItem(flag, text, packageText, text), true);
+            AutocompleteDatabase.addItem(cluster, new AutocompleteItem(flag, text, packageText, text, text), true);
         });
     }
 
@@ -113,7 +117,6 @@ public class AnalyzerAutocomplete {
     // First cluster
     public static void callAnalysis(String text, boolean isNew) {
         try {
-
             CompilationUnit unit = JavaParser.parse(text);
             if (unit.getTypes().size() > 0) {
                 TypeDeclaration declaration = unit.getType(0);
@@ -127,17 +130,15 @@ public class AnalyzerAutocomplete {
                 if (declaration.getFields().size() > 0)
                     declaration.getFields().forEach(field -> {
                         FieldDeclaration fieldDeclaration = (FieldDeclaration) field;
-                        fieldDeclaration.getVariables().forEach(variable -> {
-                            AutocompleteDatabase.addItem(0, new AutocompleteItem("V", variable.getNameAsString(), packageClass, classN), isNew);
-                        });
+                        fieldDeclaration.getVariables().forEach(variable -> AutocompleteDatabase.addItem(0, new AutocompleteItem("V", variable.getNameAsString(), "", classN, ((FieldDeclaration) field).getElementType().asString()), isNew));
                     });
                 if (declaration.getMethods().size() > 0)
                     declaration.getMethods().forEach(method -> {
                         MethodDeclaration methodDeclaration = (MethodDeclaration) method;
-                        AutocompleteDatabase.addItem(0, new AutocompleteItem("M", methodDeclaration.getNameAsString(), packageClass, classN), isNew);
+                        AutocompleteDatabase.addItem(0, new AutocompleteItem("M", methodDeclaration.getNameAsString(), "", classN, methodDeclaration.getType().asString()), isNew);
                     });
 
-                AutocompleteDatabase.addItem(0, new AutocompleteItem("C", classN, packageClass, classN), isNew);
+                AutocompleteDatabase.addItem(0, new AutocompleteItem("C", classN, packageClass, classN, classN), isNew);
             }
         } catch (ParseProblemException ignored) {
         }

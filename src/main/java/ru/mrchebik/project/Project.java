@@ -11,6 +11,8 @@ public class Project {
     public static Path pathOut;
     public static Path pathSource;
 
+    public static boolean isOpen;
+
     public static void init(String name,
                             Path path,
                             Path pathOut,

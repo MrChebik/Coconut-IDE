@@ -7,7 +7,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
 <BorderPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="400.0" prefWidth="600.0"
-            xmlns="http://javafx.com/javafx/8.0.111" fx:controller="ru.mrchebik.gui.place.start.StartPresenter">
+            xmlns="http://javafx.com/javafx/10.0.2" fx:controller="ru.mrchebik.gui.place.start.StartPresenter">
     <center>
         <ImageView fx:id="coconutPng" fitHeight="275.0" fitWidth="275.0" pickOnBounds="true" preserveRatio="true"
                    BorderPane.alignment="CENTER">
@@ -19,14 +19,24 @@
     </center>
     <bottom>
         <HBox alignment="CENTER" prefHeight="40.0" prefWidth="200.0">
-            <Button fx:id="createProject" mnemonicParsing="false" onMouseClicked="#newProject"
-                    onKeyReleased="#newProjectWithKey"/>
+            <Button fx:id="createProject" mnemonicParsing="false" onKeyReleased="#newProjectWithKey"
+                    onMouseClicked="#newProject">
+                <HBox.margin>
+                    <Insets right="10.0"/>
+                </HBox.margin>
+            </Button>
+            <Button fx:id="openProject" mnemonicParsing="false" onKeyReleased="#openProjectAWithKey"
+                    onMouseClicked="#openProjectA">
+                <HBox.margin>
+                    <Insets left="10.0"/>
+                </HBox.margin>
+            </Button>
         </HBox>
     </bottom>
     <top>
         <HBox alignment="CENTER_RIGHT" prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-            <Button mnemonicParsing="false" fx:id="setupHomeButton" onMouseClicked="#setupHome"
-                    onKeyReleased="#setupHomeWithKey">
+            <Button fx:id="setupHomeButton" mnemonicParsing="false" onKeyReleased="#setupHomeWithKey"
+                    onMouseClicked="#setupHome">
                 <HBox.margin>
                     <Insets right="6.0"/>
                 </HBox.margin>

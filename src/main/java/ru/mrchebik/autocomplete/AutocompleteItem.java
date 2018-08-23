@@ -1,14 +1,23 @@
 package ru.mrchebik.autocomplete;
 
-import lombok.AllArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import ru.mrchebik.autocomplete.database.cluster.letter.classN.AutocompleteClusterLetterClass;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class AutocompleteItem {
+    @NonNull
     public String flag;
+    @NonNull
     public String text;
+    @NonNull
     public String packageName;
-
+    @NonNull
     public String classN;
+    @NonNull
+    public String returnTypeS;
+
+    public AutocompleteClusterLetterClass returnType;
 
     @Override
     public String toString() {

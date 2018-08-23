@@ -48,8 +48,8 @@ public class AutocompleteCluster {
     public List<AutocompleteItem> normalSearch() {
         String word = EditWord.word.toString();
 
-        return searchLetter(EditWord.classN.charAt(0))
-                .searchClass(EditWord.classN)
+        return searchLetter(word.charAt(0))
+                .searchClass(word)
                 .items.stream()
                 .filter(item -> item.text.startsWith(word))
                 .collect(Collectors.toList());

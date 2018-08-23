@@ -3,6 +3,8 @@ package ru.mrchebik.autocomplete.database;
 import ru.mrchebik.autocomplete.AutocompleteItem;
 import ru.mrchebik.autocomplete.EditWord;
 import ru.mrchebik.autocomplete.database.cluster.AutocompleteCluster;
+import ru.mrchebik.autocomplete.database.cluster.letter.AutocompleteClusterLetter;
+import ru.mrchebik.autocomplete.database.cluster.letter.classN.AutocompleteClusterLetterClass;
 import ru.mrchebik.language.java.symbols.SymbolsType;
 
 import java.util.ArrayList;
@@ -29,9 +31,27 @@ import java.util.stream.IntStream;
  * 2. com.oracle
  * 3. sun
  * 4. jdk
+ * 5. java.applet
  * <p>
  * Every cluster have `Letter` delimiter, which determine
  * the first character of `Class` name.
+ *
+ * Every item have reference to return type Object - Item.
+ * @see AutocompleteDatabase#weaveWeb()
+ *
+ * TODO serialization clusters
+ * It must reduce start time, and weaveWeb time to minimum duration.
+ * Dinamically serialization every plugin / dependency / libraries
+ *
+ * TODO with weaveWeb - big memory usage (>100 Mb)
+ * I must to find better solution to store chain of variations.
+ * One of solution:
+ *  - Store to static and identificate it by id at an array:
+ *      + `flag`
+ *      + `package name`
+ *      + `classN`
+ *      + `returnTypeS`
+ *      + `returnType`
  *
  * @since 0.3.1
  */
@@ -46,7 +66,7 @@ public class AutocompleteDatabase {
         IntStream.range(0, 8).forEach(i -> clusters.add(new AutocompleteCluster()));
 
         keywords = Arrays.stream(SymbolsType.KEYWORDS.getSymbols())
-                .map(word -> new AutocompleteItem(" ", word, "", ""))
+                .map(word -> new AutocompleteItem(" ", word, "", "", ""))
                 .collect(Collectors.toList());
     }
 
@@ -68,7 +88,7 @@ public class AutocompleteDatabase {
         for (int i = 0; i < 8; i++)
             if (i == 0 && cache.size() > 0)
                 return doFilter(cache, word);
-            else if (i == 4)
+            else if (i == 4 && EditWord.classN == null)
                 result.addAll(doFilter(keywords, word));
             else {
                 AutocompleteCluster cluster = clusters.get(i);
@@ -86,5 +106,42 @@ public class AutocompleteDatabase {
         return items.stream()
                 .filter(item -> item.text.startsWith(word))
                 .collect(Collectors.toList());
+    }
+
+    public static void weaveWeb() {
+        for (int i = 1; i < 8; i++)
+            if (i != 4) {
+                AutocompleteCluster cluster = clusters.get(i);
+
+                cluster.autocompleteClusterLetters
+                        .forEach(letters -> letters.autocompleteClusterLetterClasses
+                                .forEach(classes -> {
+                                    classes.items.forEach(item -> item.returnType = AutocompleteDatabase.globalSearch(item.returnTypeS));
+                                    classes.classN.returnType = classes;
+                                }));
+            }
+    }
+
+    public static AutocompleteClusterLetterClass globalSearch(String type) {
+        if (!"long".equals(type) &&
+                !"short".equals(type) &&
+                !"int".equals(type) &&
+                !"byte".equals(type) &&
+                !"double".equals(type) &&
+                !"float".equals(type) &&
+                !"char".equals(type))
+            for (int i = 1; i < 8; i++)
+                if (i != 4) {
+                    List<AutocompleteClusterLetter> letters = clusters.get(i).autocompleteClusterLetters;
+                    for (AutocompleteClusterLetter letter : letters)
+                        if (letter.letter == type.charAt(0)) {
+                            List<AutocompleteClusterLetterClass> classes = letter.autocompleteClusterLetterClasses;
+                            for (AutocompleteClusterLetterClass classN : classes)
+                                if (classN.name.equals(type))
+                                    return classN;
+                        }
+                }
+
+        return null;
     }
 }

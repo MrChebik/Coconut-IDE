@@ -133,7 +133,11 @@ public class WorkPresenter extends KeyHelper implements Initializable {
         var scaledVirtualized = (ScaledVirtualized) scrollPane.getContent();
         var area = (CustomCodeArea) scaledVirtualized.getChildrenUnmodifiable().get(0);
         Platform.runLater(area::requestFocus);
-        area.moveTo(73);
+
+        if (Project.isOpen)
+            area.insertText(0, "");
+        else
+            area.moveTo(73);
     }
 
     private void handlePrepareToAction() {

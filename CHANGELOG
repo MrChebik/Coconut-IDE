@@ -2,10 +2,11 @@
 + Plugins (debug) for Linux:
     * RAM
     * CPU
-* Fixed memory leak.
 Autocomplete:
     + Global sources.
     * Redesigned element.
+Start:
+    + Open Project.
 
 === v0.3.0-alpha
 + Arguments.
