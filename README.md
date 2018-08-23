@@ -4,11 +4,13 @@
 [![codebeat badge](https://codebeat.co/badges/b5e31acb-b0be-41c1-91cf-7d8d3c88fc84)](https://codebeat.co/projects/github-com-mrchebik-coconut-ide-master)
 [![Code Climate](https://codeclimate.com/github/MrChebik/OSPicture/badges/gpa.svg)](https://codeclimate.com/github/MrChebik/Coconut-IDE)
 > IDE for Java developers.
-## Demonstration - v0.2.0
+# Demonstration - v0.2.0
 ![Coconut-IDE - Screenshot](https://github.com/MrChebik/Coconut-IDE/blob/master/coconut-ide-demonstration.webp?raw=true)  
-## Requirements
-* Java: 10
-* RAM: 768 Mb
+
+| Requirements | [v0.2.3](https://github.com/MrChebik/Coconut-IDE/releases/tag/v0.2.3) | [v0.3.1-a](https://github.com/MrChebik/Coconut-IDE/releases/tag/v0.3.1-a) |
+|--------------|:------:|:--------:|
+| Java         |    8   |    10    |
+| RAM (Mb)     |   384  |    768   |
 ---
 ## Build
 ```
