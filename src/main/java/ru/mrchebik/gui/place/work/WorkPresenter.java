@@ -3,15 +3,13 @@ package ru.mrchebik.gui.place.work;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.TabPane;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TreeView;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import org.fxmisc.flowless.ScaledVirtualized;
 import org.fxmisc.flowless.VirtualizedScrollPane;
 import ru.mrchebik.autocomplete.AnalyzerAutocomplete;
+import ru.mrchebik.autocomplete.Autocomplete;
 import ru.mrchebik.build.Build;
 import ru.mrchebik.build.BuildWrapper;
 import ru.mrchebik.gui.collector.ComponentsCollector;
@@ -29,8 +27,10 @@ import ru.mrchebik.gui.updater.TreeUpdater;
 import ru.mrchebik.icons.Icons;
 import ru.mrchebik.language.Language;
 import ru.mrchebik.language.java.highlight.Highlight;
-import ru.mrchebik.language.java.symbols.SymbolsType;
 import ru.mrchebik.locale.Locale;
+import ru.mrchebik.plugin.PluginWrapper;
+import ru.mrchebik.plugin.cpu.PluginCpu;
+import ru.mrchebik.plugin.ram.PluginRam;
 import ru.mrchebik.process.save.SaveTabs;
 import ru.mrchebik.process.save.SaveTabsProcess;
 import ru.mrchebik.project.Project;
@@ -39,7 +39,6 @@ import javax.inject.Inject;
 import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
 import java.util.ResourceBundle;
 
 public class WorkPresenter extends KeyHelper implements Initializable {
@@ -51,6 +50,8 @@ public class WorkPresenter extends KeyHelper implements Initializable {
     private TreeView<Path> treeView;
     @FXML
     private Button compile, run;
+    @FXML
+    private Label ram, cpu;
     @Inject
     private WorkPlace workPlace;
 
@@ -86,6 +87,7 @@ public class WorkPresenter extends KeyHelper implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        initPlugins();
         initLocale(compile, run);
         initCollectorComponents();
         startSaveTabsProcess();
@@ -94,6 +96,14 @@ public class WorkPresenter extends KeyHelper implements Initializable {
         setUpTreeView();
         addTabOfMain();
         moveCaretInMain();
+    }
+
+    private void initPlugins() {
+        PluginWrapper pluginCpu = new PluginCpu(cpu);
+        PluginWrapper pluginRam = new PluginRam(ram);
+
+        pluginCpu.start();
+        pluginRam.start();
     }
 
     private void initLocale(Button compile, Button run) {
@@ -135,9 +145,9 @@ public class WorkPresenter extends KeyHelper implements Initializable {
         build = new Build(Language.command);
 
         AnalyzerAutocomplete.initialize(Project.pathSource);
-        AnalyzerAutocomplete.database.setKeywords(Arrays.asList(SymbolsType.KEYWORDS.getSymbols()));
 
-        tabUpdater = new TabUpdater(tabPane, Highlight.create(), workPlace.getStage());
+        Autocomplete autocomplete = new Autocomplete(workPlace.getStage());
+        tabUpdater = new TabUpdater(tabPane, Highlight.create(), autocomplete);
 
         TreeUpdater treeUpdater = new TreeUpdater(treeView, tabUpdater);
         treeUpdater.setRootToTreeView();

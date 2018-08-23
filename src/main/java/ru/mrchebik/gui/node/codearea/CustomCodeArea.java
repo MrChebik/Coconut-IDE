@@ -4,7 +4,6 @@ import javafx.concurrent.Task;
 import javafx.event.Event;
 import javafx.scene.control.IndexRange;
 import javafx.scene.input.KeyCode;
-import javafx.stage.Stage;
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.LineNumberFactory;
 import org.fxmisc.richtext.model.StyleSpans;
@@ -36,14 +35,10 @@ public class CustomCodeArea extends CodeArea {
     private Executor executor;
     private Highlight highlight;
 
-    private Autocomplete autocomplete;
-
-    public CustomCodeArea(String text, Highlight highlight, Stage stage, String name) {
+    public CustomCodeArea(String text, Highlight highlight, String name, Autocomplete autocomplete) {
         executor = Executors.newSingleThreadExecutor();
         this.highlight = highlight;
         this.name = name;
-
-        autocomplete = new Autocomplete(this, stage, AnalyzerAutocomplete.database);
 
         InputMap<Event> prevent = InputMap.consume(
                 anyOf(
@@ -72,13 +67,13 @@ public class CustomCodeArea extends CodeArea {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    AnalyzerAutocomplete.callAnalysis(this.getText());
+                    AnalyzerAutocomplete.callAnalysis(this.getText(), false);
                 }).start();
             } else if (event.getCode() == ENTER) {
                 position = deleteSelection(position);
 
                 this.insertText(position, "\n" + getTabLength(position));
-                AnalyzerAutocomplete.callAnalysis(this.getText());
+                AnalyzerAutocomplete.callAnalysis(this.getText(), false);
             } else if (event.getCode() == KeyCode.BACK_SPACE) {
                 String paragraph = this.getParagraph(this.getCurrentParagraph()).getText();
 
@@ -118,6 +113,11 @@ public class CustomCodeArea extends CodeArea {
             }
         });
 
+        this.focusedProperty().addListener((arg0, oldPropertyValue, newPropertyValue) -> {
+            if (!newPropertyValue)
+                autocomplete.hideSnippet();
+        });
+
         this.caretPositionProperty().addListener(listener -> Language.caretHighlight.compute(this));
         this.setParagraphGraphicFactory(LineNumberFactory.get(this));
         this.multiPlainChanges()
@@ -127,7 +127,7 @@ public class CustomCodeArea extends CodeArea {
                 .filterMap(this::getOptional)
                 .subscribe(this::applyHighlighting);
         this.multiPlainChanges()
-                .subscribe(autocomplete::callSnippet);
+                .subscribe(changes -> autocomplete.callSnippet(changes, this));
         this.replaceText(0, 0, text);
     }
 

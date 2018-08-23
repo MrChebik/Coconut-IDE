@@ -4,7 +4,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <BorderPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="800.0" prefWidth="1200.0"
-            xmlns="http://javafx.com/javafx/8.0.111" fx:controller="ru.mrchebik.gui.place.work.WorkPresenter">
+            xmlns="http://javafx.com/javafx/10.0.2" fx:controller="ru.mrchebik.gui.place.work.WorkPresenter">
     <bottom>
         <BorderPane prefHeight="41.0" prefWidth="1200.0" BorderPane.alignment="CENTER">
             <left>
@@ -42,4 +42,22 @@
             <TextArea fx:id="outputArea"/>
         </SplitPane>
     </center>
+    <top>
+        <BorderPane BorderPane.alignment="CENTER">
+            <left>
+                <Label fx:id="ram" BorderPane.alignment="CENTER">
+                    <BorderPane.margin>
+                        <Insets left="5.0"/>
+                    </BorderPane.margin>
+                </Label>
+            </left>
+            <right>
+                <Label fx:id="cpu" BorderPane.alignment="CENTER">
+                    <BorderPane.margin>
+                        <Insets right="5.0"/>
+                    </BorderPane.margin>
+                </Label>
+            </right>
+        </BorderPane>
+    </top>
 </BorderPane>

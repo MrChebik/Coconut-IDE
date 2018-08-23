@@ -1,165 +1,149 @@
 package ru.mrchebik.autocomplete;
 
-import javafx.event.EventHandler;
+import javafx.event.Event;
 import javafx.geometry.Bounds;
-import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollBar;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
-import lombok.Getter;
-import lombok.Setter;
+import org.fxmisc.flowless.VirtualizedScrollPane;
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.model.PlainTextChange;
+import org.fxmisc.wellbehaved.event.InputMap;
+import org.fxmisc.wellbehaved.event.Nodes;
+import ru.mrchebik.autocomplete.database.AutocompleteDatabase;
 import ru.mrchebik.language.java.symbols.CustomSymbolsType;
 import ru.mrchebik.language.java.symbols.SymbolsType;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
+
+import static javafx.scene.input.KeyCode.KP_LEFT;
+import static org.fxmisc.wellbehaved.event.EventPattern.anyOf;
+import static org.fxmisc.wellbehaved.event.EventPattern.keyPressed;
 
 public class Autocomplete extends Popup {
-    private final ListView<CodeArea> listOptions;
-    private CodeArea codeArea;
-    private Stage stage;
-    private boolean begin;
-    private boolean wasSameSymbol;
-    private AtomicInteger index;
-    private AtomicInteger maxLength;
-    private AutocompleteDatabase database;
-    @Getter
-    @Setter
-    private boolean hideTemporarily = true;
+    private static CodeArea mainArea;
+    private static CodeArea codeAreaFocused;
+    private static VirtualizedScrollPane scrollPane;
 
-    public Autocomplete(CodeArea codeArea, Stage stage, AutocompleteDatabase database) {
-        super();
+    private static Stage stage;
 
-        this.begin = true;
-        this.wasSameSymbol = false;
-        this.index = new AtomicInteger();
-        this.maxLength = new AtomicInteger();
-        this.codeArea = codeArea;
-        this.stage = stage;
+    private static boolean begin;
+    private static boolean wasSameSymbol;
+    private static boolean hideTemporarily = true;
 
-        this.database = database;
+    public Autocomplete(Stage stage) {
+        Autocomplete.stage = stage;
 
-        codeArea.focusedProperty().addListener((arg0, oldPropertyValue, newPropertyValue) -> {
-            if (!newPropertyValue)
-                hideSnippet();
+        begin = true;
+        wasSameSymbol = false;
+
+        mainArea = new CodeArea();
+        mainArea.setEditable(false);
+        mainArea.setPrefWidth(400);
+        mainArea.getStylesheets().add("css/snippet.css");
+        mainArea.getStyleClass().add("autocomplete");
+        // TODO highlight paragraph on mouse moved
+        //mainArea.setOnMouseEntered(event -> mainArea.moveTo(, 0));
+        mainArea.setOnMouseClicked(event -> doOption());
+        mainArea.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER ||
+                    event.getCode() == KeyCode.TAB)
+                doOption();
+        });
+        mainArea.addEventFilter(ScrollEvent.ANY, e -> {
+            ScrollBar verticalBar = (ScrollBar) scrollPane.lookup(".scroll-bar:vertical");
+            if (e.getDeltaY() < 0) {
+                verticalBar.increment();
+                verticalBar.increment();
+                verticalBar.increment();
+                verticalBar.increment();
+            } else {
+                verticalBar.decrement();
+                verticalBar.decrement();
+                verticalBar.decrement();
+                verticalBar.decrement();
+            }
         });
 
-        listOptions = new ListView<>();
-        listOptions.getStylesheets().add("css/snippet.css");
-        listOptions.setOnMousePressed(event -> doOption());
+        InputMap<Event> prevent = InputMap.consume(
+                anyOf(
+                        keyPressed(KP_LEFT)
+                )
+        );
+        Nodes.addInputMap(mainArea, prevent);
 
-        EventHandler<KeyEvent> eventEnterOrTab = keyEvent -> {
-            if (keyEvent.getCode() == KeyCode.ENTER ||
-                    keyEvent.getCode() == KeyCode.TAB)
-                doOption();
-        };
-
-        listOptions.setOnKeyPressed(eventEnterOrTab);
-        getContent().add(listOptions);
+        scrollPane = new VirtualizedScrollPane(mainArea);
+        getContent().add(scrollPane);
     }
 
     private void setOptions(List<AutocompleteItem> options) {
-        listOptions.getItems().clear();
-        if (options.size() < 5)
-            listOptions.setPrefHeight(options.size() * 16 + options.size() * 4);
-        else
-            listOptions.setPrefHeight(100);
-        options.forEach(this::getMaxLength);
-        options.forEach(option -> {
-            StringBuilder blank = new StringBuilder();
-            for (int i = 0; i < maxLength.get() - option.getText().length(); i++)
-                blank.append(" ");
-            CodeArea codeArea = new CodeArea(option.getType() + " " + option.getText() + blank + (option.getPackageName().isEmpty() ? " " : " | " + option.getPackageName()));
-            codeArea.setPrefHeight(16);
-            codeArea.setEditable(false);
-            codeArea.getStyleClass().add("list-item");
-            codeArea.setAccessibleHelp(String.valueOf(index.getAndIncrement()));
-            codeArea.setAccessibleText(option.getPasteText());
-            codeArea.setAccessibleRoleDescription(option.getPackageName());
-            codeArea.setOnMouseEntered(event -> listOptions.getSelectionModel().select(Integer.parseInt(codeArea.getAccessibleHelp())));
-            codeArea.setOnMousePressed(event -> doOption());
-            codeArea.addEventFilter(ScrollEvent.ANY, e -> {
-                ScrollBar verticalBar = (ScrollBar) listOptions.lookup(".scroll-bar:vertical");
-                if (e.getDeltaY() < 0) {
-                    verticalBar.increment();
-                    verticalBar.increment();
-                    verticalBar.increment();
-                    verticalBar.increment();
-                } else {
-                    verticalBar.decrement();
-                    verticalBar.decrement();
-                    verticalBar.decrement();
-                    verticalBar.decrement();
-                }
-            });
-            listOptions.getItems().add(codeArea);
-        });
-        listOptions.getSelectionModel().selectFirst();
-        index.set(0);
-        maxLength.set(0);
-        listOptions.getItems().forEach(this::getMaxLength);
-        listOptions.setPrefWidth(maxLength.get() * 8 + 16 + 8 + 16 + 16);
-        maxLength.set(0);
+        mainArea.clear();
+
+        options.forEach(option -> mainArea.appendText(option.toString() + "\n"));
+
+        mainArea.deletePreviousChar();
+        mainArea.moveTo(0);
+        mainArea.requestFollowCaret();
+
+        mainArea.setPrefHeight(options.size() < 5 ?
+                options.size() * 16 + options.size() * 4
+                :
+                100);
+
+        AutocompleteDatabase.cache = options;
     }
 
-    private void getMaxLength(CodeArea area) {
-        calcMaxLength(area.getText());
-    }
+    public void doOption() {
+        if (!hideTemporarily) {
+            String line = mainArea.getText(mainArea.getCurrentParagraph());
 
-    private void getMaxLength(AutocompleteItem item) {
-        calcMaxLength(item.getText());
-    }
-
-    private void calcMaxLength(String text) {
-        int length = text.length();
-        if (maxLength.get() == 0)
-            maxLength.set(length);
-        else if (length > maxLength.get())
-            maxLength.set(length);
-    }
-
-    private void doOption() {
-        if (!isHideTemporarily()) {
-            CodeArea item = listOptions.getSelectionModel().getSelectedItem();
-            String inserted = item.getAccessibleText();
+            String inserted = line.substring(2,
+                    !line.contains("(") ?
+                            line.length() - 2
+                            :
+                            line.indexOf("(") - 1);
             String insertImport = "";
-            String packageName = item.getAccessibleRoleDescription();
+            String packageName = line.contains("(") ?
+                    line.substring(line.indexOf("(") + 1,
+                            line.indexOf(")"))
+                    :
+                    "";
 
-            codeArea.insertText(EditWord.end, inserted.substring(EditWord.end - EditWord.begin));
+            // TODO invisible
+            String CLASS_NAME = inserted;
 
-            int lastPosition = codeArea.getCaretPosition() - (inserted.contains("()") ? 1 : 0);
+            codeAreaFocused.insertText(EditWord.end, inserted.substring(EditWord.end - EditWord.begin));
+
+            int lastPosition = codeAreaFocused.getCaretPosition() - (inserted.contains("()") ? 1 : 0);
             if (!packageName.isEmpty() &&
-                    !codeArea.getText().contains(packageName)) {
-                String text = codeArea.getText();
+                    !codeAreaFocused.getText().contains(packageName)) {
+                String text = codeAreaFocused.getText();
                 int indexImport = text.indexOf("import");
                 int indexPackage = text.indexOf("package");
                 int indexInsert = 0;
 
                 if (indexImport != -1) {
-                    insertImport = "import " + item.getAccessibleRoleDescription() + ";\n";
+                    insertImport = "import " + packageName + "." + CLASS_NAME + ";\n";
                     indexInsert = indexImport;
                 } else if (indexPackage != -1) {
-                    insertImport = "\n\nimport " + item.getAccessibleRoleDescription() + ";\n\n";
-                    indexInsert = codeArea.getText().substring(indexPackage).indexOf(";");
+                    insertImport = "\n\nimport " + packageName + "." + CLASS_NAME + ";\n\n";
+                    indexInsert = codeAreaFocused.getText().substring(indexPackage).indexOf(";");
                 } else
-                    insertImport = "import " + item.getAccessibleRoleDescription() + ";\n\n";
-                codeArea.insertText(indexInsert, insertImport);
+                    insertImport = "import " + packageName + "." + CLASS_NAME + ";\n\n";
+                codeAreaFocused.insertText(indexInsert, insertImport);
             }
-            codeArea.moveTo(lastPosition + insertImport.length());
+            codeAreaFocused.moveTo(lastPosition + insertImport.length());
             hideSnippet();
         }
     }
 
-    public void callSnippet(List<PlainTextChange> changeList) {
+    public void callSnippet(List<PlainTextChange> changeList, CodeArea codeArea) {
+        codeAreaFocused = codeArea;
+
         String inserted = changeList.get(0).getInserted();
 
         if (begin || wasSameSymbol) {
@@ -170,15 +154,15 @@ public class Autocomplete extends Popup {
 
         if (inserted.length() == 1) {
             char firstChar = inserted.charAt(0);
-            int position = codeArea.getCaretPosition();
-            String nextChar = codeArea.getText(position, codeArea.getLength() < position + 1 ?
+            int position = codeAreaFocused.getCaretPosition();
+            String nextChar = codeAreaFocused.getText(position, codeAreaFocused.getLength() < position + 1 ?
                     position
                     :
                     position + 1);
 
             if (Character.isMirrored(firstChar)) {
                 if (Arrays.stream(SymbolsType.MIRROR.getSymbols()).anyMatch(item -> item.endsWith(nextChar))) {
-                    String text = codeArea.getText(0, position);
+                    String text = codeAreaFocused.getText(0, position);
                     char target = Arrays.stream(SymbolsType.MIRROR.getSymbols()).filter(option -> option.endsWith(nextChar)).findFirst().get().charAt(0);
                     boolean isOpened = false;
 
@@ -187,8 +171,8 @@ public class Autocomplete extends Popup {
                             isOpened = !isOpened;
 
                     if (!isOpened) {
-                        codeArea.deleteText(position, position + 1);
-                        codeArea.moveTo(position + 1);
+                        codeAreaFocused.deleteText(position, position + 1);
+                        codeAreaFocused.moveTo(position + 1);
                     } else
                         pasteSimilarSymbol(inserted, SymbolsType.MIRROR.getSymbols(), true);
                 } else
@@ -197,7 +181,7 @@ public class Autocomplete extends Popup {
                 return;
             } else if (Arrays.stream(SymbolsType.SAME.getSymbols()).anyMatch(item -> item.contains(inserted))) {
                 if (Arrays.stream(SymbolsType.SAME.getSymbols()).anyMatch(item -> item.contains(nextChar))) {
-                    String text = codeArea.getText(0, position);
+                    String text = codeAreaFocused.getText(0, position);
                     char target = Arrays.stream(SymbolsType.SAME.getSymbols()).filter(option -> option.startsWith(nextChar)).findFirst().get().charAt(0);
                     boolean isOpened = false;
 
@@ -206,19 +190,19 @@ public class Autocomplete extends Popup {
                             isOpened = !isOpened;
 
                     if (!isOpened) {
-                        codeArea.deleteText(position, position + 1);
-                        codeArea.moveTo(position + 1);
+                        codeAreaFocused.deleteText(position, position + 1);
+                        codeAreaFocused.moveTo(position + 1);
                     } else
                         pasteSimilarSymbol(inserted, SymbolsType.SAME.getSymbols(), false);
                 } else {
-                    String text = codeArea.getText(0, position);
+                    String text = codeAreaFocused.getText(0, position);
 
                     if (text.length() > 2 &&
                             position - 3 > -1) {
                         String previousPair = text.substring(position - 3, position - 1);
                         if (previousPair.charAt(0) == previousPair.charAt(1) &&
                                 previousPair.charAt(0) == inserted.charAt(0))
-                            codeArea.insertText(position - 2, "\\");
+                            codeAreaFocused.insertText(position - 2, "\\");
                         else {
                             char target = Arrays.stream(SymbolsType.SAME.getSymbols()).filter(option -> option.startsWith(inserted)).findFirst().get().charAt(0);
                             boolean isOpened = false;
@@ -228,18 +212,18 @@ public class Autocomplete extends Popup {
                                     isOpened = !isOpened;
 
                             if (!isOpened) {
-                                String additionalCondition = codeArea.getText(position, codeArea.getText().length());
+                                String additionalCondition = codeAreaFocused.getText(position, codeAreaFocused.getText().length());
 
                                 for (int i = 0; i < additionalCondition.length(); i++)
                                     if (additionalCondition.charAt(i) == target) {
-                                        codeArea.insertText(position - 1, "\\");
+                                        codeAreaFocused.insertText(position - 1, "\\");
                                         new Thread(() -> {
                                             try {
                                                 Thread.sleep(1);
                                             } catch (InterruptedException e) {
                                                 e.printStackTrace();
                                             }
-                                            codeArea.moveTo(position + 1);
+                                            codeAreaFocused.moveTo(position + 1);
                                         }).start();
                                         return;
                                     }
@@ -259,7 +243,7 @@ public class Autocomplete extends Popup {
         } else {
             if (!inserted.isEmpty() && !" ".equals(inserted)) {
                 if (EditWord.word.length() == 0) {
-                    int caretPos = codeArea.getCaretPosition();
+                    int caretPos = codeAreaFocused.getCaretPosition();
                     if (caretPos == 0) {
                         EditWord.begin = (0);
                     } else {
@@ -268,9 +252,10 @@ public class Autocomplete extends Popup {
                 }
                 EditWord.concat(changeList.get(0).getInserted());
             } else {
-                if (!EditWord.word.isEmpty()) {
+                AutocompleteDatabase.cache.clear();
+                if (EditWord.word.length() != 0) {
                     try {
-                        EditWord.remove(changeList.get(0).getRemoved(), codeArea.getCaretPosition());
+                        EditWord.remove(changeList.get(0).getRemoved(), codeAreaFocused.getCaretPosition());
                     } catch (StringIndexOutOfBoundsException ignored) {
                         EditWord.clear();
                     }
@@ -278,56 +263,15 @@ public class Autocomplete extends Popup {
                     EditWord.clear();
             }
 
-            if (!EditWord.word.isEmpty()) {
-                List<AutocompleteItem> options = new ArrayList<>();
-
-                List<String> optionsKeywords = database.getKeywords().stream().filter(word -> word.startsWith(EditWord.word)).collect(Collectors.toList());
-                List<TextPackage> optionsClass = new ArrayList<>();
-                List<TextPackage> optionsMethods = new ArrayList<>();
-                List<TextPackage> optionsVariables = new ArrayList<>();
-
-                database.getClassList().forEach(classItem -> {
-                    String packageName = classItem.getPackageClass() + "." + classItem.getNameClass();
-
-                    if (classItem.getNameClass().startsWith(EditWord.word))
-                        optionsClass.add(new TextPackage(classItem.getNameClass(), packageName));
-                    classItem.getVariables().forEach(variable -> {
-                        if (variable.startsWith(EditWord.word))
-                            optionsVariables.add(new TextPackage(variable, packageName));
-                    });
-                    classItem.getMethods().forEach(method -> {
-                        if (method.startsWith(EditWord.word))
-                            optionsMethods.add(new TextPackage(method, packageName));
-                    });
-                });
-
-                optionsKeywords.forEach(item -> {
-                    AutocompleteItem autocompleteItem = new AutocompleteItem(" ", item, item + " ", "");
-                    options.add(autocompleteItem);
-                });
-
-                optionsClass.forEach(item -> {
-                    AutocompleteItem autocompleteItem = new AutocompleteItem("?", item.getText(), item.getText(), item.getPackageText());
-                    options.add(autocompleteItem);
-                });
-
-                optionsVariables.forEach(item -> {
-                    AutocompleteItem autocompleteItem = new AutocompleteItem("V", item.getText(), item.getText() + " ", item.getPackageText());
-                    options.add(autocompleteItem);
-                });
-
-                optionsMethods.forEach(item -> {
-                    AutocompleteItem autocompleteItem = new AutocompleteItem("M", item.getText(), item.getText() + "()", item.getPackageText());
-                    options.add(autocompleteItem);
-                });
+            if (EditWord.word.length() != 0) {
+                List<AutocompleteItem> options = AutocompleteDatabase.searchClusters();
 
                 if (!options.isEmpty()) {
-                    Bounds bounds = codeArea.caretBoundsProperty().getValue().get();
+                    Bounds bounds = codeAreaFocused.caretBoundsProperty().getValue().get();
                     double y = bounds.getMaxY();
 
                     if (EditWord.beginGlobal == -1) {
-                        double x = bounds.getMaxX() - 30;
-                        EditWord.beginGlobal = x;
+                        EditWord.beginGlobal = bounds.getMaxX() - 30;
 
                         setX(EditWord.beginGlobal);
                     }
@@ -336,9 +280,9 @@ public class Autocomplete extends Popup {
 
                     setOptions(options);
 
-                    if (isHideTemporarily()) {
+                    if (hideTemporarily) {
                         show(stage);
-                        setHideTemporarily(false);
+                        hideTemporarily = false;
                     }
                 } else
                     hideTemporarily();
@@ -352,26 +296,27 @@ public class Autocomplete extends Popup {
 
         if (findSame.isPresent()) {
             wasSameSymbol = !mirror;
-            int position = codeArea.getCaretPosition();
-            codeArea.insertText(position, Character.toString(findSame.get().charAt(1)));
+            int position = codeAreaFocused.getCaretPosition();
+            codeAreaFocused.insertText(position, Character.toString(findSame.get().charAt(1)));
             EditWord.clear();
         }
     }
 
-    private void hideSnippet() {
+    public void hideSnippet() {
         EditWord.clear();
+        AutocompleteDatabase.cache.clear();
         hideTemporarily();
     }
 
     private void hideTemporarily() {
-        if (!isHideTemporarily()) {
+        if (!hideTemporarily) {
             hide();
-            setHideTemporarily(true);
+            hideTemporarily = true;
         }
     }
 
     public void checkCaretPosition() {
-        int position = codeArea.getCaretPosition();
+        int position = codeAreaFocused.getCaretPosition();
         boolean isOutRange = EditWord.isOutRange(position);
         if (isOutRange)
             hideSnippet();

@@ -57,7 +57,7 @@ public class InputProcess extends Thread {
         if (!line.toString().isEmpty())
             Platform.runLater(() -> {
                 ComponentsCollector.outputArea.appendText(line.toString());
-                line = new StringBuilder();
+                line.setLength(0);
                 open = true;
             });
     }

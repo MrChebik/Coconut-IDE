@@ -1,16 +1,23 @@
 package ru.mrchebik.autocomplete;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 
 @AllArgsConstructor
 public class AutocompleteItem {
-    @Getter
-    private String type;
-    @Getter
-    private String text;
-    @Getter
-    private String pasteText;
-    @Getter
-    private String packageName;
+    public String flag;
+    public String text;
+    public String packageName;
+
+    public String classN;
+
+    @Override
+    public String toString() {
+        return flag +
+                " " +
+                text +
+                (packageName.length() == 0 ?
+                        "  "
+                        :
+                        " (" + packageName + ")");
+    }
 }

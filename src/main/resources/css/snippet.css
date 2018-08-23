@@ -1,4 +1,4 @@
-.list-view {
+/*.list-view {
     -fx-padding: 0;
     -fx-background-color: orange;
     -fx-cursor: hand;
@@ -14,9 +14,18 @@
 .list-cell:filled:selected {
     -fx-background-color: #e69500;
     -fx-text-fill: white;
+}*/
+
+.autocomplete {
+    -fx-cursor: hand !important;
+    -fx-background-color: orange;
+    /*-fx-highlight-text-fill: white;*/
 }
 
-.list-item {
-    -fx-cursor: hand !important;
-    -fx-background-color: transparent;
+.paragraph-box {
+    -fx-padding: 1 2 3 2;
+}
+
+.paragraph-box:has-caret {
+    -fx-background-color: #e69500;
 }

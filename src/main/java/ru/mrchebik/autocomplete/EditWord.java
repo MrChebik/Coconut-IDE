@@ -1,18 +1,19 @@
 package ru.mrchebik.autocomplete;
 
 public class EditWord {
-    public static String word;
-    public static int begin;
-    public static int end;
-    public static double beginGlobal;
+    public static StringBuilder word;
+    public static String classN;
+    static int begin;
+    static int end;
+    static double beginGlobal;
 
     static {
-        word = "";
+        word = new StringBuilder();
         beginGlobal = -1;
     }
 
-    public static void clear() {
-        word = "";
+    static void clear() {
+        word.setLength(0);
         if (end != -1)
             begin = end + 1;
         else
@@ -20,18 +21,18 @@ public class EditWord {
         beginGlobal = -1;
     }
 
-    public static void concat(String fragment) {
-        word = word.concat(fragment);
+    static void concat(String fragment) {
+        word = word.append(fragment);
         end = begin + word.length();
     }
 
-    public static void remove(String fragment, int caretPos) {
-        word = word.substring(0, caretPos - begin) + word.substring(caretPos - begin + fragment.length());
+    static void remove(String fragment, int caretPos) {
+        word.delete(caretPos - begin, caretPos - begin + fragment.length());
         end = begin + word.length();
     }
 
-    public static boolean isOutRange(int position) {
-        return !word.isEmpty() &&
+    static boolean isOutRange(int position) {
+        return word.length() != 0 &&
                 position < begin || position > end;
     }
 }

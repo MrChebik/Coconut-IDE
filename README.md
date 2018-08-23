@@ -7,14 +7,9 @@
 ## Demonstration - v0.2.0
 ![Coconut-IDE - Screenshot](https://github.com/MrChebik/Coconut-IDE/blob/master/coconut-ide-demonstration.webp?raw=true)  
 Hello World - Error - Autocomplete
-## Features
-* Autocomplete (without global)
-* Highlight
-* IO streams
-* Project structure
 ## Requirements
 * Java: 10
-* RAM: 256 Mb
+* RAM: 768 Mb
 ---
 ## Build
 ```
@@ -23,5 +18,11 @@ $ cd Coconut-IDE
 $ mvn package
 $ java -jar ./target/coconut-ide*.jar
 ```
+## Used libraries
+* [afterburner.fx](https://github.com/AdamBien/afterburner.fx)
+* [classgraph](https://github.com/classgraph/classgraph)
+* [javaparser](https://github.com/javaparser/javaparser)
+* [lombok](https://github.com/rzwitserloot/lombok)
+* [RichTextFX](https://github.com/FXMisc/RichTextFX)
 ## License
 This project is licensed under the GPL-3.0 License - see the [LICENSE](https://github.com/MrChebik/Coconut-IDE/blob/master/LICENSE) file for details.
