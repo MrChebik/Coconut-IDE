@@ -7,10 +7,10 @@
 # Demonstration - v0.2.0
 ![Coconut-IDE - Screenshot](https://github.com/MrChebik/Coconut-IDE/blob/master/coconut-ide-demonstration.webp?raw=true)  
 
-| Requirements | [v0.2.3](https://github.com/MrChebik/Coconut-IDE/releases/tag/v0.2.3) | [v0.3.1-a](https://github.com/MrChebik/Coconut-IDE/releases/tag/v0.3.1-a) |
-|--------------|:------:|:--------:|
-| Java         |    8   |    10    |
-| RAM (Mb)     |   384  |    768   |
+| **Requirements** | [v0.2.3](https://github.com/MrChebik/Coconut-IDE/releases/tag/v0.2.3) | [v0.3.1-a](https://github.com/MrChebik/Coconut-IDE/releases/tag/v0.3.1-a) | v0.3.2-source |
+|------------------|:-------:|:--------:|:-----------:|
+| **Java**         |    8    |    10    |      10     |
+| **RAM** (Mb)     |   384   |    768   |   768 < 15  |
 ---
 ## Build
 ```
@@ -19,11 +19,5 @@ $ cd Coconut-IDE
 $ mvn package
 $ java -jar ./target/coconut-ide*.jar
 ```
-## Used libraries
-* [afterburner.fx](https://github.com/AdamBien/afterburner.fx)
-* [classgraph](https://github.com/classgraph/classgraph)
-* [javaparser](https://github.com/javaparser/javaparser)
-* [lombok](https://github.com/rzwitserloot/lombok)
-* [RichTextFX](https://github.com/FXMisc/RichTextFX)
 ## License
 This project is licensed under the GPL-3.0 License - see the [LICENSE](https://github.com/MrChebik/Coconut-IDE/blob/master/LICENSE) file for details.

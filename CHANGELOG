@@ -1,3 +1,7 @@
+=== v0.3.2
+Autocomplete:
+    * Reduced memory usage by 15 Mb with `A pool of strings vs id`.
+
 === v0.3.1-alpha - cleanup
 + Plugins (debug) for Linux:
     * RAM

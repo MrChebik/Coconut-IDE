@@ -13,6 +13,7 @@ import org.fxmisc.richtext.model.PlainTextChange;
 import org.fxmisc.wellbehaved.event.InputMap;
 import org.fxmisc.wellbehaved.event.Nodes;
 import ru.mrchebik.autocomplete.database.AutocompleteDatabase;
+import ru.mrchebik.autocomplete.database.AutocompleteItem;
 import ru.mrchebik.language.java.symbols.CustomSymbolsType;
 import ru.mrchebik.language.java.symbols.SymbolsType;
 
@@ -89,11 +90,7 @@ public class Autocomplete extends Popup {
     private void setOptions(List<AutocompleteItem> options) {
         mainArea.clear();
 
-        System.out.println(options);
-        System.out.println(mainArea);
-        options.forEach(option -> {
-            mainArea.appendText(option.toString() + "\n");
-        });
+        options.forEach(option -> mainArea.appendText(option.toString() + "\n"));
 
         mainArea.deletePreviousChar();
         mainArea.moveTo(0);

@@ -1,17 +1,17 @@
 package ru.mrchebik.autocomplete.database.cluster.letter.classN;
 
-import ru.mrchebik.autocomplete.AutocompleteItem;
+import ru.mrchebik.autocomplete.database.AutocompleteItem;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 public class AutocompleteClusterLetterClass {
-    public String name;
+    public int name;
     public AutocompleteItem classN;
     public List<AutocompleteItem> items;
 
-    public AutocompleteClusterLetterClass(String name) {
+    public AutocompleteClusterLetterClass(int name) {
         this.name = name;
 
         items = new ArrayList<>();
@@ -26,10 +26,10 @@ public class AutocompleteClusterLetterClass {
                         .findFirst();
 
         if (!itemOptional.isPresent())
-            if ("C".equals(item.flag) ||
-                    "I".equals(item.flag) ||
-                    "A".equals(item.flag) ||
-                    "?".equals(item.flag))
+            if (item.flag == 1 ||
+                    item.flag == 2 ||
+                    item.flag == 0 ||
+                    item.flag == 5)
                 classN = item;
             else
                 items.add(item);

@@ -1,7 +1,8 @@
 package ru.mrchebik.autocomplete.database.cluster;
 
-import ru.mrchebik.autocomplete.AutocompleteItem;
+import ru.mrchebik.autocomplete.CollectorAutocompleteText;
 import ru.mrchebik.autocomplete.EditWord;
+import ru.mrchebik.autocomplete.database.AutocompleteItem;
 import ru.mrchebik.autocomplete.database.cluster.letter.AutocompleteClusterLetter;
 
 import java.util.ArrayList;
@@ -39,7 +40,7 @@ public class AutocompleteCluster {
                 .filter(letter -> letter.letter == wordStart.charAt(0))
                 .forEach(letter ->
                         letter.autocompleteClusterLetterClasses.stream()
-                                .filter(classN -> classN.name.startsWith(wordStart))
+                                .filter(classN -> CollectorAutocompleteText.returnTypeS.get(classN.name).startsWith(wordStart))
                                 .forEach(classN -> result.add(classN.classN)));
 
         return result;
@@ -47,9 +48,10 @@ public class AutocompleteCluster {
 
     public List<AutocompleteItem> normalSearch() {
         String word = EditWord.word.toString();
+        int wordN = CollectorAutocompleteText.addReturnTypeS(word);
 
         return searchLetter(word.charAt(0))
-                .searchClass(word)
+                .searchClass(wordN)
                 .items.stream()
                 .filter(item -> item.text.startsWith(word))
                 .collect(Collectors.toList());

@@ -16,10 +16,11 @@ public class AutocompleteClusterLetter {
         autocompleteClusterLetterClasses = new ArrayList<>();
     }
 
-    public AutocompleteClusterLetterClass searchClass(String classN) {
+    public AutocompleteClusterLetterClass searchClass(int classN) {
+
         Optional<AutocompleteClusterLetterClass> classOptional = autocompleteClusterLetterClasses.size() != 0 ?
                 autocompleteClusterLetterClasses.stream()
-                        .filter(letterClass -> letterClass.name.equals(classN))
+                        .filter(letterClass -> letterClass.name == classN)
                         .findFirst()
                 :
                 Optional.empty();

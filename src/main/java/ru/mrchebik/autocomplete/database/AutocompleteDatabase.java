@@ -1,6 +1,6 @@
 package ru.mrchebik.autocomplete.database;
 
-import ru.mrchebik.autocomplete.AutocompleteItem;
+import ru.mrchebik.autocomplete.CollectorAutocompleteText;
 import ru.mrchebik.autocomplete.EditWord;
 import ru.mrchebik.autocomplete.database.cluster.AutocompleteCluster;
 import ru.mrchebik.autocomplete.database.cluster.letter.AutocompleteClusterLetter;
@@ -44,7 +44,7 @@ import java.util.stream.IntStream;
  * It must reduce start time, and weaveWeb time to minimum duration.
  * Dinamically serialization every plugin / dependency / libraries
  * <p>
- * TODO with weaveWeb - big memory usage (>100 Mb)
+ * TODO with other clusters - big memory usage (>200 Mb)
  * I must to find better solution to store chain of variations.
  * One of solution:
  * - Store to static and identificate it by id at an array:
@@ -66,18 +66,20 @@ public class AutocompleteDatabase {
         IntStream.range(0, 8).forEach(i -> clusters.add(new AutocompleteCluster()));
 
         keywords = Arrays.stream(SymbolsType.KEYWORDS.getSymbols())
-                .map(word -> new AutocompleteItem(" ", word, "", "", ""))
+                .map(word -> new AutocompleteItem(-1, word, -1, -1))
                 .collect(Collectors.toList());
     }
 
     public static void addItem(int cluster,
                                AutocompleteItem item,
+                               String classN,
+                               int classNum,
                                boolean isNew) {
-        char letter = item.classN.charAt(0);
+        char letter = classN.charAt(0);
 
         clusters.get(cluster)
                 .searchLetter(letter)
-                .searchClass(item.classN)
+                .searchClass(classNum)
                 .addItem(item, isNew);
     }
 
@@ -116,13 +118,15 @@ public class AutocompleteDatabase {
                 cluster.autocompleteClusterLetters
                         .forEach(letters -> letters.autocompleteClusterLetterClasses
                                 .forEach(classes -> {
-                                    classes.items.forEach(item -> item.returnType = AutocompleteDatabase.globalSearch(item.returnTypeS));
+                                    classes.items.forEach(item -> item.returnType = AutocompleteDatabase.globalSearch(item.getReturnTypeS()));
                                     classes.classN.returnType = classes;
                                 }));
             }
     }
 
     public static AutocompleteClusterLetterClass globalSearch(String type) {
+        int needed = CollectorAutocompleteText.addReturnTypeS(type);
+
         if (!"long".equals(type) &&
                 !"short".equals(type) &&
                 !"int".equals(type) &&
@@ -137,7 +141,7 @@ public class AutocompleteDatabase {
                         if (letter.letter == type.charAt(0)) {
                             List<AutocompleteClusterLetterClass> classes = letter.autocompleteClusterLetterClasses;
                             for (AutocompleteClusterLetterClass classN : classes)
-                                if (classN.name.equals(type))
+                                if (classN.name == needed)
                                     return classN;
                         }
                 }

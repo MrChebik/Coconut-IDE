@@ -10,6 +10,7 @@ import io.github.classgraph.ClassGraph;
 import io.github.classgraph.ClassInfoList;
 import io.github.classgraph.ScanResult;
 import ru.mrchebik.autocomplete.database.AutocompleteDatabase;
+import ru.mrchebik.autocomplete.database.AutocompleteItem;
 
 import java.io.File;
 import java.io.IOException;
@@ -79,30 +80,43 @@ public class AnalyzerAutocomplete {
                         !classInfo.getName().contains("$"));
 
         list.forEach(classInfo -> {
-            String flag = classInfo.isInterface() ?
-                    "I"
+            int flag = classInfo.isInterface() ?
+                    2
                     :
                     classInfo.isAbstract() ?
-                            "A"
+                            0
                             :
                             classInfo.isStandardClass() ?
-                                    "C"
+                                    1
                                     :
-                                    "?";
-
+                                    5;
             String text = classInfo.getName().substring(classInfo.getName().lastIndexOf(".") + 1);
             String packageText = classInfo.getName().substring(0, classInfo.getName().lastIndexOf("."));
+            int needPackage = CollectorAutocompleteText.addPackageName(packageText);
+            //TODO maybe equals
+            //int needClassN = CollectorAutocompleteText.addClassN(text);
+            int needReturnTypeS = CollectorAutocompleteText.addReturnTypeS(text);
+
+            AutocompleteDatabase.addItem(cluster, new AutocompleteItem(flag, text, needPackage, needReturnTypeS), text, needReturnTypeS, true);
 
             classInfo.getFieldInfo().forEach(field -> {
-                if (field.isPublic())
-                    AutocompleteDatabase.addItem(cluster, new AutocompleteItem("V", field.getName(), "", text, field.getTypeDescriptor().toString().substring(field.getTypeDescriptor().toString().lastIndexOf(".") + 1)), true);
+                if (field.isPublic()) {
+                    int returnTypeSField = CollectorAutocompleteText.addReturnTypeS(
+                            field.getTypeDescriptor().toString().substring(field.getTypeDescriptor().toString().lastIndexOf(".") + 1)
+                    );
+
+                    AutocompleteDatabase.addItem(cluster, new AutocompleteItem(4, field.getName(), returnTypeSField), text, needReturnTypeS, true);
+                }
             });
             classInfo.getMethodInfo().forEach(method -> {
-                if (method.isPublic())
-                    AutocompleteDatabase.addItem(cluster, new AutocompleteItem("M", method.getName(), "", text, method.getTypeDescriptor().toString().substring(method.getTypeDescriptor().toString().lastIndexOf(".") + 1)), true);
-            });
+                if (method.isPublic()) {
+                    int returnTypeSMethod = CollectorAutocompleteText.addReturnTypeS(
+                            method.getTypeDescriptor().toString().substring(method.getTypeDescriptor().toString().lastIndexOf(".") + 1)
+                    );
 
-            AutocompleteDatabase.addItem(cluster, new AutocompleteItem(flag, text, packageText, text, text), true);
+                    AutocompleteDatabase.addItem(cluster, new AutocompleteItem(3, method.getName(), returnTypeSMethod), text, needReturnTypeS, true);
+                }
+            });
         });
     }
 
@@ -127,18 +141,33 @@ public class AnalyzerAutocomplete {
                         "";
                 String classN = declaration.getNameAsString();
 
+                int needPackage = CollectorAutocompleteText.addPackageName(packageClass);
+                //TODO maybe equals
+                //int needClassN = CollectorAutocompleteText.addClassN(classN);
+                int needReturnTypeS = CollectorAutocompleteText.addReturnTypeS(classN);
+
+                AutocompleteDatabase.addItem(0, new AutocompleteItem(1, classN, needPackage, needReturnTypeS), classN, needReturnTypeS, isNew);
+
                 if (declaration.getFields().size() > 0)
                     declaration.getFields().forEach(field -> {
                         FieldDeclaration fieldDeclaration = (FieldDeclaration) field;
-                        fieldDeclaration.getVariables().forEach(variable -> AutocompleteDatabase.addItem(0, new AutocompleteItem("V", variable.getNameAsString(), "", classN, ((FieldDeclaration) field).getElementType().asString()), isNew));
+                        fieldDeclaration.getVariables().forEach(variable -> {
+                            int returnTypeSField = CollectorAutocompleteText.addReturnTypeS(
+                                    ((FieldDeclaration) field).getElementType().asString()
+                            );
+
+                            AutocompleteDatabase.addItem(0, new AutocompleteItem(4, variable.getNameAsString(), returnTypeSField), classN, needReturnTypeS, isNew);
+                        });
                     });
                 if (declaration.getMethods().size() > 0)
                     declaration.getMethods().forEach(method -> {
                         MethodDeclaration methodDeclaration = (MethodDeclaration) method;
-                        AutocompleteDatabase.addItem(0, new AutocompleteItem("M", methodDeclaration.getNameAsString(), "", classN, methodDeclaration.getType().asString()), isNew);
-                    });
+                        int returnTypeSMethod = CollectorAutocompleteText.addReturnTypeS(
+                                methodDeclaration.getType().asString()
+                        );
 
-                AutocompleteDatabase.addItem(0, new AutocompleteItem("C", classN, packageClass, classN, classN), isNew);
+                        AutocompleteDatabase.addItem(0, new AutocompleteItem(3, methodDeclaration.getNameAsString(), returnTypeSMethod), classN, needReturnTypeS, isNew);
+                    });
             }
         } catch (ParseProblemException ignored) {
         }
