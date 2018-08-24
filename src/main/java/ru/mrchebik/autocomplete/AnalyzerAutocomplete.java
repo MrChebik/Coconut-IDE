@@ -93,16 +93,15 @@ public class AnalyzerAutocomplete {
             String text = classInfo.getName().substring(classInfo.getName().lastIndexOf(".") + 1);
             String packageText = classInfo.getName().substring(0, classInfo.getName().lastIndexOf("."));
             int needPackage = CollectorAutocompleteText.addPackageName(packageText);
-            //TODO maybe equals
-            //int needClassN = CollectorAutocompleteText.addClassN(text);
             int needReturnTypeS = CollectorAutocompleteText.addReturnTypeS(text);
 
             AutocompleteDatabase.addItem(cluster, new AutocompleteItem(flag, text, needPackage, needReturnTypeS), text, needReturnTypeS, true);
 
             classInfo.getFieldInfo().forEach(field -> {
                 if (field.isPublic()) {
+                    String fieldType = field.getTypeDescriptor().toString();
                     int returnTypeSField = CollectorAutocompleteText.addReturnTypeS(
-                            field.getTypeDescriptor().toString().substring(field.getTypeDescriptor().toString().lastIndexOf(".") + 1)
+                            fieldType.substring(fieldType.lastIndexOf(".") + 1)
                     );
 
                     AutocompleteDatabase.addItem(cluster, new AutocompleteItem(4, field.getName(), returnTypeSField), text, needReturnTypeS, true);
@@ -110,9 +109,14 @@ public class AnalyzerAutocomplete {
             });
             classInfo.getMethodInfo().forEach(method -> {
                 if (method.isPublic()) {
+                    String firstPart = method.getTypeDescriptor().toString().split(" ")[0];
+                    int lastIndexDot = firstPart.lastIndexOf(".");
                     int returnTypeSMethod = CollectorAutocompleteText.addReturnTypeS(
-                            method.getTypeDescriptor().toString().substring(method.getTypeDescriptor().toString().lastIndexOf(".") + 1)
-                    );
+                            firstPart.substring(
+                                    lastIndexDot == -1 ?
+                                            0
+                                            :
+                                            lastIndexDot + 1));
 
                     AutocompleteDatabase.addItem(cluster, new AutocompleteItem(3, method.getName(), returnTypeSMethod), text, needReturnTypeS, true);
                 }
@@ -142,8 +146,6 @@ public class AnalyzerAutocomplete {
                 String classN = declaration.getNameAsString();
 
                 int needPackage = CollectorAutocompleteText.addPackageName(packageClass);
-                //TODO maybe equals
-                //int needClassN = CollectorAutocompleteText.addClassN(classN);
                 int needReturnTypeS = CollectorAutocompleteText.addReturnTypeS(classN);
 
                 AutocompleteDatabase.addItem(0, new AutocompleteItem(1, classN, needPackage, needReturnTypeS), classN, needReturnTypeS, isNew);

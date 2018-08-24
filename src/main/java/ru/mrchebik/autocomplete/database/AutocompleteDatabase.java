@@ -43,16 +43,7 @@ import java.util.stream.IntStream;
  * TODO serialization clusters
  * It must reduce start time, and weaveWeb time to minimum duration.
  * Dinamically serialization every plugin / dependency / libraries
- * <p>
- * TODO with other clusters - big memory usage (>200 Mb)
- * I must to find better solution to store chain of variations.
- * One of solution:
- * - Store to static and identificate it by id at an array:
- * + `flag`
- * + `package name`
- * + `classN`
- * + `returnTypeS`
- * + `returnType`
+ *
  * @since 0.3.1
  */
 public class AutocompleteDatabase {
@@ -133,7 +124,8 @@ public class AutocompleteDatabase {
                 !"byte".equals(type) &&
                 !"double".equals(type) &&
                 !"float".equals(type) &&
-                !"char".equals(type))
+                !"char".equals(type) &&
+                !"void".equals(type))
             for (int i = 1; i < 8; i++)
                 if (i != 4) {
                     List<AutocompleteClusterLetter> letters = clusters.get(i).autocompleteClusterLetters;
