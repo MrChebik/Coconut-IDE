@@ -7,13 +7,17 @@ import ru.mrchebik.plugin.debug.os.OsPluginDebugWrapper;
 public class LinuxPluginDebugRam extends OsPluginDebug implements OsPluginDebugWrapper {
     @Override
     public String[] getCommand() {
-        return new String[]{"ps", "-q", IdeProcess.pid, "-o", "rss"};
+        return new String[]{"bash", "-c", "ps -q " + IdeProcess.pid + " -o rss | sed -n 2p && " +
+                "top -p " + IdeProcess.pid + " -b n1 | sed -n 8p | awk '{print $7}'"};
     }
 
     @Override
     public String computeOutput(StringBuilder input) {
-        return input.substring(
-                input.indexOf("\n") + 1,
-                input.length() - 1);
+        int enter = input.indexOf("\n");
+
+        int rss = Integer.parseInt(input.substring(0, enter));
+        int shr = Integer.parseInt(input.substring(enter + 1, input.lastIndexOf("\n")));
+
+        return String.valueOf(rss - shr);
     }
 }

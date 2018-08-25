@@ -1,9 +1,14 @@
 === v0.3.2 - master
-Plugin:
-    * Improved API.
 Autocomplete:
     * Reduced memory usage by 15 Mb with `A pool of strings vs id`.
     * Reduced the number of saved `String` from 10,701 to 6,433.
+Plugin:
+    * Improved API.
+    CPU:
+        * Implemented the formula for calculating the percentage
+          depending on the information in `/proc/PID/stat` and `/proc/stat`.
+    RAM:
+        * Show memory usage without shared memory.
 
 === v0.3.1-alpha - cleanup
 + Plugins (debug) for Linux:

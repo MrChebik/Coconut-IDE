@@ -12,7 +12,7 @@ public class PluginDebugRam extends PluginDebug implements PluginWrapper {
 
         name = "RAM";
         measurement = "Mb";
-        updateMs = 2000;
+        updateS = 2;
         osPluginDebugWrapper = OsPluginDebug.getOs(
                 new LinuxPluginDebugRam());
 

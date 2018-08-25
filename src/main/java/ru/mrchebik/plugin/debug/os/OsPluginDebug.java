@@ -41,7 +41,7 @@ public abstract class OsPluginDebug implements OsPluginDebugWrapper {
     }
 
     @Override
-    public String computeOutput(StringBuilder input) {
+    public Object computeOutput(StringBuilder input) {
         throw new UnsupportedOperationException();
     }
 

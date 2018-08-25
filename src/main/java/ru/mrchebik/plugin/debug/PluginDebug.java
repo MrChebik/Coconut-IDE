@@ -17,14 +17,14 @@ public abstract class PluginDebug extends Plugin implements PluginWrapper {
     protected String measurement;
     protected StringBuilder input;
     protected Process process;
-    protected int updateMs;
+    protected ProcessBuilder processBuilder;
+    protected int updateS;
     protected Label label;
 
+    protected ScheduledExecutorService executorService;
     protected OsPluginDebugWrapper osPluginDebugWrapper;
 
     private CustomInteger character;
-    private ProcessBuilder processBuilder;
-    private ScheduledExecutorService executorService;
 
     protected PluginDebug(Label label) {
         this.label = label;
@@ -39,7 +39,7 @@ public abstract class PluginDebug extends Plugin implements PluginWrapper {
         executorService.shutdown();
     }
 
-    private Runnable compute() {
+    protected Runnable compute() {
         return () -> {
             startAndReadOutput();
             writeOutput();
@@ -48,7 +48,7 @@ public abstract class PluginDebug extends Plugin implements PluginWrapper {
     }
 
     @SneakyThrows(IOException.class)
-    private void startAndReadOutput() {
+    protected void startAndReadOutput() {
         process = processBuilder.start();
         var stream = process.getInputStream();
 
@@ -57,16 +57,16 @@ public abstract class PluginDebug extends Plugin implements PluginWrapper {
     }
 
     private void writeOutput() {
-        var text = osPluginDebugWrapper.computeOutput(input);
+        var text = (String) osPluginDebugWrapper.computeOutput(input);
         var modified = text.replaceAll("\\B(?=(\\d{3})+(?!\\d))", ",");
         Platform.runLater(() -> label.setText(name + ": " + modified + " " + measurement));
     }
 
-    private void clear() {
+    protected void clear() {
         input.setLength(0);
     }
 
-    private void doesNotSupported() {
+    protected void doesNotSupported() {
         label.setText(name + ": DOES_NOT_SUPPORT " + measurement);
     }
 
@@ -86,7 +86,7 @@ public abstract class PluginDebug extends Plugin implements PluginWrapper {
             startService();
     }
 
-    private void startService() {
-        executorService.scheduleAtFixedRate(compute(), 0, 2, TimeUnit.SECONDS);
+    protected void startService() {
+        executorService.scheduleAtFixedRate(compute(), 0, updateS, TimeUnit.SECONDS);
     }
 }
