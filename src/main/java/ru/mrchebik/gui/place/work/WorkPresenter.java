@@ -28,9 +28,8 @@ import ru.mrchebik.icons.Icons;
 import ru.mrchebik.language.Language;
 import ru.mrchebik.language.java.highlight.Highlight;
 import ru.mrchebik.locale.Locale;
-import ru.mrchebik.plugin.PluginWrapper;
-import ru.mrchebik.plugin.cpu.PluginCpu;
-import ru.mrchebik.plugin.ram.PluginRam;
+import ru.mrchebik.plugin.debug.cpu.PluginDebugCpu;
+import ru.mrchebik.plugin.debug.ram.PluginDebugRam;
 import ru.mrchebik.process.save.SaveTabs;
 import ru.mrchebik.process.save.SaveTabsProcess;
 import ru.mrchebik.project.Project;
@@ -99,11 +98,8 @@ public class WorkPresenter extends KeyHelper implements Initializable {
     }
 
     private void initPlugins() {
-        PluginWrapper pluginCpu = new PluginCpu(cpu);
-        PluginWrapper pluginRam = new PluginRam(ram);
-
-        pluginCpu.start();
-        pluginRam.start();
+        new PluginDebugCpu(cpu);
+        new PluginDebugRam(ram);
     }
 
     private void initLocale(Button compile, Button run) {

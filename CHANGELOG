@@ -1,4 +1,6 @@
 === v0.3.2 - master
+Plugin:
+    * Improved API.
 Autocomplete:
     * Reduced memory usage by 15 Mb with `A pool of strings vs id`.
     * Reduced the number of saved `String` from 10,701 to 6,433.
