@@ -2,7 +2,6 @@ package ru.mrchebik.plugin;
 
 public abstract class Plugin implements PluginWrapper {
     protected String name;
-    protected boolean isStop;
 
     @Override
     public void start() {
@@ -11,6 +10,6 @@ public abstract class Plugin implements PluginWrapper {
 
     @Override
     public void complete() {
-        isStop = true;
+        throw new UnsupportedOperationException();
     }
 }
