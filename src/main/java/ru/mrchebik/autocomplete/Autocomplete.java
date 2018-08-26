@@ -96,8 +96,6 @@ public class Autocomplete extends Popup {
         mainArea.moveTo(0);
         mainArea.requestFollowCaret();
 
-        mainArea.setUserData(options);
-
         mainArea.setPrefHeight(options.size() < 10 ?
                 options.size() * 16 + options.size() * 4
                 :
@@ -108,28 +106,18 @@ public class Autocomplete extends Popup {
 
     public void doOption() {
         if (!hideTemporarily) {
-            String line = mainArea.getText(mainArea.getCurrentParagraph());
-
-            String inserted = line.substring(2,
-                    !line.contains("(") ?
-                            line.length() - 2
-                            :
-                            line.indexOf("(") - 1);
-            String insertImport = "";
-            String packageName = line.contains("(") ?
-                    line.substring(line.indexOf("(") + 1,
-                            line.indexOf(")"))
-                    :
-                    "";
+            AutocompleteItem item = AutocompleteDatabase.cache.get(mainArea.getCurrentParagraph());
 
             // TODO invisible
-            String CLASS_NAME = inserted;
-            EditWord.classN = ((List<AutocompleteItem>) mainArea.getUserData()).get(mainArea.getCurrentParagraph()).returnType;
+            String CLASS_NAME = item.text;
+            EditWord.classN = item.returnType;
             AutocompleteDatabase.cache.clear();
 
-            codeAreaFocused.insertText(EditWord.end, inserted.substring(EditWord.end - EditWord.begin));
+            codeAreaFocused.insertText(EditWord.end, item.text.substring(EditWord.end - EditWord.begin));
 
-            int lastPosition = codeAreaFocused.getCaretPosition() - (inserted.contains("()") ? 1 : 0);
+            String packageName = item.getPackageName();
+            String insertImport = "";
+            int lastPosition = codeAreaFocused.getCaretPosition() - (item.text.contains("()") ? 1 : 0);
             if (!packageName.isEmpty() &&
                     !packageName.equals("java.lang") &&
                     !codeAreaFocused.getText().contains(packageName)) {

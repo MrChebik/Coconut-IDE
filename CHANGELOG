@@ -1,6 +1,8 @@
 === v0.3.2 - master
 Autocomplete:
-    * Reduced memory usage by 15 Mb with `A pool of strings vs id`.
+    * Reduced memory usage:
+        * By 15 Mb, with `A pool of strings vs id`.
+        * By 10 Mb, removed interaction with `UserData`.
     * Reduced the number of saved `String` from 10,701 to 6,433.
 Plugin:
     * Improved API.

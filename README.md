@@ -10,7 +10,7 @@
 | **Requirements** | [v0.2.3](https://github.com/MrChebik/Coconut-IDE/releases/tag/v0.2.3) | [v0.3.1-a](https://github.com/MrChebik/Coconut-IDE/releases/tag/v0.3.1-a) | v0.3.2-source |
 |------------------|:-------:|:--------:|:-----------:|
 | **Java**         |    8    |    10    |      10     |
-| **RAM** (Mb)     |   384   |    768   |   768 < 15  |
+| **RAM** (Mb)     |   384   |    768   |      640    |
 ---
 ## Build
 ```
