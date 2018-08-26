@@ -28,7 +28,8 @@ public class FileAction {
 
     @SneakyThrows(IOException.class)
     public static void deleteFile(Path path) {
-        if (Files.exists(path) && path.startsWith(Project.path)) {
+        if (Files.exists(path) &&
+                path.startsWith(Project.path))
             Files.walk(path)
                     .collect(Collectors.toCollection(LinkedList::new))
                     .descendingIterator()
@@ -39,10 +40,9 @@ public class FileAction {
                             e.printStackTrace();
                         }
                     });
-        }
     }
 
-    public static String getPathWithoutExtension(Path path) {
+    private static String getPathWithoutExtension(Path path) {
         String pathString = path.toString();
         int indexOfLastDot = pathString.lastIndexOf('.');
 
@@ -65,11 +65,9 @@ public class FileAction {
 
         return Files.walk(pathSource)
                 .filter(p -> {
-                    for (String suffix : suffixes) {
-                        if (p.toString().endsWith(suffix)) {
+                    for (String suffix : suffixes)
+                        if (p.toString().endsWith(suffix))
                             return true;
-                        }
-                    }
 
                     return false;
                 })

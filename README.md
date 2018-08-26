@@ -11,7 +11,6 @@
 |------------------|:-------:|:--------:|:-----------:|
 | **Java**         |    8    |    10    |      10     |
 | **RAM** (Mb)     |   384   |    768   |      640    |
----
 ## Build
 ```
 $ git clone https://github.com/MrChebik/Coconut-IDE.git

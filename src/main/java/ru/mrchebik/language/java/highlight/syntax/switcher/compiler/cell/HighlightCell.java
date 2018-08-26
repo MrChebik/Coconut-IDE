@@ -9,10 +9,7 @@ import ru.mrchebik.language.java.highlight.syntax.switcher.compiler.JavaCompiler
 import javax.tools.Diagnostic;
 import javax.tools.JavaFileObject;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class HighlightCell extends JavaCompilerSyntax {
@@ -45,6 +42,7 @@ public class HighlightCell extends JavaCompilerSyntax {
             diagnostics.stream()
                     .filter(JavaCompilerSyntax::isErrorKind)
                     .map(HighlightCell::isCurrTreeItem)
+                    .filter(Objects::nonNull)
                     .forEach(HighlightCell::highlightCells);
 
             cells.parallelStream()

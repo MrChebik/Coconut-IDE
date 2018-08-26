@@ -24,6 +24,7 @@ public class TaskAction {
                 if (!ErrorProcess.wasError)
                     task.run();
             }
+            ErrorProcess.wasError = false;
         }).start();
     }
 }

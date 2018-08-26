@@ -1,4 +1,4 @@
-package ru.mrchebik.autocomplete;
+package ru.mrchebik.language.java.autocomplete.analyser;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseProblemException;
@@ -9,45 +9,53 @@ import com.github.javaparser.ast.body.TypeDeclaration;
 import io.github.classgraph.ClassGraph;
 import io.github.classgraph.ClassInfoList;
 import io.github.classgraph.ScanResult;
+import lombok.SneakyThrows;
+import ru.mrchebik.autocomplete.CollectorAutocompleteText;
+import ru.mrchebik.autocomplete.analyser.AutocompleteAnalyser;
 import ru.mrchebik.autocomplete.database.AutocompleteDatabase;
 import ru.mrchebik.autocomplete.database.AutocompleteItem;
+import ru.mrchebik.project.Project;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
 
-public class AnalyzerAutocomplete {
-    public static List<File> javaFiles;
-
-    static {
-        javaFiles = new ArrayList<>();
+public class JavaAutocompleteAnalyser extends AutocompleteAnalyser {
+    public JavaAutocompleteAnalyser() {
+        suffix = "java";
     }
 
-    public static void initialize(Path source) {
+    private static void initialize() {
         CollectorAutocompleteText.addPackageName("");
         CollectorAutocompleteText.addReturnTypeS("");
 
-        listJavaFilesForFolder(source.toFile());
+        listFilesForFolder(Project.pathSource.toFile());
+    }
 
-        javaFiles.forEach(file -> {
+    @SneakyThrows(InterruptedException.class)
+    private static void analysis() {
+        Thread global = new Thread(JavaAutocompleteAnalyser::analysisUser);
+        Thread user = new Thread(JavaAutocompleteAnalyser::analysisGraph);
+
+        global.start();
+        user.start();
+
+        global.join();
+        user.join();
+    }
+
+    private static void analysisUser() {
+        files.forEach(file -> {
             try {
                 callAnalysis(new String(Files.readAllBytes(Paths.get(file.toURI()))), true);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         });
-
-        analysis();
-        AutocompleteDatabase.weaveWeb();
     }
 
-    private static void analysis() {
-        ClassInfoList list = null;
+    private static void analysisGraph() {
+        ClassInfoList list;
 
         try (ScanResult scanResult = new ClassGraph()
                 .enableAllInfo()
@@ -118,14 +126,6 @@ public class AnalyzerAutocomplete {
             });
     }
 
-    private static void listJavaFilesForFolder(File entry) {
-        for (final File fileEntry : Objects.requireNonNull(entry.listFiles()))
-            if (fileEntry.isDirectory())
-                listJavaFilesForFolder(fileEntry);
-            else if (fileEntry.getName().endsWith(".java"))
-                javaFiles.add(fileEntry);
-    }
-
     // First cluster
     public static void callAnalysis(String text, boolean isNew) {
         try {
@@ -167,5 +167,13 @@ public class AnalyzerAutocomplete {
             }
         } catch (ParseProblemException ignored) {
         }
+    }
+
+    @Override
+    public void run() {
+        initialize();
+        analysis();
+
+        AutocompleteDatabase.weaveWeb();
     }
 }

@@ -15,6 +15,7 @@ import ru.mrchebik.project.Project;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Comparator;
+import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -27,7 +28,7 @@ public class TreeUpdater {
         if (root.getValue().equals(path))
             return root;
 
-        for (TreeItem<Path> child : root.getChildren()) {
+        for (TreeItem<Path> child : root.getChildren())
             if (!path.equals(child.getValue())) {
                 if (!child.getChildren().isEmpty()) {
                     TreeItem<Path> item = getItem(child, path);
@@ -36,7 +37,6 @@ public class TreeUpdater {
                 }
             } else
                 return child;
-        }
 
         return null;
     }
@@ -49,9 +49,8 @@ public class TreeUpdater {
             TreeItem<Path> parent = getItem(treeView.getRoot(), path.getParent());
 
             WatcherStructure watcherStructure = null;
-            if (Files.isDirectory(path)) {
+            if (Files.isDirectory(path))
                 watcherStructure = new WatcherStructure(path, tabUpdater, this);
-            }
 
             TreeItem<Path> newItem = new CustomTreeItem(path, watcherStructure, tabUpdater, this);
             if (Files.isDirectory(path)) {
@@ -60,7 +59,7 @@ public class TreeUpdater {
             } else
                 newItem.setGraphic(new ImageView(Icons.FILE.get()));
 
-            parent.getChildren().add(newItem);
+            Objects.requireNonNull(parent).getChildren().add(newItem);
 
             sortItemsInTree(parent);
         }
@@ -80,11 +79,9 @@ public class TreeUpdater {
     }
 
     void removeObject(Path path) {
-        if (Project.path.equals(path)) {
-            Platform.runLater(() -> {
-                treeView.setRoot(null);
-            });
-        } else {
+        if (Project.path.equals(path))
+            Platform.runLater(() -> treeView.setRoot(null));
+        else {
             TreeItem<Path> parent = getItem(treeView.getRoot(), path.getParent());
             TreeItem<Path> item = getItem(parent, path);
             parent.getChildren().remove(item);

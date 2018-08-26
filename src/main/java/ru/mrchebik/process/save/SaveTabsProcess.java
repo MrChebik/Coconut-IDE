@@ -7,12 +7,14 @@ import java.util.TimerTask;
 
 public class SaveTabsProcess extends Thread {
     public static void runSynch() {
-        SaveTabs.create(ComponentsCollector.tabPane.getTabs()).run();
+        new SaveTabs(ComponentsCollector.tabPane.getTabs())
+                .run();
     }
 
     @Override
     public void run() {
-        schedule(() -> SaveTabs.create(ComponentsCollector.tabPane.getTabs()).start());
+        schedule(() -> new SaveTabs(ComponentsCollector.tabPane.getTabs())
+                .start());
     }
 
     private void schedule(Runnable r) {

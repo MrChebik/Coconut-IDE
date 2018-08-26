@@ -54,6 +54,16 @@ public class StartPresenter extends StartPresenterAction implements Initializabl
 
     @FXML
     private void openProjectA() {
+        openProject();
+    }
+
+    @FXML
+    private void openProjectAWithKey(KeyEvent event) {
+        if (isEnter(event))
+            openProject();
+    }
+
+    private void openProject() {
         Path needed = Files.exists(Projects.path) ?
                 Projects.path
                 :
@@ -70,13 +80,6 @@ public class StartPresenter extends StartPresenterAction implements Initializabl
             startPlace.getStage().close();
             var workPlace = new WorkPlace();
             workPlace.start(selectedFile.getName(), selectedFile.toPath());
-        }
-    }
-
-    @FXML
-    private void openProjectAWithKey(KeyEvent event) {
-        if (isEnter(event)) {
-
         }
     }
 

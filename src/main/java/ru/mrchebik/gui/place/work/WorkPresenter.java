@@ -8,7 +8,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import org.fxmisc.flowless.ScaledVirtualized;
 import org.fxmisc.flowless.VirtualizedScrollPane;
-import ru.mrchebik.autocomplete.AnalyzerAutocomplete;
 import ru.mrchebik.autocomplete.Autocomplete;
 import ru.mrchebik.build.Build;
 import ru.mrchebik.build.BuildWrapper;
@@ -139,13 +138,13 @@ public class WorkPresenter extends KeyHelper implements Initializable {
 
     private void handlePrepareToAction() {
         setEmptyValues();
-        SaveTabs.create(tabPane.getTabs()).start();
+        new SaveTabs(tabPane.getTabs()).start();
     }
 
     private void initializeVariables() {
         build = new Build(Language.command);
 
-        AnalyzerAutocomplete.initialize(Project.pathSource);
+        Language.autocompleteAnalyser.start();
 
         Autocomplete autocomplete = new Autocomplete(workPlace.getStage());
         tabUpdater = new TabUpdater(tabPane, Highlight.create(), autocomplete);

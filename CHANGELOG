@@ -8,6 +8,7 @@ Autocomplete:
         * By 15 Mb, with `A pool of strings vs id`.
         * By 10 Mb, removed interaction with `UserData`.
     * Reduced the number of saved `String` from 10,701 to 6,433.
+    * Run Analysis in thread.
     * Fixed search in clusters after entered `class`.
     * Fixed basic keywords.
 CodeArea:
@@ -21,6 +22,8 @@ Plugin:
           depending on the information in `/proc/PID/stat` and `/proc/stat`.
     RAM:
         * Show memory usage without shared memory.
+Run:
+    * Fixed re-start the program with an error - not executed.
 
 === v0.3.1-alpha - cleanup
 + Plugins (debug) for Linux:

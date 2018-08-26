@@ -12,12 +12,8 @@ import java.nio.file.Path;
 public class SaveTabs extends Thread {
     private ObservableList<Tab> tabs;
 
-    private SaveTabs(ObservableList<Tab> tabs) {
+    public SaveTabs(ObservableList<Tab> tabs) {
         this.tabs = tabs;
-    }
-
-    public static SaveTabs create(ObservableList<Tab> tabs) {
-        return new SaveTabs(tabs);
     }
 
     @Override

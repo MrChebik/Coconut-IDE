@@ -4,7 +4,6 @@ import javafx.application.Platform;
 import javafx.scene.control.Label;
 import lombok.Cleanup;
 import lombok.SneakyThrows;
-import ru.mrchebik.model.CustomInteger;
 import ru.mrchebik.plugin.Plugin;
 import ru.mrchebik.plugin.PluginWrapper;
 import ru.mrchebik.plugin.debug.os.OsPluginDebugWrapper;
@@ -28,13 +27,10 @@ public abstract class PluginDebug extends Plugin implements PluginWrapper {
     protected ScheduledExecutorService executorService;
     protected OsPluginDebugWrapper osPluginDebugWrapper;
 
-    private CustomInteger character;
-
     protected PluginDebug(Label label) {
         this.label = label;
 
         input = new StringBuilder();
-        character = new CustomInteger();
         executorService = Executors.newSingleThreadScheduledExecutor();
     }
 
@@ -56,8 +52,7 @@ public abstract class PluginDebug extends Plugin implements PluginWrapper {
         process = processBuilder.start();
 
         @Cleanup BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-        input.append(reader
-                .lines()
+        input.append(reader.lines()
                 .collect(Collectors.joining("\n")));
     }
 

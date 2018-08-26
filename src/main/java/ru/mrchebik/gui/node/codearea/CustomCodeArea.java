@@ -10,8 +10,8 @@ import org.fxmisc.richtext.model.StyleSpans;
 import org.fxmisc.wellbehaved.event.InputMap;
 import org.fxmisc.wellbehaved.event.Nodes;
 import org.reactfx.util.Try;
-import ru.mrchebik.autocomplete.AnalyzerAutocomplete;
 import ru.mrchebik.autocomplete.Autocomplete;
+import ru.mrchebik.autocomplete.analyser.AutocompleteAnalyser;
 import ru.mrchebik.language.Language;
 import ru.mrchebik.language.java.highlight.Highlight;
 import ru.mrchebik.language.java.symbols.CustomSymbolsType;
@@ -67,13 +67,13 @@ public class CustomCodeArea extends CodeArea {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    AnalyzerAutocomplete.callAnalysis(this.getText(), false);
+                    AutocompleteAnalyser.callAnalysis(this.getText(), false);
                 }).start();
             } else if (event.getCode() == ENTER) {
                 position = deleteSelection(position);
 
                 this.insertText(position, "\n" + getTabLength(position));
-                AnalyzerAutocomplete.callAnalysis(this.getText(), false);
+                AutocompleteAnalyser.callAnalysis(this.getText(), false);
             } else if (event.getCode() == KeyCode.BACK_SPACE) {
                 String paragraph = this.getParagraph(this.getCurrentParagraph()).getText();
 
