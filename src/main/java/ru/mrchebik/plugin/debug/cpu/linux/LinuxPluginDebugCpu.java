@@ -11,15 +11,14 @@ public class LinuxPluginDebugCpu extends OsPluginDebug implements OsPluginDebugW
     @Override
     public String[] getCommand() {
         return new String[]{"bash", "-c", "cat /proc/" + IdeProcess.pid + "/stat | awk '{print $14}' && "
-                + "cat /proc/stat | sed -n 1p"};
+                + "cat /proc/stat | sed -n 1p | awk -F 'cpu  ' '{print $2}'"};
     }
 
     @Override
     public UtimeTotalTime computeOutput(StringBuilder input) {
         int enter = input.indexOf("\n");
 
-        String totalTimes = input.substring(enter + 1, input.lastIndexOf("\n"));
-        totalTimes = totalTimes.substring(totalTimes.indexOf(" ") + 2);
+        String totalTimes = input.substring(enter + 1);
         String[] totalTimesItems = totalTimes.split(" ");
 
         int utime = Integer.parseInt(input.substring(0, enter));

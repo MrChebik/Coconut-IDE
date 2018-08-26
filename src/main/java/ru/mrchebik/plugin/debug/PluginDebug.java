@@ -2,16 +2,20 @@ package ru.mrchebik.plugin.debug;
 
 import javafx.application.Platform;
 import javafx.scene.control.Label;
+import lombok.Cleanup;
 import lombok.SneakyThrows;
 import ru.mrchebik.model.CustomInteger;
 import ru.mrchebik.plugin.Plugin;
 import ru.mrchebik.plugin.PluginWrapper;
 import ru.mrchebik.plugin.debug.os.OsPluginDebugWrapper;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 public abstract class PluginDebug extends Plugin implements PluginWrapper {
     protected String measurement;
@@ -50,10 +54,11 @@ public abstract class PluginDebug extends Plugin implements PluginWrapper {
     @SneakyThrows(IOException.class)
     protected void startAndReadOutput() {
         process = processBuilder.start();
-        var stream = process.getInputStream();
 
-        while (character.setAndGet(stream.read()) != -1)
-            input.append((char) character.a);
+        @Cleanup BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+        input.append(reader
+                .lines()
+                .collect(Collectors.joining("\n")));
     }
 
     private void writeOutput() {

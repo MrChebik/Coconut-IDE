@@ -1,15 +1,21 @@
 === v0.3.2 - master
+* Fixed `NullPointerException` to highlight cells on `TreeView`.
+But if it is `null`, it will not highlighted.
 Autocomplete:
+    + `awt` to blacklist.
+    * Global scanning takes place once.
     * Reduced memory usage:
         * By 15 Mb, with `A pool of strings vs id`.
         * By 10 Mb, removed interaction with `UserData`.
     * Reduced the number of saved `String` from 10,701 to 6,433.
     * Fixed search in clusters after entered `class`.
+    * Fixed basic keywords.
 CodeArea:
     * Fixed removing empty paragraph.
     * Fixed removing selected text.
 Plugin:
     * Improved API.
+    * Using `BufferedReader` instead of `InputStream`.
     CPU:
         * Implemented the formula for calculating the percentage
           depending on the information in `/proc/PID/stat` and `/proc/stat`.

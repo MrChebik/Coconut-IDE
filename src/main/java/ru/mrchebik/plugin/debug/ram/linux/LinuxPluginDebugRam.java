@@ -16,7 +16,7 @@ public class LinuxPluginDebugRam extends OsPluginDebug implements OsPluginDebugW
         int enter = input.indexOf("\n");
 
         int rss = Integer.parseInt(input.substring(0, enter));
-        int shr = Integer.parseInt(input.substring(enter + 1, input.lastIndexOf("\n")));
+        int shr = Integer.parseInt(input.substring(enter + 1));
 
         return String.valueOf(rss - shr);
     }

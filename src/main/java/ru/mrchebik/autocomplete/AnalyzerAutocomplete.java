@@ -42,14 +42,11 @@ public class AnalyzerAutocomplete {
             }
         });
 
-        //analysis(3, "java", "java.lang");
-        //analysis(5, "javax");
-        //analysis(6, "javafx");
         analysis();
         AutocompleteDatabase.weaveWeb();
     }
 
-    public static void analysis() {
+    private static void analysis() {
         ClassInfoList list = null;
 
         try (ScanResult scanResult = new ClassGraph()
@@ -63,7 +60,6 @@ public class AnalyzerAutocomplete {
             list = scanResult.getAllClasses()
                     .filter(classInfo -> classInfo.getModifiersStr().contains("public") &&
                             !classInfo.getName().contains("$"));
-        } catch (Exception ignored) {
         }
 
         if (list != null)
