@@ -11,7 +11,7 @@ public class LinuxPluginDebugCpu extends OsPluginDebug implements OsPluginDebugW
     @Override
     public String[] getCommand() {
         return new String[]{"bash", "-c", "cat /proc/" + IdeProcess.pid + "/stat | awk '{print $14}' && "
-                + "cat /proc/stat | sed -n 1p"};//"bash", "-c", "top -p " + IdeProcess.pid + " -b n1 | sed -n 8p | awk '{print $9}'" };
+                + "cat /proc/stat | sed -n 1p"};
     }
 
     @Override
