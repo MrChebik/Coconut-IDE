@@ -38,8 +38,6 @@ public class Autocomplete extends Popup {
     private static boolean wasSameSymbol;
     private static boolean hideTemporarily = true;
 
-    private static String cache;
-
     public Autocomplete(Stage stage) {
         Autocomplete.stage = stage;
 
@@ -290,8 +288,10 @@ public class Autocomplete extends Popup {
                     } catch (StringIndexOutOfBoundsException ignored) {
                         EditWord.clear();
                     }
-                } else
+                } else {
                     EditWord.clear();
+                    EditWord.classN = null;
+                }
             }
 
             if (EditWord.word.length() != 0) {

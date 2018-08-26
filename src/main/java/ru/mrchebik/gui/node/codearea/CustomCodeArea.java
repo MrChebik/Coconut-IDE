@@ -77,38 +77,42 @@ public class CustomCodeArea extends CodeArea {
             } else if (event.getCode() == KeyCode.BACK_SPACE) {
                 String paragraph = this.getParagraph(this.getCurrentParagraph()).getText();
 
-                if (paragraph.trim().length() == 0 &&
-                        getTabLength(position).equals(paragraph)) {
-                    this.deleteText(position - paragraph.length() - 1, position);
-                } else if (position >= 4 &&
-                        CustomSymbolsType.TAB.getCustom().equals(this.getText(position - 4, position))) {
-                    int spaces = 0;
+                if (deleteSelection(-1) == 0) {
+                    if (paragraph.length() > 0 &&
+                            paragraph.trim().length() == 0 &&
+                            getTabLength(position).equals(paragraph)) {
+                        this.deleteText(position - paragraph.length() - 1, position);
+                    } else if (position >= 4 &&
+                            CustomSymbolsType.TAB.getCustom().equals(this.getText(position - 4, position))) {
+                        int spaces = 0;
 
-                    for (int i = this.getCaretColumn() - 1; i >= 0; i--) {
-                        if (paragraph.charAt(i) == ' ') {
-                            spaces++;
-                        } else {
-                            break;
+                        for (int i = this.getCaretColumn() - 1; i >= 0; i--) {
+                            if (paragraph.charAt(i) == ' ') {
+                                spaces++;
+                            } else {
+                                break;
+                            }
                         }
-                    }
 
-                    if (spaces % 4 == 0) {
-                        this.deleteText(position - 4, position);
+                        if (spaces % 4 == 0) {
+                            this.deleteText(position - 4, position);
+                        } else {
+                            this.deletePreviousChar();
+                        }
                     } else {
+                        if (this.getText().length() > 1 &&
+                                position > 0) {
+                            String snippet = this.getText(position - 1, position + 1);
+                            List<String> mirror = Arrays.asList(SymbolsType.MIRROR.getSymbols());
+                            List<String> same = Arrays.asList(SymbolsType.SAME.getSymbols());
+
+                            if (mirror.contains(snippet) ||
+                                    same.contains(snippet)) {
+                                this.deleteNextChar();
+                            }
+                        }
                         this.deletePreviousChar();
                     }
-                } else if (deleteSelection(-1) == -1) {
-                    if (this.getText().length() > 1) {
-                        String snippet = this.getText(position - 1, position + 1);
-                        List<String> mirror = Arrays.asList(SymbolsType.MIRROR.getSymbols());
-                        List<String> same = Arrays.asList(SymbolsType.SAME.getSymbols());
-
-                        if (mirror.contains(snippet) ||
-                                same.contains(snippet)) {
-                            this.deleteNextChar();
-                        }
-                    }
-                    this.deletePreviousChar();
                 }
             }
         });
@@ -137,7 +141,7 @@ public class CustomCodeArea extends CodeArea {
             this.deleteText(range.getStart(), range.getEnd());
         }
 
-        return position == -1 ? position : (position == range.getEnd() ? range.getStart() : position);
+        return position == -1 ? range.getLength() : (position == range.getEnd() ? range.getStart() : position);
     }
 
     private String getTabLength(int position) {

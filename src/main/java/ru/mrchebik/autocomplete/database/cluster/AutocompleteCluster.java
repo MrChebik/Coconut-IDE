@@ -38,22 +38,16 @@ public class AutocompleteCluster {
 
         autocompleteClusterLetters.stream()
                 .filter(letter -> letter.letter == wordStart.charAt(0))
-                .forEach(letter ->
-                        letter.autocompleteClusterLetterClasses.stream()
-                                .filter(classN -> CollectorAutocompleteText.returnTypeS.get(classN.name).startsWith(wordStart))
-                                .forEach(classN -> result.add(classN.classN)));
+                .forEach(letter -> letter.autocompleteClusterLetterClasses.stream()
+                        .filter(classN -> CollectorAutocompleteText.returnTypeS.get(classN.name).startsWith(wordStart))
+                        .forEach(classN -> result.add(classN.classN)));
 
         return result;
     }
 
     public List<AutocompleteItem> normalSearch() {
-        String word = EditWord.word.toString();
-        int wordN = CollectorAutocompleteText.addReturnTypeS(word);
-
-        return searchLetter(word.charAt(0))
-                .searchClass(wordN)
-                .items.stream()
-                .filter(item -> item.text.startsWith(word))
+        return EditWord.classN.items.stream()
+                .filter(item -> item.text.startsWith(EditWord.word.toString()))
                 .collect(Collectors.toList());
     }
 }

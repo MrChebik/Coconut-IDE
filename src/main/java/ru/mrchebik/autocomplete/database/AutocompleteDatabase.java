@@ -32,6 +32,7 @@ import java.util.stream.IntStream;
  * 3. sun
  * 4. jdk
  * 5. java.applet
+ * 6. org.graalvm
  * <p>
  * Every cluster have `Letter` delimiter, which determine
  * the first character of `Class` name.
@@ -79,11 +80,13 @@ public class AutocompleteDatabase {
         String word = EditWord.word.toString();
 
         for (int i = 0; i < 8; i++)
-            if (i == 0 && cache.size() > 0)
-                return doFilter(cache, word);
-            else if (i == 4 && EditWord.classN == null)
-                result.addAll(doFilter(keywords, word));
-            else {
+            if (i == 0) {
+                if (cache.size() > 0)
+                    return doFilter(cache, word);
+            } else if (i == 4) {
+                if (EditWord.classN == null)
+                    result.addAll(doFilter(keywords, word));
+            } else if (i != 1 && i != 2) {
                 AutocompleteCluster cluster = clusters.get(i);
 
                 result.addAll(EditWord.classN == null ?
