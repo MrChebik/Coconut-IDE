@@ -19,7 +19,7 @@ public class CollectorAutocompleteText {
     public static List<String> returnTypeS;
 
     static {
-        flag = new String[]{"A", "C", "I", "M", "V", "?"};
+        flag = new String[]{" ", "A", "C", "I", "M", "V", "?"};
         packageName = new ArrayList<>();
         returnTypeS = new ArrayList<>();
     }

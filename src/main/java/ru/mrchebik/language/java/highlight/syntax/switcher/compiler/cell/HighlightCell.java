@@ -71,7 +71,7 @@ public class HighlightCell extends JavaCompilerSyntax {
         Optional<Node> item = cells.parallelStream()
                 .filter(c -> {
                     TreeCell treeCell = (TreeCell) c;
-                    return treeCell.getTreeItem().equals(treeItem);
+                    return treeItem.equals(treeCell.getTreeItem());
                 })
                 .findFirst();
 

@@ -26,13 +26,15 @@ import java.util.stream.IntStream;
  * 6. Global - `javafx`
  * 7. Global - others
  * <p>
- * Blacklist of packages for global (beta):
- * 1. com.sun
- * 2. com.oracle
- * 3. sun
- * 4. jdk
- * 5. java.applet
- * 6. org.graalvm
+ * Whitelist of packages for global:
+ * 1. java
+ * 2. java.lang
+ * 3. javax
+ * 4. javafx
+ * <p>
+ * Blacklist of packages for global:
+ * 1. java.applet
+ * 2. java.awt
  * <p>
  * Every cluster have `Letter` delimiter, which determine
  * the first character of `Class` name.
@@ -58,7 +60,7 @@ public class AutocompleteDatabase {
         IntStream.range(0, 8).forEach(i -> clusters.add(new AutocompleteCluster()));
 
         keywords = Arrays.stream(SymbolsType.KEYWORDS.getSymbols())
-                .map(word -> new AutocompleteItem(-1, word, -1, -1))
+                .map(word -> new AutocompleteItem(0, word, 0, 0))
                 .collect(Collectors.toList());
     }
 

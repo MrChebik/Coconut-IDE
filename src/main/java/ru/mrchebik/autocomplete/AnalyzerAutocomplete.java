@@ -30,6 +30,7 @@ public class AnalyzerAutocomplete {
 
     public static void initialize(Path source) {
         CollectorAutocompleteText.addPackageName("");
+        CollectorAutocompleteText.addReturnTypeS("");
 
         listJavaFilesForFolder(source.toFile());
 
@@ -41,90 +42,84 @@ public class AnalyzerAutocomplete {
             }
         });
 
-        analysis(3, "java", "java.lang");
-        analysis(5, "javax");
-        analysis(6, "javafx");
-        analysis(7, "ALL");
+        //analysis(3, "java", "java.lang");
+        //analysis(5, "javax");
+        //analysis(6, "javafx");
+        analysis();
         AutocompleteDatabase.weaveWeb();
     }
 
-    public static void analysis(int cluster, String... packages) {
-        ScanResult scanResult = "ALL".equals(packages[0]) ?
-                new ClassGraph()
-                        .enableAllInfo()
-                        .enableSystemPackages()
-                        .disableJarScanning()
-                        .disableDirScanning()
-                        .removeTemporaryFilesAfterScan()
-                        .blacklistPackages("com.sun",
-                                "com.oracle",
-                                "sun",
-                                "jdk",
-                                "java",
-                                "java.applet",
-                                "java.lang",
-                                "javax",
-                                "javafx",
-                                "org.graalvm")
-                        .scan()
-                :
-                new ClassGraph()
-                        .enableAllInfo()
-                        .enableSystemPackages()
-                        .disableJarScanning()
-                        .disableDirScanning()
-                        .removeTemporaryFilesAfterScan()
-                        .whitelistPackages(packages)
-                        .blacklistPackages("java.applet")
-                        .scan();
+    public static void analysis() {
+        ClassInfoList list = null;
 
-        ClassInfoList list = scanResult.getAllClasses()
-                .filter(classInfo -> classInfo.getModifiersStr().contains("public") &&
-                        !classInfo.getName().contains("$"));
+        try (ScanResult scanResult = new ClassGraph()
+                .enableAllInfo()
+                .enableSystemPackages()
+                .disableJarScanning()
+                .disableDirScanning()
+                .whitelistPackages("java", "java.lang", "javax", "javafx")
+                .blacklistPackages("java.applet", "java.awt")
+                .scan()) {
+            list = scanResult.getAllClasses()
+                    .filter(classInfo -> classInfo.getModifiersStr().contains("public") &&
+                            !classInfo.getName().contains("$"));
+        } catch (Exception ignored) {
+        }
 
-        list.forEach(classInfo -> {
-            int flag = classInfo.isInterface() ?
-                    2
-                    :
-                    classInfo.isAbstract() ?
-                            0
-                            :
-                            classInfo.isStandardClass() ?
-                                    1
-                                    :
-                                    5;
-            String text = classInfo.getName().substring(classInfo.getName().lastIndexOf(".") + 1);
-            String packageText = classInfo.getName().substring(0, classInfo.getName().lastIndexOf("."));
-            int needPackage = CollectorAutocompleteText.addPackageName(packageText);
-            int needReturnTypeS = CollectorAutocompleteText.addReturnTypeS(text);
+        if (list != null)
+            list.forEach(classInfo -> {
+                int flag = classInfo.isInterface() ?
+                        3
+                        :
+                        classInfo.isAbstract() ?
+                                1
+                                :
+                                classInfo.isStandardClass() ?
+                                        2
+                                        :
+                                        6;
+                String text = classInfo.getName().substring(classInfo.getName().lastIndexOf(".") + 1);
+                String packageText = classInfo.getName().substring(0, classInfo.getName().lastIndexOf("."));
+                int cluster = packageText.startsWith("javafx") ?
+                        6
+                        :
+                        packageText.startsWith("javax") ?
+                                5
+                                :
+                                packageText.startsWith("java") ?
+                                        3
+                                        :
+                                        7;
+                int needPackage = CollectorAutocompleteText.addPackageName(packageText);
+                int needReturnTypeS = CollectorAutocompleteText.addReturnTypeS(text);
 
-            AutocompleteDatabase.addItem(cluster, new AutocompleteItem(flag, text, needPackage, needReturnTypeS), text, needReturnTypeS, true);
+                AutocompleteDatabase.addItem(cluster, new AutocompleteItem(flag, text, needPackage, needReturnTypeS), text, needReturnTypeS, true);
 
-            classInfo.getFieldInfo().forEach(field -> {
-                if (field.isPublic()) {
-                    String fieldType = field.getTypeDescriptor().toString();
-                    int returnTypeSField = CollectorAutocompleteText.addReturnTypeS(
-                            fieldType.substring(fieldType.lastIndexOf(".") + 1)
-                    );
+                classInfo.getFieldInfo().forEach(field -> {
+                    if (field.isPublic()) {
+                        String fieldType = field.getTypeDescriptor().toString();
+                        int returnTypeSField = CollectorAutocompleteText.addReturnTypeS(
+                                fieldType.substring(fieldType.lastIndexOf(".") + 1)
+                        );
 
-                    AutocompleteDatabase.addItem(cluster, new AutocompleteItem(4, field.getName(), returnTypeSField), text, needReturnTypeS, true);
-                }
+                        AutocompleteDatabase.addItem(cluster, new AutocompleteItem(5, field.getName(), returnTypeSField), text, needReturnTypeS, true);
+                    }
+                });
+                classInfo.getMethodInfo().forEach(method -> {
+                    if (method.isPublic()) {
+                        String firstPart = method.getTypeDescriptor().toString().split(" ")[0];
+                        int lastIndexDot = firstPart.lastIndexOf(".");
+                        int returnTypeSMethod = CollectorAutocompleteText.addReturnTypeS(
+                                firstPart.substring(
+                                        lastIndexDot == -1 ?
+                                                0
+                                                :
+                                                lastIndexDot + 1));
+
+                        AutocompleteDatabase.addItem(cluster, new AutocompleteItem(4, method.getName(), returnTypeSMethod), text, needReturnTypeS, true);
+                    }
+                });
             });
-            classInfo.getMethodInfo().forEach(method -> {
-                if (method.isPublic()) {
-                    String firstPart = method.getTypeDescriptor().toString().split(" ")[0];
-                    int lastIndexDot = firstPart.lastIndexOf(".");
-                    int returnTypeSMethod = CollectorAutocompleteText.addReturnTypeS(
-                            firstPart.substring(
-                                    lastIndexDot == -1 ?
-                                            0
-                                            :
-                                            lastIndexDot + 1));
-
-                    AutocompleteDatabase.addItem(cluster, new AutocompleteItem(3, method.getName(), returnTypeSMethod), text, needReturnTypeS, true);
-                }
-            });
-        });
     }
 
     private static void listJavaFilesForFolder(File entry) {
@@ -151,7 +146,7 @@ public class AnalyzerAutocomplete {
                 int needPackage = CollectorAutocompleteText.addPackageName(packageClass);
                 int needReturnTypeS = CollectorAutocompleteText.addReturnTypeS(classN);
 
-                AutocompleteDatabase.addItem(1, new AutocompleteItem(1, classN, needPackage, needReturnTypeS), classN, needReturnTypeS, isNew);
+                AutocompleteDatabase.addItem(1, new AutocompleteItem(2, classN, needPackage, needReturnTypeS), classN, needReturnTypeS, isNew);
 
                 if (declaration.getFields().size() > 0)
                     declaration.getFields().forEach(field -> {
@@ -161,7 +156,7 @@ public class AnalyzerAutocomplete {
                                     ((FieldDeclaration) field).getElementType().asString()
                             );
 
-                            AutocompleteDatabase.addItem(1, new AutocompleteItem(4, variable.getNameAsString(), returnTypeSField), classN, needReturnTypeS, isNew);
+                            AutocompleteDatabase.addItem(1, new AutocompleteItem(5, variable.getNameAsString(), returnTypeSField), classN, needReturnTypeS, isNew);
                         });
                     });
                 if (declaration.getMethods().size() > 0)
@@ -171,7 +166,7 @@ public class AnalyzerAutocomplete {
                                 methodDeclaration.getType().asString()
                         );
 
-                        AutocompleteDatabase.addItem(1, new AutocompleteItem(3, methodDeclaration.getNameAsString(), returnTypeSMethod), classN, needReturnTypeS, isNew);
+                        AutocompleteDatabase.addItem(1, new AutocompleteItem(4, methodDeclaration.getNameAsString(), returnTypeSMethod), classN, needReturnTypeS, isNew);
                     });
             }
         } catch (ParseProblemException ignored) {
