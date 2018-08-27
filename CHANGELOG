@@ -3,6 +3,7 @@
 Autocomplete:
     + `awt` to blacklist.
     + Parameters of method.
+    + Return type at the right side.
     * Global scanning takes place once.
     * Improved item sorting by `text` length, then by `parameters` length and then by alphabetic.
     * Reduced memory usage:
@@ -10,6 +11,7 @@ Autocomplete:
         * By 10 Mb, removed interaction with `UserData`.
     * Reduced the number of saved `String` from 10,701 to 6,433.
     * Run Analysis in thread.
+    * Fixed at the `checkCaretPosition`, position < 0.
     * Fixed basic keywords.
     * Fixed duplicate output of elements.
     * Fixed search in clusters after entered `class`.
