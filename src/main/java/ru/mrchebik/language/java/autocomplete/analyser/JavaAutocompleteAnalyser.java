@@ -123,11 +123,10 @@ public class JavaAutocompleteAnalyser extends AutocompleteAnalyser {
                                 var name = infos[i].getName();
 
                                 arguments.append(parseClassName(type))
-                                        .append(" ")
                                         .append(name == null ?
-                                                "_unnamed"
+                                                ""
                                                 :
-                                                name)
+                                                (" " + name))
                                         .append(i < infos.length - 1 ?
                                                 ", "
                                                 :

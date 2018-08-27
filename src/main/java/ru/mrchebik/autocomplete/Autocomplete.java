@@ -18,9 +18,10 @@ import ru.mrchebik.language.java.symbols.CustomSymbolsType;
 import ru.mrchebik.language.java.symbols.SymbolsType;
 
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 import static javafx.scene.input.KeyCode.LEFT;
 import static javafx.scene.input.KeyCode.RIGHT;
@@ -38,15 +39,19 @@ public class Autocomplete extends Popup {
     private static boolean wasSameSymbol;
     private static boolean hideTemporarily = true;
 
+    private static AtomicInteger maxLength;
+
     public Autocomplete(Stage stage) {
         Autocomplete.stage = stage;
 
         begin = true;
         wasSameSymbol = false;
 
+        maxLength = new AtomicInteger();
+
         mainArea = new CodeArea();
         mainArea.setEditable(false);
-        mainArea.setPrefWidth(400);
+        mainArea.setPrefWidth(474);
         mainArea.getStylesheets().add("css/snippet.css");
         mainArea.getStyleClass().add("autocomplete");
         // TODO highlight paragraph on mouse moved
@@ -88,7 +93,37 @@ public class Autocomplete extends Popup {
     private void setOptions(List<AutocompleteItem> options) {
         mainArea.clear();
 
-        options.forEach(option -> mainArea.appendText(option.toString() + "\n"));
+        options.forEach(option -> {
+            if (option.packageName == 0) {
+                String result = "";
+                String text = option.toString();
+                int diff = 57 - text.length() - option.getReturnTypeS().length();
+                String parameters = diff <= 0 ?
+                        option.parameters.split(", ")[0].contains(" ") ?
+                                deliver(option.parameters.split(", "))
+                                :
+                                ""
+                        :
+                        option.parameters;
+                result = option.getFlag() +
+                        " " +
+                        option.text +
+                        (option.flag == 2 || option.flag == 4 ?
+                                "(" + parameters + ")"
+                                :
+                                "");
+                diff = 57 - result.length() - option.getReturnTypeS().length();
+
+                String space = diff == 0 ?
+                        ""
+                        :
+                        String.format("%" + diff + "s", "");
+
+                mainArea.appendText(result + space + option.getReturnTypeS() + "\n");
+            } else
+                mainArea.appendText(option.toString() + "\n");
+        });
+        maxLength.set(0);
 
         mainArea.deletePreviousChar();
         mainArea.moveTo(0);
@@ -100,6 +135,12 @@ public class Autocomplete extends Popup {
                 200);
 
         AutocompleteDatabase.cache = options;
+    }
+
+    private String deliver(String[] fragments) {
+        return Arrays.stream(fragments)
+                .map(fragment -> fragment.substring(0, fragment.indexOf(" ")))
+                .collect(Collectors.joining(", "));
     }
 
     public void doOption() {
@@ -243,7 +284,14 @@ public class Autocomplete extends Popup {
             }
             if (EditWord.classN != null) {
                 List<AutocompleteItem> options = EditWord.classN.items;
-                options.sort(Comparator.comparingInt(a -> a.text.length()));
+                options.sort((a, b) -> {
+                    if (a.text.length() != b.text.length())
+                        return a.text.length() - b.text.length();
+                    if (a.parameters.length() != b.parameters.length())
+                        return a.parameters.length() - b.parameters.length();
+
+                    return a.parameters.compareTo(b.parameters);
+                });
 
                 if (!options.isEmpty()) {
                     Bounds bounds = codeAreaFocused.caretBoundsProperty().getValue().get();
@@ -360,7 +408,7 @@ public class Autocomplete extends Popup {
         int position = codeAreaFocused.getCaretPosition();
         boolean isOutRange = EditWord.isOutRange(position);
         if (isOutRange &&
-                !(".".equals(codeAreaFocused.getText(position - 1, position)) && EditWord.classN != null)) {
+                !(position > 0 && ".".equals(codeAreaFocused.getText(position - 1, position)) && EditWord.classN != null)) {
             EditWord.classN = null;
             hideSnippet();
         }

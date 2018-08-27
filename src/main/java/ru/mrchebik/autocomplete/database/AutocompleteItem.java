@@ -56,9 +56,15 @@ public class AutocompleteItem {
                         parameters.length() > 0 ?
                                 "(" + parameters + ")"
                                 :
-                                ""
+                                flag == 2 ?
+                                        ""
+                                        :
+                                        "  "
                         :
-                        "") +
+                        flag != 1 && flag != 3 ?
+                                "  "
+                                :
+                                "") +
                 (this.getPackageName().length() == 0 ?
                         "  "
                         :
