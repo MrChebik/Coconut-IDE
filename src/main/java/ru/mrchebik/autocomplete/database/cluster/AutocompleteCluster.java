@@ -1,14 +1,12 @@
 package ru.mrchebik.autocomplete.database.cluster;
 
 import ru.mrchebik.autocomplete.CollectorAutocompleteText;
-import ru.mrchebik.autocomplete.EditWord;
 import ru.mrchebik.autocomplete.database.AutocompleteItem;
 import ru.mrchebik.autocomplete.database.cluster.letter.AutocompleteClusterLetter;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 public class AutocompleteCluster {
     public List<AutocompleteClusterLetter> autocompleteClusterLetters;
@@ -43,11 +41,5 @@ public class AutocompleteCluster {
                         .forEach(classN -> result.add(classN.classN)));
 
         return result;
-    }
-
-    public List<AutocompleteItem> normalSearch() {
-        return EditWord.classN.items.stream()
-                .filter(item -> item.text.startsWith(EditWord.word.toString()))
-                .collect(Collectors.toList());
     }
 }

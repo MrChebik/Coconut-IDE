@@ -296,7 +296,14 @@ public class Autocomplete extends Popup {
 
             if (EditWord.word.length() != 0) {
                 List<AutocompleteItem> options = AutocompleteDatabase.searchClusters();
-                options.sort(Comparator.comparingInt(a -> a.text.length()));
+                options.sort((a, b) -> {
+                    if (a.text.length() != b.text.length())
+                        return a.text.length() - b.text.length();
+                    if (a.parameters.length() != b.parameters.length())
+                        return a.parameters.length() - b.parameters.length();
+
+                    return a.parameters.compareTo(b.parameters);
+                });
 
                 if (!options.isEmpty()) {
                     Bounds bounds = codeAreaFocused.caretBoundsProperty().getValue().get();

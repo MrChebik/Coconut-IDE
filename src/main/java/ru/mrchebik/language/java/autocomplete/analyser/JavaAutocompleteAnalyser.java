@@ -2,10 +2,8 @@ package ru.mrchebik.language.java.autocomplete.analyser;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseProblemException;
-import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
-import com.github.javaparser.ast.body.TypeDeclaration;
 import io.github.classgraph.ClassGraph;
 import io.github.classgraph.ClassInfoList;
 import io.github.classgraph.ScanResult;
@@ -34,8 +32,8 @@ public class JavaAutocompleteAnalyser extends AutocompleteAnalyser {
 
     @SneakyThrows(InterruptedException.class)
     private static void analysis() {
-        Thread global = new Thread(JavaAutocompleteAnalyser::analysisUser);
-        Thread user = new Thread(JavaAutocompleteAnalyser::analysisGraph);
+        var global = new Thread(JavaAutocompleteAnalyser::analysisUser);
+        var user = new Thread(JavaAutocompleteAnalyser::analysisGraph);
 
         global.start();
         user.start();
@@ -55,8 +53,6 @@ public class JavaAutocompleteAnalyser extends AutocompleteAnalyser {
     }
 
     private static void analysisGraph() {
-        ClassInfoList list;
-
         try (ScanResult scanResult = new ClassGraph()
                 .enableAllInfo()
                 .enableSystemPackages()
@@ -65,104 +61,130 @@ public class JavaAutocompleteAnalyser extends AutocompleteAnalyser {
                 .whitelistPackages("java", "java.lang", "javax", "javafx")
                 .blacklistPackages("java.applet", "java.awt")
                 .scan()) {
-            list = scanResult.getAllClasses()
+            ClassInfoList list = scanResult.getAllClasses()
                     .filter(classInfo -> classInfo.getModifiersStr().contains("public") &&
                             !classInfo.getName().contains("$"));
-        }
 
-        if (list != null)
-            list.forEach(classInfo -> {
-                int flag = classInfo.isInterface() ?
-                        3
-                        :
-                        classInfo.isAbstract() ?
-                                1
-                                :
-                                classInfo.isStandardClass() ?
-                                        2
-                                        :
-                                        6;
-                String text = classInfo.getName().substring(classInfo.getName().lastIndexOf(".") + 1);
-                String packageText = classInfo.getName().substring(0, classInfo.getName().lastIndexOf("."));
-                int cluster = packageText.startsWith("javafx") ?
-                        6
-                        :
-                        packageText.startsWith("javax") ?
-                                5
-                                :
-                                packageText.startsWith("java") ?
-                                        3
-                                        :
-                                        7;
-                int needPackage = CollectorAutocompleteText.addPackageName(packageText);
-                int needReturnTypeS = CollectorAutocompleteText.addReturnTypeS(text);
+            if (list != null)
+                list.forEach(classInfo -> {
+                    var flag = classInfo.isInterface() ?
+                            3
+                            :
+                            classInfo.isAbstract() ?
+                                    1
+                                    :
+                                    classInfo.isStandardClass() ?
+                                            2
+                                            :
+                                            6;
+                    var text = classInfo.getName().substring(classInfo.getName().lastIndexOf(".") + 1);
+                    var packageText = classInfo.getName().substring(0, classInfo.getName().lastIndexOf("."));
+                    var cluster = packageText.startsWith("javafx") ?
+                            6
+                            :
+                            packageText.startsWith("javax") ?
+                                    5
+                                    :
+                                    packageText.startsWith("java") ?
+                                            3
+                                            :
+                                            7;
+                    var needPackage = CollectorAutocompleteText.addPackageName(packageText);
+                    var needReturnTypeS = CollectorAutocompleteText.addReturnTypeS(text);
 
-                AutocompleteDatabase.addItem(cluster, new AutocompleteItem(flag, text, needPackage, needReturnTypeS), text, needReturnTypeS, true);
+                    AutocompleteDatabase.addItem(cluster, new AutocompleteItem(flag, text, "", needPackage, needReturnTypeS), text, needReturnTypeS, true);
 
-                classInfo.getFieldInfo().forEach(field -> {
-                    if (field.isPublic()) {
-                        String fieldType = field.getTypeDescriptor().toString();
-                        int returnTypeSField = CollectorAutocompleteText.addReturnTypeS(
-                                fieldType.substring(fieldType.lastIndexOf(".") + 1)
-                        );
+                    classInfo.getFieldInfo().forEach(field -> {
+                        if (field.isPublic()) {
+                            var fieldType = field.getTypeDescriptor().toString();
+                            var returnTypeSField = CollectorAutocompleteText.addReturnTypeS(
+                                    parseClassName(fieldType)
+                            );
 
-                        AutocompleteDatabase.addItem(cluster, new AutocompleteItem(5, field.getName(), returnTypeSField), text, needReturnTypeS, true);
-                    }
-                });
-                classInfo.getMethodInfo().forEach(method -> {
-                    if (method.isPublic()) {
-                        String firstPart = method.getTypeDescriptor().toString().split(" ")[0];
-                        int lastIndexDot = firstPart.lastIndexOf(".");
-                        int returnTypeSMethod = CollectorAutocompleteText.addReturnTypeS(
-                                firstPart.substring(
-                                        lastIndexDot == -1 ?
-                                                0
+                            AutocompleteDatabase.addItem(cluster, new AutocompleteItem(5, field.getName(), "", returnTypeSField), text, needReturnTypeS, true);
+                        }
+                    });
+                    classInfo.getMethodInfo().forEach(method -> {
+                        if (method.isPublic()) {
+                            var firstPart = method.getTypeDescriptor().toString().split(" ")[0];
+                            var lastIndexDot = firstPart.lastIndexOf(".");
+                            var returnTypeSMethod = CollectorAutocompleteText.addReturnTypeS(
+                                    firstPart.substring(
+                                            lastIndexDot == -1 ?
+                                                    0
+                                                    :
+                                                    lastIndexDot + 1));
+
+                            var arguments = new StringBuilder();
+                            var infos = method.getParameterInfo();
+
+                            for (int i = 0; i < infos.length; i++) {
+                                var type = infos[i].getTypeDescriptor().toString();
+                                var name = infos[i].getName();
+
+                                arguments.append(parseClassName(type))
+                                        .append(" ")
+                                        .append(name == null ?
+                                                "_unnamed"
                                                 :
-                                                lastIndexDot + 1));
+                                                name)
+                                        .append(i < infos.length - 1 ?
+                                                ", "
+                                                :
+                                                "");
+                            }
 
-                        AutocompleteDatabase.addItem(cluster, new AutocompleteItem(4, method.getName(), returnTypeSMethod), text, needReturnTypeS, true);
-                    }
+                            AutocompleteDatabase.addItem(cluster, new AutocompleteItem(4, method.getName(), arguments.toString(), returnTypeSMethod), text, needReturnTypeS, true);
+                        }
+                    });
                 });
-            });
+        }
+    }
+
+    private static String parseClassName(String name) {
+        return name.substring(name.lastIndexOf(".") + 1);
     }
 
     // First cluster
     public static void callAnalysis(String text, boolean isNew) {
         try {
-            CompilationUnit unit = JavaParser.parse(text);
+            var unit = JavaParser.parse(text);
             if (unit.getTypes().size() > 0) {
-                TypeDeclaration declaration = unit.getType(0);
+                var declaration = unit.getType(0);
 
-                String packageClass = unit.getPackageDeclaration().isPresent() ?
+                var packageClass = unit.getPackageDeclaration().isPresent() ?
                         unit.getPackageDeclaration().get().getNameAsString()
                         :
                         "";
-                String classN = declaration.getNameAsString();
+                var classN = declaration.getNameAsString();
 
-                int needPackage = CollectorAutocompleteText.addPackageName(packageClass);
-                int needReturnTypeS = CollectorAutocompleteText.addReturnTypeS(classN);
+                var needPackage = CollectorAutocompleteText.addPackageName(packageClass);
+                var needReturnTypeS = CollectorAutocompleteText.addReturnTypeS(classN);
 
-                AutocompleteDatabase.addItem(1, new AutocompleteItem(2, classN, needPackage, needReturnTypeS), classN, needReturnTypeS, isNew);
+                AutocompleteDatabase.addItem(1, new AutocompleteItem(2, classN, "", needPackage, needReturnTypeS), classN, needReturnTypeS, isNew);
 
                 if (declaration.getFields().size() > 0)
                     declaration.getFields().forEach(field -> {
-                        FieldDeclaration fieldDeclaration = (FieldDeclaration) field;
+                        var fieldDeclaration = (FieldDeclaration) field;
                         fieldDeclaration.getVariables().forEach(variable -> {
                             int returnTypeSField = CollectorAutocompleteText.addReturnTypeS(
-                                    ((FieldDeclaration) field).getElementType().asString()
+                                    field.getElementType().asString()
                             );
 
-                            AutocompleteDatabase.addItem(1, new AutocompleteItem(5, variable.getNameAsString(), returnTypeSField), classN, needReturnTypeS, isNew);
+                            AutocompleteDatabase.addItem(1, new AutocompleteItem(5, variable.getNameAsString(), "", returnTypeSField), classN, needReturnTypeS, isNew);
                         });
                     });
                 if (declaration.getMethods().size() > 0)
                     declaration.getMethods().forEach(method -> {
-                        MethodDeclaration methodDeclaration = (MethodDeclaration) method;
+                        var methodDeclaration = (MethodDeclaration) method;
                         int returnTypeSMethod = CollectorAutocompleteText.addReturnTypeS(
                                 methodDeclaration.getType().asString()
                         );
 
-                        AutocompleteDatabase.addItem(1, new AutocompleteItem(4, methodDeclaration.getNameAsString(), returnTypeSMethod), classN, needReturnTypeS, isNew);
+                        var declarationAsString = methodDeclaration.getDeclarationAsString(false, false);
+                        var arguments = declarationAsString.substring(declarationAsString.indexOf("(") + 1, declarationAsString.lastIndexOf(")"));
+
+                        AutocompleteDatabase.addItem(1, new AutocompleteItem(4, methodDeclaration.getNameAsString(), arguments, returnTypeSMethod), classN, needReturnTypeS, isNew);
                     });
             }
         } catch (ParseProblemException ignored) {

@@ -11,7 +11,7 @@ import org.fxmisc.wellbehaved.event.InputMap;
 import org.fxmisc.wellbehaved.event.Nodes;
 import org.reactfx.util.Try;
 import ru.mrchebik.autocomplete.Autocomplete;
-import ru.mrchebik.autocomplete.analyser.AutocompleteAnalyser;
+import ru.mrchebik.autocomplete.database.AutocompleteDatabase;
 import ru.mrchebik.language.Language;
 import ru.mrchebik.language.java.highlight.Highlight;
 import ru.mrchebik.language.java.symbols.CustomSymbolsType;
@@ -67,14 +67,15 @@ public class CustomCodeArea extends CodeArea {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    AutocompleteAnalyser.callAnalysis(this.getText(), false);
+                    Language.autocompleteAnalyser.callAnalysis(this.getText(), false);
                 }).start();
             } else if (event.getCode() == ENTER) {
                 position = deleteSelection(position);
 
                 this.insertText(position, "\n" + getTabLength(position));
-                AutocompleteAnalyser.callAnalysis(this.getText(), false);
+                Language.autocompleteAnalyser.callAnalysis(this.getText(), false);
             } else if (event.getCode() == KeyCode.BACK_SPACE) {
+                AutocompleteDatabase.cache.clear();
                 String paragraph = this.getParagraph(this.getCurrentParagraph()).getText();
 
                 if (deleteSelection(-1) == 0) {

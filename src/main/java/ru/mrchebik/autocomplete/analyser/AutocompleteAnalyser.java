@@ -22,6 +22,6 @@ public abstract class AutocompleteAnalyser extends Thread {
     }
 
     public static void callAnalysis(String text, boolean isNew) {
-        throw new UnsupportedOperationException();
+        System.out.println("CALL ANALYSIS");
     }
 }

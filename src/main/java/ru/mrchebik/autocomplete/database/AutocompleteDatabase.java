@@ -60,7 +60,7 @@ public class AutocompleteDatabase {
         IntStream.range(0, 8).forEach(i -> clusters.add(new AutocompleteCluster()));
 
         keywords = Arrays.stream(SymbolsType.KEYWORDS.getSymbols())
-                .map(word -> new AutocompleteItem(0, word, 0, 0))
+                .map(word -> new AutocompleteItem(0, word, "", 0, 0))
                 .collect(Collectors.toList());
     }
 
@@ -79,6 +79,11 @@ public class AutocompleteDatabase {
 
     public static List<AutocompleteItem> searchClusters() {
         List<AutocompleteItem> result = new ArrayList<>();
+
+        if (EditWord.classN != null) {
+            return normalSearch();
+        }
+
         String word = EditWord.word.toString();
 
         for (int i = 0; i < 8; i++)
@@ -88,13 +93,9 @@ public class AutocompleteDatabase {
             } else if (i == 4) {
                 if (EditWord.classN == null)
                     result.addAll(doFilter(keywords, word));
-            } else if (i != 1 && i != 2) {
+            } else {
                 AutocompleteCluster cluster = clusters.get(i);
-
-                result.addAll(EditWord.classN == null ?
-                        cluster.globalSearch(word)
-                        :
-                        cluster.normalSearch());
+                result.addAll(cluster.globalSearch(word));
             }
 
         return result;
@@ -118,6 +119,12 @@ public class AutocompleteDatabase {
                                     classes.classN.returnType = classes;
                                 }));
             }
+    }
+
+    public static List<AutocompleteItem> normalSearch() {
+        return EditWord.classN.items.stream()
+                .filter(item -> item.text.startsWith(EditWord.word.toString()))
+                .collect(Collectors.toList());
     }
 
     public static AutocompleteClusterLetterClass globalSearch(String type) {

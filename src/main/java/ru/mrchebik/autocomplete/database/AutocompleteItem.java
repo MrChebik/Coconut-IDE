@@ -19,6 +19,7 @@ public class AutocompleteItem {
      */
     public int flag;
     public String text;
+    public String parameters;
     public int packageName;
     public int returnTypeS;
 
@@ -26,18 +27,22 @@ public class AutocompleteItem {
 
     public AutocompleteItem(int flag,
                             String text,
+                            String parameters,
                             int returnTypeS) {
         this.flag = flag;
         this.text = text;
+        this.parameters = parameters;
         this.returnTypeS = returnTypeS;
     }
 
     public AutocompleteItem(int flag,
                             String text,
+                            String parameters,
                             int packageName,
                             int returnTypeS) {
         this.flag = flag;
         this.text = text;
+        this.parameters = parameters;
         this.packageName = packageName;
         this.returnTypeS = returnTypeS;
     }
@@ -47,6 +52,13 @@ public class AutocompleteItem {
         return this.getFlag() +
                 " " +
                 text +
+                (flag == 4 || flag == 2 ?
+                        parameters.length() > 0 ?
+                                "(" + parameters + ")"
+                                :
+                                ""
+                        :
+                        "") +
                 (this.getPackageName().length() == 0 ?
                         "  "
                         :
