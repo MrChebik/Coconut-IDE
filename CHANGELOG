@@ -24,6 +24,8 @@ Plugin:
         `/proc/stat`.
     RAM:
         * Show memory usage without shared memory.
+RichTextFX:
+    * Fixed #774
 Run:
     * Fixed re-start the program with an error - not executed.
 

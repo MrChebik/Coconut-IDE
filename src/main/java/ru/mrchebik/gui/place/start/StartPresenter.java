@@ -1,12 +1,15 @@
 package ru.mrchebik.gui.place.start;
 
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.DirectoryChooser;
+import javafx.stage.Popup;
 import ru.mrchebik.call.startup.CallStartupWrapper;
 import ru.mrchebik.controller.startup.StartupWrapper;
 import ru.mrchebik.gui.place.create.project.CreateProjectPlace;
@@ -94,8 +97,25 @@ public class StartPresenter extends StartPresenterAction implements Initializabl
             setHomeAndEnable(createProject, callStartup, startPlace, startup);
     }
 
+    Popup popup = new Popup();
+
+    EventHandler<MouseEvent> btn_show = event -> {
+        popup.show(startPlace.getStage());
+        popup.setX(event.getScreenX());
+        popup.setY(event.getScreenY());
+    };
+
+    EventHandler<MouseEvent> btn_hide = event -> {
+        popup.hide();
+    };
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        popup.getContent().add(new Button("I Love Java!"));
+
+        createProject.setOnMouseEntered(btn_show);
+        createProject.setOnMouseExited(btn_hide);
+
         initPresenter();
         initStartup();
         initLocale();

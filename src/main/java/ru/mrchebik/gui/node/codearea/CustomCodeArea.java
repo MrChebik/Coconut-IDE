@@ -102,7 +102,7 @@ public class CustomCodeArea extends CodeArea {
                         }
                     } else {
                         if (this.getText().length() > 1 &&
-                                position > 0) {
+                                position > 0 && position < this.getText().length()) {
                             String snippet = this.getText(position - 1, position + 1);
                             List<String> mirror = Arrays.asList(SymbolsType.MIRROR.getSymbols());
                             List<String> same = Arrays.asList(SymbolsType.SAME.getSymbols());

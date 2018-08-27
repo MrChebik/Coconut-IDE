@@ -168,7 +168,7 @@ public class Autocomplete extends Popup {
                         if (text.charAt(i) == target)
                             isOpened = !isOpened;
 
-                    if (!isOpened) {
+                    if (!isOpened && position < codeAreaFocused.getText().length()) {
                         codeAreaFocused.deleteText(position, position + 1);
                         codeAreaFocused.moveTo(position + 1);
                     } else
@@ -249,6 +249,7 @@ public class Autocomplete extends Popup {
                     Bounds bounds = codeAreaFocused.caretBoundsProperty().getValue().get();
                     double y = bounds.getMaxY();
 
+
                     if (EditWord.beginGlobal == -1) {
                         EditWord.beginGlobal = bounds.getMaxX() - 30;
 
@@ -305,7 +306,7 @@ public class Autocomplete extends Popup {
                     return a.parameters.compareTo(b.parameters);
                 });
 
-                if (!options.isEmpty()) {
+                if (!options.isEmpty() && codeAreaFocused.caretBoundsProperty().getValue().isPresent()) {
                     Bounds bounds = codeAreaFocused.caretBoundsProperty().getValue().get();
                     double y = bounds.getMaxY();
 
