@@ -4,7 +4,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class ContinuousIntegration {
-    public static void init() {
+    public static void init(String value) {
         var timer = new Timer();
         var task = new TimerTask() {
             @Override

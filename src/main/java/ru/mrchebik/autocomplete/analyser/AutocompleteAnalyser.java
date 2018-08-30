@@ -1,5 +1,7 @@
 package ru.mrchebik.autocomplete.analyser;
 
+import org.fxmisc.richtext.CodeArea;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +15,7 @@ public abstract class AutocompleteAnalyser extends Thread {
         files = new ArrayList<>();
     }
 
-    protected static void listFilesForFolder(File entry) {
+    protected void listFilesForFolder(File entry) {
         for (final File fileEntry : Objects.requireNonNull(entry.listFiles()))
             if (fileEntry.isDirectory())
                 listFilesForFolder(fileEntry);
@@ -21,7 +23,11 @@ public abstract class AutocompleteAnalyser extends Thread {
                 files.add(fileEntry);
     }
 
-    public static void callAnalysis(String text, boolean isNew) {
-        System.out.println("CALL ANALYSIS");
+    public void compute(CodeArea area) {
+        throw new UnsupportedOperationException();
+    }
+
+    public void callAnalysis(String text, boolean isNew) {
+        throw new UnsupportedOperationException();
     }
 }

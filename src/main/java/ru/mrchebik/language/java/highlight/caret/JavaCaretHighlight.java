@@ -3,6 +3,8 @@ package ru.mrchebik.language.java.highlight.caret;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.JavaToken;
 import com.github.javaparser.ParseProblemException;
+import com.github.javaparser.ParserConfiguration;
+import com.github.javaparser.ast.CompilationUnit;
 import ru.mrchebik.highlight.caret.CaretHighlightFactory;
 import ru.mrchebik.highlight.pair.PairSymbolsType;
 import ru.mrchebik.language.java.highlight.bracket.JavaBracketHighlight;
@@ -114,7 +116,9 @@ public class JavaCaretHighlight extends CaretHighlightFactory {
     @Override
     protected void highlightNear() {
         try {
-            var unit = JavaParser.parse(currText);
+            CompilationUnit unit = new JavaParser(new ParserConfiguration().setLanguageLevel(ParserConfiguration.LanguageLevel.RAW))
+                    .parse(currText);
+            //var unit = JavaParser.parse(currText);
             if (unit.getTypes().size() > 0) {
                 var isWas = false;
                 var allRange = unit.getType(0).getTokenRange().orElse(null);

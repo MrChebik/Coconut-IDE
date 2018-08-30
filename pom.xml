@@ -6,7 +6,7 @@
 
     <groupId>coconut.ide</groupId>
     <artifactId>coconut-ide</artifactId>
-    <version>0.3.2</version>
+    <version>0.3.3</version>
 
     <build>
         <plugins>
@@ -107,8 +107,8 @@
         </dependency>
         <dependency>
             <groupId>com.github.javaparser</groupId>
-            <artifactId>java-symbol-solver-core</artifactId>
-            <version>0.6.3</version>
+            <artifactId>javaparser-core</artifactId>
+            <version>3.6.19</version>
         </dependency>
         <dependency>
             <groupId>javax.annotation</groupId>

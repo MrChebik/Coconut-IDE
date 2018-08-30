@@ -124,6 +124,7 @@ public class CustomCodeArea extends CodeArea {
         });
 
         this.caretPositionProperty().addListener(listener -> Language.caretHighlight.compute(this));
+        this.caretPositionProperty().addListener(listener -> Language.autocompleteAnalyser.compute(this));
         this.setParagraphGraphicFactory(LineNumberFactory.get(this));
         this.multiPlainChanges()
                 .successionEnds(Duration.ofMillis(350))

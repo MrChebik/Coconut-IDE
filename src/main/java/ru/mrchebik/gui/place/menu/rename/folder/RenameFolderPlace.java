@@ -16,8 +16,7 @@ public class RenameFolderPlace extends CellStageAction {
     public void start() {
         super.stage = new Stage();
 
-        initWindow(super.stage,
-                setTitle(),
+        initWindow(setTitle(),
                 Modality.APPLICATION_MODAL,
                 Scale.PLACE_RENAME_FOLDER,
                 ViewAction.PLACE_RENAME_FOLDER);

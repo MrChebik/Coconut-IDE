@@ -18,8 +18,7 @@ public class WorkPlace extends StageAction {
 
         super.stage = new Stage();
 
-        initWindow(super.stage,
-                Project.getTitle(),
+        initWindow(Project.getTitle(),
                 Modality.APPLICATION_MODAL,
                 Scale.PLACE_WORK,
                 ViewAction.PLACE_WORK);

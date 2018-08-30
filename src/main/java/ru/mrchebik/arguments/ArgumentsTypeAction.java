@@ -22,16 +22,6 @@ class ArgumentsTypeAction {
                 });
     }
 
-    static String initSpaces(AtomicInteger atomic,
-                             String text) {
-        int diff = atomic.get() - text.length();
-
-        return text + (diff == 0 ?
-                ""
-                :
-                String.format("%" + diff + "s", ""));
-    }
-
     private static void longest(AtomicInteger atomic,
                                 String argument) {
         int length = argument.length();

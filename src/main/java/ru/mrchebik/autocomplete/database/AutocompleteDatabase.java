@@ -17,6 +17,7 @@ import java.util.stream.IntStream;
  * TODO multi-thread search
  * <p>
  * Priority of searching autocomplete items:
+ * 0. User method
  * 0. Cache
  * 1. User source
  * 2. Plugin / Dependency / Libraries
@@ -53,8 +54,10 @@ public class AutocompleteDatabase {
     public static List<AutocompleteItem> cache;
     public static List<AutocompleteCluster> clusters;
     public static List<AutocompleteItem> keywords;
+    public static List<AutocompleteItem> method;
 
     static {
+        method = new ArrayList<>();
         cache = new ArrayList<>();
         clusters = new ArrayList<>();
         IntStream.range(0, 8).forEach(i -> clusters.add(new AutocompleteCluster()));
@@ -77,15 +80,32 @@ public class AutocompleteDatabase {
                 .addItem(item, isNew);
     }
 
-    public static List<AutocompleteItem> searchClusters() {
-        List<AutocompleteItem> result = new ArrayList<>();
+    public static void addMethod(String[] returnName) {
+        String returnTypeS = returnName[0];
+        String name = returnName[1];
+        int flag = "int".equals(returnTypeS) ||
+                "double".equals(returnTypeS) ||
+                "short".equals(returnTypeS) ||
+                "byte".equals(returnTypeS) ||
+                "long".equals(returnTypeS) ||
+                "float".equals(returnTypeS) ||
+                "char".equals(returnTypeS) ||
+                "boolean".equals(returnTypeS) ?
+                5
+                :
+                6;
+        int returnS = CollectorAutocompleteText.addReturnTypeS(returnTypeS);
+        method.add(new AutocompleteItem(flag, name, "", returnS));
+    }
 
+    public static List<AutocompleteItem> searchClusters(String userCl) {
         if (EditWord.classN != null) {
             return normalSearch();
         }
 
         String word = EditWord.word.toString();
 
+        List<AutocompleteItem> result = new ArrayList<>(method);
         for (int i = 0; i < 8; i++)
             if (i == 0) {
                 if (cache.size() > 0)
@@ -119,6 +139,10 @@ public class AutocompleteDatabase {
                                     classes.classN.returnType = classes;
                                 }));
             }
+    }
+
+    public static void weaveWebMethod() {
+        method.forEach(a -> a.returnType = AutocompleteDatabase.globalSearch(a.getReturnTypeS()));
     }
 
     public static List<AutocompleteItem> normalSearch() {

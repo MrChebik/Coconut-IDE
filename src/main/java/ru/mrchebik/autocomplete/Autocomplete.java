@@ -1,5 +1,7 @@
 package ru.mrchebik.autocomplete;
 
+import com.github.javaparser.JavaParser;
+import com.github.javaparser.ParseProblemException;
 import javafx.event.Event;
 import javafx.geometry.Bounds;
 import javafx.scene.control.ScrollBar;
@@ -40,6 +42,8 @@ public class Autocomplete extends Popup {
     private static boolean hideTemporarily = true;
 
     private static AtomicInteger maxLength;
+
+    private static String userCl;
 
     public Autocomplete(Stage stage) {
         Autocomplete.stage = stage;
@@ -182,6 +186,10 @@ public class Autocomplete extends Popup {
 
     public void callSnippet(List<PlainTextChange> changeList, CodeArea codeArea) {
         codeAreaFocused = codeArea;
+        try {
+            userCl = JavaParser.parse(codeAreaFocused.getText()).getType(0).getNameAsString();
+        } catch (ParseProblemException ignored) {
+        }
 
         String inserted = changeList.get(0).getInserted();
 
@@ -344,7 +352,7 @@ public class Autocomplete extends Popup {
             }
 
             if (EditWord.word.length() != 0) {
-                List<AutocompleteItem> options = AutocompleteDatabase.searchClusters();
+                List<AutocompleteItem> options = AutocompleteDatabase.searchClusters(userCl);
                 options.sort((a, b) -> {
                     if (a.text.length() != b.text.length())
                         return a.text.length() - b.text.length();

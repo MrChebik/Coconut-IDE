@@ -15,8 +15,7 @@ public class CreateProjectPlace extends StageAction {
     public void start() {
         super.stage = new Stage();
 
-        initWindow(super.stage,
-                setTitle(),
+        initWindow(setTitle(),
                 Modality.APPLICATION_MODAL,
                 Scale.PLACE_CREATE_PROJECT,
                 ViewAction.PLACE_CREATE_PROJECT);

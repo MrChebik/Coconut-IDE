@@ -2,12 +2,16 @@ package ru.mrchebik.language.java.autocomplete.analyser;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseProblemException;
+import com.github.javaparser.Position;
+import com.github.javaparser.Range;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import io.github.classgraph.ClassGraph;
 import io.github.classgraph.ClassInfoList;
 import io.github.classgraph.ScanResult;
 import lombok.SneakyThrows;
+import org.fxmisc.richtext.CodeArea;
 import ru.mrchebik.autocomplete.CollectorAutocompleteText;
 import ru.mrchebik.autocomplete.analyser.AutocompleteAnalyser;
 import ru.mrchebik.autocomplete.database.AutocompleteDatabase;
@@ -23,7 +27,10 @@ public class JavaAutocompleteAnalyser extends AutocompleteAnalyser {
         suffix = "java";
     }
 
-    private static void initialize() {
+    private static int paragraph;
+    private static int column;
+
+    private void initialize() {
         CollectorAutocompleteText.addPackageName("");
         CollectorAutocompleteText.addReturnTypeS("");
 
@@ -31,9 +38,9 @@ public class JavaAutocompleteAnalyser extends AutocompleteAnalyser {
     }
 
     @SneakyThrows(InterruptedException.class)
-    private static void analysis() {
-        var global = new Thread(JavaAutocompleteAnalyser::analysisUser);
-        var user = new Thread(JavaAutocompleteAnalyser::analysisGraph);
+    private void analysis() {
+        var global = new Thread(this::analysisUser);
+        var user = new Thread(this::analysisGraph);
 
         global.start();
         user.start();
@@ -42,7 +49,11 @@ public class JavaAutocompleteAnalyser extends AutocompleteAnalyser {
         user.join();
     }
 
-    private static void analysisUser() {
+    private static String parseClassName(String name) {
+        return name.substring(name.lastIndexOf(".") + 1);
+    }
+
+    private void analysisUser() {
         files.forEach(file -> {
             try {
                 callAnalysis(new String(Files.readAllBytes(Paths.get(file.toURI()))), true);
@@ -52,14 +63,14 @@ public class JavaAutocompleteAnalyser extends AutocompleteAnalyser {
         });
     }
 
-    private static void analysisGraph() {
+    private void analysisGraph() {
         try (ScanResult scanResult = new ClassGraph()
                 .enableAllInfo()
                 .enableSystemPackages()
                 .disableJarScanning()
                 .disableDirScanning()
                 .whitelistPackages("java", "java.lang", "javax", "javafx")
-                .blacklistPackages("java.applet", "java.awt")
+                .blacklistPackages("java.applet")
                 .scan()) {
             ClassInfoList list = scanResult.getAllClasses()
                     .filter(classInfo -> classInfo.getModifiersStr().contains("public") &&
@@ -140,12 +151,39 @@ public class JavaAutocompleteAnalyser extends AutocompleteAnalyser {
         }
     }
 
-    private static String parseClassName(String name) {
-        return name.substring(name.lastIndexOf(".") + 1);
+    public void compute(CodeArea area) {
+        String text = area.getText();
+        column = area.getCaretColumn() + 1;
+        paragraph = area.getCurrentParagraph() + 1;
+        try {
+            var unit = JavaParser.parse(text);
+            AutocompleteDatabase.method.clear();
+            if (unit.getTypes().size() > 0) {
+                var declaration = unit.getType(0);
+
+                if (declaration.getMethods().size() > 0)
+                    declaration.getMethods().forEach(method -> {
+                        Position pos = new Position(paragraph, column);
+                        Range range = new Range(pos, pos);
+                        if (range.isAfter(method.getRange().get().begin) &&
+                                range.isBefore(method.getRange().get().end)) {
+                            method.getBody().get().getStatements().stream()
+                                    .map(Node::toString)
+                                    .filter(statement -> statement.contains("=") || statement.indexOf(" ") == statement.lastIndexOf(" "))
+                                    .map(statement -> statement.split("=")[0])
+                                    .map(statement -> statement.substring(0, statement.length() - 1))
+                                    .map(statement -> statement.split(" "))
+                                    .forEach(AutocompleteDatabase::addMethod);
+                        }
+                    });
+            }
+            AutocompleteDatabase.weaveWebMethod();
+        } catch (Exception ignored) {
+        }
     }
 
     // First cluster
-    public static void callAnalysis(String text, boolean isNew) {
+    public void callAnalysis(String text, boolean isNew) {
         try {
             var unit = JavaParser.parse(text);
             if (unit.getTypes().size() > 0) {

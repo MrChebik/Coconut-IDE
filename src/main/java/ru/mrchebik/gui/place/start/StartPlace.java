@@ -22,8 +22,7 @@ public class StartPlace extends StageAction {
     private void initializeGui(Stage stage) {
         super.stage = stage;
 
-        initWindow(stage,
-                setTitle(),
+        initWindow(setTitle(),
                 Modality.NONE,
                 Scale.PLACE_START,
                 ViewAction.PLACE_START);

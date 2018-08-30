@@ -22,8 +22,7 @@ public class StageAction extends Application {
         Arrays.stream(helpers).forEach(StageAction::close);
     }
 
-    protected void initWindow(Stage stage,
-                              String title,
+    protected void initWindow(String title,
                               Modality modality,
                               Scale scale,
                               ViewAction viewAction) {
