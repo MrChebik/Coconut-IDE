@@ -1,12 +1,12 @@
 package ru.mrchebik.arguments.type;
 
 import lombok.AllArgsConstructor;
-import ru.mrchebik.algorithm.AlgorithmString;
 import ru.mrchebik.ci.ContinuousIntegration;
 import ru.mrchebik.locale.Locale;
 import ru.mrchebik.locale.LocaleType;
 import ru.mrchebik.project.VersionType;
 import ru.mrchebik.settings.PropertyCollector;
+import ru.mrchebik.util.StringUtil;
 
 import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -72,9 +72,9 @@ public enum ArgumentsType {
 
         Arrays.stream(ArgumentsType.values())
                 .forEach(item -> {
-                    var briefSpace = AlgorithmString.getSpaces(longestBrief, item.brief);
+                    var briefSpace = StringUtil.getSpaces(longestBrief, item.brief);
                     var briefAfter = ArgumentsTypeAction.initAfterBrief(item.brief);
-                    var fullSpace = AlgorithmString.getSpaces(longestFull, item.full);
+                    var fullSpace = StringUtil.getSpaces(longestFull, item.full);
 
                     System.out.println("  " + briefSpace + item.brief + briefAfter + item.full + fullSpace + "   " + item.info);
                 });

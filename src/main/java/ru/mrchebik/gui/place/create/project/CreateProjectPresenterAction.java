@@ -5,7 +5,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.DirectoryChooser;
 import lombok.SneakyThrows;
-import ru.mrchebik.gui.place.StageAction;
+import ru.mrchebik.gui.place.StageHelper;
 import ru.mrchebik.gui.place.start.StartPlace;
 import ru.mrchebik.gui.place.work.WorkPlace;
 import ru.mrchebik.locale.Locale;
@@ -62,7 +62,7 @@ class CreateProjectPresenterAction {
                            StartPlace startPlace,
                            CreateProjectPlace createProjectPlace) {
         initWorkPlace(name, path);
-        StageAction.closeWindow(startPlace, createProjectPlace);
+        StageHelper.closeWindow(startPlace, createProjectPlace);
     }
 
     private static void computePropertyProjectName(String newValue,

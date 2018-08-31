@@ -1,10 +1,10 @@
 package ru.mrchebik.gui.contextmenu.treeview;
 
 import lombok.SneakyThrows;
-import ru.mrchebik.algorithm.AlgorithmFile;
 import ru.mrchebik.gui.collector.ComponentsCollector;
 import ru.mrchebik.gui.contextmenu.treeview.collector.MenuTreeviewCollector;
 import ru.mrchebik.model.CommandPath;
+import ru.mrchebik.util.FileUtil;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -51,6 +51,6 @@ public class MenuTreeviewAction extends MenuTreeviewCollector {
     }
 
     protected static void initDelete() {
-        AlgorithmFile.deleteFile(path);
+        FileUtil.deleteFile(path);
     }
 }

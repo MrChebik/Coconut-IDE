@@ -3,4 +3,4 @@
  * + The return of the spaces.
  * + To return another pair, and the position of the symbol.
  */
-package ru.mrchebik.algorithm;
+package ru.mrchebik.util;

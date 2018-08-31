@@ -24,7 +24,10 @@ public class ExecutorCommand {
         process.waitFor();
         Platform.runLater(() -> ComponentsCollector.outputArea.appendText(InputProcess.line.toString()));
         InputProcess.open = false;
-        Platform.runLater(() -> ComponentsCollector.outputArea.appendText((!InputProcess.firstLine || ErrorProcess.wasError ? "\n\n" : "") + "[PROCESS]: " + (ErrorProcess.wasError ? "Failure" : "Success") + "\n"));
+        Platform.runLater(() -> {
+            ComponentsCollector.outputArea.appendText((!InputProcess.firstLine || ErrorProcess.wasError ? "\n\n" : "") + "[PROCESS]: " + (ErrorProcess.wasError ? "Failure" : "Success") + "\n");
+            ErrorProcess.wasError = false;
+        });
         outputStream = null;
 
         ComponentsCollector.outputArea.setEditable(false);

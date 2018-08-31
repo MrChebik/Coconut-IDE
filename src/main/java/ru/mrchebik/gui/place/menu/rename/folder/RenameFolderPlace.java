@@ -2,12 +2,12 @@ package ru.mrchebik.gui.place.menu.rename.folder;
 
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import ru.mrchebik.gui.place.CellStageAction;
-import ru.mrchebik.gui.place.ViewAction;
+import ru.mrchebik.gui.place.CellStageHelper;
+import ru.mrchebik.gui.place.ViewHelper;
 import ru.mrchebik.locale.Locale;
 import ru.mrchebik.screen.measurement.Scale;
 
-public class RenameFolderPlace extends CellStageAction {
+public class RenameFolderPlace extends CellStageHelper {
     public static String setTitle() {
         return Locale.getProperty("rename_folder_title", true);
     }
@@ -19,6 +19,6 @@ public class RenameFolderPlace extends CellStageAction {
         initWindow(setTitle(),
                 Modality.APPLICATION_MODAL,
                 Scale.PLACE_RENAME_FOLDER,
-                ViewAction.RENAME_FOLDER);
+                ViewHelper.RENAME_FOLDER);
     }
 }

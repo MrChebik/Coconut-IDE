@@ -4,9 +4,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import lombok.SneakyThrows;
-import ru.mrchebik.algorithm.AlgorithmFile;
 import ru.mrchebik.gui.key.KeyHelper;
 import ru.mrchebik.locale.Locale;
+import ru.mrchebik.util.FileUtil;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -29,9 +29,9 @@ public class MenuPresenterAction extends KeyHelper {
         var needPath = buildPath(name,
                 path);
         if (isFile)
-            AlgorithmFile.createFile(needPath);
+            FileUtil.createFile(needPath);
         else
-            AlgorithmFile.createFolder(needPath);
+            FileUtil.createFolder(needPath);
     }
 
     @SneakyThrows(IOException.class)

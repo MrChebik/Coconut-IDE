@@ -1,4 +1,4 @@
-package ru.mrchebik.algorithm;
+package ru.mrchebik.util;
 
 import javafx.scene.control.Tab;
 import org.fxmisc.flowless.ScaledVirtualized;
@@ -6,7 +6,7 @@ import org.fxmisc.flowless.VirtualizedScrollPane;
 import org.fxmisc.richtext.CodeArea;
 import ru.mrchebik.gui.node.codearea.CustomCodeArea;
 
-public class AlgorithmGui {
+public class GuiUtil {
     /**
      * @param tab
      * @return

@@ -2,7 +2,7 @@ package ru.mrchebik.gui.place;
 
 import java.nio.file.Path;
 
-public class CellStageAction extends StageAction {
+public class CellStageHelper extends StageHelper {
     public Path path;
 
     protected void start() {
@@ -10,7 +10,7 @@ public class CellStageAction extends StageAction {
     }
 
     public Path closeAndGetPath() {
-        StageAction.closeWindow(this);
+        StageHelper.closeWindow(this);
 
         return path;
     }

@@ -1,7 +1,7 @@
 package ru.mrchebik.project;
 
-import ru.mrchebik.algorithm.AlgorithmFile;
 import ru.mrchebik.settings.PropertyCollector;
+import ru.mrchebik.util.FileUtil;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -25,13 +25,11 @@ public class Project {
     }
 
     public static void build() {
-        AlgorithmFile.createFolder(path);
-        AlgorithmFile.createFolder(pathOut);
-        AlgorithmFile.createFolder(pathSource);
+        FileUtil.createFolders(path, pathOut, pathSource);
 
         Path pathOfMain = Paths.get(pathSource.toString(), "Main.java");
-        AlgorithmFile.createFile(pathOfMain);
-        AlgorithmFile.writeClassMain(pathOfMain);
+        FileUtil.createFile(pathOfMain);
+        FileUtil.writeClassMain(pathOfMain);
     }
 
     public static String getTitle() {

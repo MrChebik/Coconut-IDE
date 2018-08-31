@@ -1,18 +1,20 @@
-package ru.mrchebik.algorithm;
+package ru.mrchebik.util;
 
 import lombok.SneakyThrows;
+import ru.mrchebik.exception.ExceptionUtils;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static ru.mrchebik.project.Project.pathSource;
 
-public class AlgorithmFile {
+public class FileUtil extends ExceptionUtils {
     @SneakyThrows(IOException.class)
     public static void createFile(Path path) {
         if (!Files.exists(path))
@@ -25,36 +27,32 @@ public class AlgorithmFile {
             Files.createDirectory(path);
     }
 
+    public static void createFolders(Path... paths) {
+        Arrays.stream(paths)
+                .forEach(FileUtil::createFolder);
+    }
+
     @SneakyThrows(IOException.class)
     public static void deleteFile(Path path) {
         if (Files.exists(path))
             Files.walk(path)
                     .collect(Collectors.toCollection(LinkedList::new))
                     .descendingIterator()
-                    .forEachRemaining(p -> {
-                        try {
-                            Files.delete(p);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    });
+                    .forEachRemaining(handlingConsumerWrapper(Files::delete, IOException.class));
     }
 
     private static String getPathWithoutExtension(Path path) {
-        var pathString = path.toString();
-        var indexOfLastDot = pathString.lastIndexOf('.');
+        var pathStr = path.toString();
+        var lastDot = pathStr.lastIndexOf('.');
 
-        return pathString.substring(0, indexOfLastDot);
+        return pathStr.substring(0, lastDot);
     }
 
     public static String getPackageOfRunnable(Path path) {
         Path relative = pathSource.relativize(path);
-        String relativePathWithoutExtension = getPathWithoutExtension(relative);
+        String withoutExt = getPathWithoutExtension(relative);
 
-        return relativePathWithoutExtension.contains(File.separator) ?
-                relativePathWithoutExtension.replaceAll(File.separator, ".")
-                :
-                relativePathWithoutExtension;
+        return withoutExt.replaceAll(File.separator, ".");
     }
 
     @SneakyThrows(IOException.class)
@@ -75,14 +73,14 @@ public class AlgorithmFile {
 
     @SneakyThrows(IOException.class)
     public static void writeClassMain(Path path) {
-        String classMain = String.join("\n", new String[]{
+        String dflt = String.join("\n", new String[]{
                 "public class Main {",
                 "    public static void main(String[] args) {",
                 "        ",
                 "    }",
                 "}"
         });
-        Files.write(path, classMain.getBytes());
+        Files.write(path, dflt.getBytes());
     }
 
     public static String[] mergeSuffixes(String... advanceSuffixes) {

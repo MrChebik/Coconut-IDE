@@ -6,7 +6,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import ru.mrchebik.algorithm.AlgorithmGui;
 import ru.mrchebik.build.Build;
 import ru.mrchebik.build.BuildWrapper;
 import ru.mrchebik.gui.collector.ComponentsCollector;
@@ -29,6 +28,7 @@ import ru.mrchebik.plugin.debug.ram.PluginDebugRam;
 import ru.mrchebik.process.save.SaveTabs;
 import ru.mrchebik.process.save.SaveTabsProcess;
 import ru.mrchebik.project.Project;
+import ru.mrchebik.util.GuiUtil;
 
 import javax.inject.Inject;
 import java.net.URL;
@@ -123,7 +123,7 @@ public class WorkPresenter extends KeyHelper implements Initializable {
     private void moveCaretInMain() {
         var tabs = tabPane.getTabs();
         var firstTab = tabs.get(0);
-        var codeArea = AlgorithmGui.getCodeAreaByTab(firstTab);
+        var codeArea = GuiUtil.getCodeAreaByTab(firstTab);
 
         if (Project.isOpen) codeArea.insertText(0, "");
         else {

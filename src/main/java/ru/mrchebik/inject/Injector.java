@@ -1,6 +1,6 @@
 package ru.mrchebik.inject;
 
-import ru.mrchebik.algorithm.AlgorithmString;
+import ru.mrchebik.util.StringUtil;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -20,7 +20,7 @@ public class Injector {
 
     private static Map.Entry toName_Object(Object object) {
         var name = object.getClass().getSimpleName();
-        var lower = AlgorithmString.lowerFirstChar(name);
+        var lower = StringUtil.lowerFirstChar(name);
 
         return Map.entry(lower, object);
     }

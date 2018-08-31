@@ -1,4 +1,4 @@
-package ru.mrchebik.algorithm;
+package ru.mrchebik.util;
 
 import ru.mrchebik.inject.Injector;
 
@@ -7,7 +7,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * Сontains algorithms that return a String.
  */
-public class AlgorithmString {
+public class StringUtil {
     /**
      * @param max
      *        The maximum length of text.
@@ -36,12 +36,12 @@ public class AlgorithmString {
      * @return
      *        Word starting with a small letter.
      *
-     * @see Injector#getNameAndLowerFirstChar(Object)
+     * @see Injector#toName_Object(Object)
      */
     public static String lowerFirstChar(String word) {
-        var classChar = word.toCharArray();
-        classChar[0] += 32;
+        var nameChr = word.toCharArray();
+        nameChr[0] += 32;
 
-        return new String(classChar);
+        return new String(nameChr);
     }
 }
