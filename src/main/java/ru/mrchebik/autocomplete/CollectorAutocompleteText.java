@@ -14,6 +14,7 @@ import java.util.List;
  * @since 0.3.2
  */
 public class CollectorAutocompleteText {
+    // TODO parameters to int
     public static String[] flag;
     public static List<String> packageName;
     public static List<String> returnTypeS;

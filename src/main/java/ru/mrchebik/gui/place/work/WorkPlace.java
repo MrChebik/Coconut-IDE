@@ -4,7 +4,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import ru.mrchebik.gui.place.StageAction;
 import ru.mrchebik.gui.place.ViewAction;
-import ru.mrchebik.injection.Injection;
+import ru.mrchebik.inject.Injector;
 import ru.mrchebik.project.Project;
 import ru.mrchebik.screen.measurement.Scale;
 
@@ -14,14 +14,14 @@ import java.nio.file.Paths;
 public class WorkPlace extends StageAction {
     public void start(String name, Path path) {
         initializeProject(name, path);
-        Injection.initInjection(this);
+        Injector.initInjection(this);
 
         super.stage = new Stage();
 
         initWindow(Project.getTitle(),
                 Modality.APPLICATION_MODAL,
                 Scale.PLACE_WORK,
-                ViewAction.PLACE_WORK);
+                ViewAction.WORK);
 
         setOnClose(() -> System.exit(0));
     }

@@ -19,6 +19,6 @@ public class CreateFilePlace extends CellStageAction {
         initWindow(setTitle(),
                 Modality.APPLICATION_MODAL,
                 Scale.PLACE_CREATE_FILE,
-                ViewAction.PLACE_CREATE_FILE);
+                ViewAction.CREATE_FILE);
     }
 }

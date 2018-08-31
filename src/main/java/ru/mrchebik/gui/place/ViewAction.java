@@ -12,13 +12,13 @@ import ru.mrchebik.gui.place.work.WorkView;
 
 @AllArgsConstructor
 public enum ViewAction {
-    PLACE_START(new StartView()),
-    PLACE_CREATE_FILE(new CreateFileView()),
-    PLACE_CREATE_FOLDER(new CreateFolderView()),
-    PLACE_CREATE_PROJECT(new CreateProjectView()),
-    PLACE_RENAME_FILE(new RenameFileView()),
-    PLACE_RENAME_FOLDER(new RenameFolderView()),
-    PLACE_WORK(new WorkView());
+    CREATE_FILE(new CreateFileView()),
+    CREATE_FOLDER(new CreateFolderView()),
+    CREATE_PROJECT(new CreateProjectView()),
+    RENAME_FILE(new RenameFileView()),
+    RENAME_FOLDER(new RenameFolderView()),
+    START(new StartView()),
+    WORK(new WorkView());
 
     public FXMLView view;
 }

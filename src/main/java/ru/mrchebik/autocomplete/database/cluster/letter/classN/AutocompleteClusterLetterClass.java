@@ -26,10 +26,7 @@ public class AutocompleteClusterLetterClass {
                         .findFirst();
 
         if (!itemOptional.isPresent())
-            if (item.flag == 2 ||
-                    item.flag == 3 ||
-                    item.flag == 1 ||
-                    item.flag == 6)
+            if (item.nonMethodAndVariable())
                 classN = item;
             else
                 items.add(item);

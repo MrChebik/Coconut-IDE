@@ -12,7 +12,6 @@ import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import org.fxmisc.flowless.ScaledVirtualized;
 import org.fxmisc.flowless.VirtualizedScrollPane;
-import ru.mrchebik.autocomplete.Autocomplete;
 import ru.mrchebik.gui.node.CustomTreeItem;
 import ru.mrchebik.gui.node.codearea.CustomCodeArea;
 import ru.mrchebik.icons.Icons;
@@ -30,11 +29,10 @@ import java.util.stream.Collectors;
 public class TabUpdater {
     private TabPane tabPane;
     private Highlight highlight;
-    private Autocomplete autocomplete;
 
     public void addObjectToTab(CustomTreeItem item) {
         String text = getText(item.getValue());
-        CustomCodeArea customCodeArea = new CustomCodeArea(text, highlight, item.getValue().getFileName().toString(), autocomplete);
+        CustomCodeArea customCodeArea = new CustomCodeArea(text, highlight, item.getValue().getFileName().toString());
         ScaledVirtualized<CustomCodeArea> scaleVirtualized = new ScaledVirtualized<>(customCodeArea);
 
         customCodeArea.addEventFilter(ScrollEvent.ANY, e -> {

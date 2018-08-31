@@ -4,7 +4,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import ru.mrchebik.gui.place.StageAction;
 import ru.mrchebik.gui.place.ViewAction;
-import ru.mrchebik.injection.Injection;
+import ru.mrchebik.inject.Injector;
 import ru.mrchebik.locale.Locale;
 import ru.mrchebik.screen.measurement.Scale;
 
@@ -15,7 +15,7 @@ public class StartPlace extends StageAction {
 
     @Override
     public void start(Stage primaryStage) {
-        Injection.initInjection(this);
+        Injector.initInjection(this);
         initializeGui(primaryStage);
     }
 
@@ -25,6 +25,6 @@ public class StartPlace extends StageAction {
         initWindow(setTitle(),
                 Modality.NONE,
                 Scale.PLACE_START,
-                ViewAction.PLACE_START);
+                ViewAction.START);
     }
 }

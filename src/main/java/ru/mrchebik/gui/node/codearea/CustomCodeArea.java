@@ -10,7 +10,6 @@ import org.fxmisc.richtext.model.StyleSpans;
 import org.fxmisc.wellbehaved.event.InputMap;
 import org.fxmisc.wellbehaved.event.Nodes;
 import org.reactfx.util.Try;
-import ru.mrchebik.autocomplete.Autocomplete;
 import ru.mrchebik.autocomplete.database.AutocompleteDatabase;
 import ru.mrchebik.language.Language;
 import ru.mrchebik.language.java.highlight.Highlight;
@@ -35,7 +34,7 @@ public class CustomCodeArea extends CodeArea {
     private Executor executor;
     private Highlight highlight;
 
-    public CustomCodeArea(String text, Highlight highlight, String name, Autocomplete autocomplete) {
+    public CustomCodeArea(String text, Highlight highlight, String name) {
         executor = Executors.newSingleThreadExecutor();
         this.highlight = highlight;
         this.name = name;
@@ -49,7 +48,7 @@ public class CustomCodeArea extends CodeArea {
         );
         Nodes.addInputMap(this, prevent);
 
-        this.caretPositionProperty().addListener(obs -> autocomplete.checkCaretPosition());
+        this.caretPositionProperty().addListener(obs -> Language.autocomplete.checkCaretPosition());
 
         this.setOnKeyPressed(event -> {
             int position = this.getCaretPosition();
@@ -120,7 +119,7 @@ public class CustomCodeArea extends CodeArea {
 
         this.focusedProperty().addListener((arg0, oldPropertyValue, newPropertyValue) -> {
             if (!newPropertyValue)
-                autocomplete.hideSnippet();
+                Language.autocomplete.hideSnippet();
         });
 
         this.caretPositionProperty().addListener(listener -> Language.caretHighlight.compute(this));
@@ -133,7 +132,7 @@ public class CustomCodeArea extends CodeArea {
                 .filterMap(this::getOptional)
                 .subscribe(this::applyHighlighting);
         this.multiPlainChanges()
-                .subscribe(changes -> autocomplete.callSnippet(changes, this));
+                .subscribe(changes -> Language.autocomplete.callSnippet(changes, this));
         this.replaceText(0, 0, text);
     }
 

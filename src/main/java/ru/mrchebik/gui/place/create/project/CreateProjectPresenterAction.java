@@ -9,7 +9,7 @@ import ru.mrchebik.gui.place.StageAction;
 import ru.mrchebik.gui.place.start.StartPlace;
 import ru.mrchebik.gui.place.work.WorkPlace;
 import ru.mrchebik.locale.Locale;
-import ru.mrchebik.project.Projects;
+import ru.mrchebik.settings.PropertyCollector;
 
 import java.io.File;
 import java.io.IOException;
@@ -43,9 +43,8 @@ class CreateProjectPresenterAction {
 
     @SneakyThrows(IOException.class)
     static void initCorePath() {
-        var path = Projects.path;
-        if (!Files.exists(path))
-            Files.createDirectory(path);
+        var path = Paths.get(PropertyCollector.projects);
+        if (!Files.exists(path)) Files.createDirectory(path);
     }
 
     static void initListeners(TextField name,
@@ -55,15 +54,13 @@ class CreateProjectPresenterAction {
     }
 
     static void initProjectPath(TextField field) {
-        field.setText(Projects.pathString);
+        field.setText(PropertyCollector.projects);
     }
 
     static void newProject(TextField name,
                            TextField path,
                            StartPlace startPlace,
                            CreateProjectPlace createProjectPlace) {
-        //PropertyCollector.writeProject(projectName.getText(), projectPath.getText());
-
         initWorkPlace(name, path);
         StageAction.closeWindow(startPlace, createProjectPlace);
     }
@@ -71,8 +68,8 @@ class CreateProjectPresenterAction {
     private static void computePropertyProjectName(String newValue,
                                                    TextField path) {
         if (!wasChanged &&
-                path.getText().startsWith(Projects.pathString)) {
-            path.setText(Projects.pathString + newValue);
+                path.getText().startsWith(PropertyCollector.projects)) {
+            path.setText(PropertyCollector.projects + newValue);
             wasChanged = false;
         } else
             wasChanged = true;

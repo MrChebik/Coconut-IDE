@@ -1,10 +1,10 @@
 package ru.mrchebik.build;
 
 import lombok.AllArgsConstructor;
+import ru.mrchebik.algorithm.AlgorithmFile;
 import ru.mrchebik.command.CommandWrapper;
-import ru.mrchebik.helper.FileAction;
 
 @AllArgsConstructor
-public class BuildModel extends FileAction {
+public class BuildModel extends AlgorithmFile {
     protected CommandWrapper command;
 }

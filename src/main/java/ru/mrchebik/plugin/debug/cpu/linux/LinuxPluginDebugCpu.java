@@ -10,7 +10,7 @@ import java.util.Arrays;
 public class LinuxPluginDebugCpu extends OsPluginDebug implements OsPluginDebugWrapper {
     @Override
     public String[] getCommand() {
-        return new String[]{"bash", "-c", "cat /proc/" + IdeProcess.pid + "/stat | awk '{print $14}' && "
+        return new String[]{"bash", "-c", "cat /proc/" + IdeProcess.PID + "/stat | awk '{print $14}' && "
                 + "cat /proc/stat | sed -n 1p | awk -F 'cpu  ' '{print $2}'"};
     }
 

@@ -19,6 +19,6 @@ public class CreateFolderPlace extends CellStageAction {
         initWindow(setTitle(),
                 Modality.APPLICATION_MODAL,
                 Scale.PLACE_CREATE_FOLDER,
-                ViewAction.PLACE_CREATE_FOLDER);
+                ViewAction.CREATE_FOLDER);
     }
 }

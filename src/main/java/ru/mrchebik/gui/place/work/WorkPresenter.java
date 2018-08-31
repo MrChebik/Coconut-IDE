@@ -6,15 +6,12 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import org.fxmisc.flowless.ScaledVirtualized;
-import org.fxmisc.flowless.VirtualizedScrollPane;
-import ru.mrchebik.autocomplete.Autocomplete;
+import ru.mrchebik.algorithm.AlgorithmGui;
 import ru.mrchebik.build.Build;
 import ru.mrchebik.build.BuildWrapper;
 import ru.mrchebik.gui.collector.ComponentsCollector;
 import ru.mrchebik.gui.key.KeyHelper;
 import ru.mrchebik.gui.node.CustomTreeItem;
-import ru.mrchebik.gui.node.codearea.CustomCodeArea;
 import ru.mrchebik.gui.node.treeCell.CustomTreeCell;
 import ru.mrchebik.gui.place.menu.create.file.CreateFilePlace;
 import ru.mrchebik.gui.place.menu.create.folder.CreateFolderPlace;
@@ -124,15 +121,14 @@ public class WorkPresenter extends KeyHelper implements Initializable {
     }
 
     private void moveCaretInMain() {
-        var scrollPane = (VirtualizedScrollPane) tabPane.getTabs().get(0).getContent();
-        var scaledVirtualized = (ScaledVirtualized) scrollPane.getContent();
-        var area = (CustomCodeArea) scaledVirtualized.getChildrenUnmodifiable().get(0);
+        var tabs = tabPane.getTabs();
+        var firstTab = tabs.get(0);
+        var codeArea = AlgorithmGui.getCodeAreaByTab(firstTab);
 
-        if (Project.isOpen)
-            area.insertText(0, "");
+        if (Project.isOpen) codeArea.insertText(0, "");
         else {
-            Platform.runLater(area::requestFocus);
-            area.moveTo(73);
+            Platform.runLater(codeArea::requestFocus);
+            codeArea.moveTo(73);
         }
     }
 
@@ -146,8 +142,8 @@ public class WorkPresenter extends KeyHelper implements Initializable {
 
         Language.autocompleteAnalyser.start();
 
-        Autocomplete autocomplete = new Autocomplete(workPlace.getStage());
-        tabUpdater = new TabUpdater(tabPane, Highlight.create(), autocomplete);
+        Language.initAutocomplete(workPlace.getStage());
+        tabUpdater = new TabUpdater(tabPane, Highlight.create());
 
         TreeUpdater treeUpdater = new TreeUpdater(treeView, tabUpdater);
         treeUpdater.setRootToTreeView();

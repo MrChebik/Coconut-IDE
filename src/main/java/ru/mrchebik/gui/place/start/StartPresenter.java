@@ -11,14 +11,14 @@ import ru.mrchebik.call.startup.CallStartupWrapper;
 import ru.mrchebik.controller.startup.StartupWrapper;
 import ru.mrchebik.gui.place.create.project.CreateProjectPlace;
 import ru.mrchebik.gui.place.work.WorkPlace;
-import ru.mrchebik.injection.Injection;
+import ru.mrchebik.inject.Injector;
 import ru.mrchebik.language.Language;
 import ru.mrchebik.language.LanguageType;
 import ru.mrchebik.language.java.call.JavaCallStartup;
 import ru.mrchebik.language.java.startup.JavaStartup;
 import ru.mrchebik.locale.Locale;
 import ru.mrchebik.project.Project;
-import ru.mrchebik.project.Projects;
+import ru.mrchebik.settings.PropertyCollector;
 
 import javax.inject.Inject;
 import java.net.URL;
@@ -64,8 +64,8 @@ public class StartPresenter extends StartPresenterAction implements Initializabl
     }
 
     private void openProject() {
-        Path needed = Files.exists(Projects.path) ?
-                Projects.path
+        Path needed = Files.exists(Paths.get(PropertyCollector.projects)) ?
+                Paths.get(PropertyCollector.projects)
                 :
                 Paths.get(System.getProperty("user.home"));
 
@@ -101,7 +101,7 @@ public class StartPresenter extends StartPresenterAction implements Initializabl
         initLocale();
         initNewProject(createProject, startup);
         initAnimation(coconutPng);
-        Injection.initInjection(startPlace, createProjectPlace);
+        Injector.initInjection(startPlace, createProjectPlace);
     }
 
     private void initStartup() {

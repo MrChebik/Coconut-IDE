@@ -7,8 +7,8 @@ import ru.mrchebik.plugin.debug.os.OsPluginDebugWrapper;
 public class LinuxPluginDebugRam extends OsPluginDebug implements OsPluginDebugWrapper {
     @Override
     public String[] getCommand() {
-        return new String[]{"bash", "-c", "ps -q " + IdeProcess.pid + " -o rss | sed -n 2p && " +
-                "top -p " + IdeProcess.pid + " -b n1 | sed -n 8p | awk '{print $7}'"};
+        return new String[]{"bash", "-c", "ps -q " + IdeProcess.PID + " -o rss | sed -n 2p && " +
+                "top -p " + IdeProcess.PID + " -b n1 | sed -n 8p | awk '{print $7}'"};
     }
 
     @Override

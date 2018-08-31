@@ -14,13 +14,18 @@ import java.util.Objects;
 import java.util.Properties;
 
 public class PropertyCollector {
+    /* Properties stored in the config file */
     public static String language;
     public static String locale;
+    public static String projects;
+
     private static Path SETTINGS_PATH;
     private static Path pathProperties;
-    private static Properties properties = new Properties();
+
+    private static Properties properties;
 
     static {
+        properties = new Properties();
         initializeSettingsPath();
         initializeApplicationProperties();
         initializeProperties();
@@ -29,6 +34,7 @@ public class PropertyCollector {
     public static void initializeProperties() {
         language = PropertyCollector.initVariable("language", "java");
         locale = PropertyCollector.initVariable("locale", "en");
+        projects = PropertyCollector.initVariable("projects", System.getProperty("user.home") + File.separator + "CoconutProjects" + File.separator);
     }
 
     public static String getProperty(String key) {

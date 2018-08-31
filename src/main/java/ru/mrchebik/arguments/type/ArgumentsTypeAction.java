@@ -1,4 +1,4 @@
-package ru.mrchebik.arguments;
+package ru.mrchebik.arguments.type;
 
 import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -12,8 +12,8 @@ class ArgumentsTypeAction {
     }
 
     static void initLongest() {
-        ArgumentsType.longestBrief = new AtomicInteger(-1);
-        ArgumentsType.longestFull = new AtomicInteger(-1);
+        ArgumentsType.longestBrief = new AtomicInteger();
+        ArgumentsType.longestFull = new AtomicInteger();
 
         Arrays.stream(ArgumentsType.values())
                 .forEach(item -> {

@@ -1,7 +1,6 @@
-package ru.mrchebik.helper;
+package ru.mrchebik.algorithm;
 
 import lombok.SneakyThrows;
-import ru.mrchebik.project.Project;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,7 +12,7 @@ import java.util.stream.Stream;
 
 import static ru.mrchebik.project.Project.pathSource;
 
-public class FileAction {
+public class AlgorithmFile {
     @SneakyThrows(IOException.class)
     public static void createFile(Path path) {
         if (!Files.exists(path))
@@ -28,8 +27,7 @@ public class FileAction {
 
     @SneakyThrows(IOException.class)
     public static void deleteFile(Path path) {
-        if (Files.exists(path) &&
-                path.startsWith(Project.path))
+        if (Files.exists(path))
             Files.walk(path)
                     .collect(Collectors.toCollection(LinkedList::new))
                     .descendingIterator()
@@ -43,8 +41,8 @@ public class FileAction {
     }
 
     private static String getPathWithoutExtension(Path path) {
-        String pathString = path.toString();
-        int indexOfLastDot = pathString.lastIndexOf('.');
+        var pathString = path.toString();
+        var indexOfLastDot = pathString.lastIndexOf('.');
 
         return pathString.substring(0, indexOfLastDot);
     }

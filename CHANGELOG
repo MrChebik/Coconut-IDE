@@ -1,4 +1,10 @@
 === v0.3.3
+* Removed an exception in Arguments/Locale initialize.
+* Updated API.
+Autcomplete:
+    + Variables in method.
+    * Returned `awt`.
+    * Fixed UA window title.
 
 === v0.3.2
 * Fixed `NullPointerException` to highlight cells on `TreeView`. But if it is `null`, it will not highlighted.

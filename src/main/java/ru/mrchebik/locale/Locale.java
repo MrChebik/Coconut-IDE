@@ -26,7 +26,6 @@ public class Locale {
 
         var localeCode = PropertyCollector.locale;
         localeType = LocaleType.find(localeCode);
-
         initPart(localeType.toString());
 
         Language.init();
@@ -37,7 +36,7 @@ public class Locale {
                 localeProperties
                 :
                 localeLangProperties;
-        try (InputStream stream = Locale.class.getResourceAsStream("/locale/" + localeType + "/" + part + ".properties")) {
+        try (InputStream stream = Locale.class.getResourceAsStream("/locale/" + localeType + "/" + (part.equals(localeType.toString()) ? "interface" : part) + ".properties")) {
             properties.load(stream);
         } catch (IOException e) {
             System.err.println("[ERROR][Locale]: File \"" + part + "\" of \"" + localeType + "\" language not found!");

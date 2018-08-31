@@ -2,9 +2,7 @@ package ru.mrchebik.process.save;
 
 import javafx.collections.ObservableList;
 import javafx.scene.control.Tab;
-import org.fxmisc.flowless.ScaledVirtualized;
-import org.fxmisc.flowless.VirtualizedScrollPane;
-import ru.mrchebik.gui.node.codearea.CustomCodeArea;
+import ru.mrchebik.algorithm.AlgorithmGui;
 import ru.mrchebik.model.ExistFileToSave;
 
 import java.nio.file.Path;
@@ -20,14 +18,12 @@ public class SaveTabs extends Thread {
     public void run() {
         tabs.stream()
                 .map(tab -> {
+                    var codeArea = AlgorithmGui.getCodeAreaByTab(tab);
+
+                    var text = codeArea.getText();
                     var path = (Path) tab.getUserData();
 
-                    var scrollPane = (VirtualizedScrollPane) tab.getContent();
-                    var scaledVirtualized = (ScaledVirtualized) scrollPane.getContent();
-                    var codeArea = (CustomCodeArea) scaledVirtualized.getChildrenUnmodifiable().get(0);
-                    var lines = codeArea.getText();
-
-                    return new ExistFileToSave(lines, path);
+                    return new ExistFileToSave(text, path);
                 })
                 .forEach(ExistFileToSave::save);
     }

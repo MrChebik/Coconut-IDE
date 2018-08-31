@@ -18,6 +18,6 @@ public class CreateProjectPlace extends StageAction {
         initWindow(setTitle(),
                 Modality.APPLICATION_MODAL,
                 Scale.PLACE_CREATE_PROJECT,
-                ViewAction.PLACE_CREATE_PROJECT);
+                ViewAction.CREATE_PROJECT);
     }
 }

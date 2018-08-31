@@ -52,7 +52,7 @@ public class AutocompleteItem {
         return this.getFlag() +
                 " " +
                 text +
-                (flag == 4 || flag == 2 ?
+                (isMethodOrClass() ?
                         parameters.length() > 0 ?
                                 "(" + parameters + ")"
                                 :
@@ -61,7 +61,7 @@ public class AutocompleteItem {
                                         :
                                         "  "
                         :
-                        flag != 1 && flag != 3 ?
+                        nonAbstractAndInterface() ?
                                 "  "
                                 :
                                 "") +
@@ -69,6 +69,18 @@ public class AutocompleteItem {
                         "  "
                         :
                         " (" + this.getPackageName() + ")");
+    }
+
+    public boolean nonMethodAndVariable() {
+        return flag != 4 && flag != 5;
+    }
+
+    public boolean isMethodOrClass() {
+        return flag == 4 || flag == 2;
+    }
+
+    public boolean nonAbstractAndInterface() {
+        return flag != 1 && flag != 3;
     }
 
     public String getFlag() {
