@@ -1,6 +1,5 @@
 package ru.mrchebik.language.java.autocomplete;
 
-import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseProblemException;
 import javafx.geometry.Bounds;
 import javafx.stage.Stage;
@@ -11,6 +10,7 @@ import ru.mrchebik.autocomplete.AutocompleteWrapper;
 import ru.mrchebik.autocomplete.EditWord;
 import ru.mrchebik.autocomplete.database.AutocompleteDatabase;
 import ru.mrchebik.autocomplete.database.AutocompleteItem;
+import ru.mrchebik.language.java.autocomplete.analyser.JavaAutocompleteAnalyser;
 import ru.mrchebik.language.java.symbols.CustomSymbolsType;
 import ru.mrchebik.language.java.symbols.SymbolsType;
 
@@ -115,7 +115,7 @@ public class JavaAutocomplete extends Autocomplete implements AutocompleteWrappe
     public void callSnippet(List<PlainTextChange> changeList, CodeArea codeArea) {
         codeAreaFocused = codeArea;
         try {
-            userCl = JavaParser.parse(codeAreaFocused.getText()).getType(0).getNameAsString();
+            userCl = JavaAutocompleteAnalyser.RAW.parse(codeAreaFocused.getText()).getType(0).getNameAsString();
         } catch (ParseProblemException ignored) {
         }
 

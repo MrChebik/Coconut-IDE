@@ -7,8 +7,10 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.DirectoryChooser;
+import javafx.stage.Stage;
 import ru.mrchebik.call.startup.CallStartupWrapper;
 import ru.mrchebik.controller.startup.StartupWrapper;
+import ru.mrchebik.gui.place.ViewHelper;
 import ru.mrchebik.gui.place.create.project.CreateProjectPlace;
 import ru.mrchebik.gui.place.work.WorkPlace;
 import ru.mrchebik.inject.Injector;
@@ -37,8 +39,8 @@ public class StartPresenter extends StartPresenterAction implements Initializabl
     @Inject
     private StartPlace startPlace;
 
-    private CallStartupWrapper callStartup;
-    private CreateProjectPlace createProjectPlace;
+    public static CallStartupWrapper callStartup;
+    public static CreateProjectPlace createProjectPlace;
     private StartupWrapper startup;
 
     @FXML
@@ -63,7 +65,7 @@ public class StartPresenter extends StartPresenterAction implements Initializabl
             openProject();
     }
 
-    private void openProject() {
+    public static void openProject() {
         Path needed = Files.exists(Paths.get(PropertyCollector.projects)) ?
                 Paths.get(PropertyCollector.projects)
                 :
@@ -74,10 +76,10 @@ public class StartPresenter extends StartPresenterAction implements Initializabl
         directoryChooser.setInitialDirectory(folder);
         directoryChooser.setTitle(Locale.getProperty("open_project_title", true));
 
-        var selectedFile = directoryChooser.showDialog(startPlace.getStage());
+        var selectedFile = directoryChooser.showDialog((Stage) ViewHelper.START.view.getUserData());
         if (selectedFile != null) {
             Project.isOpen = true;
-            startPlace.getStage().close();
+            ViewHelper.START.stage.close();
             var workPlace = new WorkPlace();
             workPlace.start(selectedFile.getName(), selectedFile.toPath());
         }

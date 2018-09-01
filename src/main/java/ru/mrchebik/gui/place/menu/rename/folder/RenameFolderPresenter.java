@@ -7,6 +7,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import ru.mrchebik.gui.collector.ComponentsCollector;
+import ru.mrchebik.gui.place.ViewHelper;
 import ru.mrchebik.gui.place.menu.MenuPresenterAction;
 
 import java.net.URL;
@@ -22,13 +23,13 @@ public class RenameFolderPresenter extends MenuPresenterAction implements Initia
 
     @FXML
     private void handleRename() {
-        renameFile(name, ComponentsCollector.renameFolderPlace.closeAndGetPath());
+        renameFile(name, ComponentsCollector.renameFolderPlace.closeAndGetPath(ViewHelper.RENAME_FOLDER));
     }
 
     @FXML
     private void handleRenameWithKey(KeyEvent event) {
         if (isEnter(event))
-            renameFile(name, ComponentsCollector.renameFolderPlace.closeAndGetPath());
+            renameFile(name, ComponentsCollector.renameFolderPlace.closeAndGetPath(ViewHelper.RENAME_FOLDER));
     }
 
     @Override

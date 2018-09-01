@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="224.0" prefWidth="400.0"
+            xmlns="http://javafx.com/javafx/10.0.2" fx:controller="ru.mrchebik.gui.place.menubar.about.AboutPresenter">
+   <children>
+      <Label layoutX="126.0" layoutY="40.0" text="Coconut-IDE">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+      <Label layoutX="180.0" layoutY="75.0" text="v0.3.3" />
+      <ImageView fitHeight="30.0" fitWidth="30.0" layoutX="154.0" layoutY="133.0" pickOnBounds="true"
+                 preserveRatio="true" onMouseClicked="#gitlab">
+         <Image url="/img/gitlab.png"/>
+      </ImageView>
+      <ImageView fitHeight="30.0" fitWidth="30.0" layoutX="218.0" layoutY="133.0" pickOnBounds="true"
+                 preserveRatio="true" onMouseClicked="#github">
+         <Image url="/img/github.png"/>
+      </ImageView>
+      <Label layoutX="298.0" layoutY="194.0" text="© 2017-2018" />
+      <Hyperlink layoutX="14.0" layoutY="190.0" onMouseClicked="#gpl3" text="GPL-3.0" />
+   </children>
+</AnchorPane>

@@ -4,6 +4,7 @@ import javafx.stage.DirectoryChooser;
 import ru.mrchebik.call.startup.CallStartup;
 import ru.mrchebik.call.startup.CallStartupWrapper;
 import ru.mrchebik.controller.startup.StartupWrapper;
+import ru.mrchebik.gui.place.ViewHelper;
 import ru.mrchebik.gui.place.create.project.CreateProjectPlace;
 import ru.mrchebik.gui.place.start.StartPlace;
 import ru.mrchebik.language.java.settings.JavaPropertyCollector;
@@ -25,7 +26,7 @@ public class JavaCallStartup extends CallStartup implements CallStartupWrapper {
         directoryChooser.setInitialDirectory(folderJdk);
         directoryChooser.setTitle(Locale.getProperty("setup_home_title", false));
 
-        var selectedFile = directoryChooser.showDialog(startPlace.getStage());
+        var selectedFile = directoryChooser.showDialog(ViewHelper.START.stage);
         if (selectedFile != null)
             startup.setupHome(selectedFile.getPath());
     }

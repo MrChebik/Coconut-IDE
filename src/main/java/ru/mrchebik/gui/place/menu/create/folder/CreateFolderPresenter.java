@@ -7,6 +7,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import ru.mrchebik.gui.collector.ComponentsCollector;
+import ru.mrchebik.gui.place.ViewHelper;
 import ru.mrchebik.gui.place.menu.MenuPresenterAction;
 
 import java.net.URL;
@@ -22,13 +23,13 @@ public class CreateFolderPresenter extends MenuPresenterAction implements Initia
 
     @FXML
     private void handleCreateFolder() {
-        createFile(name, ComponentsCollector.createFolderPlace.closeAndGetPath(), false);
+        createFile(name, ComponentsCollector.createFolderPlace.closeAndGetPath(ViewHelper.CREATE_FOLDER), false);
     }
 
     @FXML
     private void handleCreateFolderWithKey(KeyEvent event) {
         if (isEnter(event))
-            createFile(name, ComponentsCollector.createFolderPlace.closeAndGetPath(), false);
+            createFile(name, ComponentsCollector.createFolderPlace.closeAndGetPath(ViewHelper.CREATE_FOLDER), false);
     }
 
     @Override

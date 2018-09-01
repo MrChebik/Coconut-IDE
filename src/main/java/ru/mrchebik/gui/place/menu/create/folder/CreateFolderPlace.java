@@ -1,7 +1,6 @@
 package ru.mrchebik.gui.place.menu.create.folder;
 
 import javafx.stage.Modality;
-import javafx.stage.Stage;
 import ru.mrchebik.gui.place.CellStageHelper;
 import ru.mrchebik.gui.place.ViewHelper;
 import ru.mrchebik.locale.Locale;
@@ -14,7 +13,7 @@ public class CreateFolderPlace extends CellStageHelper {
 
     @Override
     public void start() {
-        super.stage = new Stage();
+        super.stage = ViewHelper.CREATE_FOLDER.stage;
 
         initWindow(setTitle(),
                 Modality.APPLICATION_MODAL,

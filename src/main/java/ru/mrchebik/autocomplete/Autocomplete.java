@@ -98,7 +98,6 @@ public class Autocomplete extends Popup implements AutocompleteWrapper {
         throw new UnsupportedOperationException();
     }
 
-
     public void hideSnippet() {
         EditWord.clear();
         AutocompleteDatabase.cache.clear();

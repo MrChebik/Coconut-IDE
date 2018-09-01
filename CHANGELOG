@@ -1,10 +1,13 @@
 === v0.3.3
++ Added MenuBar.
 * Removed an exception in Arguments/Locale initialize.
 * Updated API.
-Autcomplete:
+Autocomplete:
     + Variables in method.
     * Returned `awt`.
     * Fixed UA window title.
+Parser:
+    * Set language level to RAW.
 Run:
     * Fixed failure position.
     * Fixed a successful outcome when in fact there was a failure.

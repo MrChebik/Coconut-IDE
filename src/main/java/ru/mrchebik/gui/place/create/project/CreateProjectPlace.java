@@ -1,7 +1,6 @@
 package ru.mrchebik.gui.place.create.project;
 
 import javafx.stage.Modality;
-import javafx.stage.Stage;
 import ru.mrchebik.gui.place.StageHelper;
 import ru.mrchebik.gui.place.ViewHelper;
 import ru.mrchebik.locale.Locale;
@@ -13,7 +12,7 @@ public class CreateProjectPlace extends StageHelper {
     }
 
     public void start() {
-        super.stage = new Stage();
+        super.stage = ViewHelper.CREATE_PROJECT.stage;
 
         initWindow(setTitle(),
                 Modality.APPLICATION_MODAL,

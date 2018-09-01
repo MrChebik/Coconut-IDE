@@ -9,8 +9,8 @@ public class CellStageHelper extends StageHelper {
         throw new UnsupportedOperationException();
     }
 
-    public Path closeAndGetPath() {
-        StageHelper.closeWindow(this);
+    public Path closeAndGetPath(ViewHelper helper) {
+        StageHelper.closeWindow(helper);
 
         return path;
     }

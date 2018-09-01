@@ -1,7 +1,6 @@
 package ru.mrchebik.gui.place.work;
 
 import javafx.stage.Modality;
-import javafx.stage.Stage;
 import ru.mrchebik.gui.place.StageHelper;
 import ru.mrchebik.gui.place.ViewHelper;
 import ru.mrchebik.inject.Injector;
@@ -16,7 +15,7 @@ public class WorkPlace extends StageHelper {
         initializeProject(name, path);
         Injector.initInjection(this);
 
-        super.stage = new Stage();
+        super.stage = ViewHelper.WORK.stage;
 
         initWindow(Project.getTitle(),
                 Modality.APPLICATION_MODAL,

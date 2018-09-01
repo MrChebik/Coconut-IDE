@@ -7,7 +7,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import lombok.Getter;
 import ru.mrchebik.icons.Icons;
 import ru.mrchebik.screen.Screen;
 import ru.mrchebik.screen.measurement.Scale;
@@ -15,34 +14,37 @@ import ru.mrchebik.screen.measurement.Scale;
 import java.util.Arrays;
 
 public class StageHelper extends Application {
-    @Getter
     protected Stage stage;
 
-    public static void closeWindow(StageHelper... helpers) {
-        Arrays.stream(helpers).forEach(StageHelper::close);
+    // TODO null
+    public static void closeWindow(ViewHelper... helpers) {
+        Arrays.stream(helpers).forEach(e -> e.stage.close());
     }
 
     protected void initWindow(String title,
                               Modality modality,
                               Scale scale,
                               ViewHelper viewHelper) {
-        stage.setTitle(title);
-        stage.getIcons().add(Icons.LOGO.get());
+        if (stage.getIcons().size() == 0) {
+            stage.setTitle(title);
+            stage.getIcons().add(Icons.LOGO.get());
 
-        if (!modality.equals(Modality.NONE))
-            stage.initModality(modality);
+            if (!modality.equals(Modality.NONE))
+                stage.initModality(modality);
 
-        if (!scale.equals(Scale.PLACE_WORK)) {
-            setResizableFalse(stage, scale);
-            stage.setResizable(false);
-        } else
-            setSize(stage, scale);
+            if (!scale.equals(Scale.PLACE_WORK)) {
+                setResizableFalse(stage, scale);
+                stage.setResizable(false);
+            } else
+                setSize(stage, scale);
 
-        setPosition(stage, scale);
+            setPosition(stage, scale);
 
-        Scene scene = initScene(viewHelper);
-        initFrame(scene);
-        stage.setScene(scene);
+            Scene scene = initScene(viewHelper);
+            initFrame(scene);
+            stage.setScene(scene);
+        }
+
         stage.show();
     }
 
@@ -64,7 +66,7 @@ public class StageHelper extends Application {
     private Scene initScene(ViewHelper viewHelper) {
         Parent view = viewHelper.view.getView();
 
-        return view.isNeedsLayout() ?
+        return view.isNeedsLayout() && view.getScene() == null ?
                 new Scene(view)
                 :
                 view.getScene();
@@ -103,9 +105,5 @@ public class StageHelper extends Application {
 
         stage.setX(point.x);
         stage.setY(point.y);
-    }
-
-    private void close() {
-        stage.close();
     }
 }

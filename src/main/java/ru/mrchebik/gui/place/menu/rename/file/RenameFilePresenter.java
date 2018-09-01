@@ -7,6 +7,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import ru.mrchebik.gui.collector.ComponentsCollector;
+import ru.mrchebik.gui.place.ViewHelper;
 import ru.mrchebik.gui.place.menu.MenuPresenterAction;
 
 import java.net.URL;
@@ -22,13 +23,13 @@ public class RenameFilePresenter extends MenuPresenterAction implements Initiali
 
     @FXML
     private void handleRename() {
-        renameFile(name, ComponentsCollector.renameFilePlace.closeAndGetPath());
+        renameFile(name, ComponentsCollector.renameFilePlace.closeAndGetPath(ViewHelper.RENAME_FILE));
     }
 
     @FXML
     private void handleRenameWithKey(KeyEvent event) {
         if (isEnter(event))
-            renameFile(name, ComponentsCollector.renameFilePlace.closeAndGetPath());
+            renameFile(name, ComponentsCollector.renameFilePlace.closeAndGetPath(ViewHelper.RENAME_FILE));
     }
 
     @Override

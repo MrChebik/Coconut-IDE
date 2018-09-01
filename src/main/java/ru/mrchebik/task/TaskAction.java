@@ -1,12 +1,13 @@
 package ru.mrchebik.task;
 
+import ru.mrchebik.exception.ExceptionUtils;
 import ru.mrchebik.process.ExecutorCommand;
 import ru.mrchebik.process.io.ErrorProcess;
 
 import java.nio.file.Path;
 import java.util.Arrays;
 
-public class TaskAction {
+public class TaskAction extends ExceptionUtils {
     public static Task makeTask(String command) {
         return new Task(() -> ExecutorCommand.execute(command));
     }
@@ -25,17 +26,13 @@ public class TaskAction {
      * @since 0.3.0-a
      */
     public static void chain(Task... tasks) {
-        new Task(() -> {
-            Arrays.stream(tasks)
-                    .forEach(task -> {
-                        try {
-                            task.join();
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
+        new Task(() -> Arrays.stream(tasks)
+                .forEach(handlingConsumerWrapper(task -> {
+                    task.join();
 
-                        if (!ErrorProcess.wasError) task.run();
-                    });
-        }).start();
+                    if (!ErrorProcess.wasError)
+                        task.run();
+                }, InterruptedException.class))
+        ).start();
     }
 }

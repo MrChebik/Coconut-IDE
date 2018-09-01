@@ -6,9 +6,10 @@ import javafx.scene.control.TextField;
 import javafx.stage.DirectoryChooser;
 import lombok.SneakyThrows;
 import ru.mrchebik.gui.place.StageHelper;
-import ru.mrchebik.gui.place.start.StartPlace;
+import ru.mrchebik.gui.place.ViewHelper;
 import ru.mrchebik.gui.place.work.WorkPlace;
 import ru.mrchebik.locale.Locale;
+import ru.mrchebik.project.Project;
 import ru.mrchebik.settings.PropertyCollector;
 
 import java.io.File;
@@ -29,14 +30,14 @@ class CreateProjectPresenterAction {
         path.setText(Locale.getProperty("path_label", true) + ":");
     }
 
-    static void callDirectoryChooser(TextField name, TextField path, CreateProjectPlace createProjectPlace) {
+    static void callDirectoryChooser(TextField name, TextField path) {
         var target = computeFile(path);
 
         var directoryChooser = new DirectoryChooser();
         directoryChooser.setInitialDirectory(target);
         directoryChooser.setTitle(Locale.getProperty("new_project_title", true));
 
-        var file = directoryChooser.showDialog(createProjectPlace.getStage());
+        var file = directoryChooser.showDialog(ViewHelper.CREATE_PROJECT.stage);
         if (file != null)
             setFields(file, name, path);
     }
@@ -58,11 +59,10 @@ class CreateProjectPresenterAction {
     }
 
     static void newProject(TextField name,
-                           TextField path,
-                           StartPlace startPlace,
-                           CreateProjectPlace createProjectPlace) {
+                           TextField path) {
+        Project.isOpen = false;
         initWorkPlace(name, path);
-        StageHelper.closeWindow(startPlace, createProjectPlace);
+        StageHelper.closeWindow(ViewHelper.START, ViewHelper.CREATE_PROJECT);
     }
 
     private static void computePropertyProjectName(String newValue,

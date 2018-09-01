@@ -12,10 +12,14 @@ import ru.mrchebik.gui.collector.ComponentsCollector;
 import ru.mrchebik.gui.key.KeyHelper;
 import ru.mrchebik.gui.node.CustomTreeItem;
 import ru.mrchebik.gui.node.treeCell.CustomTreeCell;
+import ru.mrchebik.gui.place.ViewHelper;
 import ru.mrchebik.gui.place.menu.create.file.CreateFilePlace;
 import ru.mrchebik.gui.place.menu.create.folder.CreateFolderPlace;
 import ru.mrchebik.gui.place.menu.rename.file.RenameFilePlace;
 import ru.mrchebik.gui.place.menu.rename.folder.RenameFolderPlace;
+import ru.mrchebik.gui.place.menubar.about.AboutPlace;
+import ru.mrchebik.gui.place.start.StartPlace;
+import ru.mrchebik.gui.place.start.StartPresenter;
 import ru.mrchebik.gui.place.work.event.InputTextToOutputArea;
 import ru.mrchebik.gui.updater.TabUpdater;
 import ru.mrchebik.gui.updater.TreeUpdater;
@@ -47,12 +51,71 @@ public class WorkPresenter extends KeyHelper implements Initializable {
     private Button compile, run;
     @FXML
     private Label ram, cpu;
+    @FXML
+    private CheckMenuItem cpuItem, ramItem;
     @Inject
     private WorkPlace workPlace;
 
     private TabUpdater tabUpdater;
 
     private BuildWrapper build;
+
+    @FXML
+    private void handleNew() {
+        StartPresenter.callStartup.callNewProject(StartPresenter.createProjectPlace);
+    }
+
+    @FXML
+    private void open() {
+        StartPresenter.openProject();
+    }
+
+    @FXML
+    private void callSettings() {
+        // TODO
+    }
+
+    @FXML
+    private void closeProject() {
+        ViewHelper.WORK.stage.close();
+        new StartPlace().start();
+    }
+
+    @FXML
+    private void exit() {
+        System.exit(0);
+    }
+
+    @FXML
+    private void pluginCpu() {
+        cpu.setVisible(cpuItem.isSelected());
+
+        if (!cpu.isVisible()) {
+            cpu.setMinHeight(0);
+            cpu.setMaxHeight(0);
+        } else {
+            cpu.setMinHeight(16);
+            cpu.setMaxHeight(16);
+        }
+    }
+
+    @FXML
+    private void pluginRam() {
+        ram.setVisible(ramItem.isSelected());
+
+        if (!ram.isVisible()) {
+            ram.setMinHeight(0);
+            ram.setMaxHeight(0);
+        } else {
+            ram.setMinHeight(16);
+            ram.setMaxHeight(16);
+        }
+    }
+
+    @FXML
+    private void about() {
+        new AboutPlace().start();
+    }
 
     @FXML
     private void handleCompileProject() {
@@ -142,7 +205,7 @@ public class WorkPresenter extends KeyHelper implements Initializable {
 
         Language.autocompleteAnalyser.start();
 
-        Language.initAutocomplete(workPlace.getStage());
+        Language.initAutocomplete(ViewHelper.WORK.stage);
         tabUpdater = new TabUpdater(tabPane, Highlight.create());
 
         TreeUpdater treeUpdater = new TreeUpdater(treeView, tabUpdater);

@@ -27,24 +27,24 @@ public class CreateProjectPresenter extends KeyHelper implements Initializable {
 
     @FXML
     private void handleCreateProject() {
-        CreateProjectPresenterAction.newProject(projectName, projectPath, startPlace, createProjectPlace);
+        CreateProjectPresenterAction.newProject(projectName, projectPath);
     }
 
     @FXML
     private void handleCreateProjectWithKeyOnName(KeyEvent event) {
         if (isEnter(event))
-            CreateProjectPresenterAction.newProject(projectName, projectPath, startPlace, createProjectPlace);
+            CreateProjectPresenterAction.newProject(projectName, projectPath);
     }
 
     @FXML
     private void handleCreateProjectWithKeyOnPath(KeyEvent event) {
         if (isEnter(event))
-            CreateProjectPresenterAction.newProject(projectName, projectPath, startPlace, createProjectPlace);
+            CreateProjectPresenterAction.newProject(projectName, projectPath);
     }
 
     @FXML
     private void handleEditPath() {
-        CreateProjectPresenterAction.callDirectoryChooser(projectName, projectPath, createProjectPlace);
+        CreateProjectPresenterAction.callDirectoryChooser(projectName, projectPath);
     }
 
     @Override

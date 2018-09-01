@@ -31,11 +31,11 @@ public class CustomCodeArea extends CodeArea {
     public CodeArea codeAreaCSS;
     public String name;
 
-    private Executor executor;
+    private Executor highlightExecutor;
     private Highlight highlight;
 
     public CustomCodeArea(String text, Highlight highlight, String name) {
-        executor = Executors.newSingleThreadExecutor();
+        highlightExecutor = Executors.newSingleThreadExecutor();
         this.highlight = highlight;
         this.name = name;
 
@@ -176,7 +176,7 @@ public class CustomCodeArea extends CodeArea {
                 return highlight.computeHighlighting(text);
             }
         };
-        executor.execute(task);
+        highlightExecutor.execute(task);
         return task;
     }
 

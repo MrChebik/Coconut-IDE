@@ -16,11 +16,16 @@ public class StartPlace extends StageHelper {
     @Override
     public void start(Stage primaryStage) {
         Injector.initInjection(this);
-        initializeGui(primaryStage);
+        initializeGui();
     }
 
-    private void initializeGui(Stage stage) {
-        super.stage = stage;
+    public void start() {
+        Injector.initInjection(this);
+        initializeGui();
+    }
+
+    private void initializeGui() {
+        super.stage = ViewHelper.START.stage;
 
         initWindow(setTitle(),
                 Modality.NONE,

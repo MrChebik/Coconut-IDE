@@ -8,5 +8,5 @@ import java.lang.management.ManagementFactory;
 public enum IdeProcess {
     PID(ManagementFactory.getRuntimeMXBean().getName().split("@")[0]);
 
-    public String pid;
+    public String number;
 }

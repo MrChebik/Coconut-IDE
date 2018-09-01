@@ -1,9 +1,6 @@
 package ru.mrchebik.language.java.autocomplete.analyser;
 
-import com.github.javaparser.JavaParser;
-import com.github.javaparser.ParseProblemException;
-import com.github.javaparser.Position;
-import com.github.javaparser.Range;
+import com.github.javaparser.*;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
@@ -23,12 +20,18 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 public class JavaAutocompleteAnalyser extends AutocompleteAnalyser {
+    public static final JavaParser RAW;
+
     public JavaAutocompleteAnalyser() {
         suffix = "java";
     }
 
     private static int paragraph;
     private static int column;
+
+    static {
+        RAW = new JavaParser(new ParserConfiguration().setLanguageLevel(ParserConfiguration.LanguageLevel.RAW));
+    }
 
     private void initialize() {
         CollectorAutocompleteText.addPackageName("");
@@ -156,7 +159,7 @@ public class JavaAutocompleteAnalyser extends AutocompleteAnalyser {
         column = area.getCaretColumn() + 1;
         paragraph = area.getCurrentParagraph() + 1;
         try {
-            var unit = JavaParser.parse(text);
+            var unit = JavaAutocompleteAnalyser.RAW.parse(text);
             AutocompleteDatabase.method.clear();
             if (unit.getTypes().size() > 0) {
                 var declaration = unit.getType(0);
@@ -185,7 +188,7 @@ public class JavaAutocompleteAnalyser extends AutocompleteAnalyser {
     // First cluster
     public void callAnalysis(String text, boolean isNew) {
         try {
-            var unit = JavaParser.parse(text);
+            var unit = JavaAutocompleteAnalyser.RAW.parse(text);
             if (unit.getTypes().size() > 0) {
                 var declaration = unit.getType(0);
 
