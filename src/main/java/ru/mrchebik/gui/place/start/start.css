@@ -1,0 +1,12 @@
+/*
+@font-face { font-family: Arkhip; src: url('/font/arkhip.ttf'); }
+
+.button {
+    -fx-font-family: Arkhip;
+    -fx-font-size: 14;
+    -fx-background-color: #E8E8E8;
+}
+
+.button:focused {
+
+}*/

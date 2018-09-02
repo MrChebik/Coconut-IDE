@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import java.lang.*?>
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" fx:id="titlebar" xmlns="http://javafx.com/javafx/10.0.2"
+            fx:controller="ru.mrchebik.gui.titlebar.TitlebarPresenter">
+
+    <Label fx:id="title" alignment="CENTER" contentDisplay="CENTER" onMouseDragged="#mouseDragged"
+           onMousePressed="#mousePressed" styleClass="titlebar-title" textAlignment="CENTER"
+           AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+           AnchorPane.topAnchor="0.0"  onMouseClicked="#mouseClicked"/>
+
+    <Button mnemonicParsing="false" onMouseClicked="#doTitleHide" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="66.0" AnchorPane.topAnchor="10.0">
+        <graphic>
+            <ImageView fitHeight="10.0" fitWidth="10.0" pickOnBounds="true" preserveRatio="true" />
+        </graphic>
+        <styleClass>
+            <String fx:value="titlebar-button" />
+            <String fx:value="green" />
+        </styleClass>
+    </Button>
+
+    <Button mnemonicParsing="false" onMouseClicked="#doTitleFull" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="38.0" AnchorPane.topAnchor="10.0">
+        <graphic>
+            <ImageView fitHeight="10.0" fitWidth="10.0" pickOnBounds="true" preserveRatio="true" />
+        </graphic>
+        <styleClass>
+            <String fx:value="titlebar-button" />
+            <String fx:value="orange" />
+        </styleClass>
+    </Button>
+
+    <Button mnemonicParsing="false" onMouseClicked="#doTitleClose" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+        <graphic>
+            <ImageView fitHeight="10.0" fitWidth="10.0" pickOnBounds="true" preserveRatio="true" />
+        </graphic>
+        <styleClass>
+            <String fx:value="titlebar-button" />
+            <String fx:value="red" />
+        </styleClass>
+    </Button>
+
+</AnchorPane>

@@ -3,10 +3,14 @@ package ru.mrchebik.gui.place;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+import ru.mrchebik.gui.titlebar.TitlebarPresenter;
 import ru.mrchebik.icons.Icons;
+import ru.mrchebik.locale.Locale;
 import ru.mrchebik.screen.Screen;
 import ru.mrchebik.screen.measurement.Scale;
 
@@ -16,6 +20,7 @@ public class PlaceConfig {
     private static Stage stage;
     private static Scale scale;
     private static Parent view;
+    private static String key;
 
     public static void initialize(ViewHelper viewHelper) {
         if (!isCreated(viewHelper.stage)) {
@@ -31,6 +36,7 @@ public class PlaceConfig {
         PlaceConfig.stage = viewHelper.stage;
         PlaceConfig.scale = viewHelper.scale;
         PlaceConfig.view = viewHelper.view.getView();
+        PlaceConfig.key = viewHelper.key;
     }
 
     public static void clear() {
@@ -52,6 +58,7 @@ public class PlaceConfig {
     }
 
     public static void initWindow() {
+        stage.initStyle(StageStyle.UNDECORATED);
         stage.getIcons().add(Icons.LOGO.get());
 
         if (!scale.equals(Scale.PLACE_START))
@@ -70,9 +77,28 @@ public class PlaceConfig {
         Scene scene = initScene();
         //initFrame(scene);
         stage.setScene(scene);
+
+        setTitle(key);
     }
 
-    private static  void initFrame(Scene scene) {
+    /**
+     *
+     * @param key
+     */
+    private static void setTitle(String key) {
+        ViewHelper.TITLE.view.getView();
+
+        TitlebarPresenter.stage = stage;
+        TitlebarPresenter presenter = (TitlebarPresenter) ViewHelper.TITLE.view.getPresenter();
+
+        String title = Locale.getProperty(key, true);
+        presenter.title.setText(title);
+        stage.setTitle(title);
+
+        ((BorderPane) view).setTop(presenter.titlebar);
+    }
+
+    private static void initFrame(Scene scene) {
         if (scene.getRoot().getChildrenUnmodifiable().get(0) instanceof GridPane) {
             GridPane gridPane = (GridPane) scene.getRoot().getChildrenUnmodifiable().get(0);
             if (gridPane.getChildren().size() > 0 &&

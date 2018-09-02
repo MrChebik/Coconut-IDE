@@ -1,0 +1,29 @@
+@font-face { font-family: Arkhip; src: url('/font/arkhip.ttf'); }
+
+.titlebar-button {
+    -fx-padding: 0 3 0 4;
+    -fx-background-radius: 5em;
+    -fx-font-size: 0;
+}
+
+.titlebar-title {
+    -fx-font-family: Arkhip;
+    -fx-font-size: 17;
+    /*-fx-background-color: #E0E0E0;*/
+}
+
+.button:focused {
+    -fx-background-insets: 0 0 -1 0, 0, 1, 2;
+}
+
+.green {
+    -fx-background-color: #2e972e;
+}
+
+.orange {
+    -fx-background-color: #ffb52e;
+}
+
+.red {
+    -fx-background-color: #ff2e2e;
+}

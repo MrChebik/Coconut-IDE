@@ -5,6 +5,7 @@ import ru.mrchebik.screen.Screen;
 
 @AllArgsConstructor
 public enum Scale {
+    EMPTY(0, 0),
     PLACE_START(600, 400),
     PLACE_CREATE_FILE(360, 122),
     PLACE_CREATE_FOLDER(360, 122),
