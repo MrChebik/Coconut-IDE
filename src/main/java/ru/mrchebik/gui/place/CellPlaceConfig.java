@@ -2,7 +2,7 @@ package ru.mrchebik.gui.place;
 
 import java.nio.file.Path;
 
-public class CellPlaceConfig extends PlaceConfig {
+public class CellPlaceConfig {
     public static Path path;
 
     public static Path closeAndGetPath(ViewHelper helper) {

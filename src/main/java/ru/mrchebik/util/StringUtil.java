@@ -1,7 +1,5 @@
 package ru.mrchebik.util;
 
-import ru.mrchebik.inject.Injector;
-
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -29,19 +27,5 @@ public class StringUtil {
                 ""
                 :
                 String.format("%" + diff + "s", ""));
-    }
-
-    /**
-     * @param word
-     * @return
-     *        Word starting with a small letter.
-     *
-     * @see Injector#toName_Object(Object)
-     */
-    public static String lowerFirstChar(String word) {
-        var nameChr = word.toCharArray();
-        nameChr[0] += 32;
-
-        return new String(nameChr);
     }
 }

@@ -83,7 +83,7 @@ public class PlaceConfig {
         }
     }
 
-    protected static void setOnClose(Runnable handler) {
+    private static void setOnClose(Runnable handler) {
         stage.setOnCloseRequest(event -> handler.run());
     }
 
