@@ -5,9 +5,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.DirectoryChooser;
 import lombok.SneakyThrows;
-import ru.mrchebik.gui.place.StageHelper;
+import ru.mrchebik.gui.place.PlaceConfig;
 import ru.mrchebik.gui.place.ViewHelper;
-import ru.mrchebik.gui.place.work.WorkPlace;
 import ru.mrchebik.locale.Locale;
 import ru.mrchebik.project.Project;
 import ru.mrchebik.settings.PropertyCollector;
@@ -62,7 +61,7 @@ class CreateProjectPresenterAction {
                            TextField path) {
         Project.isOpen = false;
         initWorkPlace(name, path);
-        StageHelper.closeWindow(ViewHelper.START, ViewHelper.CREATE_PROJECT);
+        PlaceConfig.closeWindow(ViewHelper.START, ViewHelper.CREATE_PROJECT);
     }
 
     private static void computePropertyProjectName(String newValue,
@@ -96,8 +95,8 @@ class CreateProjectPresenterAction {
         var name = nameField.getText();
         var path = Paths.get(pathField.getText());
 
-        var workPlace = new WorkPlace();
-        workPlace.start(name, path);
+        Project.initializeProject(name, path);
+        ViewHelper.WORK.start();
     }
 
     private static void setFields(File file, TextField name, TextField path) {

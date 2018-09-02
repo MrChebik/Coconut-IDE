@@ -14,6 +14,17 @@ public class Project {
 
     public static boolean isOpen;
 
+    public static void initializeProject(String name, Path path) {
+        System.out.println("EEEE");
+        Path pathOut = Paths.get(path.toString(), "out");
+        Path pathSource = Paths.get(path.toString(), "src");
+
+        Project.init(name, path, pathOut, pathSource);
+
+        if (!Project.isOpen)
+            Project.build();
+    }
+
     public static void init(String name,
                             Path path,
                             Path pathOut,

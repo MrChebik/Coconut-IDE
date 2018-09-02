@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public enum VersionType {
-    IDE("Coconut-IDE 0.3.3");
+    IDE("Coconut-IDE 0.3.3-a");
 
     private String version;
 

@@ -35,7 +35,6 @@ import java.util.stream.IntStream;
  * <p>
  * Blacklist of packages for global:
  * 1. java.applet
- * 2. java.awt
  * <p>
  * Every cluster have `Letter` delimiter, which determine
  * the first character of `Class` name.

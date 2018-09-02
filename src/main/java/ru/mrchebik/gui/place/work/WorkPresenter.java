@@ -13,12 +13,6 @@ import ru.mrchebik.gui.key.KeyHelper;
 import ru.mrchebik.gui.node.CustomTreeItem;
 import ru.mrchebik.gui.node.treeCell.CustomTreeCell;
 import ru.mrchebik.gui.place.ViewHelper;
-import ru.mrchebik.gui.place.menu.create.file.CreateFilePlace;
-import ru.mrchebik.gui.place.menu.create.folder.CreateFolderPlace;
-import ru.mrchebik.gui.place.menu.rename.file.RenameFilePlace;
-import ru.mrchebik.gui.place.menu.rename.folder.RenameFolderPlace;
-import ru.mrchebik.gui.place.menubar.about.AboutPlace;
-import ru.mrchebik.gui.place.start.StartPlace;
 import ru.mrchebik.gui.place.start.StartPresenter;
 import ru.mrchebik.gui.place.work.event.InputTextToOutputArea;
 import ru.mrchebik.gui.updater.TabUpdater;
@@ -34,7 +28,6 @@ import ru.mrchebik.process.save.SaveTabsProcess;
 import ru.mrchebik.project.Project;
 import ru.mrchebik.util.GuiUtil;
 
-import javax.inject.Inject;
 import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -53,8 +46,6 @@ public class WorkPresenter extends KeyHelper implements Initializable {
     private Label ram, cpu;
     @FXML
     private CheckMenuItem cpuItem, ramItem;
-    @Inject
-    private WorkPlace workPlace;
 
     private TabUpdater tabUpdater;
 
@@ -62,7 +53,7 @@ public class WorkPresenter extends KeyHelper implements Initializable {
 
     @FXML
     private void handleNew() {
-        StartPresenter.callStartup.callNewProject(StartPresenter.createProjectPlace);
+        StartPresenter.callStartup.callNewProject();
     }
 
     @FXML
@@ -78,7 +69,7 @@ public class WorkPresenter extends KeyHelper implements Initializable {
     @FXML
     private void closeProject() {
         ViewHelper.WORK.stage.close();
-        new StartPlace().start();
+        ViewHelper.START.start();
     }
 
     @FXML
@@ -114,7 +105,7 @@ public class WorkPresenter extends KeyHelper implements Initializable {
 
     @FXML
     private void about() {
-        new AboutPlace().start();
+        ViewHelper.ABOUT.start();
     }
 
     @FXML
@@ -167,12 +158,7 @@ public class WorkPresenter extends KeyHelper implements Initializable {
     }
 
     private void initCollectorComponents() {
-        var createFilePlace = new CreateFilePlace();
-        var createFolderPlace = new CreateFolderPlace();
-        var renameFilePlace = new RenameFilePlace();
-        var renameFolderPlace = new RenameFolderPlace();
-
-        ComponentsCollector.setComponents(outputArea, tabPane, treeView, createFilePlace, createFolderPlace, renameFilePlace, renameFolderPlace);
+        ComponentsCollector.setComponents(outputArea, tabPane, treeView);
     }
 
     private void addTabOfMain() {

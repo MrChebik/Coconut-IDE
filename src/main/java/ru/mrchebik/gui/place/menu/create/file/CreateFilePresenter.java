@@ -6,7 +6,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
-import ru.mrchebik.gui.collector.ComponentsCollector;
+import ru.mrchebik.gui.place.CellPlaceConfig;
 import ru.mrchebik.gui.place.ViewHelper;
 import ru.mrchebik.gui.place.menu.MenuPresenterAction;
 
@@ -23,13 +23,13 @@ public class CreateFilePresenter extends MenuPresenterAction implements Initiali
 
     @FXML
     private void handleCreateFile() {
-        createFile(name, ComponentsCollector.createFilePlace.closeAndGetPath(ViewHelper.CREATE_FILE), true);
+        createFile(name, CellPlaceConfig.closeAndGetPath(ViewHelper.CREATE_FILE), true);
     }
 
     @FXML
     private void handleCreateFileWithKey(KeyEvent event) {
         if (isEnter(event))
-            createFile(name, ComponentsCollector.createFilePlace.closeAndGetPath(ViewHelper.CREATE_FILE), true);
+            createFile(name, CellPlaceConfig.closeAndGetPath(ViewHelper.CREATE_FILE), true);
     }
 
     @Override

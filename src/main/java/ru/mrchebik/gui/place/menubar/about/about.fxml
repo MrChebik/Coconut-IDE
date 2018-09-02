@@ -6,21 +6,18 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="224.0" prefWidth="400.0"
-            xmlns="http://javafx.com/javafx/10.0.2" fx:controller="ru.mrchebik.gui.place.menubar.about.AboutPresenter">
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="224.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/10.0.2" fx:controller="ru.mrchebik.gui.place.menubar.about.AboutPresenter">
    <children>
       <Label layoutX="126.0" layoutY="40.0" text="Coconut-IDE">
          <font>
             <Font size="24.0" />
          </font>
       </Label>
-      <Label layoutX="180.0" layoutY="75.0" text="v0.3.3" />
-      <ImageView fitHeight="30.0" fitWidth="30.0" layoutX="154.0" layoutY="133.0" pickOnBounds="true"
-                 preserveRatio="true" onMouseClicked="#gitlab">
+      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="180.0" layoutY="75.0" text="v0.3.3-a" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
+      <ImageView fitHeight="30.0" fitWidth="30.0" layoutX="154.0" layoutY="133.0" onMouseClicked="#gitlab" pickOnBounds="true" preserveRatio="true">
          <Image url="/img/gitlab.png"/>
       </ImageView>
-      <ImageView fitHeight="30.0" fitWidth="30.0" layoutX="218.0" layoutY="133.0" pickOnBounds="true"
-                 preserveRatio="true" onMouseClicked="#github">
+      <ImageView fitHeight="30.0" fitWidth="30.0" layoutX="218.0" layoutY="133.0" onMouseClicked="#github" pickOnBounds="true" preserveRatio="true">
          <Image url="/img/github.png"/>
       </ImageView>
       <Label layoutX="298.0" layoutY="194.0" text="© 2017-2018" />

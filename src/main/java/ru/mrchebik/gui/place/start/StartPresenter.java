@@ -11,9 +11,6 @@ import javafx.stage.Stage;
 import ru.mrchebik.call.startup.CallStartupWrapper;
 import ru.mrchebik.controller.startup.StartupWrapper;
 import ru.mrchebik.gui.place.ViewHelper;
-import ru.mrchebik.gui.place.create.project.CreateProjectPlace;
-import ru.mrchebik.gui.place.work.WorkPlace;
-import ru.mrchebik.inject.Injector;
 import ru.mrchebik.language.Language;
 import ru.mrchebik.language.LanguageType;
 import ru.mrchebik.language.java.call.JavaCallStartup;
@@ -36,34 +33,12 @@ public class StartPresenter extends StartPresenterAction implements Initializabl
     public Tooltip tooltipSetupHome;
     @FXML
     private ImageView coconutPng;
+    // TODO remove
     @Inject
     private StartPlace startPlace;
 
     public static CallStartupWrapper callStartup;
-    public static CreateProjectPlace createProjectPlace;
     private StartupWrapper startup;
-
-    @FXML
-    private void newProject() {
-        callStartup.callNewProject(createProjectPlace);
-    }
-
-    @FXML
-    private void newProjectWithKey(KeyEvent event) {
-        if (isEnter(event))
-            callStartup.callNewProject(createProjectPlace);
-    }
-
-    @FXML
-    private void openProjectA() {
-        openProject();
-    }
-
-    @FXML
-    private void openProjectAWithKey(KeyEvent event) {
-        if (isEnter(event))
-            openProject();
-    }
 
     public static void openProject() {
         Path needed = Files.exists(Paths.get(PropertyCollector.projects)) ?
@@ -80,9 +55,31 @@ public class StartPresenter extends StartPresenterAction implements Initializabl
         if (selectedFile != null) {
             Project.isOpen = true;
             ViewHelper.START.stage.close();
-            var workPlace = new WorkPlace();
-            workPlace.start(selectedFile.getName(), selectedFile.toPath());
+            Project.initializeProject(selectedFile.getName(), selectedFile.toPath());
+            ViewHelper.WORK.start();
         }
+    }
+
+    @FXML
+    private void newProject() {
+        callStartup.callNewProject();
+    }
+
+    @FXML
+    private void openProjectA() {
+        openProject();
+    }
+
+    @FXML
+    private void openProjectAWithKey(KeyEvent event) {
+        if (isEnter(event))
+            openProject();
+    }
+
+    @FXML
+    private void newProjectWithKey(KeyEvent event) {
+        if (isEnter(event))
+            callStartup.callNewProject();
     }
 
     @FXML
@@ -103,7 +100,6 @@ public class StartPresenter extends StartPresenterAction implements Initializabl
         initLocale();
         initNewProject(createProject, startup);
         initAnimation(coconutPng);
-        Injector.initInjection(startPlace, createProjectPlace);
     }
 
     private void initStartup() {
@@ -111,7 +107,6 @@ public class StartPresenter extends StartPresenterAction implements Initializabl
             startup = new JavaStartup();
             callStartup = new JavaCallStartup();
         }
-        createProjectPlace = new CreateProjectPlace();
     }
 
     private void initPresenter() {

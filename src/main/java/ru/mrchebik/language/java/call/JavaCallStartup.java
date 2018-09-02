@@ -5,7 +5,6 @@ import ru.mrchebik.call.startup.CallStartup;
 import ru.mrchebik.call.startup.CallStartupWrapper;
 import ru.mrchebik.controller.startup.StartupWrapper;
 import ru.mrchebik.gui.place.ViewHelper;
-import ru.mrchebik.gui.place.create.project.CreateProjectPlace;
 import ru.mrchebik.gui.place.start.StartPlace;
 import ru.mrchebik.language.java.settings.JavaPropertyCollector;
 import ru.mrchebik.locale.Locale;
@@ -14,8 +13,8 @@ import java.io.File;
 
 public class JavaCallStartup extends CallStartup implements CallStartupWrapper {
     @Override
-    public void callNewProject(CreateProjectPlace place) {
-        place.start();
+    public void callNewProject() {
+        ViewHelper.CREATE_PROJECT.start();
     }
 
     @Override

@@ -1,8 +1,9 @@
 package ru.mrchebik.gui.contextmenu.treeview;
 
 import lombok.SneakyThrows;
-import ru.mrchebik.gui.collector.ComponentsCollector;
 import ru.mrchebik.gui.contextmenu.treeview.collector.MenuTreeviewCollector;
+import ru.mrchebik.gui.place.CellPlaceConfig;
+import ru.mrchebik.gui.place.ViewHelper;
 import ru.mrchebik.model.CommandPath;
 import ru.mrchebik.util.FileUtil;
 
@@ -15,11 +16,11 @@ public class MenuTreeviewAction extends MenuTreeviewCollector {
     protected static Path path;
 
     protected static void initCreateFile() {
-        ComponentsCollector.createFilePlace.runAndSetPath(path);
+        CellPlaceConfig.runAndSetPath(path, ViewHelper.CREATE_FILE);
     }
 
     protected static void initCreateFolder() {
-        ComponentsCollector.createFolderPlace.runAndSetPath(path);
+        CellPlaceConfig.runAndSetPath(path, ViewHelper.CREATE_FOLDER);
     }
 
     protected static void initCopy() {
@@ -45,9 +46,9 @@ public class MenuTreeviewAction extends MenuTreeviewCollector {
 
     protected static void initRename() {
         if (!Files.isDirectory(path))
-            ComponentsCollector.renameFilePlace.runAndSetPath(path);
+            CellPlaceConfig.runAndSetPath(path, ViewHelper.RENAME_FILE);
         else
-            ComponentsCollector.renameFolderPlace.runAndSetPath(path);
+            CellPlaceConfig.runAndSetPath(path, ViewHelper.RENAME_FOLDER);
     }
 
     protected static void initDelete() {

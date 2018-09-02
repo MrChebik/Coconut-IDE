@@ -7,9 +7,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import ru.mrchebik.gui.key.KeyHelper;
-import ru.mrchebik.gui.place.start.StartPlace;
 
-import javax.inject.Inject;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -20,10 +18,6 @@ public class CreateProjectPresenter extends KeyHelper implements Initializable {
     private Button button, edit;
     @FXML
     private Label name, path;
-    @Inject
-    private CreateProjectPlace createProjectPlace;
-    @Inject
-    private StartPlace startPlace;
 
     @FXML
     private void handleCreateProject() {
