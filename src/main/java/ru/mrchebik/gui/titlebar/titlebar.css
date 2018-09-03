@@ -2,8 +2,9 @@
 
 .titlebar-button {
     -fx-padding: 0 3 0 4;
-    -fx-background-radius: 5em;
+    -fx-background-radius: 1em;
     -fx-font-size: 0;
+    -fx-background-insets: 0 0 -1 0, 0, 1, 2;
 }
 
 .titlebar-title {
@@ -12,18 +13,38 @@
     /*-fx-background-color: #E0E0E0;*/
 }
 
-.button:focused {
-    -fx-background-insets: 0 0 -1 0, 0, 1, 2;
-}
-
 .green {
     -fx-background-color: #2e972e;
+}
+
+.green:hover {
+    -fx-background-color: #45a245;
+}
+
+.green-pressed {
+    -fx-background-color: #178b17 !important;
 }
 
 .orange {
     -fx-background-color: #ffb52e;
 }
 
+.orange:hover {
+    -fx-background-color: #ffbd45;
+}
+
+.orange-pressed {
+    -fx-background-color: #ffad17 !important;
+}
+
 .red {
     -fx-background-color: #ff2e2e;
+}
+
+.red:hover {
+    -fx-background-color: #ff4545;
+}
+
+.red-pressed {
+    -fx-background-color: #ff1717 !important;
 }

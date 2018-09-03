@@ -49,7 +49,7 @@ public class StartPresenter extends StartPresenterAction implements Initializabl
         var folder = needed.toFile();
         var directoryChooser = new DirectoryChooser();
         directoryChooser.setInitialDirectory(folder);
-        directoryChooser.setTitle(Locale.getProperty("open_project_title", true));
+        directoryChooser.setTitle(Locale.getProperty("choose_folder_title", true));
 
         var selectedFile = directoryChooser.showDialog((Stage) ViewHelper.START.view.getUserData());
         if (selectedFile != null) {

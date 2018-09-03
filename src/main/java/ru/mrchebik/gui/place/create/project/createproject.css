@@ -1,0 +1,35 @@
+.button,
+.label {
+    -fx-font-family: Arkhip;
+}
+
+.button,
+.label,
+.text-field {
+    -fx-font-size: 14;
+}
+
+.button,
+.text-field {
+    -fx-background-radius: 0.4em;
+}
+
+.button {
+    -fx-background-color: #b55050;
+    -fx-text-fill: whitesmoke;
+    -fx-padding: 6 20 6 20;
+}
+
+.text-field {
+    -fx-background-color: white;
+    -fx-padding: 7 20 7 20;
+    -fx-background-insets: 0, 1;
+}
+
+.button:focused {
+    -fx-background-insets: 0 0 -1 0, 0, 1, 2;
+}
+
+.button:hover {
+    -fx-background-color: #bd6464;
+}

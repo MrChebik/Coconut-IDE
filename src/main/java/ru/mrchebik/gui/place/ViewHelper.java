@@ -39,7 +39,7 @@ public enum ViewHelper {
     ),
 
     CREATE_PROJECT(
-            new CreateProjectView(), "create_project_title", Scale.PLACE_CREATE_PROJECT
+            new CreateProjectView(), "choose_folder_title", Scale.PLACE_CREATE_PROJECT
     ),
 
     RENAME_FILE(

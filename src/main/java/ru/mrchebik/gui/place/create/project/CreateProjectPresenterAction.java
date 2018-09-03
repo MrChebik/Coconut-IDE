@@ -1,7 +1,6 @@
 package ru.mrchebik.gui.place.create.project;
 
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.DirectoryChooser;
 import lombok.SneakyThrows;
@@ -14,19 +13,17 @@ import ru.mrchebik.settings.PropertyCollector;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 
 class CreateProjectPresenterAction {
     private static boolean wasChanged;
+    private static String initial;
 
     static void initLocale(Button button,
-                           Button edit,
-                           Label name,
-                           Label path) {
+                           Button edit) {
         button.setText(Locale.getProperty("create_button", true));
         edit.setText(Locale.getProperty("edit_button", true));
-        name.setText(Locale.getProperty("name_label", true) + ":");
-        path.setText(Locale.getProperty("path_label", true) + ":");
     }
 
     static void callDirectoryChooser(TextField name, TextField path) {
@@ -34,7 +31,7 @@ class CreateProjectPresenterAction {
 
         var directoryChooser = new DirectoryChooser();
         directoryChooser.setInitialDirectory(target);
-        directoryChooser.setTitle(Locale.getProperty("new_project_title", true));
+        directoryChooser.setTitle(Locale.getProperty("choose_folder_title", true));
 
         var file = directoryChooser.showDialog(ViewHelper.CREATE_PROJECT.stage);
         if (file != null)
@@ -54,7 +51,16 @@ class CreateProjectPresenterAction {
     }
 
     static void initProjectPath(TextField field) {
-        field.setText(PropertyCollector.projects);
+        Path property = Paths.get(PropertyCollector.projects);
+        Path userHome = Paths.get(System.getProperty("user.home"));
+        field.setText(property.startsWith(userHome) ?
+                property.equals(userHome) ?
+                        "~/"
+                        :
+                        "~/" + userHome.relativize(property).toString() + "/"
+                :
+                PropertyCollector.projects);
+        initial = field.getText();
     }
 
     static void newProject(TextField name,
@@ -67,8 +73,8 @@ class CreateProjectPresenterAction {
     private static void computePropertyProjectName(String newValue,
                                                    TextField path) {
         if (!wasChanged &&
-                path.getText().startsWith(PropertyCollector.projects)) {
-            path.setText(PropertyCollector.projects + newValue);
+                path.getText().startsWith(initial)) {
+            path.setText(initial + newValue);
             wasChanged = false;
         } else
             wasChanged = true;
@@ -93,7 +99,11 @@ class CreateProjectPresenterAction {
     private static void initWorkPlace(TextField nameField,
                                       TextField pathField) {
         var name = nameField.getText();
-        var path = Paths.get(pathField.getText());
+        var pathStr = pathField.getText();
+        var path = Paths.get(pathStr.startsWith("~") ?
+                System.getProperty("user.home") + pathStr.substring(1)
+                :
+                pathStr);
 
         Project.initializeProject(name, path);
         ViewHelper.WORK.start();

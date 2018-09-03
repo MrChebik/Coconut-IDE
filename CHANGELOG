@@ -1,5 +1,6 @@
 === v0.3.3-a
 + Added MenuBar.
++ Custom buttons.
 * Removed an exception in Arguments/Locale initialize.
 * Updated API.
 Autocomplete:

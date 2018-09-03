@@ -3,7 +3,6 @@ package ru.mrchebik.gui.place.create.project;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import ru.mrchebik.gui.key.KeyHelper;
@@ -16,8 +15,6 @@ public class CreateProjectPresenter extends KeyHelper implements Initializable {
     private TextField projectName, projectPath;
     @FXML
     private Button button, edit;
-    @FXML
-    private Label name, path;
 
     @FXML
     private void handleCreateProject() {
@@ -43,7 +40,7 @@ public class CreateProjectPresenter extends KeyHelper implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        CreateProjectPresenterAction.initLocale(button, edit, name, path);
+        CreateProjectPresenterAction.initLocale(button, edit);
         CreateProjectPresenterAction.initCorePath();
         CreateProjectPresenterAction.initProjectPath(projectPath);
         CreateProjectPresenterAction.initListeners(projectName, projectPath);

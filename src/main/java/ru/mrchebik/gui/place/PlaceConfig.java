@@ -11,6 +11,7 @@ import javafx.stage.StageStyle;
 import ru.mrchebik.gui.titlebar.TitlebarPresenter;
 import ru.mrchebik.icons.Icons;
 import ru.mrchebik.locale.Locale;
+import ru.mrchebik.project.Project;
 import ru.mrchebik.screen.Screen;
 import ru.mrchebik.screen.measurement.Scale;
 
@@ -21,6 +22,8 @@ public class PlaceConfig {
     private static Scale scale;
     private static Parent view;
     private static String key;
+
+    private static boolean isInitialized;
 
     public static void initialize(ViewHelper viewHelper) {
         if (!isCreated(viewHelper.stage)) {
@@ -81,21 +84,26 @@ public class PlaceConfig {
         setTitle(key);
     }
 
-    /**
-     *
-     * @param key
-     */
     private static void setTitle(String key) {
-        ViewHelper.TITLE.view.getView();
+        String title = scale == Scale.PLACE_WORK ?
+                Project.getTitle()
+                :
+                Locale.getProperty(key, true);
+        if (scale == Scale.PLACE_START || scale == Scale.PLACE_WORK) {
+            if (!isInitialized) {
+                ViewHelper.TITLE.view.getView();
+                isInitialized = true;
+            }
 
-        TitlebarPresenter.stage = stage;
-        TitlebarPresenter presenter = (TitlebarPresenter) ViewHelper.TITLE.view.getPresenter();
+            TitlebarPresenter.stage = stage;
+            TitlebarPresenter presenter = (TitlebarPresenter) ViewHelper.TITLE.view.getPresenter();
 
-        String title = Locale.getProperty(key, true);
-        presenter.title.setText(title);
+            presenter.title.setText(title);
+
+            ((BorderPane) view).setTop(presenter.titlebar);
+        }
+
         stage.setTitle(title);
-
-        ((BorderPane) view).setTop(presenter.titlebar);
     }
 
     private static void initFrame(Scene scene) {

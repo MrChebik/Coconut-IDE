@@ -13,7 +13,9 @@
            AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
            AnchorPane.topAnchor="0.0"  onMouseClicked="#mouseClicked"/>
 
-    <Button mnemonicParsing="false" onMouseClicked="#doTitleHide" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="66.0" AnchorPane.topAnchor="10.0">
+    <Button fx:id="green" focusTraversable="false" mnemonicParsing="false" onMouseClicked="#doTitleHide"
+            AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="66.0" AnchorPane.topAnchor="10.0"
+            onMousePressed="#pressedTitleHide" onMouseReleased="#releasedTitleHide">
         <graphic>
             <ImageView fitHeight="10.0" fitWidth="10.0" pickOnBounds="true" preserveRatio="true" />
         </graphic>
@@ -23,7 +25,9 @@
         </styleClass>
     </Button>
 
-    <Button mnemonicParsing="false" onMouseClicked="#doTitleFull" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="38.0" AnchorPane.topAnchor="10.0">
+    <Button fx:id="orange" focusTraversable="false" mnemonicParsing="false" onMouseClicked="#doTitleFull"
+            AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="38.0" AnchorPane.topAnchor="10.0"
+            onMousePressed="#pressedTitleFull" onMouseReleased="#releasedTitleFull">
         <graphic>
             <ImageView fitHeight="10.0" fitWidth="10.0" pickOnBounds="true" preserveRatio="true" />
         </graphic>
@@ -33,7 +37,9 @@
         </styleClass>
     </Button>
 
-    <Button mnemonicParsing="false" onMouseClicked="#doTitleClose" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+    <Button fx:id="red" focusTraversable="false" mnemonicParsing="false" onMouseClicked="#doTitleClose"
+            AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0"
+            onMousePressed="#pressedTitleClose" onMouseReleased="#releasedTitleClose">
         <graphic>
             <ImageView fitHeight="10.0" fitWidth="10.0" pickOnBounds="true" preserveRatio="true" />
         </graphic>

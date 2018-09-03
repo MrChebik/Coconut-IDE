@@ -1,12 +1,16 @@
-/*
-@font-face { font-family: Arkhip; src: url('/font/arkhip.ttf'); }
-
 .button {
     -fx-font-family: Arkhip;
     -fx-font-size: 14;
-    -fx-background-color: #E8E8E8;
+    -fx-background-color: #b55050;
+    -fx-background-radius: 0.4em;
+    -fx-padding: 6 20 6 20;
+    -fx-text-fill: whitesmoke;
 }
 
 .button:focused {
+    -fx-background-insets: 0 0 -1 0, 0, 1, 2;
+}
 
-}*/
+.button:hover {
+    -fx-background-color: #bd6464;
+}

@@ -1,88 +1,91 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<BorderPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/10.0.2" fx:controller="ru.mrchebik.gui.place.work.WorkPresenter">
-    <bottom>
-        <BorderPane prefHeight="41.0" prefWidth="1200.0" BorderPane.alignment="CENTER">
-            <left>
-                <Button fx:id="compile" mnemonicParsing="false" onMouseClicked="#handleCompileProject" prefWidth="120.0" BorderPane.alignment="CENTER">
-                    <BorderPane.margin>
-                        <Insets left="7.0" />
-                    </BorderPane.margin>
-                </Button>
-            </left>
-            <right>
-                <Button fx:id="run" mnemonicParsing="false" onMouseClicked="#handleRunProject" prefWidth="120.0" BorderPane.alignment="CENTER">
-                    <BorderPane.margin>
-                        <Insets right="7.0" />
-                    </BorderPane.margin>
-                </Button>
-            </right>
-        </BorderPane>
-    </bottom>
-    <center>
-        <SplitPane dividerPositions="0.7225891677675033" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0" BorderPane.alignment="CENTER">
-            <BorderPane prefHeight="200.0" prefWidth="200.0">
-                <left>
-                    <TreeView fx:id="treeView" editable="true" onMouseClicked="#handleDoubleClick" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
-                </left>
-                <center>
-                    <TabPane fx:id="tabPane" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="ALL_TABS" BorderPane.alignment="CENTER">
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/10.0.2" fx:controller="ru.mrchebik.gui.place.work.WorkPresenter">
+   <center>
+      <BorderPane prefHeight="800.0" prefWidth="1200.0">
+          <bottom>
+              <BorderPane prefHeight="41.0" prefWidth="1200.0" BorderPane.alignment="CENTER">
+                  <left>
+                      <Button fx:id="compile" mnemonicParsing="false" onMouseClicked="#handleCompileProject" prefWidth="120.0" BorderPane.alignment="CENTER">
+                          <BorderPane.margin>
+                              <Insets left="7.0" />
+                          </BorderPane.margin>
+                      </Button>
+                  </left>
+                  <right>
+                      <Button fx:id="run" mnemonicParsing="false" onMouseClicked="#handleRunProject" prefWidth="120.0" BorderPane.alignment="CENTER">
+                          <BorderPane.margin>
+                              <Insets right="7.0" />
+                          </BorderPane.margin>
+                      </Button>
+                  </right>
+              </BorderPane>
+          </bottom>
+          <center>
+              <SplitPane dividerPositions="0.7225891677675033" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0" BorderPane.alignment="CENTER">
+                  <BorderPane prefHeight="200.0" prefWidth="200.0">
+                      <left>
+                          <TreeView fx:id="treeView" editable="true" onMouseClicked="#handleDoubleClick" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+                      </left>
+                      <center>
+                          <TabPane fx:id="tabPane" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="ALL_TABS" BorderPane.alignment="CENTER">
                     </TabPane>
-                </center>
-            </BorderPane>
-            <TextArea fx:id="outputArea" />
-        </SplitPane>
-    </center>
-    <top>
-        <BorderPane BorderPane.alignment="CENTER">
-            <left>
-                <Label fx:id="ram" BorderPane.alignment="CENTER">
-                    <BorderPane.margin>
-                        <Insets left="5.0" />
-                    </BorderPane.margin>
-                </Label>
-            </left>
-            <right>
-                <Label fx:id="cpu" BorderPane.alignment="CENTER">
-                    <BorderPane.margin>
-                        <Insets right="5.0" />
-                    </BorderPane.margin>
-                </Label>
-            </right>
-         <top>
-            <MenuBar BorderPane.alignment="CENTER">
-              <menus>
-                <Menu mnemonicParsing="false" text="File">
-                  <items>
-                        <MenuItem disable="true" mnemonicParsing="false" onAction="#handleNew" text="New" />
-                        <MenuItem disable="true" mnemonicParsing="false" onAction="#open" text="Open" />
-                        <SeparatorMenuItem mnemonicParsing="false" />
-                        <MenuItem disable="true" mnemonicParsing="false" onAction="#callSettings" text="Settings" />
-                        <SeparatorMenuItem mnemonicParsing="false" />
-                      <MenuItem disable="true" mnemonicParsing="false" onAction="#closeProject" text="Close Project" />
-                        <SeparatorMenuItem mnemonicParsing="false" />
-                        <MenuItem mnemonicParsing="false" onAction="#exit" text="Exit" />
-                  </items>
-                </Menu>
-                  <Menu mnemonicParsing="false" text="Debug">
-                     <items>
-                        <CheckMenuItem fx:id="cpuItem" mnemonicParsing="false" selected="true" onAction="#pluginCpu"
-                                       text="CPU" />
-                        <CheckMenuItem fx:id="ramItem" mnemonicParsing="false" selected="true" onAction="#pluginRam"
-                                       text="RAM" />
-                     </items>
-                  </Menu>
-                <Menu mnemonicParsing="false" text="Help">
-                  <items>
-                    <MenuItem mnemonicParsing="false" onAction="#about" text="About" />
-                  </items>
-                </Menu>
-              </menus>
-            </MenuBar>
-         </top>
-        </BorderPane>
-    </top>
+                      </center>
+                  </BorderPane>
+                  <TextArea fx:id="outputArea" />
+              </SplitPane>
+          </center>
+          <top>
+              <BorderPane BorderPane.alignment="CENTER">
+                  <left>
+                      <Label fx:id="ram" BorderPane.alignment="CENTER">
+                          <BorderPane.margin>
+                              <Insets left="5.0" />
+                          </BorderPane.margin>
+                      </Label>
+                  </left>
+                  <right>
+                      <Label fx:id="cpu" BorderPane.alignment="CENTER">
+                          <BorderPane.margin>
+                              <Insets right="5.0" />
+                          </BorderPane.margin>
+                      </Label>
+                  </right>
+               <top>
+                  <MenuBar BorderPane.alignment="CENTER">
+                    <menus>
+                      <Menu mnemonicParsing="false" text="File">
+                        <items>
+                              <MenuItem disable="true" mnemonicParsing="false" onAction="#handleNew" text="New" />
+                              <MenuItem disable="true" mnemonicParsing="false" onAction="#open" text="Open" />
+                              <SeparatorMenuItem mnemonicParsing="false" />
+                              <MenuItem disable="true" mnemonicParsing="false" onAction="#callSettings" text="Settings" />
+                              <SeparatorMenuItem mnemonicParsing="false" />
+                            <MenuItem disable="true" mnemonicParsing="false" onAction="#closeProject" text="Close Project" />
+                              <SeparatorMenuItem mnemonicParsing="false" />
+                              <MenuItem mnemonicParsing="false" onAction="#exit" text="Exit" />
+                        </items>
+                      </Menu>
+                        <Menu mnemonicParsing="false" text="Debug">
+                           <items>
+                              <CheckMenuItem fx:id="cpuItem" mnemonicParsing="false" onAction="#pluginCpu" selected="true" text="CPU" />
+                              <CheckMenuItem fx:id="ramItem" mnemonicParsing="false" onAction="#pluginRam" selected="true" text="RAM" />
+                           </items>
+                        </Menu>
+                      <Menu mnemonicParsing="false" text="Help">
+                        <items>
+                          <MenuItem mnemonicParsing="false" onAction="#about" text="About" />
+                        </items>
+                      </Menu>
+                    </menus>
+                  </MenuBar>
+               </top>
+              </BorderPane>
+          </top>
+      </BorderPane>
+   </center>
 </BorderPane>
