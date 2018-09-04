@@ -6,6 +6,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 import ru.mrchebik.call.startup.CallStartupWrapper;
@@ -36,6 +37,9 @@ public class StartPresenter extends StartPresenterAction implements Initializabl
     // TODO remove
     @Inject
     private StartPlace startPlace;
+
+    @FXML
+    public BorderPane titleZone;
 
     public static CallStartupWrapper callStartup;
     private StartupWrapper startup;

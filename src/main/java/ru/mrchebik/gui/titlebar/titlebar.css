@@ -14,37 +14,37 @@
 }
 
 .green {
-    -fx-background-color: #2e972e;
+    -fx-background-color: #4CAF50;
 }
 
 .green:hover {
-    -fx-background-color: #45a245;
+    -fx-background-color: #66BB6A;
 }
 
 .green-pressed {
-    -fx-background-color: #178b17 !important;
+    -fx-background-color: #43A047 !important;
 }
 
 .orange {
-    -fx-background-color: #ffb52e;
+    -fx-background-color: #FF9800;
 }
 
 .orange:hover {
-    -fx-background-color: #ffbd45;
+    -fx-background-color: #FFA726;
 }
 
 .orange-pressed {
-    -fx-background-color: #ffad17 !important;
+    -fx-background-color: #FB8C00 !important;
 }
 
 .red {
-    -fx-background-color: #ff2e2e;
+    -fx-background-color: #f44336;
 }
 
 .red:hover {
-    -fx-background-color: #ff4545;
+    -fx-background-color: #ef5350;
 }
 
 .red-pressed {
-    -fx-background-color: #ff1717 !important;
+    -fx-background-color: #e53935 !important;
 }

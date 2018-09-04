@@ -67,11 +67,14 @@ public enum ViewHelper {
                String key,
                Scale scale) {
         this.view = view;
+        this.key = key;
         this.scale = scale;
 
-        this.stage = new Stage();
-        this.key = key;
-        //stage.setTitle(Locale.getProperty(key, true));
+        if (scale == Scale.PLACE_START || scale == Scale.PLACE_WORK)
+            this.stage = new Stage();
+
+        if (scale == Scale.EMPTY)
+            view.getView();
     }
 
     /**

@@ -1,32 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.*?>
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/10.0.2" fx:controller="ru.mrchebik.gui.place.create.project.CreateProjectPresenter">
-    <GridPane layoutX="50.0" layoutY="52.0" prefWidth="440.0" AnchorPane.bottomAnchor="88.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="30.0">
-        <columnConstraints>
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="458.0" minWidth="10.0" prefWidth="342.0" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="458.0" minWidth="10.0" prefWidth="98.0" />
-        </columnConstraints>
-        <rowConstraints>
-            <RowConstraints />
-            <RowConstraints />
-            <RowConstraints minHeight="10.0" prefHeight="20.0" />
-            <RowConstraints />
-        </rowConstraints>
-        <TextField fx:id="projectName" onKeyReleased="#handleCreateProjectWithKeyOnName" prefHeight="26.0"
-                   prefWidth="195.0" promptText="Name" GridPane.columnSpan="2">
-            <opaqueInsets>
-                <Insets right="-1.0" />
-            </opaqueInsets>
-        </TextField>
-        <TextField fx:id="projectPath" onKeyReleased="#handleCreateProjectWithKeyOnPath" GridPane.rowIndex="3"
-                   promptText="Path"/>
-        <HBox alignment="CENTER_RIGHT" prefHeight="26.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
-            <Button fx:id="edit" mnemonicParsing="false" onMouseClicked="#handleEditPath" />
-        </HBox>
-    </GridPane>
-    <Button fx:id="button" layoutX="400.0" layoutY="182.0" mnemonicParsing="false" onMouseClicked="#handleCreateProject" AnchorPane.bottomAnchor="30.0" AnchorPane.rightAnchor="30.0" />
+<?import ru.mrchebik.gui.node.button.CustomButton?>
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" fx:id="mask" xmlns="http://javafx.com/javafx/10.0.2"
+            fx:controller="ru.mrchebik.gui.place.create.project.CreateProjectPresenter"
+            onMouseClicked="#maskClicked">
+    <AnchorPane styleClass="background-white" layoutX="65" layoutY="152.5" onMouseClicked="#nonMaskClicked">
+        <GridPane layoutX="50.0" layoutY="52.0" prefWidth="440.0" AnchorPane.bottomAnchor="73.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0">
+            <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="458.0" minWidth="10.0" prefWidth="342.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="458.0" minWidth="10.0" prefWidth="98.0" />
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints />
+                <RowConstraints />
+                <RowConstraints minHeight="10.0" prefHeight="20.0" />
+                <RowConstraints />
+            </rowConstraints>
+            <TextField fx:id="projectName" onKeyReleased="#handleCreateProjectWithKeyOnName" prefHeight="26.0"
+                       prefWidth="195.0" promptText="Name" GridPane.columnSpan="2">
+                <opaqueInsets>
+                    <Insets right="-1.0" />
+                </opaqueInsets>
+            </TextField>
+            <TextField fx:id="projectPath" onKeyReleased="#handleCreateProjectWithKeyOnPath" GridPane.rowIndex="3"
+                       promptText="Path"/>
+            <HBox alignment="CENTER_RIGHT" prefHeight="26.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                <CustomButton fx:id="edit" mnemonicParsing="false" onMouseClicked="#handleEditPath" />
+            </HBox>
+        </GridPane>
+        <CustomButton fx:id="button" layoutX="400.0" layoutY="182.0" mnemonicParsing="false"
+                      onMouseClicked="#handleCreateProject" AnchorPane.bottomAnchor="15.0"
+                      AnchorPane.rightAnchor="15.0" />
+    </AnchorPane>
 </AnchorPane>

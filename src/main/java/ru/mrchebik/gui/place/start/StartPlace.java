@@ -8,6 +8,5 @@ public class StartPlace extends Application {
     @Override
     public void start(Stage primaryStage) {
         ViewHelper.START.start();
-        //ViewHelper.TITLE.start();
     }
 }

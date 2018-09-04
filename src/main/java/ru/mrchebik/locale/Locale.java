@@ -17,11 +17,9 @@ public class Locale {
     static {
         localeProperties = new Properties();
         localeLangProperties = new Properties();
-
-        init();
     }
 
-    private static void init() {
+    public static void init() {
         PropertyCollector.initializeProperties();
 
         var localeCode = PropertyCollector.locale;

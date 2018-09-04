@@ -1,51 +1,55 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.*?>
-<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
-<BorderPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="450.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.2" fx:controller="ru.mrchebik.gui.place.start.StartPresenter">
-   <center>
-      <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-         <center>
-              <ImageView fx:id="coconutPng" fitHeight="275.0" fitWidth="275.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
-                  <BorderPane.margin>
-                      <Insets top="-55.0" />
-                  </BorderPane.margin>
-                  <Image url="/img/coconut.png"/>
-              </ImageView>
-         </center>
-         <top>
-              <HBox alignment="CENTER_RIGHT" prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-                  <Button fx:id="setupHomeButton" mnemonicParsing="false" onKeyReleased="#setupHomeWithKey" onMouseClicked="#setupHome">
-                      <HBox.margin>
-                          <Insets right="10.0" top="10.0" />
-                      </HBox.margin>
-                      <tooltip>
-                          <Tooltip fx:id="tooltipSetupHome" />
-                      </tooltip>
-                  </Button>
-              </HBox>
-         </top>
-         <bottom>
-              <HBox alignment="CENTER" prefWidth="200.0" BorderPane.alignment="CENTER">
-                  <Button fx:id="createProject" minWidth="90" mnemonicParsing="false" onKeyReleased="#newProjectWithKey" onMouseClicked="#newProject">
-                      <HBox.margin>
-                          <Insets right="15.0" />
-                      </HBox.margin>
-                  </Button>
-                  <Button fx:id="openProject" minWidth="90" mnemonicParsing="false" onKeyReleased="#openProjectAWithKey" onMouseClicked="#openProjectA">
-                      <HBox.margin>
-                          <Insets left="15.0" />
-                      </HBox.margin>
-                  </Button>
-               <BorderPane.margin>
-                  <Insets bottom="15.0" />
-               </BorderPane.margin>
-              </HBox>
-         </bottom>
-      </BorderPane>
-   </center>
-</BorderPane>
+<?import ru.mrchebik.gui.node.button.CustomButton?>
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="450.0" prefWidth="600.0"
+            xmlns="http://javafx.com/javafx/10.0.2"
+            fx:controller="ru.mrchebik.gui.place.start.StartPresenter">
+    <BorderPane styleClass="background-white" fx:id="titleZone" prefHeight="450.0" prefWidth="600.0">
+       <center>
+          <BorderPane styleClass="background-white" BorderPane.alignment="CENTER">
+             <center>
+                  <ImageView fx:id="coconutPng" fitHeight="275.0" fitWidth="275.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
+                      <BorderPane.margin>
+                          <Insets top="-55.0" />
+                      </BorderPane.margin>
+                      <Image url="/img/coconut.png"/>
+                  </ImageView>
+             </center>
+             <top>
+                  <HBox alignment="CENTER_RIGHT" prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                      <CustomButton fx:id="setupHomeButton" mnemonicParsing="false" onKeyReleased="#setupHomeWithKey" onMouseClicked="#setupHome">
+                          <HBox.margin>
+                              <Insets right="10.0" top="10.0" />
+                          </HBox.margin>
+                          <tooltip>
+                              <Tooltip fx:id="tooltipSetupHome" />
+                          </tooltip>
+                      </CustomButton>
+                  </HBox>
+             </top>
+             <bottom>
+                  <HBox alignment="CENTER" prefWidth="200.0" BorderPane.alignment="CENTER">
+                      <CustomButton fx:id="createProject" minWidth="90" mnemonicParsing="false" onKeyReleased="#newProjectWithKey" onMouseClicked="#newProject">
+                          <HBox.margin>
+                              <Insets right="15.0" />
+                          </HBox.margin>
+                      </CustomButton>
+                      <CustomButton fx:id="openProject" minWidth="90" mnemonicParsing="false" onKeyReleased="#openProjectAWithKey" onMouseClicked="#openProjectA">
+                          <HBox.margin>
+                              <Insets left="15.0" />
+                          </HBox.margin>
+                      </CustomButton>
+                   <BorderPane.margin>
+                      <Insets bottom="15.0" />
+                   </BorderPane.margin>
+                  </HBox>
+             </bottom>
+          </BorderPane>
+       </center>
+    </BorderPane>
+</AnchorPane>
