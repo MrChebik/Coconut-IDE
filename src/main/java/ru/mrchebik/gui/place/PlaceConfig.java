@@ -8,6 +8,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import ru.mrchebik.gui.place.start.StartPresenter;
+import ru.mrchebik.gui.place.work.WorkPresenter;
 import ru.mrchebik.gui.titlebar.TitlebarPresenter;
 import ru.mrchebik.icons.Icons;
 import ru.mrchebik.locale.Locale;
@@ -90,11 +91,14 @@ public class PlaceConfig {
         TitlebarPresenter presenter = (TitlebarPresenter) ViewHelper.TITLE.view.getPresenter();
         if (scale == Scale.PLACE_START || scale == Scale.PLACE_WORK) {
             TitlebarPresenter.stage = stage;
-            StartPresenter startPresenter = (StartPresenter) ViewHelper.START.view.getPresenter();
-
             presenter.title.setText(title);
-
-            startPresenter.titleZone.setTop(presenter.titlebar);
+            if (scale == Scale.PLACE_START) {
+                StartPresenter startPresenter = (StartPresenter) ViewHelper.START.view.getPresenter();
+                startPresenter.titleZone.setTop(presenter.titlebar);
+            } else if (scale == Scale.PLACE_WORK) {
+                WorkPresenter workPresenter = (WorkPresenter) ViewHelper.WORK.view.getPresenter();
+                workPresenter.titleZone.setTop(presenter.titlebar);
+            }
         }
 
         stage.setTitle(title);

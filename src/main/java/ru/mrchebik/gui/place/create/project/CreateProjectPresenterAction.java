@@ -67,7 +67,7 @@ class CreateProjectPresenterAction {
                            TextField path) {
         Project.isOpen = false;
         initWorkPlace(name, path);
-        PlaceConfig.closeWindow(ViewHelper.START, ViewHelper.CREATE_PROJECT);
+        PlaceConfig.closeWindow(ViewHelper.START/*, ViewHelper.CREATE_PROJECT*/);
     }
 
     private static void computePropertyProjectName(String newValue,

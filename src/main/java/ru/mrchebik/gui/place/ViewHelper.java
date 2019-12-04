@@ -70,7 +70,7 @@ public enum ViewHelper {
         this.key = key;
         this.scale = scale;
 
-        if (scale == Scale.PLACE_START || scale == Scale.PLACE_WORK)
+        if (scale == Scale.PLACE_START || scale == Scale.PLACE_WORK || scale == Scale.PLACE_MENU_ABOUT)
             this.stage = new Stage();
 
         if (scale == Scale.EMPTY)

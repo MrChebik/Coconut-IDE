@@ -70,6 +70,7 @@ public class JavaAutocompleteAnalyser extends AutocompleteAnalyser {
         try (ScanResult scanResult = new ClassGraph()
                 .enableAllInfo()
                 .enableSystemPackages()
+                //.enableSystemPackages()
                 .disableJarScanning()
                 .disableDirScanning()
                 .whitelistPackages("java", "java.lang", "javax", "javafx")
@@ -205,8 +206,7 @@ public class JavaAutocompleteAnalyser extends AutocompleteAnalyser {
 
                 if (declaration.getFields().size() > 0)
                     declaration.getFields().forEach(field -> {
-                        var fieldDeclaration = (FieldDeclaration) field;
-                        fieldDeclaration.getVariables().forEach(variable -> {
+                        ((FieldDeclaration) field).getVariables().forEach(variable -> {
                             int returnTypeSField = CollectorAutocompleteText.addReturnTypeS(
                                     field.getElementType().asString()
                             );
@@ -216,15 +216,14 @@ public class JavaAutocompleteAnalyser extends AutocompleteAnalyser {
                     });
                 if (declaration.getMethods().size() > 0)
                     declaration.getMethods().forEach(method -> {
-                        var methodDeclaration = (MethodDeclaration) method;
                         int returnTypeSMethod = CollectorAutocompleteText.addReturnTypeS(
-                                methodDeclaration.getType().asString()
+                                ((MethodDeclaration) method).getType().asString()
                         );
 
-                        var declarationAsString = methodDeclaration.getDeclarationAsString(false, false);
+                        var declarationAsString = ((MethodDeclaration) method).getDeclarationAsString(false, false);
                         var arguments = declarationAsString.substring(declarationAsString.indexOf("(") + 1, declarationAsString.lastIndexOf(")"));
 
-                        AutocompleteDatabase.addItem(1, new AutocompleteItem(4, methodDeclaration.getNameAsString(), arguments, returnTypeSMethod), classN, needReturnTypeS, isNew);
+                        AutocompleteDatabase.addItem(1, new AutocompleteItem(4, ((MethodDeclaration) method).getNameAsString(), arguments, returnTypeSMethod), classN, needReturnTypeS, isNew);
                     });
             }
         } catch (ParseProblemException ignored) {

@@ -4,6 +4,7 @@ import com.github.javaparser.JavaToken;
 import com.github.javaparser.ParseProblemException;
 import com.github.javaparser.ast.CompilationUnit;
 import ru.mrchebik.highlight.caret.CaretHighlightFactory;
+import ru.mrchebik.highlight.pair.PairSymbols;
 import ru.mrchebik.highlight.pair.PairSymbolsType;
 import ru.mrchebik.language.java.autocomplete.analyser.JavaAutocompleteAnalyser;
 import ru.mrchebik.language.java.highlight.bracket.JavaBracketHighlight;
@@ -21,8 +22,10 @@ public class JavaCaretHighlight extends CaretHighlightFactory {
     }
 
     protected static void doHighlightBracket(JavaToken token, boolean isPrevSearch) {
-        if (!isPrevSearch || isBracket(token))
-            bracketHighlight.wrapSearchBracket(token, PairSymbolsType.find(token.getText().charAt(0)));
+        PairSymbols pair = PairSymbolsType.find(token.getText().charAt(0));
+
+        if ((!isPrevSearch || isBracket(token)) && pair != null)
+            bracketHighlight.wrapSearchBracket(token, pair);
     }
 
     private static void currSearch(JavaToken token) {

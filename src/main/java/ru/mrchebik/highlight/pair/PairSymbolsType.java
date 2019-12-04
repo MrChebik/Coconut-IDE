@@ -3,6 +3,7 @@ package ru.mrchebik.highlight.pair;
 import lombok.AllArgsConstructor;
 
 import java.util.Arrays;
+import java.util.Optional;
 
 @AllArgsConstructor
 public enum PairSymbolsType {
@@ -17,8 +18,9 @@ public enum PairSymbolsType {
         PairSymbolsType type = Arrays.stream(PairSymbolsType.values())
                 .filter(item -> item.right == symbol ||
                         item.left == symbol)
-                .findFirst().get();
+                .findFirst().orElse(null);
 
-        return new PairSymbols(type.left, type.right);
+        return type != null ?
+                new PairSymbols(type.left, type.right) : null;
     }
 }

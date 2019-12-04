@@ -4,7 +4,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import ru.mrchebik.gui.node.button.CustomButton?>
-<BorderPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/10.0.2" fx:controller="ru.mrchebik.gui.place.work.WorkPresenter">
+<BorderPane fx:id="titleZone" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/10.0.2" fx:controller="ru.mrchebik.gui.place.work.WorkPresenter">
    <center>
       <BorderPane prefHeight="800.0" prefWidth="1200.0">
           <bottom>

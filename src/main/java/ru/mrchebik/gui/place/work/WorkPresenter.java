@@ -6,6 +6,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
 import ru.mrchebik.build.Build;
 import ru.mrchebik.build.BuildWrapper;
 import ru.mrchebik.gui.collector.ComponentsCollector;
@@ -50,6 +51,9 @@ public class WorkPresenter extends KeyHelper implements Initializable {
     private TabUpdater tabUpdater;
 
     private BuildWrapper build;
+
+    @FXML
+    public BorderPane titleZone;
 
     @FXML
     private void handleNew() {
