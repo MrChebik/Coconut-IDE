@@ -5,7 +5,7 @@ env:
 before_install:
   - sh -e /etc/init.d/xvfb start
 jdk:
-- oraclejdk10
+- oraclejdk11
 script:
 - mvn package
 - java -jar ./target/coconut-ide*.jar --ci
