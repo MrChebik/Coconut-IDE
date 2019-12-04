@@ -2,8 +2,8 @@ language: java
 sudo: false
 env:
   - DISPLAY=:99.0
-before_install:
-  - sh -e /etc/init.d/xvfb start
+services:
+- xvfb
 jdk:
 - oraclejdk11
 script:
