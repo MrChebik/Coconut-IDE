@@ -5,12 +5,13 @@
 [![Code Climate](https://codeclimate.com/github/MrChebik/OSPicture/badges/gpa.svg)](https://codeclimate.com/github/MrChebik/Coconut-IDE)
 > IDE for Java developers.
 
+![Coconut-IDE - Screenshot](https://github.com/MrChebik/Coconut-IDE/blob/master/coconut-ide-0.3.3-a.webp?raw=true)
 ![Coconut-IDE - Screenshot](https://github.com/MrChebik/Coconut-IDE/blob/master/coconut-ide-demonstration.webp?raw=true)  
 
-| **Requirements** | [v0.2.3](https://github.com/MrChebik/Coconut-IDE/releases/tag/v0.2.3) | [v0.3.2](https://github.com/MrChebik/Coconut-IDE/releases/tag/v0.3.2)
-|------------------|:-------:|:--------:|
-| **Java**         |    8    |    10    |
-| **RAM** (Mb)     |   384   |    768   |
+| **Requirements** | [v0.2.3](https://github.com/MrChebik/Coconut-IDE/releases/tag/v0.2.3) | [v0.3.2](https://github.com/MrChebik/Coconut-IDE/releases/tag/v0.3.2) | [v0.3.3-a](https://github.com/MrChebik/Coconut-IDE/releases/tag/v0.3.3-a) (non-stable)
+|------------------|:-------:|:--------:|:-------:|
+| **Java**         |    8    |    10    |    11   |
+| **RAM** (Mb)     |   384   |    768   |   768   |
 ## Build
 ```bash
 $ git clone https://github.com/MrChebik/Coconut-IDE.git
